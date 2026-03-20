@@ -1,8 +1,10 @@
+import Link from 'next/link';
+
 export default function Header({ onLoginOpen, isLoginOpen = false }) {
   return (
     <header className="header" role="banner">
       <div className="header__inner">
-        <div className="header__brand" aria-label="브랜드·CI 영역">
+        <Link href="/" className="header__brand" aria-label="홈으로 이동">
           <img
             className="header__logo"
             src="/images/logo-sample.svg"
@@ -12,7 +14,7 @@ export default function Header({ onLoginOpen, isLoginOpen = false }) {
             decoding="async"
           />
           <span className="header__wordmark">EJJ</span>
-        </div>
+        </Link>
 
         <nav className="header__nav" aria-label="주 메뉴">
           <ul className="header__nav-grid">
@@ -20,11 +22,11 @@ export default function Header({ onLoginOpen, isLoginOpen = false }) {
               <a href="#" className="header__nav-item">조직 소개</a>
               <div className="header__mega-col" role="group" aria-label="조직 소개 하위 메뉴">
                 <ul className="header__mega-list">
-                  <li><a href="#" className="header__mega-link">소개</a></li>
-                  <li><a href="#" className="header__mega-link">인사말</a></li>
-                  <li><a href="#" className="header__mega-link">연혁</a></li>
-                  <li><a href="#" className="header__mega-link">함께하는 사람들</a></li>
-                  <li><a href="#" className="header__mega-link">오시는 길</a></li>
+                  <li><Link href="/about" className="header__mega-link">소개</Link></li>
+                  <li><Link href="/greeting" className="header__mega-link">인사말</Link></li>
+                  <li><Link href="/history" className="header__mega-link">연혁</Link></li>
+                  <li><Link href="/people" className="header__mega-link">함께하는 사람들</Link></li>
+                  <li><Link href="/directions" className="header__mega-link">오시는 길</Link></li>
                 </ul>
               </div>
             </li>
@@ -62,7 +64,7 @@ export default function Header({ onLoginOpen, isLoginOpen = false }) {
               <a href="#" className="header__nav-item">커뮤니티</a>
               <div className="header__mega-col" role="group" aria-label="커뮤니티 하위 메뉴">
                 <ul className="header__mega-list">
-                  <li><a href="#" className="header__mega-link">공지사항</a></li>
+                  <li><Link href="/notices" className="header__mega-link">공지사항</Link></li>
                   <li><a href="#" className="header__mega-link">임시메뉴2</a></li>
                   <li><a href="#" className="header__mega-link">임시메뉴3</a></li>
                 </ul>
