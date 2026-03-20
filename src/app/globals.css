@@ -880,6 +880,10 @@ body {
     row-gap: 0.5rem;
   }
 
+  .header__tools {
+    margin-left: auto; /* 모바일에서 CI 로고 옆에 붙지 않게 우측 정렬 */
+  }
+
   .header__nav {
     order: 3;
     flex: 1 0 100%;
@@ -3211,6 +3215,123 @@ body {
 .dp__today-btn:hover {
   background: rgba(18, 79, 166, 0.06);
   border-color: var(--brand);
+}
+
+/* ── 표 삽입 Picker (tgp-*) ─────────────────────────────────── */
+.ep-tbl-wrap {
+  position: relative;
+}
+
+.tgp {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 130;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(12, 20, 36, 0.13), 0 2px 8px rgba(12, 20, 36, 0.06);
+  padding: 0.75rem;
+  animation: dpIn 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tgp__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+  text-align: center;
+  min-height: 1.25em;
+  letter-spacing: -0.01em;
+}
+
+.tgp__grid {
+  display: grid;
+  gap: 3px;
+}
+
+.tgp__cell {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1.5px solid var(--line);
+  border-radius: 3px;
+  background: var(--canvas);
+  cursor: pointer;
+  transition: background 0.08s, border-color 0.08s;
+}
+
+.tgp__cell:hover,
+.tgp__cell--on {
+  background: rgba(18, 79, 166, 0.14);
+  border-color: var(--brand);
+}
+
+/* ── 에디터 / 공개 페이지 공통 표 스타일 ────────────────────── */
+.ep-content table,
+.nd__body--html table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.25em 0;
+  table-layout: auto;
+  font-size: 0.9375rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.ep-content table td,
+.ep-content table th,
+.nd__body--html table td,
+.nd__body--html table th {
+  border: 1px solid var(--line);
+  padding: 0.55em 0.875em;
+  min-width: 2.5em;
+  vertical-align: top;
+  line-height: 1.55;
+  position: relative;
+}
+
+.ep-content table th,
+.nd__body--html table th {
+  background: var(--canvas);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--ink);
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* 에디터 전용: 선택된 셀 강조 */
+.ep-content table .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 79, 166, 0.12);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 에디터 전용: 열 너비 조절 핸들 */
+.ep-content table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--brand);
+  cursor: col-resize;
+  z-index: 20;
+  border-radius: 2px;
+}
+
+/* 에디터 전용: 표 선택 커서 */
+.ep-content .tableWrapper {
+  overflow-x: auto;
+  cursor: default;
+}
+
+.ep-content .resize-cursor {
+  cursor: col-resize;
 }
 
 /* ── 에디터 페이지 반응형 ────────────────────────────────────── */

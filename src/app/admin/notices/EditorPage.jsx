@@ -8,6 +8,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
+import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
 import { createNotice, updateNotice } from './actions';
 
 /* ── 툴바 버튼 ─────────────────────────────────────────────── */
@@ -110,7 +111,127 @@ const icons = {
       <path d="M4 12h16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
     </svg>
   ),
+  table: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="1.4"/>
+    </svg>
+  ),
+  rowBefore: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="11" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M9 11v10M15 11v10" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M12 7V3M10 5h4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+    </svg>
+  ),
+  rowAfter: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M9 3v10M15 3v10" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M12 17v4M10 19h4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+    </svg>
+  ),
+  deleteRow: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="7" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M9 7v10M15 7v10" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M9.5 4.5l5 5M14.5 4.5l-5 5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  colBefore: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="11" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M11 9h10M11 15h10" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M7 12H3M5 10v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+    </svg>
+  ),
+  colAfter: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M3 9h10M3 15h10" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M17 12h4M19 10v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+    </svg>
+  ),
+  deleteCol: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="7" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M7 9h10M7 15h10" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M4.5 9.5l5 5M9.5 9.5l-5 5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  mergeCells: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M3 12h18M12 3v9M12 15v6" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M8 10l4-4 4 4M8 14l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  splitCell: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M9 9l3 3-3 3M15 9l-3 3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  deleteTable: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="1.2"/>
+      <path d="M8 8l8 8M16 8l-8 8" stroke="#dc2626" strokeWidth="1.8" strokeLinecap="round"/>
+    </svg>
+  ),
 };
+
+/* ── 표 크기 선택기 ─────────────────────────────────────────── */
+const TBL_ROWS = 7;
+const TBL_COLS = 9;
+
+function TableGridPicker({ onSelect, onClose }) {
+  const ref = useRef(null);
+  const [hover, setHover] = useState([0, 0]);
+
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [onClose]);
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const [hRow, hCol] = hover;
+  return (
+    <div className="tgp" ref={ref} role="dialog" aria-label="표 크기 선택">
+      <p className="tgp__label">
+        {hRow > 0 && hCol > 0 ? `${hCol}열 x ${hRow}행` : '표 크기를 선택하세요'}
+      </p>
+      <div
+        className="tgp__grid"
+        style={{ gridTemplateColumns: `repeat(${TBL_COLS}, 1fr)` }}
+        onMouseLeave={() => setHover([0, 0])}
+      >
+        {Array.from({ length: TBL_ROWS * TBL_COLS }, (_, i) => {
+          const row = Math.floor(i / TBL_COLS) + 1;
+          const col = (i % TBL_COLS) + 1;
+          const isOn = row <= hRow && col <= hCol;
+          return (
+            <button
+              key={i}
+              type="button"
+              className={`tgp__cell${isOn ? ' tgp__cell--on' : ''}`}
+              onMouseEnter={() => setHover([row, col])}
+              onClick={() => onSelect(row, col)}
+              aria-label={`${col}열 ${row}행 표 삽입`}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 /* ── 날짜 선택기 ────────────────────────────────────────────── */
 const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
@@ -281,6 +402,7 @@ export default function EditorPage({ notice }) {
     notice?.createdAt ?? new Date().toISOString().slice(0, 10)
   );
   const [saving, setSaving] = useState(false);
+  const [tablePickerOpen, setTablePickerOpen] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -293,8 +415,12 @@ export default function EditorPage({ notice }) {
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({
-        placeholder: '본문을 입력하세요…',
+        placeholder: '본문을 입력하세요...',
       }),
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: notice?.content ?? '',
     editorProps: {
@@ -367,7 +493,7 @@ export default function EditorPage({ notice }) {
               onClick={handleSave}
               disabled={saving}
             >
-              {saving ? '저장 중…' : isEdit ? '수정 완료' : '게시하기'}
+              {saving ? '저장 중...' : isEdit ? '수정 완료' : '게시하기'}
             </button>
           </div>
         </div>
@@ -563,6 +689,57 @@ export default function EditorPage({ notice }) {
                 {icons.hr}
               </ToolbarBtn>
             </div>
+
+            <Divider />
+
+            {/* 표 삽입 */}
+            <div className="ep-toolbar__group">
+              <div className="ep-tbl-wrap">
+                <ToolbarBtn
+                  title="표 삽입"
+                  active={tablePickerOpen}
+                  onClick={() => setTablePickerOpen((o) => !o)}
+                >
+                  {icons.table}
+                </ToolbarBtn>
+                {tablePickerOpen && (
+                  <TableGridPicker
+                    onSelect={(rows, cols) => {
+                      editor?.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+                      setTablePickerOpen(false);
+                    }}
+                    onClose={() => setTablePickerOpen(false)}
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* 표 편집 (표 안에 커서가 있을 때 표시) */}
+            {editor?.isActive('table') && (
+              <>
+                <Divider />
+                <div className="ep-toolbar__group">
+                  <ToolbarBtn title="위에 행 삽입" onClick={() => editor.chain().focus().addRowBefore().run()}>{icons.rowBefore}</ToolbarBtn>
+                  <ToolbarBtn title="아래에 행 삽입" onClick={() => editor.chain().focus().addRowAfter().run()}>{icons.rowAfter}</ToolbarBtn>
+                  <ToolbarBtn title="행 삭제" onClick={() => editor.chain().focus().deleteRow().run()}>{icons.deleteRow}</ToolbarBtn>
+                </div>
+                <Divider />
+                <div className="ep-toolbar__group">
+                  <ToolbarBtn title="왼쪽에 열 삽입" onClick={() => editor.chain().focus().addColumnBefore().run()}>{icons.colBefore}</ToolbarBtn>
+                  <ToolbarBtn title="오른쪽에 열 삽입" onClick={() => editor.chain().focus().addColumnAfter().run()}>{icons.colAfter}</ToolbarBtn>
+                  <ToolbarBtn title="열 삭제" onClick={() => editor.chain().focus().deleteColumn().run()}>{icons.deleteCol}</ToolbarBtn>
+                </div>
+                <Divider />
+                <div className="ep-toolbar__group">
+                  <ToolbarBtn title="셀 병합" disabled={!editor.can().mergeCells()} onClick={() => editor.chain().focus().mergeCells().run()}>{icons.mergeCells}</ToolbarBtn>
+                  <ToolbarBtn title="셀 분리" disabled={!editor.can().splitCell()} onClick={() => editor.chain().focus().splitCell().run()}>{icons.splitCell}</ToolbarBtn>
+                </div>
+                <Divider />
+                <div className="ep-toolbar__group">
+                  <ToolbarBtn title="표 삭제" onClick={() => editor.chain().focus().deleteTable().run()}>{icons.deleteTable}</ToolbarBtn>
+                </div>
+              </>
+            )}
           </div>
 
           {/* 본문 편집 */}

@@ -3,18 +3,18 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { deleteNotice, togglePin } from './actions';
 
-export default function NoticesClient({ initialNotices }) {
+import { deleteDisclosure } from './actions';
+
+export default function DisclosuresClient({ initialDisclosures }) {
   const router = useRouter();
-  const [notices, setNotices] = useState(initialNotices);
+  const [disclosures, setDisclosures] = useState(initialDisclosures);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [togglingId, setTogglingId] = useState(null);
 
   useEffect(() => {
-    setNotices(initialNotices);
-  }, [initialNotices]);
+    setDisclosures(initialDisclosures);
+  }, [initialDisclosures]);
 
   useEffect(() => {
     const handleKey = (e) => {
@@ -27,7 +27,7 @@ export default function NoticesClient({ initialNotices }) {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await deleteNotice(deleteTarget.id);
+      await deleteDisclosure(deleteTarget.id);
       setDeleteTarget(null);
       router.refresh();
     } catch {
@@ -37,45 +37,18 @@ export default function NoticesClient({ initialNotices }) {
     }
   };
 
-  const handleTogglePin = async (notice) => {
-    setTogglingId(notice.id);
-    try {
-      await togglePin(notice.id);
-      router.refresh();
-    } catch {
-      alert('공지 설정에 실패했습니다.');
-    } finally {
-      setTogglingId(null);
-    }
-  };
-
-  const sorted = [...notices].sort((a, b) => {
-    if (a.isPinned && !b.isPinned) return -1;
-    if (!a.isPinned && b.isPinned) return 1;
-    return b.id - a.id;
-  });
-
-  const nonPinnedSorted = sorted.filter((n) => !n.isPinned);
-  const totalNonPinned = nonPinnedSorted.length;
-  const getRowNum = (notice) => {
-    if (notice.isPinned) return null;
-    const idx = nonPinnedSorted.findIndex((n) => n.id === notice.id);
-    return totalNonPinned - idx;
-  };
-
-  const pinnedCount = notices.filter((n) => n.isPinned).length;
+  const sorted = [...disclosures].sort((a, b) => b.id - a.id);
   const thisMonth = new Date().toISOString().slice(0, 7);
-  const thisMonthCount = notices.filter((n) => n.createdAt.startsWith(thisMonth)).length;
+  const thisMonthCount = disclosures.filter((d) => d.createdAt?.startsWith(thisMonth)).length;
 
   return (
     <div className="an">
-        {/* 페이지 헤더 */}
         <div className="an__bar">
           <div className="an__bar-left">
-            <h1 className="an__title">공지사항 관리</h1>
-            <p className="an__sub">게시물을 작성·수정·삭제하거나 공지로 고정할 수 있습니다.</p>
+            <h1 className="an__title">공시자료 관리</h1>
+            <p className="an__sub">게시물을 작성·수정·삭제할 수 있습니다.</p>
           </div>
-          <Link href="/admin/notices/new" className="an-btn an-btn--primary">
+          <Link href="/admin/disclosures/new" className="an-btn an-btn--primary">
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
             </svg>
@@ -83,29 +56,28 @@ export default function NoticesClient({ initialNotices }) {
           </Link>
         </div>
 
-        {/* 통계 카드 */}
         <div className="an-stats">
           <div className="an-stat">
-            <span className="an-stat__num">{notices.length}</span>
+            <span className="an-stat__num">{disclosures.length}</span>
             <span className="an-stat__label">전체 게시물</span>
-          </div>
-          <div className="an-stat an-stat--pin">
-            <span className="an-stat__num">{pinnedCount}</span>
-            <span className="an-stat__label">공지 고정</span>
           </div>
           <div className="an-stat">
             <span className="an-stat__num">{thisMonthCount}</span>
             <span className="an-stat__label">이번 달 작성</span>
           </div>
+          <div className="an-stat">
+            <span className="an-stat__num">
+              {disclosures.reduce((sum, d) => sum + (Number(d.views) || 0), 0).toLocaleString()}
+            </span>
+            <span className="an-stat__label">누적 조회</span>
+          </div>
         </div>
 
-        {/* 목록 테이블 */}
         <div className="an-table-wrap">
           <table className="an-table">
             <thead>
               <tr>
                 <th className="an-table__th an-table__th--num">번호</th>
-                <th className="an-table__th an-table__th--pin">공지</th>
                 <th className="an-table__th an-table__th--title">제목</th>
                 <th className="an-table__th an-table__th--date">작성일</th>
                 <th className="an-table__th an-table__th--views">조회</th>
@@ -113,60 +85,27 @@ export default function NoticesClient({ initialNotices }) {
               </tr>
             </thead>
             <tbody>
-              {sorted.map((notice) => (
-                <tr
-                  key={notice.id}
-                  className={`an-table__row${notice.isPinned ? ' an-table__row--pinned' : ''}`}
-                >
-                  <td className="an-table__td an-table__td--num">
-                    {notice.isPinned ? (
-                      <span className="an-pin-badge">공지</span>
-                    ) : (
-                      getRowNum(notice)
-                    )}
-                  </td>
-                  <td className="an-table__td an-table__td--pin">
-                    <button
-                      className={`an-star-btn${notice.isPinned ? ' an-star-btn--on' : ''}`}
-                      onClick={() => handleTogglePin(notice)}
-                      disabled={togglingId === notice.id}
-                      title={notice.isPinned ? '공지 해제' : '공지로 고정'}
-                      aria-label={notice.isPinned ? '공지 해제' : '공지로 고정'}
-                      aria-pressed={notice.isPinned}
-                    >
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 24 24"
-                        fill={notice.isPinned ? 'currentColor' : 'none'}
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  </td>
+              {sorted.map((disclosure, idx) => (
+                <tr key={disclosure.id} className="an-table__row">
+                  <td className="an-table__td an-table__td--num">{sorted.length - idx}</td>
                   <td className="an-table__td an-table__td--title">
-                    <span className="an-table__notice-title">{notice.title}</span>
+                    <span className="an-table__notice-title">{disclosure.title}</span>
                   </td>
-                  <td className="an-table__td an-table__td--date">{notice.createdAt}</td>
-                  <td className="an-table__td an-table__td--views">{notice.views.toLocaleString()}</td>
+                  <td className="an-table__td an-table__td--date">{disclosure.createdAt}</td>
+                  <td className="an-table__td an-table__td--views">
+                    {Number(disclosure.views).toLocaleString()}
+                  </td>
                   <td className="an-table__td an-table__td--actions">
                     <div className="an-actions">
                       <Link
-                        href={`/admin/notices/${notice.id}/edit`}
+                        href={`/admin/disclosures/${disclosure.id}/edit`}
                         className="an-btn an-btn--sm an-btn--ghost"
                       >
                         수정
                       </Link>
                       <button
                         className="an-btn an-btn--sm an-btn--danger-ghost"
-                        onClick={() => setDeleteTarget(notice)}
+                        onClick={() => setDeleteTarget(disclosure)}
                       >
                         삭제
                       </button>
@@ -174,12 +113,12 @@ export default function NoticesClient({ initialNotices }) {
                   </td>
                 </tr>
               ))}
-              {notices.length === 0 && (
+              {disclosures.length === 0 && (
                 <tr>
-                  <td className="an-table__empty" colSpan={6}>
+                  <td className="an-table__empty" colSpan={5}>
                     게시물이 없습니다.{' '}
-                    <Link href="/admin/notices/new" className="an-table__empty-link">
-                      새 게시물을 작성해 보세요.
+                    <Link href="/admin/disclosures/new" className="an-table__empty-link">
+                      새 자료를 작성해 보세요.
                     </Link>
                   </td>
                 </tr>
@@ -188,7 +127,6 @@ export default function NoticesClient({ initialNotices }) {
           </table>
         </div>
 
-        {/* 삭제 확인 모달 */}
         {deleteTarget && (
           <div
             className="an-overlay"
@@ -204,18 +142,9 @@ export default function NoticesClient({ initialNotices }) {
             >
               <div className="an-modal__hd">
                 <h2 className="an-modal__title">게시물 삭제</h2>
-                <button
-                  className="an-modal__close"
-                  onClick={() => setDeleteTarget(null)}
-                  aria-label="닫기"
-                >
+                <button className="an-modal__close" onClick={() => setDeleteTarget(null)} aria-label="닫기">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path
-                      d="M2 2l12 12M14 2L2 14"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                    />
+                    <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                   </svg>
                 </button>
               </div>
@@ -232,14 +161,7 @@ export default function NoticesClient({ initialNotices }) {
                         strokeLinejoin="round"
                       />
                       <path d="M12 9v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      <circle
-                        cx="12"
-                        cy="17"
-                        r="0.5"
-                        fill="currentColor"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                      />
+                      <circle cx="12" cy="17" r="0.5" fill="currentColor" stroke="currentColor" strokeWidth="1.5" />
                     </svg>
                   </div>
                   <p className="an-del-confirm__q">이 게시물을 삭제하시겠습니까?</p>
@@ -252,11 +174,7 @@ export default function NoticesClient({ initialNotices }) {
                 <button className="an-btn an-btn--secondary" onClick={() => setDeleteTarget(null)}>
                   취소
                 </button>
-                <button
-                  className="an-btn an-btn--danger"
-                  onClick={handleDelete}
-                  disabled={deleting}
-                >
+                <button className="an-btn an-btn--danger" onClick={handleDelete} disabled={deleting}>
                   {deleting ? '삭제 중...' : '삭제'}
                 </button>
               </div>
@@ -266,3 +184,4 @@ export default function NoticesClient({ initialNotices }) {
       </div>
   );
 }
+

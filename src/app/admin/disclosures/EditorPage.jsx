@@ -10,9 +10,8 @@ import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
 
-import { createArchive, updateArchive } from './actions';
+import { createDisclosure, updateDisclosure } from './actions';
 
-/* ── 툴바 버튼 ────────────────────────────────────────────── */
 function ToolbarBtn({ active, disabled, title, onClick, children }) {
   return (
     <button
@@ -36,7 +35,6 @@ function Divider() {
   return <span className="ep-toolbar__sep" aria-hidden="true" />;
 }
 
-/* ── 아이콘 SVG ────────────────────────────────────────────── */
 const icons = {
   undo: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -94,16 +92,8 @@ const icons = {
   ),
   blockquote: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"
-        stroke="currentColor"
-        strokeWidth="1.7"
-      />
-      <path
-        d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
-        stroke="currentColor"
-        strokeWidth="1.7"
-      />
+      <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" stroke="currentColor" strokeWidth="1.7" />
     </svg>
   ),
   alignLeft: (
@@ -128,76 +118,76 @@ const icons = {
   ),
   table: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="1.4"/>
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="1.4" />
     </svg>
   ),
   rowBefore: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="11" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M9 11v10M15 11v10" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M12 7V3M10 5h4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+      <rect x="3" y="11" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M9 11v10M15 11v10" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M12 7V3M10 5h4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   ),
   rowAfter: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M9 3v10M15 3v10" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M12 17v4M10 19h4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+      <rect x="3" y="3" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M9 3v10M15 3v10" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M12 17v4M10 19h4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   ),
   deleteRow: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="7" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M9 7v10M15 7v10" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M9.5 4.5l5 5M14.5 4.5l-5 5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+      <rect x="3" y="7" width="18" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M9 7v10M15 7v10" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M9.5 4.5l5 5M14.5 4.5l-5 5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
   colBefore: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="11" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M11 9h10M11 15h10" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M7 12H3M5 10v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+      <rect x="11" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M11 9h10M11 15h10" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M7 12H3M5 10v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   ),
   colAfter: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M3 9h10M3 15h10" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M17 12h4M19 10v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+      <rect x="3" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M3 9h10M3 15h10" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M17 12h4M19 10v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   ),
   deleteCol: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="7" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M7 9h10M7 15h10" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M4.5 9.5l5 5M9.5 9.5l-5 5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+      <rect x="7" y="3" width="10" height="18" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M7 9h10M7 15h10" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M4.5 9.5l5 5M9.5 9.5l-5 5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
   mergeCells: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M3 12h18M12 3v9M12 15v6" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M8 10l4-4 4 4M8 14l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M3 12h18" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M12 3v9M12 15v6" stroke="currentColor" strokeWidth="1.3" strokeDasharray="2 2" />
+      <path d="M8 10l4-4 4 4M8 14l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   splitCell: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M9 9l3 3-3 3M15 9l-3 3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M9 9l3 3-3 3M15 9l-3 3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   deleteTable: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
-      <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M8 8l8 8M16 8l-8 8" stroke="#dc2626" strokeWidth="1.8" strokeLinecap="round"/>
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M8 8l8 8M16 8l-8 8" stroke="#dc2626" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   ),
 };
 
-/* ── 표 크기 선택기 ─────────────────────────────────────────── */
 const TBL_ROWS = 7;
 const TBL_COLS = 9;
 
@@ -206,23 +196,26 @@ function TableGridPicker({ onSelect, onClose }) {
   const [hover, setHover] = useState([0, 0]);
 
   useEffect(() => {
-    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) onClose();
+    };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [onClose]);
 
   useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    const handler = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
   }, [onClose]);
 
   const [hRow, hCol] = hover;
+
   return (
-    <div className="tgp" ref={ref} role="dialog" aria-label="표 크기 선택">
-      <p className="tgp__label">
-        {hRow > 0 && hCol > 0 ? `${hCol}열 x ${hRow}행` : '표 크기를 선택하세요'}
-      </p>
+    <div className="tgp" ref={ref} role="dialog" aria-label="Table size picker">
+      <p className="tgp__label">{hRow > 0 && hCol > 0 ? `${hCol} cols x ${hRow} rows` : 'Select table size'}</p>
       <div
         className="tgp__grid"
         style={{ gridTemplateColumns: `repeat(${TBL_COLS}, 1fr)` }}
@@ -239,7 +232,7 @@ function TableGridPicker({ onSelect, onClose }) {
               className={`tgp__cell${isOn ? ' tgp__cell--on' : ''}`}
               onMouseEnter={() => setHover([row, col])}
               onClick={() => onSelect(row, col)}
-              aria-label={`${col}열 ${row}행 표 삽입`}
+              aria-label={`Insert ${col} cols x ${row} rows`}
             />
           );
         })}
@@ -248,9 +241,8 @@ function TableGridPicker({ onSelect, onClose }) {
   );
 }
 
-/* ── 날짜 선택기 ─────────────────────────────────────────────── */
-const MONTHS = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+const MONTHS = ['1?', '2?', '3?', '4?', '5?', '6?', '7?', '8?', '9?', '10?', '11?', '12?'];
+const DAYS = ['?', '?', '?', '?', '?', '?', '?'];
 
 function parseDate(str) {
   if (!str) return null;
@@ -269,7 +261,6 @@ function DatePicker({ value, onChange }) {
   const initial = parseDate(value) ?? new Date();
   const [view, setView] = useState({ year: initial.getFullYear(), month: initial.getMonth() });
 
-  // 외부 클릭 시 닫기
   useEffect(() => {
     if (!open) return;
     const handler = (e) => {
@@ -279,7 +270,6 @@ function DatePicker({ value, onChange }) {
     return () => document.removeEventListener('mousedown', handler);
   }, [open]);
 
-  // Esc 키로 닫기
   useEffect(() => {
     if (!open) return;
     const handler = (e) => {
@@ -317,40 +307,40 @@ function DatePicker({ value, onChange }) {
         className="dp__trigger"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        aria-label="작성일 선택"
+        aria-label="??? ??"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.8" />
           <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
-        {value ?? '날짜 선택'}
+        {value ?? '?? ??'}
       </button>
 
       {open && (
-        <div className="dp__panel" role="dialog" aria-label="날짜 선택">
+        <div className="dp__panel" role="dialog" aria-label="?? ??">
           <div className="dp__hd">
-            <button type="button" className="dp__nav" onClick={prevYear} title="이전 연도">
+            <button type="button" className="dp__nav" onClick={prevYear} title="?? ??">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M5 2L1 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button type="button" className="dp__nav" onClick={prevMonth} title="이전 달">
+            <button type="button" className="dp__nav" onClick={prevMonth} title="?? ?">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M7.5 2L3.5 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
 
             <span className="dp__heading">
-              {view.year}년 {MONTHS[view.month]}
+              {view.year}? {MONTHS[view.month]}
             </span>
 
-            <button type="button" className="dp__nav" onClick={nextMonth} title="다음 달">
+            <button type="button" className="dp__nav" onClick={nextMonth} title="?? ?">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M4.5 2l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button type="button" className="dp__nav" onClick={nextYear} title="다음 연도">
+            <button type="button" className="dp__nav" onClick={nextYear} title="?? ??">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -400,7 +390,7 @@ function DatePicker({ value, onChange }) {
                 setOpen(false);
               }}
             >
-              오늘
+              ??
             </button>
           </div>
         </div>
@@ -409,13 +399,14 @@ function DatePicker({ value, onChange }) {
   );
 }
 
-/* ── 메인 에디터 페이지 ────────────────────────────────────── */
-export default function EditorPage({ archive }) {
+export default function EditorPage({ disclosure }) {
   const router = useRouter();
-  const isEdit = Boolean(archive);
+  const isEdit = Boolean(disclosure);
 
-  const [title, setTitle] = useState(archive?.title ?? '');
-  const [createdAt, setCreatedAt] = useState(archive?.createdAt ?? new Date().toISOString().slice(0, 10));
+  const [title, setTitle] = useState(disclosure?.title ?? '');
+  const [createdAt, setCreatedAt] = useState(
+    disclosure?.createdAt ?? new Date().toISOString().slice(0, 10),
+  );
   const [saving, setSaving] = useState(false);
   const [tablePickerOpen, setTablePickerOpen] = useState(false);
 
@@ -430,14 +421,14 @@ export default function EditorPage({ archive }) {
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({
-        placeholder: '본문을 입력하세요...',
+        placeholder: '??? ?????...',
       }),
       Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
       TableCell,
     ],
-    content: archive?.content ?? '',
+    content: disclosure?.content ?? '',
     editorProps: {
       attributes: {
         class: 'ep-content',
@@ -448,61 +439,49 @@ export default function EditorPage({ archive }) {
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) {
-      alert('제목을 입력해 주세요.');
+      alert('??? ??? ???.');
       return;
     }
+
     const content = editor?.getHTML() ?? '';
     if (!content || content === '<p></p>') {
-      alert('내용을 입력해 주세요.');
+      alert('??? ??? ???.');
       return;
     }
 
     setSaving(true);
     try {
       if (isEdit) {
-        await updateArchive(archive.id, { title, content, createdAt });
+        await updateDisclosure(disclosure.id, { title, content, createdAt });
       } else {
-        await createArchive({ title, content, createdAt });
+        await createDisclosure({ title, content, createdAt });
       }
-      router.push('/admin/archive');
+      router.push('/admin/disclosures');
       router.refresh();
     } catch {
-      alert('저장에 실패했습니다. 다시 시도해 주세요.');
+      alert('??? ??????. ?? ??? ???.');
     } finally {
       setSaving(false);
     }
-  }, [title, createdAt, editor, isEdit, archive, router]);
+  }, [title, createdAt, editor, isEdit, disclosure, router]);
 
   return (
     <div className="ep">
-      {/* 헤더 */}
-      <header className="adm-header">
-        <div className="adm-header__inner">
-          <span className="adm-header__brand">EJJ 관리자</span>
-          <div className="adm-header__tools">
-            <Link href="/" className="adm-header__site-link">
-              사이트 보기
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* 액션 바 */}
       <div className="ep__actionbar">
         <div className="ep__actionbar-inner">
-          <Link href="/admin/archive" className="ep__back">
+          <Link href="/admin/disclosures" className="ep__back">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M8.5 3L5 7L8.5 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            목록으로
+            ????
           </Link>
-          <span className="ep__actionbar-title">{isEdit ? '자료 수정' : '새 자료 작성'}</span>
+          <span className="ep__actionbar-title">{isEdit ? '???? ??' : '? ???? ??'}</span>
           <div className="ep__actionbar-btns">
-            <Link href="/admin/archive" className="an-btn an-btn--secondary an-btn--sm">
-              취소
+            <Link href="/admin/disclosures" className="an-btn an-btn--secondary an-btn--sm">
+              ??
             </Link>
             <button className="an-btn an-btn--primary an-btn--sm" onClick={handleSave} disabled={saving}>
-              {saving ? '저장 중...' : isEdit ? '수정 완료' : '게시하기'}
+              {saving ? '?? ?...' : isEdit ? '?? ??' : '????'}
             </button>
           </div>
         </div>
@@ -512,7 +491,7 @@ export default function EditorPage({ archive }) {
         <div className="ep__paper">
           <div className="ep__meta-row">
             <div className="ep__meta-date">
-              <span className="ep__meta-date-label">작성일</span>
+              <span className="ep__meta-date-label">???</span>
               <DatePicker value={createdAt} onChange={setCreatedAt} />
             </div>
           </div>
@@ -522,24 +501,16 @@ export default function EditorPage({ archive }) {
             className="ep__title-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요"
+            placeholder="??? ?????"
             maxLength={100}
           />
 
-          <div className="ep-toolbar" role="toolbar" aria-label="텍스트 서식">
+          <div className="ep-toolbar" role="toolbar" aria-label="??? ??">
             <div className="ep-toolbar__group">
-              <ToolbarBtn
-                title="실행 취소 (Ctrl+Z)"
-                disabled={!editor?.can().undo()}
-                onClick={() => editor?.chain().focus().undo().run()}
-              >
+              <ToolbarBtn title="?? ?? (Ctrl+Z)" disabled={!editor?.can().undo()} onClick={() => editor?.chain().focus().undo().run()}>
                 {icons.undo}
               </ToolbarBtn>
-              <ToolbarBtn
-                title="다시 실행 (Ctrl+Y)"
-                disabled={!editor?.can().redo()}
-                onClick={() => editor?.chain().focus().redo().run()}
-              >
+              <ToolbarBtn title="?? ?? (Ctrl+Y)" disabled={!editor?.can().redo()} onClick={() => editor?.chain().focus().redo().run()}>
                 {icons.redo}
               </ToolbarBtn>
             </div>
@@ -548,31 +519,19 @@ export default function EditorPage({ archive }) {
 
             <div className="ep-toolbar__group">
               <ToolbarBtn
-                title="본문"
+                title="??"
                 active={editor?.isActive('paragraph') && !editor?.isActive('heading')}
                 onClick={() => editor?.chain().focus().setParagraph().run()}
               >
-                <span className="ep-toolbar__label">본문</span>
+                <span className="ep-toolbar__label">??</span>
               </ToolbarBtn>
-              <ToolbarBtn
-                title="제목 1"
-                active={editor?.isActive('heading', { level: 1 })}
-                onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-              >
+              <ToolbarBtn title="?? 1" active={editor?.isActive('heading', { level: 1 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}>
                 <span className="ep-toolbar__label ep-toolbar__label--h1">H1</span>
               </ToolbarBtn>
-              <ToolbarBtn
-                title="제목 2"
-                active={editor?.isActive('heading', { level: 2 })}
-                onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-              >
+              <ToolbarBtn title="?? 2" active={editor?.isActive('heading', { level: 2 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>
                 <span className="ep-toolbar__label">H2</span>
               </ToolbarBtn>
-              <ToolbarBtn
-                title="제목 3"
-                active={editor?.isActive('heading', { level: 3 })}
-                onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-              >
+              <ToolbarBtn title="?? 3" active={editor?.isActive('heading', { level: 3 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>
                 <span className="ep-toolbar__label">H3</span>
               </ToolbarBtn>
             </div>
@@ -580,16 +539,16 @@ export default function EditorPage({ archive }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="굵게 (Ctrl+B)" active={editor?.isActive('bold')} onClick={() => editor?.chain().focus().toggleBold().run()}>
+              <ToolbarBtn title="?? (Ctrl+B)" active={editor?.isActive('bold')} onClick={() => editor?.chain().focus().toggleBold().run()}>
                 {icons.bold}
               </ToolbarBtn>
-              <ToolbarBtn title="기울임 (Ctrl+I)" active={editor?.isActive('italic')} onClick={() => editor?.chain().focus().toggleItalic().run()}>
+              <ToolbarBtn title="??? (Ctrl+I)" active={editor?.isActive('italic')} onClick={() => editor?.chain().focus().toggleItalic().run()}>
                 {icons.italic}
               </ToolbarBtn>
-              <ToolbarBtn title="밑줄 (Ctrl+U)" active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>
+              <ToolbarBtn title="?? (Ctrl+U)" active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>
                 {icons.underline}
               </ToolbarBtn>
-              <ToolbarBtn title="취소선" active={editor?.isActive('strike')} onClick={() => editor?.chain().focus().toggleStrike().run()}>
+              <ToolbarBtn title="???" active={editor?.isActive('strike')} onClick={() => editor?.chain().focus().toggleStrike().run()}>
                 {icons.strike}
               </ToolbarBtn>
             </div>
@@ -597,13 +556,13 @@ export default function EditorPage({ archive }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="글머리 기호 목록" active={editor?.isActive('bulletList')} onClick={() => editor?.chain().focus().toggleBulletList().run()}>
+              <ToolbarBtn title="??? ?? ??" active={editor?.isActive('bulletList')} onClick={() => editor?.chain().focus().toggleBulletList().run()}>
                 {icons.bulletList}
               </ToolbarBtn>
-              <ToolbarBtn title="번호 매기기 목록" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
+              <ToolbarBtn title="?? ??? ??" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
                 {icons.orderedList}
               </ToolbarBtn>
-              <ToolbarBtn title="인용구" active={editor?.isActive('blockquote')} onClick={() => editor?.chain().focus().toggleBlockquote().run()}>
+              <ToolbarBtn title="???" active={editor?.isActive('blockquote')} onClick={() => editor?.chain().focus().toggleBlockquote().run()}>
                 {icons.blockquote}
               </ToolbarBtn>
             </div>
@@ -611,13 +570,13 @@ export default function EditorPage({ archive }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="왼쪽 정렬" active={editor?.isActive({ textAlign: 'left' })} onClick={() => editor?.chain().focus().setTextAlign('left').run()}>
+              <ToolbarBtn title="?? ??" active={editor?.isActive({ textAlign: 'left' })} onClick={() => editor?.chain().focus().setTextAlign('left').run()}>
                 {icons.alignLeft}
               </ToolbarBtn>
-              <ToolbarBtn title="가운데 정렬" active={editor?.isActive({ textAlign: 'center' })} onClick={() => editor?.chain().focus().setTextAlign('center').run()}>
+              <ToolbarBtn title="??? ??" active={editor?.isActive({ textAlign: 'center' })} onClick={() => editor?.chain().focus().setTextAlign('center').run()}>
                 {icons.alignCenter}
               </ToolbarBtn>
-              <ToolbarBtn title="오른쪽 정렬" active={editor?.isActive({ textAlign: 'right' })} onClick={() => editor?.chain().focus().setTextAlign('right').run()}>
+              <ToolbarBtn title="??? ??" active={editor?.isActive({ textAlign: 'right' })} onClick={() => editor?.chain().focus().setTextAlign('right').run()}>
                 {icons.alignRight}
               </ToolbarBtn>
             </div>
@@ -625,27 +584,26 @@ export default function EditorPage({ archive }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="구분선" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
+              <ToolbarBtn title="???" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
                 {icons.hr}
               </ToolbarBtn>
             </div>
 
             <Divider />
 
-            {/* 표 삽입 */}
             <div className="ep-toolbar__group">
               <div className="ep-tbl-wrap">
-                <ToolbarBtn
-                  title="표 삽입"
-                  active={tablePickerOpen}
-                  onClick={() => setTablePickerOpen((o) => !o)}
-                >
+                <ToolbarBtn title="? ??" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
                   {icons.table}
                 </ToolbarBtn>
                 {tablePickerOpen && (
                   <TableGridPicker
                     onSelect={(rows, cols) => {
-                      editor?.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+                      editor
+                        ?.chain()
+                        .focus()
+                        .insertTable({ rows, cols, withHeaderRow: true })
+                        .run();
                       setTablePickerOpen(false);
                     }}
                     onClose={() => setTablePickerOpen(false)}
@@ -654,29 +612,49 @@ export default function EditorPage({ archive }) {
               </div>
             </div>
 
-            {/* 표 편집 (표 안에 커서가 있을 때 표시) */}
             {editor?.isActive('table') && (
               <>
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="위에 행 삽입" onClick={() => editor.chain().focus().addRowBefore().run()}>{icons.rowBefore}</ToolbarBtn>
-                  <ToolbarBtn title="아래에 행 삽입" onClick={() => editor.chain().focus().addRowAfter().run()}>{icons.rowAfter}</ToolbarBtn>
-                  <ToolbarBtn title="행 삭제" onClick={() => editor.chain().focus().deleteRow().run()}>{icons.deleteRow}</ToolbarBtn>
+                  <ToolbarBtn title="?? ? ??" onClick={() => editor.chain().focus().addRowBefore().run()}>
+                    {icons.rowBefore}
+                  </ToolbarBtn>
+                  <ToolbarBtn title="??? ? ??" onClick={() => editor.chain().focus().addRowAfter().run()}>
+                    {icons.rowAfter}
+                  </ToolbarBtn>
+                  <ToolbarBtn title="? ??" onClick={() => editor.chain().focus().deleteRow().run()}>
+                    {icons.deleteRow}
+                  </ToolbarBtn>
                 </div>
+
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="왼쪽에 열 삽입" onClick={() => editor.chain().focus().addColumnBefore().run()}>{icons.colBefore}</ToolbarBtn>
-                  <ToolbarBtn title="오른쪽에 열 삽입" onClick={() => editor.chain().focus().addColumnAfter().run()}>{icons.colAfter}</ToolbarBtn>
-                  <ToolbarBtn title="열 삭제" onClick={() => editor.chain().focus().deleteColumn().run()}>{icons.deleteCol}</ToolbarBtn>
+                  <ToolbarBtn title="??? ? ??" onClick={() => editor.chain().focus().addColumnBefore().run()}>
+                    {icons.colBefore}
+                  </ToolbarBtn>
+                  <ToolbarBtn title="???? ? ??" onClick={() => editor.chain().focus().addColumnAfter().run()}>
+                    {icons.colAfter}
+                  </ToolbarBtn>
+                  <ToolbarBtn title="? ??" onClick={() => editor.chain().focus().deleteColumn().run()}>
+                    {icons.deleteCol}
+                  </ToolbarBtn>
                 </div>
+
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="셀 병합" disabled={!editor.can().mergeCells()} onClick={() => editor.chain().focus().mergeCells().run()}>{icons.mergeCells}</ToolbarBtn>
-                  <ToolbarBtn title="셀 분리" disabled={!editor.can().splitCell()} onClick={() => editor.chain().focus().splitCell().run()}>{icons.splitCell}</ToolbarBtn>
+                  <ToolbarBtn title="? ??" disabled={!editor.can().mergeCells()} onClick={() => editor.chain().focus().mergeCells().run()}>
+                    {icons.mergeCells}
+                  </ToolbarBtn>
+                  <ToolbarBtn title="? ??" disabled={!editor.can().splitCell()} onClick={() => editor.chain().focus().splitCell().run()}>
+                    {icons.splitCell}
+                  </ToolbarBtn>
                 </div>
+
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="표 삭제" onClick={() => editor.chain().focus().deleteTable().run()}>{icons.deleteTable}</ToolbarBtn>
+                  <ToolbarBtn title="? ??" onClick={() => editor.chain().focus().deleteTable().run()}>
+                    {icons.deleteTable}
+                  </ToolbarBtn>
                 </div>
               </>
             )}

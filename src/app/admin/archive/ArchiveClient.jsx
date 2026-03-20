@@ -175,7 +175,7 @@ export default function ArchiveClient({ initialArchives }) {
                 취소
               </button>
               <button className="an-btn an-btn--danger" onClick={handleDelete} disabled={deleting}>
-                {deleting ? '삭제 중…' : '삭제'}
+                {deleting ? '삭제 중...' : '삭제'}
               </button>
             </div>
           </div>
