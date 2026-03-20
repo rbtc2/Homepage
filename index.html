@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>기업 홈페이지</title>
+    <title>EJJ 홈페이지</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -98,7 +98,7 @@
               <div class="hero__visual-frame"></div>
             </div>
             <div class="hero__copy">
-              <h2 class="hero__title">배너 헤드라인</h2>
+              <h2 class="hero__title" id="hero-title" aria-live="polite">배너 헤드라인 1</h2>
               <p class="hero__desc">
                 슬라이드 배너에 들어갈 부제·요약 문구가 이 위치에 배치됩니다. 현재는 레이아웃용 스켈레톤입니다.
               </p>
@@ -108,9 +108,8 @@
 
         <button
           type="button"
-          class="hero__ctrl hero__ctrl--prev is-skeleton"
-          aria-label="이전 슬라이드 (준비 중)"
-          aria-disabled="true"
+          class="hero__ctrl hero__ctrl--prev"
+          aria-label="이전 슬라이드"
         >
           <svg class="hero__chevron" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -118,9 +117,8 @@
         </button>
         <button
           type="button"
-          class="hero__ctrl hero__ctrl--next is-skeleton"
-          aria-label="다음 슬라이드 (준비 중)"
-          aria-disabled="true"
+          class="hero__ctrl hero__ctrl--next"
+          aria-label="다음 슬라이드"
         >
           <svg class="hero__chevron" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -195,5 +193,6 @@
     </div>
 
     <script src="src/scripts/login-modal.js" defer></script>
+    <script src="src/scripts/hero-banner.js" defer></script>
   </body>
 </html>
