@@ -35,9 +35,11 @@
               <a href="#" class="header__nav-item">조직 소개</a>
               <div class="header__mega-col" role="group" aria-label="조직 소개 하위 메뉴">
                 <ul class="header__mega-list">
-                  <li><a href="#" class="header__mega-link">임시메뉴1</a></li>
-                  <li><a href="#" class="header__mega-link">임시메뉴2</a></li>
-                  <li><a href="#" class="header__mega-link">임시메뉴3</a></li>
+                  <li><a href="#" class="header__mega-link">소개</a></li>
+                  <li><a href="#" class="header__mega-link">인사말</a></li>
+                  <li><a href="#" class="header__mega-link">연혁</a></li>
+                  <li><a href="#" class="header__mega-link">함께하는 사람들</a></li>
+                  <li><a href="#" class="header__mega-link">오시는 길</a></li>
                 </ul>
               </div>
             </li>
@@ -126,7 +128,9 @@
     </header>
 
     <section class="hero" aria-label="메인 배너 슬라이드 영역 (준비 중)">
-      <div class="hero__viewport">
+      <div class="hero__viewport" id="hero-viewport">
+        <!-- 전체 배너 영역(그라데이션 크기 전체) 배경 이미지 레이어 — hero-banner.js 의 backgroundSlide 와 --hero-slide-bg-image 로 연결 -->
+        <div class="hero__bg" aria-hidden="true"></div>
         <div class="hero__slide">
           <div class="hero__layout">
             <div class="hero__visual" aria-hidden="true">

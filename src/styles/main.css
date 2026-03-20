@@ -355,11 +355,28 @@ body {
   min-height: clamp(17rem, 42vw, 28rem);
   display: flex;
   flex-direction: column;
+  /* 배경 이미지가 없을 때 보이는 기본 면 (이미지 사용 시에도 가장자리/로딩 Fallback 으로 유지) */
   background: linear-gradient(145deg, #dfe8f2 0%, #c9d6e8 42%, #b8c9df 100%);
   overflow: hidden;
+  /* JavaScript: 슬라이드별 url("...") — 미설정 시 투명, 그라데이션만 보임 */
+  --hero-slide-bg-image: none;
+}
+
+/* 뷰포트 전체를 덮는 배너 배경(추후 슬라이드 이미지). 현재는 변수가 none 이라 그라데이션만 보입니다. */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--hero-slide-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero__slide {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   align-items: center;
@@ -465,6 +482,7 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
+  z-index: 2;
   width: clamp(2.75rem, 7vw, 3.75rem);
   margin: 0;
   padding: 0;

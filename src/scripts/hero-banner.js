@@ -1,5 +1,38 @@
 (() => {
-  const SLIDE_TITLES = ["배너 헤드라인 1", "배너 헤드라인 2", "배너 헤드라인 3", "배너 헤드라인 4"];
+  /** 슬라이드별 ‘전체 뷰포트’ 배경 이미지 파일 경로 (public 기준). 파일은 여기에 둡니다. */
+  const HERO_BG_IMAGE_BASE = "public/images/hero/slides";
+
+  /**
+   * 슬라이드 데이터
+   * - backgroundImage: 파일명 문자열이면 `.hero__viewport` 전체에 cover 배경으로 표시됩니다.
+   * - null 이면 배경 이미지 없음 → 그라데이션만 보입니다. (현재 기본값 전부 null)
+   */
+  const HERO_SLIDES = [
+    {
+      title: "배너 헤드라인 1",
+      description:
+        "슬라이드 배너에 들어갈 부제·요약 문구가 이 위치에 배치됩니다. 현재는 레이아웃용 스켈레톤입니다.",
+      backgroundImage: null,
+    },
+    {
+      title: "배너 헤드라인 2",
+      description:
+        "슬라이드 배너에 들어갈 부제·요약 문구가 이 위치에 배치됩니다. 현재는 레이아웃용 스켈레톤입니다.",
+      backgroundImage: null,
+    },
+    {
+      title: "배너 헤드라인 3",
+      description:
+        "슬라이드 배너에 들어갈 부제·요약 문구가 이 위치에 배치됩니다. 현재는 레이아웃용 스켈레톤입니다.",
+      backgroundImage: null,
+    },
+    {
+      title: "배너 헤드라인 4",
+      description:
+        "슬라이드 배너에 들어갈 부제·요약 문구가 이 위치에 배치됩니다. 현재는 레이아웃용 스켈레톤입니다.",
+      backgroundImage: null,
+    },
+  ];
 
   const LEAVE_NEXT = "hero__title--leave-next";
   const LEAVE_PREV = "hero__title--leave-prev";
@@ -19,23 +52,40 @@
     titleEl.classList.remove(LEAVE_NEXT, LEAVE_PREV, NO_MOTION, ENTER_FROM_NEXT, ENTER_FROM_PREV);
   }
 
+  function applyHeroViewportBackground(viewportEl, slide) {
+    const file = slide?.backgroundImage;
+    if (typeof file === "string" && file.trim() !== "") {
+      const url = `${HERO_BG_IMAGE_BASE}/${file}`.replace(/\\/g, "/");
+      viewportEl.style.setProperty("--hero-slide-bg-image", `url("${url}")`);
+    } else {
+      viewportEl.style.removeProperty("--hero-slide-bg-image");
+    }
+  }
+
+  function applySlideContent(index, titleEl, descEl, viewportEl) {
+    const slide = HERO_SLIDES[index];
+    if (!slide) return;
+
+    titleEl.textContent = slide.title;
+    descEl.textContent = slide.description;
+    applyHeroViewportBackground(viewportEl, slide);
+  }
+
   function initHeroBanner() {
+    const viewportEl = document.getElementById("hero-viewport");
     const titleEl = document.getElementById("hero-title");
     const descEl = document.querySelector(".hero__desc");
     const prevBtn = document.querySelector(".hero__ctrl--prev");
     const nextBtn = document.querySelector(".hero__ctrl--next");
 
-    if (!titleEl || !prevBtn || !nextBtn || !descEl) return;
-
-    const initialDesc = descEl.textContent?.trim() ?? "";
+    if (!viewportEl || !titleEl || !prevBtn || !nextBtn || !descEl) return;
 
     let index = 0;
     let isAnimating = false;
 
     function renderImmediate() {
       stripTitleMotionClasses(titleEl);
-      titleEl.textContent = SLIDE_TITLES[index];
-      if (!descEl.textContent) descEl.textContent = initialDesc;
+      applySlideContent(index, titleEl, descEl, viewportEl);
     }
 
     function animateTo(newIndex, direction) {
@@ -65,8 +115,7 @@
 
       const afterLeave = () => {
         index = newIndex;
-        titleEl.textContent = SLIDE_TITLES[index];
-        if (!descEl.textContent) descEl.textContent = initialDesc;
+        applySlideContent(index, titleEl, descEl, viewportEl);
 
         titleEl.classList.remove(leaveClass);
         titleEl.classList.add(NO_MOTION, enterFromClass);
@@ -100,12 +149,12 @@
     }
 
     prevBtn.addEventListener("click", () => {
-      const newIndex = getNextIndex(index, -1, SLIDE_TITLES.length);
+      const newIndex = getNextIndex(index, -1, HERO_SLIDES.length);
       animateTo(newIndex, -1);
     });
 
     nextBtn.addEventListener("click", () => {
-      const newIndex = getNextIndex(index, +1, SLIDE_TITLES.length);
+      const newIndex = getNextIndex(index, +1, HERO_SLIDES.length);
       animateTo(newIndex, +1);
     });
 
