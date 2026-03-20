@@ -159,18 +159,18 @@
           </svg>
         </button>
         <h2 class="login-modal__title" id="login-modal-title">로그인</h2>
-        <p class="login-modal__hint">스켈레톤 화면입니다. 실제 로그인·인증은 연결되어 있지 않습니다.</p>
+        <p class="login-modal__hint">테스트 계정: 아이디 <strong>admin</strong>, 비밀번호 <strong>admin</strong></p>
+        <p class="login-modal__error" id="login-modal-error" role="alert" hidden></p>
         <form class="login-modal__form" id="login-modal-form" action="#" novalidate>
           <div class="login-modal__field">
-            <label class="login-modal__label" for="login-modal-email">이메일 또는 아이디</label>
+            <label class="login-modal__label" for="login-modal-email">아이디</label>
             <input
               class="login-modal__input"
               id="login-modal-email"
-              name="email"
+              name="id"
               type="text"
               autocomplete="username"
-              placeholder="example@email.com"
-              disabled
+              placeholder="admin"
             />
           </div>
           <div class="login-modal__field">
@@ -181,8 +181,7 @@
               name="password"
               type="password"
               autocomplete="current-password"
-              placeholder="비밀번호"
-              disabled
+              placeholder="admin"
             />
           </div>
           <button type="submit" class="login-modal__submit" disabled aria-disabled="true">
@@ -191,6 +190,20 @@
         </form>
       </div>
     </div>
+
+    <footer class="footer" role="contentinfo">
+      <div class="footer__inner">
+        <p class="footer__line">
+          <span class="footer__label">사무실</span> <span class="footer__value">서울특별시</span>
+        </p>
+        <p class="footer__line">
+          <span class="footer__label">대표자</span> <span class="footer__value">조은혜</span>
+          <span class="footer__sep">|</span>
+          <span class="footer__label">대표 전화</span> <span class="footer__value">010-0000-0000</span>
+        </p>
+        <p class="footer__copyright">ⓒ EJJ. ALL RIGHTS RESERVED.</p>
+      </div>
+    </footer>
 
     <script src="src/scripts/login-modal.js" defer></script>
     <script src="src/scripts/hero-banner.js" defer></script>
