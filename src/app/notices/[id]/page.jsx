@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ViewTracker from '@/components/ViewTracker';
 import { getNoticeById, getPrevNext } from '@/lib/notices';
 
 export const dynamic = 'force-dynamic';
@@ -22,6 +23,7 @@ export default async function NoticeDetailPage({ params }) {
 
   return (
     <>
+      <ViewTracker table="notices" id={id} />
       <Header />
       <main role="main">
         <div className="nd-wrap">
