@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/styles/main.css" />
@@ -16,16 +16,35 @@
   <body>
     <header class="header" role="banner">
       <div class="header__inner">
-        <div class="header__brand" aria-label="브랜드·CI 영역 (추후 로고 연결)">
-          <span class="header__mark" aria-hidden="true">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
-              <rect width="32" height="32" rx="7" fill="currentColor" />
-              <rect x="9" y="11" width="14" height="2.5" rx="1.25" fill="#fff" />
-              <rect x="9" y="17.25" width="9" height="2.5" rx="1.25" fill="#fff" opacity="0.88" />
-            </svg>
-          </span>
-          <span class="header__wordmark">기업명</span>
+        <div class="header__brand" aria-label="브랜드·CI 영역">
+          <!-- 로고 교체: public/images/ 아래 SVG로 두고 src 경로만 맞추면 됩니다. -->
+          <img
+            class="header__logo"
+            src="public/images/logo-sample.svg"
+            width="32"
+            height="32"
+            alt=""
+            decoding="async"
+          />
+          <span class="header__wordmark">EJJ</span>
         </div>
+
+        <nav class="header__nav" aria-label="주 메뉴 (준비 중)">
+          <ul class="header__nav-list">
+            <li>
+              <button type="button" class="header__nav-item is-skeleton" aria-disabled="true">1</button>
+            </li>
+            <li>
+              <button type="button" class="header__nav-item is-skeleton" aria-disabled="true">2</button>
+            </li>
+            <li>
+              <button type="button" class="header__nav-item is-skeleton" aria-disabled="true">3</button>
+            </li>
+            <li>
+              <button type="button" class="header__nav-item is-skeleton" aria-disabled="true">4</button>
+            </li>
+          </ul>
+        </nav>
 
         <div class="header__tools">
           <button
@@ -54,20 +73,59 @@
           </button>
           <button
             type="button"
-            class="header__action header__action--lang is-skeleton"
+            class="header__lang-pill is-skeleton"
             aria-label="영문 사이트 (준비 중)"
             aria-disabled="true"
           >
-            <span class="header__lang">ENG</span>
+            <span class="header__lang-pill-text">ENG</span>
           </button>
         </div>
       </div>
     </header>
 
+    <section class="hero" aria-label="메인 배너 슬라이드 영역 (준비 중)">
+      <div class="hero__viewport">
+        <div class="hero__slide">
+          <div class="hero__layout">
+            <div class="hero__visual" aria-hidden="true">
+              <div class="hero__visual-frame"></div>
+            </div>
+            <div class="hero__copy">
+              <h2 class="hero__title">배너 헤드라인</h2>
+              <p class="hero__desc">
+                슬라이드 배너에 들어갈 부제·요약 문구가 이 위치에 배치됩니다. 현재는 레이아웃용 스켈레톤입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="hero__ctrl hero__ctrl--prev is-skeleton"
+          aria-label="이전 슬라이드 (준비 중)"
+          aria-disabled="true"
+        >
+          <svg class="hero__chevron" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="hero__ctrl hero__ctrl--next is-skeleton"
+          aria-label="다음 슬라이드 (준비 중)"
+          aria-disabled="true"
+        >
+          <svg class="hero__chevron" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
     <main class="main" role="main">
       <div class="main__surface">
         <p class="main__lead">본문 영역</p>
-        <p class="main__note">콘텐츠는 이후 단계에서 구성됩니다.</p>
+        <p class="main__note">하단 콘텐츠는 이후 단계에서 구성됩니다.</p>
       </div>
     </main>
   </body>

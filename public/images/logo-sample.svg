@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <!-- 샘플 CI: 배포 전 본사 로고 SVG로 교체. 경로: public/images/ — index.html의 img src도 함께 수정 -->
+  <rect width="32" height="32" rx="7" fill="#124fa6" />
+  <rect x="9" y="11" width="14" height="2.5" rx="1.25" fill="#fff" />
+  <rect x="9" y="17.25" width="9" height="2.5" rx="1.25" fill="#fff" opacity="0.88" />
+</svg>
