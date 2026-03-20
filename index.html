@@ -159,7 +159,7 @@
           </svg>
         </button>
         <h2 class="login-modal__title" id="login-modal-title">로그인</h2>
-        <p class="login-modal__hint">테스트 계정: 아이디 <strong>admin</strong>, 비밀번호 <strong>admin</strong></p>
+        <p class="login-modal__hint">아이디와 비밀번호를 입력해 로그인해 주세요.</p>
         <p class="login-modal__error" id="login-modal-error" role="alert" hidden></p>
         <form class="login-modal__form" id="login-modal-form" action="#" novalidate>
           <div class="login-modal__field">
@@ -170,7 +170,7 @@
               name="id"
               type="text"
               autocomplete="username"
-              placeholder="admin"
+              placeholder="id"
             />
           </div>
           <div class="login-modal__field">
@@ -181,7 +181,7 @@
               name="password"
               type="password"
               autocomplete="current-password"
-              placeholder="admin"
+              placeholder="password"
             />
           </div>
           <button type="submit" class="login-modal__submit" disabled aria-disabled="true">
@@ -193,6 +193,45 @@
 
     <footer class="footer" role="contentinfo">
       <div class="footer__inner">
+        <div class="footer__sns" aria-label="SNS LINK">
+          <span class="footer__sns-label">SNS LINK</span>
+          <div class="footer__sns-icons" aria-label="인스타그램/페이스북">
+            <a
+              class="footer__sns-icon"
+              href="https://www.instagram.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="인스타그램 링크"
+            >
+              <img
+                class="footer__sns-img"
+                src="public/images/instagram.svg"
+                width="22"
+                height="22"
+                alt="인스타그램"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <a
+              class="footer__sns-icon"
+              href="https://www.facebook.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="페이스북 링크"
+            >
+              <img
+                class="footer__sns-img"
+                src="public/images/facebook.svg"
+                width="22"
+                height="22"
+                alt="페이스북"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          </div>
+        </div>
         <p class="footer__line">
           <span class="footer__label">사무실</span> <span class="footer__value">서울특별시</span>
         </p>
