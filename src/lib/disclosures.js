@@ -1,36 +1,64 @@
-import { readFile } from 'fs/promises';
-import path from 'path';
+import { supabase } from './supabase';
 
-const DATA_PATH = path.join(process.cwd(), 'src/data/disclosures-store.json');
-
-export async function getDisclosures() {
-  const raw = await readFile(DATA_PATH, 'utf8');
-  return JSON.parse(raw);
-}
-
-export async function searchDisclosures(query) {
-  const disclosures = await getDisclosures();
-  if (!query || !query.trim()) return disclosures;
-  const q = query.trim().toLowerCase();
-  return disclosures.filter(
-    (d) => d.title.toLowerCase().includes(q) || d.content.toLowerCase().includes(q),
-  );
-}
-
-export async function getDisclosureById(id) {
-  const disclosures = await getDisclosures();
-  return disclosures.find((d) => d.id === Number(id)) ?? null;
-}
-
-export async function getPrevNext(id) {
-  const disclosures = await getDisclosures();
-  const numId = Number(id);
-  const sorted = [...disclosures].sort((a, b) => a.id - b.id);
-  const idx = sorted.findIndex((d) => d.id === numId);
-
+function normalize(row) {
+  if (!row) return null;
   return {
-    prev: idx > 0 ? sorted[idx - 1] : null,
-    next: idx < sorted.length - 1 ? sorted[idx + 1] : null,
+    id: row.id,
+    title: row.title,
+    content: row.content,
+    author: row.author,
+    createdAt: row.created_at,
+    views: row.views,
   };
 }
 
+export async function getDisclosures() {
+  const { data, error } = await supabase
+    .from('disclosures')
+    .select('*')
+    .order('id', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map(normalize);
+}
+
+export async function searchDisclosures(query) {
+  if (!query || !query.trim()) return getDisclosures();
+  const q = query.trim().toLowerCase();
+
+  const { data, error } = await supabase
+    .from('disclosures')
+    .select('*')
+    .or(`title.ilike.%${q}%,content.ilike.%${q}%`)
+    .order('id', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map(normalize);
+}
+
+export async function getDisclosureById(id) {
+  const { data, error } = await supabase
+    .from('disclosures')
+    .select('*')
+    .eq('id', Number(id))
+    .single();
+
+  if (error) return null;
+  return normalize(data);
+}
+
+export async function getPrevNext(id) {
+  const { data, error } = await supabase
+    .from('disclosures')
+    .select('id, title')
+    .order('id', { ascending: true });
+
+  if (error) throw new Error(error.message);
+
+  const numId = Number(id);
+  const idx = data.findIndex((d) => d.id === numId);
+  return {
+    prev: idx > 0 ? data[idx - 1] : null,
+    next: idx < data.length - 1 ? data[idx + 1] : null,
+  };
+}

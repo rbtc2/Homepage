@@ -241,8 +241,8 @@ function TableGridPicker({ onSelect, onClose }) {
   );
 }
 
-const MONTHS = ['1\uC6D4','2\uC6D4','3\uC6D4','4\uC6D4','5\uC6D4','6\uC6D4','7\uC6D4','8\uC6D4','9\uC6D4','10\uC6D4','11\uC6D4','12\uC6D4'];
-const DAYS = ['\uC77C','\uC6D4','\uD654','\uC218','\uBAA9','\uAE08','\uD1B5'];
+const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const DAYS = ['일','월','화','수','목','금','통'];
 
 function parseDate(str) {
   if (!str) return null;
@@ -307,40 +307,40 @@ function DatePicker({ value, onChange }) {
         className="dp__trigger"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        aria-label="\uc791\uc131\uc77c\u0020\uc120\ud0dd"
+        aria-label="작성일 선택"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.8" />
           <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
-        {value ?? '\ub0a0\uc9dc\u0020\uc120\ud0dd'}
+        {value ?? '날짜 선택'}
       </button>
 
       {open && (
-        <div className="dp__panel" role="dialog" aria-label="\ub0a0\uc9dc\u0020\uc120\ud0dd">
+        <div className="dp__panel" role="dialog" aria-label="날짜 선택">
           <div className="dp__hd">
-            <button type="button" className="dp__nav" onClick={prevYear} title="\uc774\uc804\u0020\uc5f0\ub3c4">
+            <button type="button" className="dp__nav" onClick={prevYear} title="이전 연도">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M5 2L1 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button type="button" className="dp__nav" onClick={prevMonth} title="\uc774\uc804\u0020\ub2ec">
+            <button type="button" className="dp__nav" onClick={prevMonth} title="이전 달">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M7.5 2L3.5 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
 
             <span className="dp__heading">
-              {view.year}{'\ub144'} {MONTHS[view.month]}
+              {view.year}{'년'} {MONTHS[view.month]}
             </span>
 
-            <button type="button" className="dp__nav" onClick={nextMonth} title="\ub2e4\uc74c\u0020\ub2ec">
+            <button type="button" className="dp__nav" onClick={nextMonth} title="다음 달">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M4.5 2l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button type="button" className="dp__nav" onClick={nextYear} title="\ub2e4\uc74c\u0020\uc5f0\ub3c4">
+            <button type="button" className="dp__nav" onClick={nextYear} title="다음 연도">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -390,7 +390,7 @@ function DatePicker({ value, onChange }) {
                 setOpen(false);
               }}
             >
-              \uc624\ub298
+              오늘
             </button>
           </div>
         </div>
@@ -421,7 +421,7 @@ export default function EditorPage({ disclosure }) {
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({
-        placeholder: '\ubcf8\ubb38\uc744\u0020\uc785\ub825\ud558\uc138\uc694\u002e\u002e\u002e',
+        placeholder: '본문을 입력하세요...',
       }),
       Table.configure({ resizable: true }),
       TableRow,
@@ -439,13 +439,13 @@ export default function EditorPage({ disclosure }) {
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) {
-      alert('\uc81c\ubaa9\uc744\u0020\uc785\ub825\ud574\u0020\uc8fc\uc138\uc694\u002e');
+      alert('제목을 입력해 주세요.');
       return;
     }
 
     const content = editor?.getHTML() ?? '';
     if (!content || content === '<p></p>') {
-      alert('\ub0b4\uc6a9\uc744\u0020\uc785\ub825\ud574\u0020\uc8fc\uc138\uc694\u002e');
+      alert('내용을 입력해 주세요.');
       return;
     }
 
@@ -459,7 +459,7 @@ export default function EditorPage({ disclosure }) {
       router.push('/admin/disclosures');
       router.refresh();
     } catch {
-      alert('\uc800\uc7a5\u0020\uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4\u002e\u0020\ub2e4\uc2dc\u0020\uc2dc\ub3c4\ud574\u0020\uc8fc\uc138\uc694\u002e');
+      alert('저장 실패했습니다. 다시 시도해 주세요.');
     } finally {
       setSaving(false);
     }
@@ -473,15 +473,15 @@ export default function EditorPage({ disclosure }) {
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M8.5 3L5 7L8.5 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            \ubaa9\ub85d\uc73c\ub85c
+            목록으로
           </Link>
-          <span className="ep__actionbar-title">{isEdit ? '\uacf5\uc2dc\uc790\ub8cc\u0020\uc218\uc815' : '\uc0c8\u0020\uacf5\uc2dc\uc790\ub8cc\u0020\uc791\uc131'}</span>
+          <span className="ep__actionbar-title">{isEdit ? '공시자료 수정' : '새 공시자료 작성'}</span>
           <div className="ep__actionbar-btns">
             <Link href="/admin/disclosures" className="an-btn an-btn--secondary an-btn--sm">
-              \ucde8\uc18c
+              취소
             </Link>
             <button className="an-btn an-btn--primary an-btn--sm" onClick={handleSave} disabled={saving}>
-              {saving ? '\uc800\uc7a5\u0020\uc911\u002e\u002e\u002e' : isEdit ? '\uc218\uc815\u0020\uc644\ub8cc' : '\uac8c\uc2dc\ud558\uae30'}
+              {saving ? '저장 중...' : isEdit ? '수정 완료' : '게시하기'}
             </button>
           </div>
         </div>
@@ -491,7 +491,7 @@ export default function EditorPage({ disclosure }) {
         <div className="ep__paper">
           <div className="ep__meta-row">
             <div className="ep__meta-date">
-              <span className="ep__meta-date-label">\uc791\uc131\uc77c</span>
+              <span className="ep__meta-date-label">작성일</span>
               <DatePicker value={createdAt} onChange={setCreatedAt} />
             </div>
           </div>
@@ -501,16 +501,16 @@ export default function EditorPage({ disclosure }) {
             className="ep__title-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="\uc81c\ubaa9\uc744\u0020\uc785\ub825\ud558\uc138\uc694"
+            placeholder="제목을 입력하세요"
             maxLength={100}
           />
 
-          <div className="ep-toolbar" role="toolbar" aria-label="\ud14d\uc2a4\ud2b8\u0020\uc11c\uc2dd">
+          <div className="ep-toolbar" role="toolbar" aria-label="텍스트 서식">
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="\uc2e4\ud589\u0020\ucde8\uc18c\u0020(\u0043\u0074\u0072\u006c\u002b\u005a)" disabled={!editor?.can().undo()} onClick={() => editor?.chain().focus().undo().run()}>
+              <ToolbarBtn title="실행 취소 (Ctrl+Z)" disabled={!editor?.can().undo()} onClick={() => editor?.chain().focus().undo().run()}>
                 {icons.undo}
               </ToolbarBtn>
-              <ToolbarBtn title="\ub2e4\uc2dc\u0020\uc2e4\ud589\u0020(\u0043\u0074\u0072\u006c\u002b\u0059)" disabled={!editor?.can().redo()} onClick={() => editor?.chain().focus().redo().run()}>
+              <ToolbarBtn title="다시 실행 (Ctrl+Y)" disabled={!editor?.can().redo()} onClick={() => editor?.chain().focus().redo().run()}>
                 {icons.redo}
               </ToolbarBtn>
             </div>
@@ -519,19 +519,19 @@ export default function EditorPage({ disclosure }) {
 
             <div className="ep-toolbar__group">
               <ToolbarBtn
-                title="\ubcf8\ubb38"
+                title="본문"
                 active={editor?.isActive('paragraph') && !editor?.isActive('heading')}
                 onClick={() => editor?.chain().focus().setParagraph().run()}
               >
-                <span className="ep-toolbar__label">\ubcf8\ubb38</span>
+                <span className="ep-toolbar__label">본문</span>
               </ToolbarBtn>
-              <ToolbarBtn title="\uc81c\ubaa9\u0020\u0031" active={editor?.isActive('heading', { level: 1 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}>
+              <ToolbarBtn title="제목 1" active={editor?.isActive('heading', { level: 1 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}>
                 <span className="ep-toolbar__label ep-toolbar__label--h1">H1</span>
               </ToolbarBtn>
-              <ToolbarBtn title="\uc81c\ubaa9\u0020\u0032" active={editor?.isActive('heading', { level: 2 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>
+              <ToolbarBtn title="제목 2" active={editor?.isActive('heading', { level: 2 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>
                 <span className="ep-toolbar__label">H2</span>
               </ToolbarBtn>
-              <ToolbarBtn title="\uc81c\ubaa9\u0020\u0033" active={editor?.isActive('heading', { level: 3 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>
+              <ToolbarBtn title="제목 3" active={editor?.isActive('heading', { level: 3 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>
                 <span className="ep-toolbar__label">H3</span>
               </ToolbarBtn>
             </div>
@@ -539,16 +539,16 @@ export default function EditorPage({ disclosure }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="\uad75\uac8c\u0020(\u0043\u0074\u0072\u006c\u002b\u0042)" active={editor?.isActive('bold')} onClick={() => editor?.chain().focus().toggleBold().run()}>
+              <ToolbarBtn title="굵게 (Ctrl+B)" active={editor?.isActive('bold')} onClick={() => editor?.chain().focus().toggleBold().run()}>
                 {icons.bold}
               </ToolbarBtn>
-              <ToolbarBtn title="\uae30\uc6b8\uc784\u0020(\u0043\u0074\u0072\u006c\u002b\u0049)" active={editor?.isActive('italic')} onClick={() => editor?.chain().focus().toggleItalic().run()}>
+              <ToolbarBtn title="기울임 (Ctrl+I)" active={editor?.isActive('italic')} onClick={() => editor?.chain().focus().toggleItalic().run()}>
                 {icons.italic}
               </ToolbarBtn>
-              <ToolbarBtn title="\ubc11\uc904\u0020(\u0043\u0074\u0072\u006c\u002b\u0055)" active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>
+              <ToolbarBtn title="밑줄 (Ctrl+U)" active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>
                 {icons.underline}
               </ToolbarBtn>
-              <ToolbarBtn title="\ucde8\uc18c\uc120" active={editor?.isActive('strike')} onClick={() => editor?.chain().focus().toggleStrike().run()}>
+              <ToolbarBtn title="취소선" active={editor?.isActive('strike')} onClick={() => editor?.chain().focus().toggleStrike().run()}>
                 {icons.strike}
               </ToolbarBtn>
             </div>
@@ -556,13 +556,13 @@ export default function EditorPage({ disclosure }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="\uae00\uba38\ub9ac\u0020uae30\ud638\u0020\ubaa9\ub85d" active={editor?.isActive('bulletList')} onClick={() => editor?.chain().focus().toggleBulletList().run()}>
+              <ToolbarBtn title="글머리 uae30호 목록" active={editor?.isActive('bulletList')} onClick={() => editor?.chain().focus().toggleBulletList().run()}>
                 {icons.bulletList}
               </ToolbarBtn>
-              <ToolbarBtn title="\ubc88\ud638\u0020\ub9e4\uae30\uae30\u0020\ubaa9\ub85d" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
+              <ToolbarBtn title="번호 매기기 목록" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
                 {icons.orderedList}
               </ToolbarBtn>
-              <ToolbarBtn title="\uc778\uc6a9\ucad6" active={editor?.isActive('blockquote')} onClick={() => editor?.chain().focus().toggleBlockquote().run()}>
+              <ToolbarBtn title="인용쫖" active={editor?.isActive('blockquote')} onClick={() => editor?.chain().focus().toggleBlockquote().run()}>
                 {icons.blockquote}
               </ToolbarBtn>
             </div>
@@ -570,13 +570,13 @@ export default function EditorPage({ disclosure }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="\uc67c\ucabd\u0020\uc815\ub82c" active={editor?.isActive({ textAlign: 'left' })} onClick={() => editor?.chain().focus().setTextAlign('left').run()}>
+              <ToolbarBtn title="왼쪽 정렬" active={editor?.isActive({ textAlign: 'left' })} onClick={() => editor?.chain().focus().setTextAlign('left').run()}>
                 {icons.alignLeft}
               </ToolbarBtn>
-              <ToolbarBtn title="\uac00\uc6b4\ub370\u0020\uc815\ub82c" active={editor?.isActive({ textAlign: 'center' })} onClick={() => editor?.chain().focus().setTextAlign('center').run()}>
+              <ToolbarBtn title="가운데 정렬" active={editor?.isActive({ textAlign: 'center' })} onClick={() => editor?.chain().focus().setTextAlign('center').run()}>
                 {icons.alignCenter}
               </ToolbarBtn>
-              <ToolbarBtn title="\uc624\ub978\ucabd\u0020\uc815\ub82c" active={editor?.isActive({ textAlign: 'right' })} onClick={() => editor?.chain().focus().setTextAlign('right').run()}>
+              <ToolbarBtn title="오른쪽 정렬" active={editor?.isActive({ textAlign: 'right' })} onClick={() => editor?.chain().focus().setTextAlign('right').run()}>
                 {icons.alignRight}
               </ToolbarBtn>
             </div>
@@ -584,7 +584,7 @@ export default function EditorPage({ disclosure }) {
             <Divider />
 
             <div className="ep-toolbar__group">
-              <ToolbarBtn title="\uad6c\ubd84\uc120" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
+              <ToolbarBtn title="구분선" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
                 {icons.hr}
               </ToolbarBtn>
             </div>
@@ -593,7 +593,7 @@ export default function EditorPage({ disclosure }) {
 
             <div className="ep-toolbar__group">
               <div className="ep-tbl-wrap">
-                <ToolbarBtn title="\ud45c\u0020\uc0bd\uc785" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
+                <ToolbarBtn title="표 삽입" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
                   {icons.table}
                 </ToolbarBtn>
                 {tablePickerOpen && (
@@ -616,43 +616,43 @@ export default function EditorPage({ disclosure }) {
               <>
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="\uc704\uc5d0\u0020\ud589\u0020\uc0bd\uc785" onClick={() => editor.chain().focus().addRowBefore().run()}>
+                  <ToolbarBtn title="위에 행 삽입" onClick={() => editor.chain().focus().addRowBefore().run()}>
                     {icons.rowBefore}
                   </ToolbarBtn>
-                  <ToolbarBtn title="\uc544\ub798\uc5d0\u0020\ud589\u0020\uc0bd\uc785" onClick={() => editor.chain().focus().addRowAfter().run()}>
+                  <ToolbarBtn title="아래에 행 삽입" onClick={() => editor.chain().focus().addRowAfter().run()}>
                     {icons.rowAfter}
                   </ToolbarBtn>
-                  <ToolbarBtn title="\ud589\u0020\uc0ad\uc81c" onClick={() => editor.chain().focus().deleteRow().run()}>
+                  <ToolbarBtn title="행 삭제" onClick={() => editor.chain().focus().deleteRow().run()}>
                     {icons.deleteRow}
                   </ToolbarBtn>
                 </div>
 
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="\uc67c\ucabd\uc5d0\u0020\uc5f4\u0020\uc0bd\uc785" onClick={() => editor.chain().focus().addColumnBefore().run()}>
+                  <ToolbarBtn title="왼쪽에 열 삽입" onClick={() => editor.chain().focus().addColumnBefore().run()}>
                     {icons.colBefore}
                   </ToolbarBtn>
-                  <ToolbarBtn title="\uc624\ub978\ucabd\uc5d0\u0020\uc5f4\u0020\uc0bd\uc785" onClick={() => editor.chain().focus().addColumnAfter().run()}>
+                  <ToolbarBtn title="오른쪽에 열 삽입" onClick={() => editor.chain().focus().addColumnAfter().run()}>
                     {icons.colAfter}
                   </ToolbarBtn>
-                  <ToolbarBtn title="\uc5f4\u0020\uc0ad\uc81c" onClick={() => editor.chain().focus().deleteColumn().run()}>
+                  <ToolbarBtn title="열 삭제" onClick={() => editor.chain().focus().deleteColumn().run()}>
                     {icons.deleteCol}
                   </ToolbarBtn>
                 </div>
 
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="\uc140\u0020\ubcd1\ud569" disabled={!editor.can().mergeCells()} onClick={() => editor.chain().focus().mergeCells().run()}>
+                  <ToolbarBtn title="셀 병합" disabled={!editor.can().mergeCells()} onClick={() => editor.chain().focus().mergeCells().run()}>
                     {icons.mergeCells}
                   </ToolbarBtn>
-                  <ToolbarBtn title="\uc140\u0020\ubd84\ub9ac" disabled={!editor.can().splitCell()} onClick={() => editor.chain().focus().splitCell().run()}>
+                  <ToolbarBtn title="셀 분리" disabled={!editor.can().splitCell()} onClick={() => editor.chain().focus().splitCell().run()}>
                     {icons.splitCell}
                   </ToolbarBtn>
                 </div>
 
                 <Divider />
                 <div className="ep-toolbar__group">
-                  <ToolbarBtn title="\ud45c\u0020\uc0ad\uc81c" onClick={() => editor.chain().focus().deleteTable().run()}>
+                  <ToolbarBtn title="표 삭제" onClick={() => editor.chain().focus().deleteTable().run()}>
                     {icons.deleteTable}
                   </ToolbarBtn>
                 </div>

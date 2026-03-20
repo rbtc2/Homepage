@@ -1,40 +1,65 @@
-import { readFile, writeFile } from 'fs/promises';
-import path from 'path';
+import { supabase } from './supabase';
 
-const DATA_PATH = path.join(process.cwd(), 'src/data/notices-store.json');
-
-export async function getNotices() {
-  const raw = await readFile(DATA_PATH, 'utf8');
-  return JSON.parse(raw);
+function normalize(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    title: row.title,
+    content: row.content,
+    author: row.author,
+    createdAt: row.created_at,
+    isPinned: row.is_pinned,
+    views: row.views,
+  };
 }
 
-export async function writeNotices(notices) {
-  await writeFile(DATA_PATH, JSON.stringify(notices, null, 2), 'utf8');
+export async function getNotices() {
+  const { data, error } = await supabase
+    .from('notices')
+    .select('*')
+    .order('id', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map(normalize);
 }
 
 export async function searchNotices(query) {
-  const notices = await getNotices();
-  if (!query || !query.trim()) return notices;
+  if (!query || !query.trim()) return getNotices();
   const q = query.trim().toLowerCase();
-  return notices.filter(
-    (n) =>
-      n.title.toLowerCase().includes(q) ||
-      n.content.toLowerCase().includes(q)
-  );
+
+  const { data, error } = await supabase
+    .from('notices')
+    .select('*')
+    .or(`title.ilike.%${q}%,content.ilike.%${q}%`)
+    .order('id', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map(normalize);
 }
 
 export async function getNoticeById(id) {
-  const notices = await getNotices();
-  return notices.find((n) => n.id === Number(id)) ?? null;
+  const { data, error } = await supabase
+    .from('notices')
+    .select('*')
+    .eq('id', Number(id))
+    .single();
+
+  if (error) return null;
+  return normalize(data);
 }
 
 export async function getPrevNext(id) {
-  const notices = await getNotices();
+  const { data, error } = await supabase
+    .from('notices')
+    .select('id, title')
+    .order('id', { ascending: true });
+
+  if (error) throw new Error(error.message);
+
   const numId = Number(id);
-  const sorted = [...notices].sort((a, b) => a.id - b.id);
-  const idx = sorted.findIndex((n) => n.id === numId);
+  const idx = data.findIndex((n) => n.id === numId);
   return {
-    prev: idx > 0 ? sorted[idx - 1] : null,
-    next: idx < sorted.length - 1 ? sorted[idx + 1] : null,
+    prev: idx > 0 ? data[idx - 1] : null,
+    next: idx < data.length - 1 ? data[idx + 1] : null,
   };
 }

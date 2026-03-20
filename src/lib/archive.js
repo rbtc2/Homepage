@@ -1,38 +1,64 @@
-import { readFile } from 'fs/promises';
-import path from 'path';
+import { supabase } from './supabase';
 
-const DATA_PATH = path.join(process.cwd(), 'src/data/archive-store.json');
-
-export async function getArchives() {
-  const raw = await readFile(DATA_PATH, 'utf8');
-  return JSON.parse(raw);
-}
-
-export async function searchArchives(query) {
-  const archives = await getArchives();
-  if (!query || !query.trim()) return archives;
-  const q = query.trim().toLowerCase();
-  return archives.filter(
-    (a) =>
-      a.title.toLowerCase().includes(q) ||
-      a.content.toLowerCase().includes(q),
-  );
-}
-
-export async function getArchiveById(id) {
-  const archives = await getArchives();
-  return archives.find((a) => a.id === Number(id)) ?? null;
-}
-
-export async function getPrevNext(id) {
-  const archives = await getArchives();
-  const numId = Number(id);
-  const sorted = [...archives].sort((a, b) => a.id - b.id);
-  const idx = sorted.findIndex((a) => a.id === numId);
-
+function normalize(row) {
+  if (!row) return null;
   return {
-    prev: idx > 0 ? sorted[idx - 1] : null,
-    next: idx < sorted.length - 1 ? sorted[idx + 1] : null,
+    id: row.id,
+    title: row.title,
+    content: row.content,
+    author: row.author,
+    createdAt: row.created_at,
+    views: row.views,
   };
 }
 
+export async function getArchives() {
+  const { data, error } = await supabase
+    .from('archive')
+    .select('*')
+    .order('id', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map(normalize);
+}
+
+export async function searchArchives(query) {
+  if (!query || !query.trim()) return getArchives();
+  const q = query.trim().toLowerCase();
+
+  const { data, error } = await supabase
+    .from('archive')
+    .select('*')
+    .or(`title.ilike.%${q}%,content.ilike.%${q}%`)
+    .order('id', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []).map(normalize);
+}
+
+export async function getArchiveById(id) {
+  const { data, error } = await supabase
+    .from('archive')
+    .select('*')
+    .eq('id', Number(id))
+    .single();
+
+  if (error) return null;
+  return normalize(data);
+}
+
+export async function getPrevNext(id) {
+  const { data, error } = await supabase
+    .from('archive')
+    .select('id, title')
+    .order('id', { ascending: true });
+
+  if (error) throw new Error(error.message);
+
+  const numId = Number(id);
+  const idx = data.findIndex((a) => a.id === numId);
+  return {
+    prev: idx > 0 ? data[idx - 1] : null,
+    next: idx < data.length - 1 ? data[idx + 1] : null,
+  };
+}
