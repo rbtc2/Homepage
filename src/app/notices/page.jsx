@@ -9,8 +9,9 @@ export const metadata = {
 
 const ITEMS_PER_PAGE = 10;
 
-export default function NoticesPage({ searchParams }) {
-  const page = Math.max(1, Number(searchParams?.page) || 1);
+export default async function NoticesPage({ searchParams }) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
 
   const pinned = notices.filter((n) => n.isPinned).sort((a, b) => b.id - a.id);
   const normal = notices.filter((n) => !n.isPinned).sort((a, b) => b.id - a.id);
