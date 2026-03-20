@@ -52,9 +52,13 @@
         <div class="header__tools">
           <button
             type="button"
-            class="header__action header__action--login is-skeleton"
-            aria-label="로그인 (준비 중)"
-            aria-disabled="true"
+            class="header__action header__action--login"
+            id="login-open-btn"
+            data-login-open
+            aria-haspopup="dialog"
+            aria-controls="login-dialog"
+            aria-expanded="false"
+            aria-label="로그인 창 열기"
           >
             <svg
               class="header__glyph"
@@ -131,5 +135,65 @@
         <p class="main__note">하단 콘텐츠는 이후 단계에서 구성됩니다.</p>
       </div>
     </main>
+
+    <div
+      class="login-modal"
+      id="login-modal"
+      hidden
+      aria-hidden="true"
+    >
+      <div class="login-modal__backdrop" data-modal-close tabindex="-1"></div>
+      <div
+        class="login-modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="login-modal-title"
+        id="login-dialog"
+      >
+        <button
+          type="button"
+          class="login-modal__close"
+          data-modal-close
+          aria-label="로그인 창 닫기"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
+          </svg>
+        </button>
+        <h2 class="login-modal__title" id="login-modal-title">로그인</h2>
+        <p class="login-modal__hint">스켈레톤 화면입니다. 실제 로그인·인증은 연결되어 있지 않습니다.</p>
+        <form class="login-modal__form" id="login-modal-form" action="#" novalidate>
+          <div class="login-modal__field">
+            <label class="login-modal__label" for="login-modal-email">이메일 또는 아이디</label>
+            <input
+              class="login-modal__input"
+              id="login-modal-email"
+              name="email"
+              type="text"
+              autocomplete="username"
+              placeholder="example@email.com"
+              disabled
+            />
+          </div>
+          <div class="login-modal__field">
+            <label class="login-modal__label" for="login-modal-password">비밀번호</label>
+            <input
+              class="login-modal__input"
+              id="login-modal-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="비밀번호"
+              disabled
+            />
+          </div>
+          <button type="submit" class="login-modal__submit" disabled aria-disabled="true">
+            로그인
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="src/scripts/login-modal.js" defer></script>
   </body>
 </html>
