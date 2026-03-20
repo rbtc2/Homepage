@@ -147,6 +147,16 @@ export const notices = [
   },
 ];
 
+export function searchNotices(query) {
+  if (!query || !query.trim()) return notices;
+  const q = query.trim().toLowerCase();
+  return notices.filter(
+    (n) =>
+      n.title.toLowerCase().includes(q) ||
+      n.content.toLowerCase().includes(q)
+  );
+}
+
 export function getNoticeById(id) {
   return notices.find((n) => n.id === Number(id)) ?? null;
 }

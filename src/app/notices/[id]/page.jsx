@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getNoticeById, getPrevNext } from '@/data/notices';
+import { getNoticeById, getPrevNext } from '@/lib/notices';
+
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const notice = getNoticeById(id);
+  const notice = await getNoticeById(id);
   if (!notice) return { title: '공지사항 | EJJ 홈페이지' };
   return { title: `${notice.title} | EJJ 홈페이지` };
 }
@@ -23,10 +25,10 @@ function renderBody(content) {
 
 export default async function NoticeDetailPage({ params }) {
   const { id } = await params;
-  const notice = getNoticeById(id);
+  const notice = await getNoticeById(id);
   if (!notice) notFound();
 
-  const { prev, next } = getPrevNext(id);
+  const { prev, next } = await getPrevNext(id);
 
   return (
     <>

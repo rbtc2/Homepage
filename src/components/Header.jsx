@@ -72,8 +72,8 @@ export default function Header() {
               <div className="header__mega-col" role="group" aria-label="커뮤니티 하위 메뉴">
                 <ul className="header__mega-list">
                   <li><Link href="/notices" className="header__mega-link">공지사항</Link></li>
-                  <li><a href="#" className="header__mega-link">임시메뉴2</a></li>
-                  <li><a href="#" className="header__mega-link">임시메뉴3</a></li>
+                  <li><a href="#" className="header__mega-link">공시자료</a></li>
+                  <li><a href="#" className="header__mega-link">자료실</a></li>
                 </ul>
               </div>
             </li>
