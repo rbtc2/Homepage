@@ -475,18 +475,6 @@ export default function EditorPage({ archive }) {
 
   return (
     <div className="ep">
-      {/* 헤더 */}
-      <header className="adm-header">
-        <div className="adm-header__inner">
-          <span className="adm-header__brand">EJJ 관리자</span>
-          <div className="adm-header__tools">
-            <Link href="/" className="adm-header__site-link">
-              사이트 보기
-            </Link>
-          </div>
-        </div>
-      </header>
-
       {/* 액션 바 */}
       <div className="ep__actionbar">
         <div className="ep__actionbar-inner">
