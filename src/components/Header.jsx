@@ -1,7 +1,14 @@
-import Link from 'next/link';
+'use client';
 
-export default function Header({ onLoginOpen, isLoginOpen = false }) {
+import { useState } from 'react';
+import Link from 'next/link';
+import LoginModal from '@/components/LoginModal';
+
+export default function Header() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
   return (
+    <>
     <header className="header" role="banner">
       <div className="header__inner">
         <Link href="/" className="header__brand" aria-label="홈으로 이동">
@@ -78,7 +85,7 @@ export default function Header({ onLoginOpen, isLoginOpen = false }) {
             type="button"
             className="header__action header__action--login"
             id="login-open-btn"
-            onClick={onLoginOpen}
+            onClick={() => setIsLoginOpen(true)}
             aria-haspopup="dialog"
             aria-controls="login-dialog"
             aria-expanded={isLoginOpen ? 'true' : 'false'}
@@ -113,5 +120,7 @@ export default function Header({ onLoginOpen, isLoginOpen = false }) {
         </div>
       </div>
     </header>
+    <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+    </>
   );
 }
