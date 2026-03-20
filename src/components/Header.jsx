@@ -62,7 +62,7 @@ export default function Header({ onLoginOpen, isLoginOpen = false }) {
               <a href="#" className="header__nav-item">커뮤니티</a>
               <div className="header__mega-col" role="group" aria-label="커뮤니티 하위 메뉴">
                 <ul className="header__mega-list">
-                  <li><a href="#" className="header__mega-link">임시메뉴1</a></li>
+                  <li><a href="#" className="header__mega-link">공지사항</a></li>
                   <li><a href="#" className="header__mega-link">임시메뉴2</a></li>
                   <li><a href="#" className="header__mega-link">임시메뉴3</a></li>
                 </ul>
