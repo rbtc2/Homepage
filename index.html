@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>기업 홈페이지</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <header class="header" role="banner">
+      <div class="header__inner">
+        <div class="header__brand" aria-label="브랜드·CI 영역 (추후 로고 연결)">
+          <span class="header__mark" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <rect width="32" height="32" rx="7" fill="currentColor" />
+              <rect x="9" y="11" width="14" height="2.5" rx="1.25" fill="#fff" />
+              <rect x="9" y="17.25" width="9" height="2.5" rx="1.25" fill="#fff" opacity="0.88" />
+            </svg>
+          </span>
+          <span class="header__wordmark">기업명</span>
+        </div>
+
+        <div class="header__tools">
+          <button
+            type="button"
+            class="header__action header__action--login is-skeleton"
+            aria-label="로그인 (준비 중)"
+            aria-disabled="true"
+          >
+            <svg
+              class="header__glyph"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="header__action-text">로그인</span>
+          </button>
+          <button
+            type="button"
+            class="header__action header__action--lang is-skeleton"
+            aria-label="영문 사이트 (준비 중)"
+            aria-disabled="true"
+          >
+            <span class="header__lang">ENG</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main" role="main">
+      <div class="main__surface">
+        <p class="main__lead">본문 영역</p>
+        <p class="main__note">콘텐츠는 이후 단계에서 구성됩니다.</p>
+      </div>
+    </main>
+  </body>
+</html>
