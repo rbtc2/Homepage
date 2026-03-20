@@ -19,7 +19,7 @@ function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
-export async function createNotice({ title, content, isPinned }) {
+export async function createNotice({ title, content, isPinned, createdAt }) {
   const notices = await read();
   const maxId = notices.reduce((m, n) => Math.max(m, n.id), 0);
   const newNotice = {
@@ -27,7 +27,7 @@ export async function createNotice({ title, content, isPinned }) {
     title: title.trim(),
     content: content.trim(),
     author: '관리자',
-    createdAt: today(),
+    createdAt: createdAt ?? today(),
     isPinned: Boolean(isPinned),
     views: 0,
   };
@@ -38,7 +38,7 @@ export async function createNotice({ title, content, isPinned }) {
   return newNotice;
 }
 
-export async function updateNotice(id, { title, content, isPinned }) {
+export async function updateNotice(id, { title, content, isPinned, createdAt }) {
   const notices = await read();
   const idx = notices.findIndex((n) => n.id === Number(id));
   if (idx === -1) throw new Error('Not found');
@@ -47,6 +47,7 @@ export async function updateNotice(id, { title, content, isPinned }) {
     title: title.trim(),
     content: content.trim(),
     isPinned: Boolean(isPinned),
+    createdAt: createdAt ?? notices[idx].createdAt,
   };
   await write(notices);
   revalidatePath('/notices');

@@ -73,7 +73,7 @@ export default function Header() {
                 <ul className="header__mega-list">
                   <li><Link href="/notices" className="header__mega-link">공지사항</Link></li>
                   <li><a href="#" className="header__mega-link">공시자료</a></li>
-                  <li><a href="#" className="header__mega-link">자료실</a></li>
+                  <li><Link href="/archive" className="header__mega-link">자료실</Link></li>
                 </ul>
               </div>
             </li>

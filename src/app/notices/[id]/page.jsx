@@ -13,16 +13,6 @@ export async function generateMetadata({ params }) {
   return { title: `${notice.title} | EJJ 홈페이지` };
 }
 
-function renderBody(content) {
-  return content.split(/\n\n+/).map((block, bi) => (
-    <p key={bi} className="nd__para">
-      {block.split('\n').map((line, li) => (
-        li === 0 ? line : <span key={li}><br />{line}</span>
-      ))}
-    </p>
-  ));
-}
-
 export default async function NoticeDetailPage({ params }) {
   const { id } = await params;
   const notice = await getNoticeById(id);
@@ -66,9 +56,10 @@ export default async function NoticeDetailPage({ params }) {
               </div>
             </header>
 
-            <div className="nd__body">
-              {renderBody(notice.content)}
-            </div>
+            <div
+              className="nd__body nd__body--html"
+              dangerouslySetInnerHTML={{ __html: notice.content }}
+            />
           </article>
 
           <nav className="nd-sibling" aria-label="이전·다음 글">

@@ -17,7 +17,7 @@ export default function AboutPage() {
           </div>
         </div>
         <div className="main">
-          <div className="main__surface about-intro">
+          <div className="about-intro">
             <div className="about-intro__stack">
               <section className="about-section" aria-label="비전">
                 <div className="about-section__head">
