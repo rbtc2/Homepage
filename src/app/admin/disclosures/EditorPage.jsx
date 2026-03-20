@@ -241,8 +241,8 @@ function TableGridPicker({ onSelect, onClose }) {
   );
 }
 
-const MONTHS = ['1?', '2?', '3?', '4?', '5?', '6?', '7?', '8?', '9?', '10?', '11?', '12?'];
-const DAYS = ['?', '?', '?', '?', '?', '?', '?'];
+const MONTHS = ['1?','2?','3?','4?','5?','6?','7?','8?','9?','10?','11?','12?'];
+const DAYS = ['?','?','?','?','?','?','?'];
 
 function parseDate(str) {
   if (!str) return null;
@@ -307,7 +307,7 @@ function DatePicker({ value, onChange }) {
         className="dp__trigger"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        aria-label="??? ??"
+        aria-label="\uc791\uc131\uc77c\u0020\uc120\ud0dd"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.8" />
@@ -421,7 +421,7 @@ export default function EditorPage({ disclosure }) {
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({
-        placeholder: '??? ?????...',
+        placeholder: '\ubcf8\ubb38\uc744\u0020\uc785\ub825\ud558\uc138\uc694\u002e\u002e\u002e',
       }),
       Table.configure({ resizable: true }),
       TableRow,
@@ -501,7 +501,7 @@ export default function EditorPage({ disclosure }) {
             className="ep__title-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="??? ?????"
+            placeholder="\uc81c\ubaa9\uc744\u0020\uc785\ub825\ud558\uc138\uc694"
             maxLength={100}
           />
 
