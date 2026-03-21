@@ -64,7 +64,11 @@ The dashboard home (`/admin`) is a pure navigation menu (4 link cards) that beco
 - **Height:** ~32px
 - **Background:** `#ffffff`
 - **Border-bottom:** `1px solid var(--line)`
-- **Content:** `관리자 / [Section name]` — top level always "관리자", second level is current section
+- **Depth rules:**
+  - 2 levels on section root pages: `관리자 / 공지사항 관리`
+  - 3 levels on sub-pages (new/edit): `관리자 / 공지사항 관리 / 새 게시물` or `관리자 / 공지사항 관리 / 게시물 수정`
+  - The second crumb always links back to the section list page (e.g. `/admin/notices`)
+- The breadcrumb bar is rendered inside `AdminLayout` (server component), driven by `usePathname()` in a thin client wrapper `AdminBreadcrumb`
 
 ### Mobile behavior (breakpoint: ≤ 768px)
 - Sidebar hidden by default
@@ -175,9 +179,10 @@ adm-dash-recent     (recent activity table wrapper)
 
 ## 10. Success Criteria
 
-1. From any admin page, the user can reach any other section in exactly **1 click**.
-2. The active sidebar item is always highlighted.
-3. Breadcrumb correctly reflects the current section.
-4. On mobile (≤768px), the sidebar is hidden by default and opens via hamburger tap.
-5. The dashboard home shows real data (stats + recent posts), not static cards.
-6. No regressions in existing notice/archive/disclosure/popup management pages.
+1. **Desktop:** From any admin page, the user can reach any other section in exactly **1 click** (sidebar is always visible).
+2. **Mobile (≤768px):** From any admin page, the user can reach any other section in **2 interactions** (hamburger tap → nav item tap). This is accepted and intentional; the 1-click criterion applies to desktop only.
+3. The active sidebar item is always highlighted.
+4. Breadcrumb correctly reflects the current section and depth (2-level on list pages, 3-level on new/edit pages).
+5. On mobile (≤768px), the sidebar is hidden by default and opens via hamburger tap; clicking a nav item or the backdrop closes it.
+6. The dashboard home shows real data (stats + recent posts), not static cards.
+7. No regressions in existing notice/archive/disclosure/popup management pages.
