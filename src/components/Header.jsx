@@ -1,11 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import LoginModal from '@/components/LoginModal';
 
 export default function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    fetch('/api/auth/check')
+      .then((res) => res.json())
+      .then((data) => setIsAdmin(data.isAdmin))
+      .catch(() => setIsAdmin(false));
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    setIsAdmin(false);
+    router.refresh();
+  };
 
   return (
     <>
@@ -81,34 +97,83 @@ export default function Header() {
         </nav>
 
         <div className="header__tools">
-          <button
-            type="button"
-            className="header__action header__action--login"
-            id="login-open-btn"
-            onClick={() => setIsLoginOpen(true)}
-            aria-haspopup="dialog"
-            aria-controls="login-dialog"
-            aria-expanded={isLoginOpen ? 'true' : 'false'}
-            aria-label="로그인 창 열기"
-          >
-            <svg
-              className="header__glyph"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+          {isAdmin ? (
+            <>
+              <Link href="/admin" className="header__action">
+                <svg
+                  className="header__glyph"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+                <span className="header__action-text">관리자 페이지</span>
+              </Link>
+              <button
+                type="button"
+                className="header__action"
+                onClick={handleLogout}
+                aria-label="로그아웃"
+              >
+                <svg
+                  className="header__glyph"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                <span className="header__action-text">로그아웃</span>
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="header__action header__action--login"
+              id="login-open-btn"
+              onClick={() => setIsLoginOpen(true)}
+              aria-haspopup="dialog"
+              aria-controls="login-dialog"
+              aria-expanded={isLoginOpen ? 'true' : 'false'}
+              aria-label="로그인 창 열기"
             >
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-              <polyline points="10 17 15 12 10 7" />
-              <line x1="15" y1="12" x2="3" y2="12" />
-            </svg>
-            <span className="header__action-text">로그인</span>
-          </button>
+              <svg
+                className="header__glyph"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+              </svg>
+              <span className="header__action-text">로그인</span>
+            </button>
+          )}
           <button
             type="button"
             className="header__lang-pill is-skeleton"
