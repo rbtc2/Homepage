@@ -74,8 +74,8 @@ export default function Header() {
               </div>
             </li>
             <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">나의 기부</a>
-              <div className="header__mega-col" role="group" aria-label="나의 기부 하위 메뉴">
+              <a href="#" className="header__nav-item">나의 후원</a>
+              <div className="header__mega-col" role="group" aria-label="나의 후원 하위 메뉴">
                 <ul className="header__mega-list">
                   <li><a href="#" className="header__mega-link">임시메뉴1</a></li>
                   <li><a href="#" className="header__mega-link">임시메뉴2</a></li>
