@@ -528,6 +528,142 @@
   color: var(--ink);
 }
 
+/* ── 팝업 관리 전용 ──────────────────────────────────────────── */
+
+/* 상태 배지 */
+.an-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.an-status-badge--active {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.an-status-badge--inactive {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--muted);
+}
+
+.an-status-badge--scheduled {
+  background: rgba(18, 79, 166, 0.08);
+  color: var(--brand);
+}
+
+.an-status-badge--expired {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+/* 노출 기간 텍스트 */
+.an-popup-period {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* 활성화 토글 스위치 */
+.an-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.an-toggle__track {
+  position: relative;
+  display: block;
+  width: 2.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: var(--line);
+  transition: background 0.2s var(--ease);
+}
+
+.an-toggle--on .an-toggle__track {
+  background: var(--brand);
+}
+
+.an-toggle__thumb {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s var(--ease);
+}
+
+.an-toggle--on .an-toggle__thumb {
+  transform: translateX(1rem);
+}
+
+/* 팝업 테이블 컬럼 너비 */
+.an-table__th--popup-period { width: 13rem; }
+.an-table__th--popup-pos    { width: 5rem; text-align: center; }
+.an-table__th--popup-status { width: 6rem; }
+.an-table__th--popup-active { width: 4.5rem; text-align: center; }
+
+.an-table__td--popup-active {
+  text-align: center;
+}
+
+/* 팝업 폼 모달 너비 */
+.an-modal--popup-form {
+  max-width: 560px;
+}
+
+/* 폼 가로 2열 레이아웃 */
+.an-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem;
+}
+
+@media (max-width: 480px) {
+  .an-field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 체크박스 그룹 */
+.an-field-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+/* 활성화 통계 카드 하이라이트 */
+.an-stat--active {
+  border-color: rgba(22, 163, 74, 0.25);
+  background: rgba(22, 163, 74, 0.04);
+}
+
+.an-stat--active .an-stat__num {
+  color: #16a34a;
+}
+
+/* 셀렉트 공통 */
+.an-field__select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238898aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+  cursor: pointer;
+}
+
 /* ── 삭제 확인 ──────────────────────────────────────────────── */
 .an-del-confirm {
   display: flex;

@@ -51,6 +51,9 @@ export default function Footer() {
           <span className="footer__sep">|</span>
           <span className="footer__label">대표 전화</span>{' '}
           <span className="footer__value">010-0000-0000</span>
+          <span className="footer__sep">|</span>
+          <span className="footer__label">팩스</span>{' '}
+          <span className="footer__value">00-000-0000</span>
         </p>
         <p className="footer__copyright">ⓒ EJJ. ALL RIGHTS RESERVED.</p>
       </div>

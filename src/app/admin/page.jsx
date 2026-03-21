@@ -116,6 +116,50 @@ export default async function AdminPage() {
               </svg>
             </Link>
 
+            <Link href="/admin/popups" className="adm-card">
+              <div className="adm-card__icon" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                  <rect
+                    x="3" y="4" width="18" height="14" rx="2"
+                    stroke="currentColor" strokeWidth="1.7"
+                    strokeLinecap="round" strokeLinejoin="round"
+                  />
+                  <path
+                    d="M8 20h8M12 18v2"
+                    stroke="currentColor" strokeWidth="1.7"
+                    strokeLinecap="round" strokeLinejoin="round"
+                  />
+                  <path
+                    d="M15 8.5l-4.5 3L15 14.5"
+                    stroke="currentColor" strokeWidth="1.7"
+                    strokeLinecap="round" strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className="adm-card__body">
+                <span className="adm-card__name">팝업 관리</span>
+                <span className="adm-card__meta">
+                  전체 0건 · 노출 중 0건
+                </span>
+              </div>
+              <svg
+                className="adm-card__arrow"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M6 3l5 5-5 5"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+
             <Link href="/admin/disclosures" className="adm-card">
               <div className="adm-card__icon" aria-hidden="true">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
