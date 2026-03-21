@@ -20,7 +20,7 @@
 }
 
 .ep__actionbar-inner {
-  max-width: 860px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0.625rem var(--pad-x);
   display: flex;
@@ -70,13 +70,13 @@
 
 /* ── 종이 카드 ──────────────────────────────────────────────── */
 .ep__paper {
-  max-width: 860px;
+  max-width: 1100px;
   margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(12, 20, 36, 0.06);
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* ── 메타 행 (공지 고정 + 작성일) ───────────────────────────── */
@@ -87,6 +87,7 @@
   padding: 1rem 1.75rem;
   border-bottom: 1px solid var(--line);
   background: var(--canvas);
+  border-radius: 12px 12px 0 0;
 }
 
 .ep__created-at {
@@ -197,6 +198,8 @@
 /* ── 에디터 본문 영역 ───────────────────────────────────────── */
 .ep-editor-wrap {
   min-height: 500px;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
 }
 
 .ep-content {
