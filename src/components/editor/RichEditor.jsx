@@ -11,11 +11,13 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
+import { Link as TiptapLink } from '@tiptap/extension-link';
 
 import icons from './icons';
 import { ToolbarBtn, Divider } from './ToolbarBtn';
 import TableGridPicker from './TableGridPicker';
 import ColorPicker from './ColorPicker';
+import LinkPicker from './LinkPicker';
 import DatePicker from './DatePicker';
 
 /**
@@ -58,6 +60,11 @@ export default function RichEditor({
       Underline,
       TextStyle,
       Color,
+      TiptapLink.configure({
+        openOnClick: false,
+        autolink: true,
+        HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' },
+      }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({ placeholder: '본문을 입력하세요...' }),
       Table.configure({ resizable: true }),
@@ -224,6 +231,12 @@ export default function RichEditor({
               <ToolbarBtn title="구분선" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
                 {icons.hr}
               </ToolbarBtn>
+            </div>
+
+            <Divider />
+
+            <div className="ep-toolbar__group">
+              <LinkPicker editor={editor} />
             </div>
 
             <Divider />
