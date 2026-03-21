@@ -12,7 +12,9 @@ export default function BoardPagination({ page, totalPages, basePath, query }) {
           className="pagination__btn"
           aria-label="이전 페이지"
         >
-          &lsaquo;
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true">
+            <path d="M6 1L1 6L6 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </Link>
       )}
       {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
@@ -31,7 +33,9 @@ export default function BoardPagination({ page, totalPages, basePath, query }) {
           className="pagination__btn"
           aria-label="다음 페이지"
         >
-          &rsaquo;
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true">
+            <path d="M1 1L6 6L1 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </Link>
       )}
     </nav>

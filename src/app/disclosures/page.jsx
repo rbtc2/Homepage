@@ -38,8 +38,10 @@ export default async function DisclosuresPage({ searchParams }) {
         </div>
         <div className="notice-board">
           <div className="notice-board__inner">
-            <BoardSearchForm basePath={BASE} ariaLabel="공시자료 검색" defaultValue={query} />
-            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={totalCount} />
+            <div className="notice-board__toolbar">
+              <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={totalCount} />
+              <BoardSearchForm basePath={BASE} ariaLabel="공시자료 검색" defaultValue={query} />
+            </div>
             <BoardTable rows={rows} basePath={BASE} isSearching={isSearching} query={query} emptyText="공시자료를" />
             <BoardPagination page={page} totalPages={totalPages} basePath={BASE} query={query} />
           </div>

@@ -53,8 +53,10 @@ export default async function NoticesPage({ searchParams }) {
         </div>
         <div className="notice-board">
           <div className="notice-board__inner">
-            <BoardSearchForm basePath={BASE} ariaLabel="공지사항 검색" defaultValue={query} />
-            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={allCount} />
+            <div className="notice-board__toolbar">
+              <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={allCount} />
+              <BoardSearchForm basePath={BASE} ariaLabel="공지사항 검색" defaultValue={query} />
+            </div>
             <BoardTable rows={rows} basePath={BASE} isSearching={isSearching} query={query} emptyText="공지사항을" />
             <BoardPagination page={page} totalPages={totalPages} basePath={BASE} query={query} />
           </div>

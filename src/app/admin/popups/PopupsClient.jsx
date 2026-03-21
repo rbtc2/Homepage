@@ -1,18 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import PopupFormModal from './PopupFormModal';
 
 const POSITION_LABELS = {
   center: '중앙',
   'bottom-left': '좌하단',
   'bottom-right': '우하단',
 };
-
-const POSITION_OPTIONS = [
-  { value: 'center', label: '중앙' },
-  { value: 'bottom-left', label: '좌하단' },
-  { value: 'bottom-right', label: '우하단' },
-];
 
 function getStatus(popup) {
   const today = new Date().toISOString().slice(0, 10);
@@ -222,160 +217,13 @@ export default function PopupsClient({ initialPopups }) {
 
       {/* 팝업 등록·수정 모달 */}
       {modalOpen && (
-        <div className="an-overlay" onClick={(e) => e.target === e.currentTarget && closeModal()}>
-          <div className="an-modal an-modal--popup-form" role="dialog" aria-modal="true">
-            <div className="an-modal__hd">
-              <h2 className="an-modal__title">
-                {editTarget ? '팝업 수정' : '새 팝업 등록'}
-              </h2>
-              <button className="an-modal__close" onClick={closeModal} aria-label="닫기">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit}>
-              <div className="an-modal__body">
-                {/* 팝업 제목 */}
-                <div className="an-field">
-                  <label className="an-field__label" htmlFor="popup-title">
-                    팝업 제목 <span className="an-field__req" aria-hidden="true">*</span>
-                  </label>
-                  <input
-                    id="popup-title"
-                    name="title"
-                    type="text"
-                    className="an-field__input"
-                    placeholder="관리용 제목을 입력하세요 (사용자에게 노출되지 않음)"
-                    value={form.title}
-                    onChange={handleFormChange}
-                    required
-                  />
-                </div>
-
-                {/* 이미지 URL */}
-                <div className="an-field">
-                  <label className="an-field__label" htmlFor="popup-image">이미지 URL</label>
-                  <input
-                    id="popup-image"
-                    name="imageUrl"
-                    type="url"
-                    className="an-field__input"
-                    placeholder="https://example.com/image.png"
-                    value={form.imageUrl}
-                    onChange={handleFormChange}
-                  />
-                </div>
-
-                {/* 링크 URL */}
-                <div className="an-field">
-                  <label className="an-field__label" htmlFor="popup-link">클릭 시 이동 URL</label>
-                  <input
-                    id="popup-link"
-                    name="linkUrl"
-                    type="text"
-                    className="an-field__input"
-                    placeholder="/notices/1 또는 https://..."
-                    value={form.linkUrl}
-                    onChange={handleFormChange}
-                  />
-                </div>
-
-                {/* 노출 기간 */}
-                <div className="an-field-row">
-                  <div className="an-field">
-                    <label className="an-field__label" htmlFor="popup-start">
-                      노출 시작일 <span className="an-field__req" aria-hidden="true">*</span>
-                    </label>
-                    <input
-                      id="popup-start"
-                      name="startDate"
-                      type="date"
-                      className="an-field__input"
-                      value={form.startDate}
-                      onChange={handleFormChange}
-                      required
-                    />
-                  </div>
-                  <div className="an-field">
-                    <label className="an-field__label" htmlFor="popup-end">
-                      노출 종료일 <span className="an-field__req" aria-hidden="true">*</span>
-                    </label>
-                    <input
-                      id="popup-end"
-                      name="endDate"
-                      type="date"
-                      className="an-field__input"
-                      value={form.endDate}
-                      onChange={handleFormChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* 팝업 위치 */}
-                <div className="an-field">
-                  <label className="an-field__label" htmlFor="popup-position">팝업 위치</label>
-                  <select
-                    id="popup-position"
-                    name="position"
-                    className="an-field__input an-field__select"
-                    value={form.position}
-                    onChange={handleFormChange}
-                  >
-                    {POSITION_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>{opt.label}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* 옵션 */}
-                <div className="an-field-checks">
-                  <label className="an-check">
-                    <input
-                      type="checkbox"
-                      name="showCloseForDay"
-                      className="an-check__input"
-                      checked={form.showCloseForDay}
-                      onChange={handleFormChange}
-                    />
-                    <span className="an-check__box" aria-hidden="true">
-                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                        <path d="M2 5l2.5 2.5L8 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                    <span className="an-check__label">오늘 하루 보지 않기 버튼 표시</span>
-                  </label>
-                  <label className="an-check">
-                    <input
-                      type="checkbox"
-                      name="isActive"
-                      className="an-check__input"
-                      checked={form.isActive}
-                      onChange={handleFormChange}
-                    />
-                    <span className="an-check__box" aria-hidden="true">
-                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                        <path d="M2 5l2.5 2.5L8 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                    <span className="an-check__label">즉시 활성화</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="an-modal__ft">
-                <button type="button" className="an-btn an-btn--secondary" onClick={closeModal}>
-                  취소
-                </button>
-                <button type="submit" className="an-btn an-btn--primary">
-                  {editTarget ? '수정 저장' : '팝업 등록'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <PopupFormModal
+          editTarget={editTarget}
+          form={form}
+          onChange={handleFormChange}
+          onSubmit={handleSubmit}
+          onClose={closeModal}
+        />
       )}
 
       {/* 삭제 확인 모달 */}
