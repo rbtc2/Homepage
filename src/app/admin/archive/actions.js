@@ -57,5 +57,6 @@ export async function deleteArchive(id) {
   if (error) throw new Error(error.message);
 
   revalidatePath('/archive');
+  revalidatePath(`/archive/${id}`);
   revalidatePath('/');
 }

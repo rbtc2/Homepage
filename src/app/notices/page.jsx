@@ -8,7 +8,7 @@ import { getPinnedNotices, getNoticesPage, searchNoticesPage } from '@/lib/notic
 import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '공지사항 | EJJ 홈페이지' };
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const BASE = '/notices';
 

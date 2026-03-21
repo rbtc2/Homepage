@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import { getDisclosureById, getPrevNext } from '@/lib/disclosures';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { id } = await params;

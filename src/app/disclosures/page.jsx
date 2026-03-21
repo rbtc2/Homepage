@@ -8,7 +8,7 @@ import { getDisclosuresPage, searchDisclosuresPage } from '@/lib/disclosures';
 import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '공시자료 | EJJ 홈페이지' };
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const BASE = '/disclosures';
 

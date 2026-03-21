@@ -57,5 +57,6 @@ export async function deleteDisclosure(id) {
   if (error) throw new Error(error.message);
 
   revalidatePath('/disclosures');
+  revalidatePath(`/disclosures/${id}`);
   revalidatePath('/');
 }

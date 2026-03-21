@@ -8,7 +8,7 @@ import { getArchivesPage, searchArchivesPage } from '@/lib/archive';
 import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '자료실 | EJJ 홈페이지' };
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const BASE = '/archive';
 
