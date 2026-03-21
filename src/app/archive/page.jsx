@@ -4,8 +4,8 @@ import BoardSearchForm from '@/components/board/BoardSearchForm';
 import BoardMeta from '@/components/board/BoardMeta';
 import BoardTable from '@/components/board/BoardTable';
 import BoardPagination from '@/components/board/BoardPagination';
-import { getArchives, searchArchives } from '@/lib/archive';
-import { paginateSorted } from '@/lib/paginate';
+import { getArchivesPage, searchArchivesPage } from '@/lib/archive';
+import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '자료실 | EJJ 홈페이지' };
 export const dynamic = 'force-dynamic';
@@ -18,13 +18,13 @@ export default async function ArchivePage({ searchParams }) {
   const page  = Math.max(1, Number(pageParam) || 1);
 
   const isSearching = query.length > 0;
-  const allArchives = await getArchives();
 
-  const source = isSearching
-    ? (await searchArchives(query)).sort((a, b) => b.id - a.id)
-    : [...allArchives].sort((a, b) => b.id - a.id);
+  const { items, totalCount } = await (isSearching
+    ? searchArchivesPage({ query, page })
+    : getArchivesPage({ page }));
 
-  const { rows, totalCount, totalPages } = paginateSorted(source, { page });
+  const totalPages = calcTotalPages(totalCount);
+  const rows       = addRowNums(items, { totalCount, page });
 
   return (
     <>
@@ -39,7 +39,7 @@ export default async function ArchivePage({ searchParams }) {
         <div className="notice-board">
           <div className="notice-board__inner">
             <BoardSearchForm basePath={BASE} ariaLabel="자료실 검색" defaultValue={query} />
-            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={allArchives.length} />
+            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={totalCount} />
             <BoardTable rows={rows} basePath={BASE} isSearching={isSearching} query={query} emptyText="자료를" />
             <BoardPagination page={page} totalPages={totalPages} basePath={BASE} query={query} />
           </div>

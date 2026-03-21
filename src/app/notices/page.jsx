@@ -4,8 +4,8 @@ import BoardSearchForm from '@/components/board/BoardSearchForm';
 import BoardMeta from '@/components/board/BoardMeta';
 import BoardTable from '@/components/board/BoardTable';
 import BoardPagination from '@/components/board/BoardPagination';
-import { getNotices, searchNotices } from '@/lib/notices';
-import { paginateSorted } from '@/lib/paginate';
+import { getPinnedNotices, getNoticesPage, searchNoticesPage } from '@/lib/notices';
+import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '공지사항 | EJJ 홈페이지' };
 export const dynamic = 'force-dynamic';
@@ -18,22 +18,26 @@ export default async function NoticesPage({ searchParams }) {
   const page  = Math.max(1, Number(pageParam) || 1);
 
   const isSearching = query.length > 0;
-  const allNotices  = await getNotices();
 
-  let rows, totalCount, totalPages;
+  let rows, totalCount, totalPages, allCount;
 
   if (isSearching) {
-    const matched = (await searchNotices(query)).sort((a, b) => b.id - a.id);
-    ({ rows, totalCount, totalPages } = paginateSorted(matched, { page }));
+    const { items, totalCount: tc } = await searchNoticesPage({ query, page });
+    totalCount = tc;
+    totalPages = calcTotalPages(totalCount);
+    allCount   = totalCount;
+    rows       = addRowNums(items, { totalCount, page });
   } else {
-    const pinned = allNotices.filter((n) => n.isPinned).sort((a, b) => b.id - a.id);
-    const normal = allNotices.filter((n) => !n.isPinned).sort((a, b) => b.id - a.id);
-    const { rows: normalRows, totalCount: nc, totalPages: tp } = paginateSorted(normal, { page });
+    const [pinnedItems, { items: normalItems, totalCount: nc }] = await Promise.all([
+      getPinnedNotices(),
+      getNoticesPage({ page }),
+    ]);
     totalCount = nc;
-    totalPages = tp;
+    totalPages = calcTotalPages(totalCount);
+    allCount   = totalCount + pinnedItems.length;
     rows = [
-      ...(page === 1 ? pinned.map((n) => ({ ...n, rowNum: null })) : []),
-      ...normalRows,
+      ...(page === 1 ? pinnedItems.map((n) => ({ ...n, rowNum: null })) : []),
+      ...addRowNums(normalItems, { totalCount, page }),
     ];
   }
 
@@ -50,7 +54,7 @@ export default async function NoticesPage({ searchParams }) {
         <div className="notice-board">
           <div className="notice-board__inner">
             <BoardSearchForm basePath={BASE} ariaLabel="공지사항 검색" defaultValue={query} />
-            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={allNotices.length} />
+            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={allCount} />
             <BoardTable rows={rows} basePath={BASE} isSearching={isSearching} query={query} emptyText="공지사항을" />
             <BoardPagination page={page} totalPages={totalPages} basePath={BASE} query={query} />
           </div>

@@ -4,8 +4,8 @@ import BoardSearchForm from '@/components/board/BoardSearchForm';
 import BoardMeta from '@/components/board/BoardMeta';
 import BoardTable from '@/components/board/BoardTable';
 import BoardPagination from '@/components/board/BoardPagination';
-import { getDisclosures, searchDisclosures } from '@/lib/disclosures';
-import { paginateSorted } from '@/lib/paginate';
+import { getDisclosuresPage, searchDisclosuresPage } from '@/lib/disclosures';
+import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '공시자료 | EJJ 홈페이지' };
 export const dynamic = 'force-dynamic';
@@ -17,14 +17,14 @@ export default async function DisclosuresPage({ searchParams }) {
   const query = rawQuery?.trim() ?? '';
   const page  = Math.max(1, Number(pageParam) || 1);
 
-  const isSearching    = query.length > 0;
-  const allDisclosures = await getDisclosures();
+  const isSearching = query.length > 0;
 
-  const source = isSearching
-    ? (await searchDisclosures(query)).sort((a, b) => b.id - a.id)
-    : [...allDisclosures].sort((a, b) => b.id - a.id);
+  const { items, totalCount } = await (isSearching
+    ? searchDisclosuresPage({ query, page })
+    : getDisclosuresPage({ page }));
 
-  const { rows, totalCount, totalPages } = paginateSorted(source, { page });
+  const totalPages = calcTotalPages(totalCount);
+  const rows       = addRowNums(items, { totalCount, page });
 
   return (
     <>
@@ -39,7 +39,7 @@ export default async function DisclosuresPage({ searchParams }) {
         <div className="notice-board">
           <div className="notice-board__inner">
             <BoardSearchForm basePath={BASE} ariaLabel="공시자료 검색" defaultValue={query} />
-            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={allDisclosures.length} />
+            <BoardMeta basePath={BASE} isSearching={isSearching} query={query} searchCount={totalCount} allCount={totalCount} />
             <BoardTable rows={rows} basePath={BASE} isSearching={isSearching} query={query} emptyText="공시자료를" />
             <BoardPagination page={page} totalPages={totalPages} basePath={BASE} query={query} />
           </div>
