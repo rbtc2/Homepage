@@ -8,7 +8,9 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
-import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
+import { Table, TableRow } from '@tiptap/extension-table';
+import { CustomTableCell } from './CustomTableCell';
+import { CustomTableHeader } from './CustomTableHeader';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import { Link as TiptapLink } from '@tiptap/extension-link';
@@ -18,17 +20,21 @@ import { ToolbarBtn, Divider } from './ToolbarBtn';
 import TableGridPicker from './TableGridPicker';
 import ColorPicker from './ColorPicker';
 import LinkPicker from './LinkPicker';
+import CellColorPicker from './CellColorPicker';
+import CellBorderPicker from './CellBorderPicker';
 import DatePicker from './DatePicker';
+import EditorContextMenu from './EditorContextMenu';
 
 /**
  * 공통 리치 텍스트 에디터 페이지
  *
- * @param {object}   post          - 수정 시 기존 게시물 데이터 (null이면 신규 작성)
- * @param {string}   backHref      - 목록으로 돌아가는 경로
- * @param {string}   editTitle     - 수정 모드 제목
- * @param {string}   newTitle      - 신규 작성 모드 제목
- * @param {boolean}  showPinToggle - 공지 고정 체크박스 표시 여부
- * @param {function} onSave        - async ({ title, content, createdAt, isPinned? }) => void
+ * @param {object}   post             - 수정 시 기존 게시물 데이터 (null이면 신규 작성)
+ * @param {string}   backHref         - 목록으로 돌아가는 경로
+ * @param {string}   editTitle        - 수정 모드 제목
+ * @param {string}   newTitle         - 신규 작성 모드 제목
+ * @param {boolean}  showPinToggle    - 공지 고정 체크박스 표시 여부
+ * @param {boolean}  showCoverImage   - 커버 이미지 URL 입력 표시 여부 (갤러리용)
+ * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage? }) => void
  */
 export default function RichEditor({
   post,
@@ -36,18 +42,21 @@ export default function RichEditor({
   editTitle,
   newTitle,
   showPinToggle = false,
+  showCoverImage = false,
   onSave,
 }) {
   const router  = useRouter();
   const isEdit  = Boolean(post);
 
-  const [title,           setTitle]           = useState(post?.title    ?? '');
-  const [isPinned,        setIsPinned]        = useState(post?.isPinned ?? false);
+  const [title,           setTitle]           = useState(post?.title      ?? '');
+  const [isPinned,        setIsPinned]        = useState(post?.isPinned   ?? false);
+  const [coverImage,      setCoverImage]      = useState(post?.coverImage ?? '');
   const [createdAt,       setCreatedAt]       = useState(
     post?.createdAt ?? new Date().toISOString().slice(0, 10)
   );
   const [saving,          setSaving]          = useState(false);
   const [tablePickerOpen, setTablePickerOpen] = useState(false);
+  const [contextMenu,     setContextMenu]     = useState(null);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -69,12 +78,19 @@ export default function RichEditor({
       Placeholder.configure({ placeholder: '본문을 입력하세요...' }),
       Table.configure({ resizable: true }),
       TableRow,
-      TableHeader,
-      TableCell,
+      CustomTableHeader,
+      CustomTableCell,
     ],
     content: post?.content ?? '',
     editorProps: {
       attributes: { class: 'ep-content', spellCheck: 'false' },
+      handleDOMEvents: {
+        contextmenu: (_view, event) => {
+          event.preventDefault();
+          setContextMenu({ x: event.clientX, y: event.clientY });
+          return true;
+        },
+      },
     },
   });
 
@@ -90,7 +106,7 @@ export default function RichEditor({
     }
     setSaving(true);
     try {
-      await onSave({ title, content: html, createdAt, isPinned });
+      await onSave({ title, content: html, createdAt, isPinned, coverImage: coverImage.trim() || null });
       router.push(backHref);
       router.refresh();
     } catch {
@@ -98,7 +114,7 @@ export default function RichEditor({
     } finally {
       setSaving(false);
     }
-  }, [title, createdAt, isPinned, onSave, backHref, router, editor]);
+  }, [title, createdAt, isPinned, coverImage, onSave, backHref, router, editor]);
 
   return (
     <div className="ep">
@@ -166,6 +182,36 @@ export default function RichEditor({
             placeholder="제목을 입력하세요"
             maxLength={100}
           />
+
+          {/* 커버 이미지 URL (갤러리 전용) */}
+          {showCoverImage && (
+            <div className="ep-cover">
+              <span className="ep-cover__label">커버 이미지 URL</span>
+              <div className="ep-cover__row">
+                <input
+                  type="url"
+                  className="ep-cover__input"
+                  value={coverImage}
+                  onChange={(e) => setCoverImage(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                />
+                <div className="ep-cover__preview" aria-label="커버 이미지 미리보기">
+                  {coverImage.trim() ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={coverImage.trim()} alt="미리보기" />
+                  ) : (
+                    <div className="ep-cover__preview-empty" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                        <circle cx="8.5" cy="10.5" r="1.5" stroke="currentColor" strokeWidth="1.5" />
+                        <path d="M3 17l5-4 3 3 3-2 7 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 포매팅 툴바 */}
           <div className="ep-toolbar" role="toolbar" aria-label="텍스트 서식">
@@ -281,6 +327,11 @@ export default function RichEditor({
                 <div className="ep-toolbar__group">
                   <ToolbarBtn title="표 삭제" onClick={() => editor.chain().focus().deleteTable().run()}>{icons.deleteTable}</ToolbarBtn>
                 </div>
+                <Divider />
+                <div className="ep-toolbar__group">
+                  <CellColorPicker editor={editor} />
+                  <CellBorderPicker editor={editor} />
+                </div>
               </>
             )}
           </div>
@@ -289,6 +340,15 @@ export default function RichEditor({
           <EditorContent editor={editor} className="ep-editor-wrap" />
         </div>
       </main>
+
+      {/* 우클릭 컨텍스트 메뉴 */}
+      {contextMenu && (
+        <EditorContextMenu
+          editor={editor}
+          pos={contextMenu}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
     </div>
   );
 }

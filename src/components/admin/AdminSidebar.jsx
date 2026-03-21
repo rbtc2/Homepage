@@ -19,21 +19,22 @@ const NAV_ITEMS = [
     ),
   },
   {
+    href: '/admin/popups',
+    label: '팝업 관리',
+    icon: (
+      <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
+        <path d="M8 20h8M12 18v2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
     href: '/admin/notices',
     label: '공지사항',
     icon: (
       <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    href: '/admin/archive',
-    label: '자료실',
-    icon: (
-      <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M3 7h18M3 12h18M3 17h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -48,12 +49,22 @@ const NAV_ITEMS = [
     ),
   },
   {
-    href: '/admin/popups',
-    label: '팝업 관리',
+    href: '/admin/archive',
+    label: '자료실',
     icon: (
       <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
-        <path d="M8 20h8M12 18v2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        <path d="M3 7h18M3 12h18M3 17h12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    href: '/admin/gallery',
+    label: '포토갤러리',
+    icon: (
+      <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
+        <circle cx="8.5" cy="10.5" r="1.5" stroke="currentColor" strokeWidth="1.6" />
+        <path d="M3 17l5-4 3 3 3-2 7 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },

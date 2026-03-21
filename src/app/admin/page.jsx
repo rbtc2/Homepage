@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getNotices } from '@/lib/notices';
 import { getArchives } from '@/lib/archive';
 import { getDisclosures } from '@/lib/disclosures';
+import { getGalleryPosts } from '@/lib/gallery';
 import { buildRecentActivity } from '@/lib/dashboard';
 
 export const metadata = { title: '대시보드 | EJJ 관리자' };
@@ -16,10 +17,11 @@ const SECTION_BADGE_STYLE = {
 export default async function AdminPage() {
   const thisMonth = new Date().toISOString().slice(0, 7);
 
-  const [notices, archives, disclosures] = await Promise.all([
+  const [notices, archives, disclosures, gallery] = await Promise.all([
     getNotices(),
     getArchives(),
     getDisclosures(),
+    getGalleryPosts(),
   ]);
   const recentActivity = buildRecentActivity(notices, archives, disclosures, 5);
 
@@ -46,12 +48,19 @@ export default async function AdminPage() {
       highlight: false,
     },
     {
+      label: '포토갤러리',
+      href: '/admin/gallery',
+      total: gallery.length,
+      monthCount: gallery.filter((g) => g.createdAt?.startsWith(thisMonth)).length,
+      highlight: false,
+    },
+    {
       // Popups are not yet DB-backed. Show 0 until backend is implemented.
       label: '활성 팝업',
       href: '/admin/popups',
       total: 0,
       sub: '노출 중',
-      highlight: false, // will become `total > 0` once popup DB is implemented
+      highlight: false,
     },
   ];
 

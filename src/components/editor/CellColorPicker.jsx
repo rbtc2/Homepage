@@ -2,43 +2,41 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-const COLORS = [
-  { hex: '#000000', name: '검정' },
+const BG_COLORS = [
+  { hex: '#ffffff', name: '흰색' },
+  { hex: '#fef9c3', name: '연한 노랑' },
+  { hex: '#fef3c7', name: '연한 황금' },
+  { hex: '#fed7aa', name: '연한 주황' },
+  { hex: '#fecaca', name: '연한 빨강' },
+  { hex: '#fce7f3', name: '연한 분홍' },
+  { hex: '#ede9fe', name: '연한 보라' },
+  { hex: '#dbeafe', name: '연한 파랑' },
+  { hex: '#cffafe', name: '연한 청록' },
+  { hex: '#dcfce7', name: '연한 초록' },
+  { hex: '#f1f5f9', name: '연한 회색' },
+  { hex: '#e2e8f0', name: '회색' },
+  { hex: '#1e293b', name: '짙은 네이비' },
   { hex: '#374151', name: '짙은 회색' },
-  { hex: '#6b7280', name: '회색' },
-  { hex: '#9ca3af', name: '밝은 회색' },
-  { hex: '#e5e7eb', name: '연한 회색' },
-  { hex: '#dc2626', name: '빨강' },
-  { hex: '#ea580c', name: '주황' },
-  { hex: '#d97706', name: '황금색' },
-  { hex: '#ca8a04', name: '노랑' },
-  { hex: '#16a34a', name: '초록' },
-  { hex: '#059669', name: '에메랄드' },
-  { hex: '#0891b2', name: '청록' },
-  { hex: '#2563eb', name: '파랑' },
-  { hex: '#124fa6', name: '짙은 파랑' },
-  { hex: '#7c3aed', name: '보라' },
-  { hex: '#a21caf', name: '자주' },
-  { hex: '#db2777', name: '분홍' },
-  { hex: '#e11d48', name: '로즈' },
-  { hex: '#065f46', name: '숲 초록' },
-  { hex: '#1e3a5f', name: '남색' },
+  { hex: '#000000', name: '검정' },
 ];
 
 function isValidHex(val) {
   return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(val);
 }
 
-export default function ColorPicker({ editor }) {
+export default function CellColorPicker({ editor }) {
   const [open,        setOpen]        = useState(false);
   const [customColor, setCustomColor] = useState('');
   const ref = useRef(null);
 
-  const currentColor = editor?.getAttributes('textStyle')?.color ?? null;
+  const currentVal = editor
+    ? (editor.isActive('tableHeader')
+        ? editor.getAttributes('tableHeader').backgroundColor
+        : editor.getAttributes('tableCell').backgroundColor) ?? null
+    : null;
 
-  /* 드롭다운 열릴 때 현재 적용 색상을 커스텀 입력에 채움 */
   const handleOpen = () => {
-    setCustomColor(currentColor ?? '');
+    setCustomColor(currentVal ?? '');
     setOpen((o) => !o);
   };
 
@@ -56,98 +54,92 @@ export default function ColorPicker({ editor }) {
     return () => document.removeEventListener('keydown', handler);
   }, []);
 
-  const applyCustom = () => {
-    if (!isValidHex(customColor)) return;
-    editor?.chain().focus().setColor(customColor).run();
+  const applyColor = (color) => {
+    if (!editor) return;
+    const nodeType = editor.isActive('tableHeader') ? 'tableHeader' : 'tableCell';
+    editor.chain().focus().updateAttributes(nodeType, { backgroundColor: color }).run();
     setOpen(false);
   };
 
-  /* 텍스트 입력 처리: # 자동 삽입 */
+  const resetColor = () => {
+    if (!editor) return;
+    const nodeType = editor.isActive('tableHeader') ? 'tableHeader' : 'tableCell';
+    editor.chain().focus().updateAttributes(nodeType, { backgroundColor: null }).run();
+    setOpen(false);
+  };
+
+  const applyCustom = () => {
+    if (!isValidHex(customColor)) return;
+    applyColor(customColor);
+  };
+
   const handleHexInput = (e) => {
     let val = e.target.value;
     if (val && !val.startsWith('#')) val = '#' + val;
     setCustomColor(val.slice(0, 7));
   };
 
-  /* 네이티브 color input 변경 → 텍스트 입력에도 반영 */
-  const handleNativeChange = (e) => {
-    setCustomColor(e.target.value);
-  };
-
-  /* 네이티브 picer의 value는 항상 유효한 6자리 헥스여야 함 */
   const nativeValue = isValidHex(customColor)
     ? (customColor.length === 4
         ? '#' + [...customColor.slice(1)].map((c) => c + c).join('')
         : customColor)
-    : (currentColor ?? '#000000');
+    : (currentVal ?? '#ffffff');
 
   return (
     <div className="ep-color-wrap" ref={ref}>
       <button
         type="button"
-        title="글자 색상"
-        aria-label="글자 색상"
+        title="셀 배경색"
+        aria-label="셀 배경색"
         className={`ep-toolbar__btn${open ? ' ep-toolbar__btn--on' : ''}`}
         onMouseDown={(e) => { e.preventDefault(); handleOpen(); }}
       >
         <span className="ep-color-icon">
-          <svg width="13" height="12" viewBox="0 0 13 12" fill="none" aria-hidden="true">
-            <text
-              x="0" y="11"
-              fontSize="13" fontWeight="800"
-              fontFamily="Georgia, serif"
-              fill="currentColor"
-            >
-              A
-            </text>
+          <svg width="14" height="13" viewBox="0 0 14 13" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="12" height="8" rx="1.2"
+              fill="currentColor" fillOpacity="0.18"
+              stroke="currentColor" strokeWidth="1.5"/>
           </svg>
           <span
             className="ep-color-icon__bar"
-            style={{ background: currentColor ?? 'currentColor' }}
+            style={{
+              background: currentVal ?? 'transparent',
+              border: !currentVal ? '1px solid var(--line)' : 'none',
+            }}
           />
         </span>
       </button>
 
       {open && (
-        <div className="cp" role="dialog" aria-label="글자 색상 선택">
-          <p className="cp__label">글자 색상</p>
-
-          {/* 프리셋 스와치 */}
+        <div className="cp" role="dialog" aria-label="셀 배경색 선택">
+          <p className="cp__label">셀 배경색</p>
           <div className="cp__grid">
-            {COLORS.map(({ hex, name }) => (
+            {BG_COLORS.map(({ hex, name }) => (
               <button
                 key={hex}
                 type="button"
                 title={name}
                 aria-label={name}
-                className={`cp__swatch${currentColor === hex ? ' cp__swatch--on' : ''}`}
+                className={`cp__swatch${currentVal === hex ? ' cp__swatch--on' : ''}`}
                 style={{ background: hex }}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  editor?.chain().focus().setColor(hex).run();
-                  setOpen(false);
-                }}
+                onMouseDown={(e) => { e.preventDefault(); applyColor(hex); }}
               />
             ))}
           </div>
-
-          {/* 직접 입력 영역 */}
           <div className="cp__custom">
-            {/* 브라우저 네이티브 컬러 피커 */}
             <input
               type="color"
               className="cp__native-input"
               value={nativeValue}
-              onChange={handleNativeChange}
+              onChange={(e) => setCustomColor(e.target.value)}
               title="컬러 피커"
             />
-            {/* 헥스 코드 텍스트 입력 */}
             <input
               type="text"
               className="cp__hex-input"
               value={customColor}
               maxLength={7}
-              placeholder="#000000"
+              placeholder="#ffffff"
               spellCheck={false}
               onChange={handleHexInput}
               onKeyDown={(e) => {
@@ -163,15 +155,10 @@ export default function ColorPicker({ editor }) {
               적용
             </button>
           </div>
-
           <button
             type="button"
             className="cp__reset"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              editor?.chain().focus().unsetColor().run();
-              setOpen(false);
-            }}
+            onMouseDown={(e) => { e.preventDefault(); resetColor(); }}
           >
             색상 해제
           </button>

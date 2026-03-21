@@ -658,6 +658,75 @@
   box-shadow: 0 0 0 2px rgba(18, 79, 166, 0.35) !important;
 }
 
+/* ── 직접 입력 영역 ──────────────────────────────────────────── */
+.cp__custom {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--line);
+  margin-bottom: 0.5rem;
+}
+
+.cp__native-input {
+  width: 1.875rem;
+  height: 1.875rem;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  cursor: pointer;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.cp__hex-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font: inherit;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  color: var(--ink);
+  background: var(--canvas);
+  outline: none;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+.cp__hex-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(18, 79, 166, 0.12);
+}
+
+.cp__hex-input::placeholder {
+  color: var(--line);
+}
+
+.cp__custom-apply {
+  padding: 0.3rem 0.625rem;
+  border: 1px solid var(--brand);
+  border-radius: 5px;
+  background: var(--brand);
+  color: #fff;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease);
+}
+
+.cp__custom-apply:hover:not(:disabled) {
+  background: var(--brand-mid);
+  border-color: var(--brand-mid);
+}
+
+.cp__custom-apply:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .cp__reset {
   display: block;
   width: 100%;
@@ -727,6 +796,136 @@
 .tgp__cell--on {
   background: rgba(18, 79, 166, 0.14);
   border-color: var(--brand);
+}
+
+/* ── 셀 테두리 피커 (cbp-*) ─────────────────────────────────── */
+.cbp {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 130;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(12, 20, 36, 0.13), 0 2px 8px rgba(12, 20, 36, 0.06);
+  padding: 0.75rem;
+  width: 224px;
+  animation: dpIn 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cbp__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0.5rem 0 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.cbp__label:first-child {
+  margin-top: 0;
+}
+
+.cbp__color-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.375rem;
+}
+
+.cbp__hex {
+  flex: 1;
+  min-width: 0;
+}
+
+.cbp__color-preview {
+  display: block;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 4px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.cbp__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-bottom: 0.5rem;
+}
+
+.cbp__preset {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 3px;
+}
+
+.cbp__options-row {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.375rem;
+}
+
+.cbp__opt-btn {
+  flex: 1;
+  padding: 0.25rem 0.125rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--canvas);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease),
+    color 0.12s var(--ease);
+}
+
+.cbp__opt-btn:hover {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: #b0bac9;
+}
+
+.cbp__opt-btn--on {
+  background: rgba(18, 79, 166, 0.1);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.cbp__pos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.cbp__pos-btn {
+  padding: 0.3rem 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--canvas);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease),
+    color 0.12s var(--ease);
+}
+
+.cbp__pos-btn:hover {
+  background: rgba(18, 79, 166, 0.08);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.cbp__pos-btn--full {
+  grid-column: span 2;
+  background: rgba(18, 79, 166, 0.04);
 }
 
 /* ── URL 링크 버튼 + 피커 (lp-*) ────────────────────────────── */
@@ -864,7 +1063,10 @@
 .ep-content table th,
 .nd__body--html table td,
 .nd__body--html table th {
-  border: 1px solid var(--line);
+  /* border shorthand 대신 분리 선언 → 인라인 border-color 적용 가능 */
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--line);
   padding: 0.55em 0.875em;
   min-width: 2.5em;
   vertical-align: top;
@@ -981,4 +1183,179 @@
   .an-modal__ft {
     padding: 0.875rem 1.25rem;
   }
+}
+
+/* ── 에디터 우클릭 컨텍스트 메뉴 (ecm-*) ─────────────────────── */
+.ecm {
+  position: fixed;
+  z-index: 600;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow:
+    0 8px 32px rgba(12, 20, 36, 0.14),
+    0 2px 8px  rgba(12, 20, 36, 0.07);
+  padding: 0.3rem;
+  min-width: 196px;
+  max-width: 224px;
+  user-select: none;
+  animation: ecmIn 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ecmIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+.ecm__section {
+  font-size: 0.69rem;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 0.35rem 0.625rem 0.15rem;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.ecm__sep {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0.2rem 0;
+}
+
+.ecm__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.42rem 0.625rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.835rem;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.35;
+  transition: background 0.08s;
+}
+
+.ecm__item:hover:not(:disabled) {
+  background: rgba(18, 79, 166, 0.07);
+}
+
+.ecm__item--disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.ecm__item--danger {
+  color: #dc2626;
+}
+
+.ecm__item--danger:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.07);
+}
+
+.ecm__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.ecm__item--danger .ecm__icon {
+  color: #dc2626;
+}
+
+.ecm__label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ecm__shortcut {
+  font-size: 0.72rem;
+  color: var(--muted);
+  opacity: 0.65;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── 링크 입력 패널 ─────────────────────────────────────────── */
+.ecm__link-panel {
+  padding: 0.4rem 0.3rem 0.25rem;
+  border-top: 1px solid var(--line);
+  margin-top: 0.25rem;
+}
+
+.ecm__link-input {
+  width: 100%;
+  padding: 0.375rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--canvas);
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--ink);
+  outline: none;
+  margin-bottom: 0.35rem;
+  box-sizing: border-box;
+}
+
+.ecm__link-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(18, 79, 166, 0.12);
+}
+
+.ecm__link-input::placeholder {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.ecm__link-row {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: flex-end;
+}
+
+.ecm__link-cancel,
+.ecm__link-apply {
+  padding: 0.22rem 0.6rem;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.ecm__link-cancel {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+}
+
+.ecm__link-cancel:hover {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.ecm__link-apply {
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.ecm__link-apply:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.ecm__link-apply:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
