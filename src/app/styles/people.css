@@ -1,0 +1,206 @@
+/* ── People (함께하는 사람들) ──────────────────────────────────
+   Design language: same as directions / about pages
+   - Section opener: 2px solid ink (first) / 1px solid line (rest)
+   - Eyebrow + title + horizontal rule header per section
+   - Skeleton: pulse animation
+   ─────────────────────────────────────────────────────────────── */
+
+@keyframes pp-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.38; }
+}
+
+.pp-skel {
+  background: #cfd6e0;
+  border-radius: 2px;
+  animation: pp-pulse 2s ease-in-out infinite;
+  display: block;
+}
+
+/* ── 전체 래퍼 ─────────────────────────────────────────────── */
+.pp-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3.5rem, 8vw, 5rem);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 섹션 공통 ─────────────────────────────────────────────── */
+.pp-section {
+  padding-top: clamp(2rem, 5vw, 3rem);
+  padding-bottom: clamp(2rem, 5vw, 3rem);
+  border-top: 1px solid var(--line);
+}
+
+.pp-section:first-child {
+  border-top: 2px solid var(--ink);
+}
+
+/* ── 섹션 헤더: eyebrow + title + rule ─────────────────────── */
+.pp-section__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.pp-section__eyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+  white-space: nowrap;
+}
+
+.pp-section__title {
+  margin: 0;
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.pp-section__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  border: none;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   이사회 (Board of Directors)
+   ─────────────────────────────────────────────────────────────── */
+.pp-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 1.75rem) clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.pp-person {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+/* 사진 영역 */
+.pp-person__photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--canvas);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pp-pulse 2.2s ease-in-out infinite;
+  margin-bottom: 0.875rem;
+  position: relative;
+}
+
+/* 사진 플레이스홀더 — 사람 실루엣 */
+.pp-person__photo-icon {
+  width: 38%;
+  color: #b0bac8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.pp-person__photo-icon svg {
+  width: 100%;
+  height: auto;
+}
+
+/* 이름 / 직함 */
+.pp-person__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0 0.125rem;
+}
+
+.pp-person__name {
+  height: 0.9375rem;
+  width: 55%;
+}
+
+.pp-person__role {
+  height: 0.75rem;
+  width: 75%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   파트너 (Partners)
+   ─────────────────────────────────────────────────────────────── */
+.pp-partners {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.pp-logo {
+  background: var(--surface);
+  aspect-ratio: 5 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  transition: background 0.18s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 로고 플레이스홀더 내부 skeleton 바 */
+.pp-logo__inner {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.pp-logo__bar {
+  height: 0.6875rem;
+  border-radius: 2px;
+  animation: pp-pulse 2s ease-in-out infinite;
+}
+
+.pp-logo__bar--wide  { width: 100%; background: #cfd6e0; }
+.pp-logo__bar--mid   { width: 70%; background: #cfd6e0; }
+.pp-logo__bar--short { width: 45%; background: #cfd6e0; }
+
+/* ── 반응형 ─────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .pp-board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pp-partners {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .pp-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pp-partners {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 400px) {
+  .pp-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 0.75rem;
+  }
+}

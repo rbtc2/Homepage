@@ -1,6 +1,96 @@
 {
   "version": 1,
   "skills": {
+    "ab-test-setup": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "039c651784ebc388ef4ccd57ac538a6fe7edbe443b8fd3f24139ac1a610760e6"
+    },
+    "ad-creative": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "660ef74aba893d23335366c5bcc11faf7701ce9f441d9450bc80ab53dccbf21e"
+    },
+    "agent-browser": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "e81afb2aea3e85e969136891c4b66115e6ecf71c6ff69538206f258537ae948d"
+    },
+    "agentation": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "821475fcd1f35d9acddd58476d4cdad7f16d287ccf0bfe59482e25b421f77e9c"
+    },
+    "ai-seo": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "0dfe8e2dedc037971bc817fb169c2c1175776b51fd1403f5cd43a8662806ae50"
+    },
+    "ai-tool-compliance": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "6dc4c1c0aeee3e7dca44a08d567c9a1d5e136623f4d4cada1a7e73b79c555a87"
+    },
+    "analytics-tracking": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "6ea7d8bb78cacaec93f61c953807e35446304f5c6374fda4b190c76c4281fd4d"
+    },
+    "api-design": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "30ba2419b18643073649dd8eccb9a845f8907751b7c8d6f77e29f014baf628e2"
+    },
+    "api-documentation": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "6a9d024171da6ee5d8f126dc242a348349782fbe7a0ed65df156eb39b57b5465"
+    },
+    "authentication-setup": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "1cbdbf19e8473040652714fd035df46c4ae418f93203a790ee67c09ca94b71cd"
+    },
+    "autoresearch": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "bc93e4469d3572396bec7b0253527357fa77559eb7543c9a3a16aec23549f3c2"
+    },
+    "backend-testing": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "1149c16f3cb08bf0d68e842dd1bf872172f756c3a244e9cb92b96c7acce4e724"
+    },
+    "bmad-gds": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "b12e8c50caaf3343edd09f78f05d436f4d5865e8b95b2e073738b599f139212c"
+    },
+    "bmad-idea": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "0ab47dcc3bed662d1e1d5a3d4e965c17ea7a0cbb2d1940c27ef698e15fe08524"
+    },
+    "bmad-orchestrator": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "5ec260663354bb1552a44b541bd7989ddd9907625f11794edaa91b1814b57e3f"
+    },
+    "brainstorming": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "576ee8b8c2e1b514b1eea2d152320e208e4187e44fa4ae923ad33142f25ee8d1"
+    },
+    "changelog-maintenance": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "ac538e27fdba50d613ce72eb929f4b33ac1d2d8bd25aff266b138cd6fb5529ee"
+    },
+    "churn-prevention": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "e1f4abdffeae2104cecd05d87fbe4c752c6fbcf6a6e856ad584493ed99a69e75"
+    },
     "ckm:banner-design": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",
@@ -31,15 +121,580 @@
       "sourceType": "github",
       "computedHash": "b5f892864e479f969820c353f44faeedc61981bf2d7a854367069a80e0a264e1"
     },
+    "code-refactoring": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "61312d5f71ec3240606dab042c0a86b62b421031e4aa8252d61dc3b2885ef2a2"
+    },
+    "code-review": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "199d2fcf315d17a4d6d96a0db7553f11a33ac291a861f93ba0ef5dd9fe1d67bf"
+    },
+    "codebase-search": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "6390cbb0df21130adea16a0bd854131213733e7df2e027743c29033985811aa9"
+    },
+    "cold-email": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "bd2738a0d28bad7e344de0712feb718637c1259ee91ae48fb1f6895f64f3204c"
+    },
+    "competitor-alternatives": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "d763652f36568b03d8daec3e1e98ac2cc730dcab663d87e2560acee3b9af1a3c"
+    },
+    "content-strategy": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "e1ab02527702ead90a9e5774cfe1be9a222bdcc6e861f2cae778ad7cc293f225"
+    },
+    "copilot-coding-agent": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "7e8325d7453ce2d9c2ceb9fbd8e844e8024757de999a1363984d8448aba1726a"
+    },
+    "copy-editing": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "f8bb575dff23a5cf1f105b4e94ef32038a8b45984a96cfe1f3c4a5b38996ce4d"
+    },
+    "copywriting": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "c008c80aff1eec1aba190edf421772a3f350e91405d4207575092b663c3702a7"
+    },
+    "data-analysis": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "90b275a94a958572c096858fb9e877f9257d26f2888e6714fc99901797839900"
+    },
+    "database-schema-design": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "4c33e1db0dbbe6f7c4c99a8a4d38b695d8bc417bcad3f18a34543c8d9bceb79d"
+    },
+    "debugging": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "178f2e9c76986e3b3ef1007d7ecc79a2bacd82dd1085886ff734dcd6587a44cc"
+    },
+    "deploy-to-vercel": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "3a0481591523c55ecfe2569b6b28b2dcbfa3742367667697219d29170981ad53"
+    },
+    "deployment-automation": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "f2b783a4414ce85f591d544e27c470d2ce9e2642a34cd96de4e69edcbdd5ed9f"
+    },
+    "design-system": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "7755999df1971c2b5dbefe4837778d4bd90b5acd7e31c83ea91b3721ffa2fba6"
+    },
+    "dispatching-parallel-agents": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "e21044ae7496fc285f1df9ff3fb518a3a20bea6f5216c1f59f4987e12c769a0a"
+    },
+    "email-sequence": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "084c3fcc7d616eaff3bf65b274b37def9717570d1bc135dac7a202011935b813"
+    },
+    "environment-setup": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "e9edce862bf28b5d89e43fc4178009bb76ee0e4c7432021b1cf5d218c8dd45df"
+    },
+    "executing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "2f709d1a2c7564f8ce6a9bb707e7f5451117ba80f8e8e2302662c29bc61246a6"
+    },
+    "fabric": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "4cb1d017ee7dfbaa5e4edf8a6129406ef4e4083587738e1c8bed7d1d46c424f2"
+    },
+    "file-organization": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "425c3b58b70a6953f18de2002e411aa93f5b00a60fff2fc57f028b759d50271b"
+    },
+    "finishing-a-development-branch": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "9edba9a38684c060fdc38290f640e1dc0c37de286723ac9be73bacacf7cd6f3d"
+    },
+    "firebase-ai-logic": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "029bc1cf1086d0932baa79028705c8590e1940b52b79d1bae64d16439ca47370"
+    },
+    "firebase-cli": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "061421f804fcf45f825bcd628c8a99c432f3dcb91d995ab474c5551907bdab08"
+    },
+    "form-cro": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "9eb72b95e9e1df985af42541c498cdd11aca914da97a59d07f397d77f17519a1"
+    },
+    "free-tool-strategy": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "c9ac82b87836d26f69dd21c9f9a9a03d6398a723ed360f275ab5cc1d70c5c4c7"
+    },
     "frontend-design": {
       "source": "anthropics/claude-code",
       "sourceType": "github",
       "computedHash": "e8118284a6365753790d44bb2758a6032b3af27fa84696428d9233f2be0f4e78"
     },
+    "frontend-design-system": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "da8fe39e337e255e6cffa99bec61458afbfb843c0b01b66012f628b5aabdb5b6"
+    },
+    "genkit": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "9d32275d607bd60a75709acac4ba32b0db5fdac169d21349cc71e0dd222e6c9a"
+    },
+    "git-submodule": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "6e99e2801ca80943c6cfea86a272cf54434d4f1b37b8b24e5c748986e3a7dc88"
+    },
+    "git-workflow": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "109028f9fc5fc520fbe2742131d18084763ec1b1d09c4c50d612ab5cbea3e494"
+    },
+    "google-workspace": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "f22d1af09284852c686d0a39740f2aca3061449bf9fd6249d12b1dc2e347161e"
+    },
+    "jeo": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "e7d919e0fc32154006732eb42f1e5d3a2065c2d5d7f1b604198ebf46e666b706"
+    },
+    "langsmith": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "5c581c9b0b510930dbf5e630d219ffd8262c144f5a21645768269635c747713a"
+    },
+    "launch-strategy": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "b50e81251b8774f4861b9f2205596fbf2b3f465df35a1bc2c56615128ecac90f"
+    },
+    "lead-magnets": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "927819fe8960471cbc1af903534ea6f0633992441de205105e599e79886c0f90"
+    },
+    "llm-monitoring-dashboard": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "21a2c22a426592367a58c316faefb57d9b9874c3a22c5c22e83c4f87e272064a"
+    },
+    "log-analysis": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "d868625e50c87a4c49830d3c3a25d5bbee7f623e3bb46b2dd4bbf4a8b2111cae"
+    },
+    "looker-studio-bigquery": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "d1c5dccf583a5427d74e06377e9d0689c0ac197096e003c2ac020a2295b2d900"
+    },
+    "marketing-automation": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "33c068d6b9df42ebcd1883df40270dda83dd0c4091dad42f60414dfe9eb28ecc"
+    },
+    "marketing-ideas": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "ece95da6d74dc84deb45035109311748697b7b074af1a78e111299464306cad2"
+    },
+    "marketing-psychology": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "5b8654c4d6db63d9da55f7cd56f2babd92e602b089e96a86ef38c7f547f51d52"
+    },
+    "marketing-skills-collection": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "2af9c4aced446f8de91dacb2a88973fbf98b0bd0441947a8372b6f01763ee56e"
+    },
+    "monitoring-observability": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "3ef1ac3fc38698642694c6de5e648c45908b1451e48f77de67c841679746b28d"
+    },
+    "next-best-practices": {
+      "source": "vercel-labs/next-skills",
+      "sourceType": "github",
+      "computedHash": "c31ddd68ba5798a79a516c619b1e1fc4408cc4876ad600fefa4f5add4425719d"
+    },
+    "next-cache-components": {
+      "source": "vercel-labs/next-skills",
+      "sourceType": "github",
+      "computedHash": "844401be868754beba2e7dc2c66abbe08b740eeefdec69c630ff6cbd81cc4c62"
+    },
+    "next-upgrade": {
+      "source": "vercel-labs/next-skills",
+      "sourceType": "github",
+      "computedHash": "082ce8a4aaad096baa8e38f90a4221b0ae0015a70649e4e6c647cc5da4e59dcd"
+    },
+    "npm-git-install": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "29e29aa0989d2120f87215ab2bf029adb48ebb69111241a3c059a6619b5900ec"
+    },
+    "ohmg": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "365ed47b291843fbcc5e46fd5ba3a99a80c1f4ff2c744ba0824d6840f5cca0c7"
+    },
+    "omc": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "46ab820b6f443e6d174e13c3f69acf549dc13f674b6dd0c052742310b76ac14e"
+    },
+    "omx": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "ae75c089256d1abf4fe80ee14d6238ad391b2ebf85c6216f27f76627e1138b90"
+    },
+    "onboarding-cro": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "b051b45c234c59f97e0e1d365a81cae46adcb75baa95260299f617d80c1cb378"
+    },
+    "opencontext": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "10e9c02efe15fc3aadb800742797339a4e566838a86e1290d4fa94641babbeda"
+    },
+    "page-cro": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "97fa14549ae123830f1096821a0aadc898f48542c0473897e0bc3d0c90b024f4"
+    },
+    "paid-ads": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "b5f152fad2a67387088b72f05109646e153e168315ab3f9200b9fa3a3cd0e280"
+    },
+    "pattern-detection": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "06ed6fee99f863f11ab5611ad192ed2acd537082b887f73c205cd5d3cc32a945"
+    },
+    "paywall-upgrade-cro": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "16ba56a987c0df61653de6401ba2702f74e9b3e281a651619020677ea123e416"
+    },
+    "performance-optimization": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "21ffefa616b4f835765200001fa3aa6d6561d5eab720f9502299c4913cd14d32"
+    },
+    "plannotator": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "f19274a6a4d4af69e503499728fae88bd2cb2e7fd42a72b3fa49cc746a244347"
+    },
+    "playwriter": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "63aea948e919440cd361c5f8a5f1b27f01642a153ca099953df076a0450b7301"
+    },
+    "popup-cro": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "d62750cd309aaae426bdc91b267199169f1799edd5dcfb3b5526e08505a1b0e7"
+    },
+    "presentation-builder": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "073079e6509d62d380efb831cdb05c7db09bac116ab686a88bb6cb0cbef959f0"
+    },
+    "pricing-strategy": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "45dcee6fb615d7db2ed85764a91c57b6f6806cbca92b0a348fc901aeda02b10b"
+    },
+    "product-marketing-context": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "e0c954d8b63d562b997fe6d60f0b39aef49517bdbb93ad67e61989ecbc647cf8"
+    },
+    "programmatic-seo": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "c6384f24bb0203f8aa98b23b55d35b9e6721b94532a0e7965215c340ae96f1e0"
+    },
+    "prompt-repetition": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "634ca0213138f2d0964507ff1e35e5ffc30f9b76ea9a29d532d8a2ae077599cc"
+    },
+    "ralph": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "4e15823ea2328d99bd1c0d874d69853cf0427963fa0e7b57bc0213fda4ffe926"
+    },
+    "ralphmode": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "ce7018e772331b91c0b172cc43de44fce1b2241c2a6facd817bd6e4fc2fd4a8f"
+    },
+    "react-best-practices": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "d6c203140daeaee95d57940b595b8eed964f814c06cea22a8f9b03b93fe1a757"
+    },
+    "react-grab": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "91cf226afecd5470d775766ecf0b40c110b0051eafbf17a356f73e3029393764"
+    },
+    "receiving-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "2760c85d4f4117b0006e7ba755f4bbd61f8f4c185f347999763c97f507274e30"
+    },
+    "referral-program": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "4cf172e8b646c360a4d08e51354ef353c28690cd8b611d8db4a21c5ec3855802"
+    },
+    "remotion-video-production": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "668b875bd2b3c45a53d4119ba594fdb3b31dd8f583ca8535359f0f89dd7aef68"
+    },
+    "requesting-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "246e65cd72a7e360987d94e6c61564ce6d71c6361d1784d529d70e4cbbe8522d"
+    },
+    "responsive-design": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "1c2c94867cc1eeca74977d57b0d9818616934a62a58e100d9350ff11cd7244fd"
+    },
+    "revops": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "a3becb1724dc414f1685ee15c3b8531f58a5c1ea104b31fbd2f1c79611d8b0d5"
+    },
+    "sales-enablement": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "39a5491a17f8e7aa5e3a12b146c12cb8a5d53ac6fbb639827aa3da20a51f8205"
+    },
+    "schema-markup": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "7e94629c1bafd6459b4f113237655a98761438eb1b26aa15c440351f79a86d2e"
+    },
+    "security-best-practices": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "c5ddd50338549d28b2edd45cec131d6a231349b0671a093b3b7e3b51d4780ab8"
+    },
+    "seo-audit": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "941f6f4db0f79248f6480256cf1838ed19bc1a0d70f499bb756f491142625cb4"
+    },
+    "signup-flow-cro": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "9ed0af5cecc6d6b9956a7ffd79c15cb18e5a19d3249bb760418a9b763eb21503"
+    },
+    "site-architecture": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "040cf6fcceb0d57322c97aff2e75e1f8d2bf49df7a4e1faccd6f34ebf7f3fab1"
+    },
+    "skill-standardization": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "8c377c642ac0f9624d107dfe6129b33e6527a32341c97e1130a8c2939dca741c"
+    },
+    "social-content": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "89c1726323ac944b02fb8f27c1d86e84c6310ebacb6b0f62dae74e0351873c08"
+    },
+    "sprint-retrospective": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "a1ffbd4396b8b323bc197102cd491c69218d53d01331e4da67d0ee0ede9e0273"
+    },
+    "standup-meeting": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "77569c75134065ff4f1fec8b21ce57fab8719938520b5d9cbea9b3ef7ada5316"
+    },
+    "state-management": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "19bd2a636363f3d20386b753d724ee33433ef770ca36f714163568be9b6d25de"
+    },
+    "subagent-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "a197f8e5fba5ea59013e1adbaa90dd42db35de8f074feca200c8038de584a83b"
+    },
+    "supabase-postgres-best-practices": {
+      "source": "supabase/agent-skills",
+      "sourceType": "github",
+      "computedHash": "e3ba3d760c5f4cc43b02a91fb8924f726c7818f95cc35d79d0a606ca622b72f5"
+    },
+    "survey": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "13bf9f376f845b33c487d36e01ca56e42ec8db01798aa637b42f863466ee8b11"
+    },
+    "system-environment-setup": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "c0c6bdfdd7333856b5ab08086feaccfc7090cb9eaf99c72840f6fe143f9e5b28"
+    },
+    "systematic-debugging": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "72e9ab72627e4fd8ed26a582e82309a98ecdc4f6e1c99418430ac05682c9e91d"
+    },
+    "task-estimation": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "ee7bda25c85cf5cfdf3ae05f202bbae91295fe2c2bbf68dea97d14c0551576b8"
+    },
+    "task-planning": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "cc0f00bb1c8c5130160a08b18cd71d6f743871036593ce5b31e0fc9e4e0205df"
+    },
+    "technical-writing": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "24b18a2653cdf62a8438f191117b91b7b683b9189f6acd88791ca96d6076dbf7"
+    },
+    "test-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "126f1ebf6ccd414f42544f6e83d8cc5adb089e1108eaffb7c400701e37eecd9f"
+    },
+    "testing-strategies": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "aabdab066a69696b95a78ffb575749fd0f2bb14200dfa56c62a6c30685ee8a9b"
+    },
+    "ui-component-patterns": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "85389a825fdc9e4f6ec84e6776e263e00f12f3cc9205006a2932b0a97e3f4522"
+    },
     "ui-ux-pro-max": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",
       "computedHash": "6337038fe1fe6bbe1b9f252ab678ee575859190bab6f0f246f4061824eb40875"
+    },
+    "user-guide-writing": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "167cd8a18e4f38dd87b17ee4d663515304082889ce01031c0088cceec5c1702c"
+    },
+    "using-git-worktrees": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "52bbb4b6e80918e83e92a1514f3b3757712154c2a8a42de24919e48a794c54fc"
+    },
+    "using-superpowers": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "91a4d2ccb9432dfd4d3654f6ebd97875adab301d3d77f84e590169ba397760e3"
+    },
+    "vercel-cli-with-tokens": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "e1e480328b12b79669604c8849845be7582f6c0a6da1e8d1d6d1ec1a2806dbf0"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "10eb4ec94577b79ae98c63ce3e7f35f8a6a06436a4011bff083b397de6960eeb"
+    },
+    "vercel-deploy": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "1957bf5b80c3261ec0997c32918ea5fa504f9d6c0375acede754be82fb7f5927"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "e218e50fe7057a4db91390e579c7db5aafac2394c31a3d8e5fa9444c8fa00726"
+    },
+    "vercel-react-native-skills": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "a804b4e848059822638c390359976f7021380bcefb1469d473aa4e9202c15ecb"
+    },
+    "verification-before-completion": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "9b446f0c7fe1cfb560b1d34439523b1a76d5f177290007b2c053a1c749a4a8ba"
+    },
+    "vibe-kanban": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "9b41ae0e9dea6506a1b899720a407483c9d6f70f3df48bf5ee8603728d427220"
+    },
+    "video-production": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "0facfeaac7cc3fbbcd5d2443c89563f9c81bec4e8c0da0adb2238e1c7ce5b8e1"
+    },
+    "web-accessibility": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "18f3c393f2fe364ecd7b0fbf646eafabef4dcb287af948e1414d16c84b4d7628"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
+    },
+    "workflow-automation": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "910da83d805046b56573e7bf5f531bdae43783a5bd54462c1a068d624192b819"
+    },
+    "writing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "70fe626d5970349239e939f311893389563a6338cda40eb0500606dd48aa3afa"
+    },
+    "writing-skills": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "90371e81ed49a9d9a5eb5a36f62e75586939253f85096e8d50fd1f6b8bacf2a8"
     }
   }
 }
