@@ -1,351 +1,440 @@
-/* ── Directions (오시는 길) ────────────────────────────────────── */
+/* ── Directions (오시는 길) ─────────────────────────────────────────
+   Design intent:
+   - Map as the dominant visual element, full-container width
+   - Editorial info layout below — no cards, no borders, generous space
+   - Skeleton: soft pulse, not shimmer (less template-like)
+   - Brand color used sparingly and precisely
+   ─────────────────────────────────────────────────────────────────── */
 
-/* 스켈레톤 공통 shimmer */
-@keyframes dir-shimmer {
-  0%   { background-position: -600px 0; }
-  100% { background-position:  600px 0; }
+@keyframes dr-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.38; }
 }
 
-.dir-skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--canvas) 25%,
-    #dde3ec 50%,
-    var(--canvas) 75%
-  );
-  background-size: 1200px 100%;
-  animation: dir-shimmer 1.6s infinite linear;
-  border-radius: 4px;
+.dr-skel {
+  background: #cfd6e0;
+  border-radius: 2px;
+  animation: dr-pulse 2s ease-in-out infinite;
 }
 
-/* ── 전체 래퍼 ──────────────────────────────────────── */
-.dir-wrap {
+/* ── 전체 래퍼 ─────────────────────────────────────────────────── */
+.dr-wrap {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3rem, 7vw, 4.5rem);
+  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3.5rem, 8vw, 5rem);
   display: flex;
   flex-direction: column;
-  gap: clamp(2rem, 5vw, 3rem);
+  gap: 0;
 }
 
-/* ── 지도 + 정보 (2단) ──────────────────────────────── */
-.dir-map {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 1.5rem;
-  align-items: start;
-}
-
-/* 지도 스켈레톤 */
-.dir-map__frame {
+/* ── 지도 블록 ─────────────────────────────────────────────────── */
+.dr-map {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  min-height: 320px;
-  border-radius: 8px;
+  aspect-ratio: 16 / 7;
+  min-height: 300px;
+  background: #e8ecf2;
   overflow: hidden;
 }
 
-.dir-map__frame-inner {
+/* 지도 iframe이 들어올 자리 */
+.dr-map__iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* 지도 스켈레톤 오버레이 */
+.dr-map__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #e4e9f0;
+  animation: dr-pulse 2.4s ease-in-out infinite;
+}
+
+.dr-map__pin {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand);
+  opacity: 0.45;
+}
+
+.dr-map__pin svg {
   width: 100%;
   height: 100%;
 }
 
-/* 지도 위 "지도 준비 중" 배지 */
-.dir-map__badge {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.625rem;
-  pointer-events: none;
-}
-
-.dir-map__badge-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.72);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dir-map__badge-icon svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--brand);
-}
-
-.dir-map__badge-label {
+.dr-map__note {
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   color: var(--muted);
-  background: rgba(255,255,255,0.72);
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
+  opacity: 0.7;
+  text-transform: uppercase;
 }
 
-/* ── 정보 카드 ─────────────────────────────────────── */
-.dir-info {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 1.75rem 1.5rem;
+/* ── 위치 정보 패널 ─────────────────────────────────────────────
+   지도 바로 아래, 구분선으로 섹션 구분
+   ─────────────────────────────────────────────────────────────── */
+.dr-info-panel {
+  border-top: 2px solid var(--ink);
+  padding-top: clamp(1.75rem, 4vw, 2.5rem);
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0 clamp(2rem, 5vw, 3.5rem);
+  align-items: start;
+}
+
+.dr-info-divider {
+  width: 1px;
+  background: var(--line);
+  align-self: stretch;
+}
+
+/* 주소 블록 */
+.dr-address {
+  padding: clamp(0.5rem, 2vw, 1rem) 0 clamp(1.5rem, 4vw, 2.5rem);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
-.dir-info__row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.dir-info__row-label {
+.dr-address__eyebrow {
+  margin: 0;
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--brand);
-  margin: 0;
 }
 
-.dir-info__row-value {
-  font-size: 0.9375rem;
+.dr-address__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.dr-address__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.25rem;
+}
+
+.dr-address__value {
+  font-size: 1rem;
+  font-weight: 500;
   line-height: 1.6;
   color: var(--ink);
   margin: 0;
 }
 
-/* 스켈레톤 텍스트 줄 */
-.dir-info__skel-line {
-  height: 0.875rem;
-  border-radius: 4px;
+.dr-address__skel-line {
+  height: 0.9375rem;
   margin-bottom: 0.375rem;
+  display: block;
 }
 
-.dir-info__skel-line:last-child {
-  margin-bottom: 0;
-  width: 60%;
+.dr-address__actions {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.dir-info__divider {
+/* 길찾기 버튼 */
+.dr-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.125rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.18s var(--ease), color 0.18s var(--ease),
+              border-color 0.18s var(--ease);
+  border: 1.5px solid transparent;
+}
+
+.dr-cta--fill {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+.dr-cta--fill:hover {
+  background: var(--brand-deep);
+  border-color: var(--brand-deep);
+}
+
+.dr-cta--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.dr-cta--ghost:hover {
+  border-color: var(--muted);
+  color: var(--ink);
+}
+
+.dr-cta--skel {
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 3px;
+  border: none;
+}
+
+/* ── 연락처 블록 (우측) ─────────────────────────────────────── */
+.dr-contact {
+  padding: clamp(0.5rem, 2vw, 1rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dr-contact__eyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.dr-contact__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dr-contact__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dr-contact__sub {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dr-contact__val {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.dr-contact__skel {
+  height: 0.9375rem;
+  display: block;
+}
+
+/* ── 교통 섹션 ─────────────────────────────────────────────────
+   Editorial list — no cards, no left borders, just clean type
+   ─────────────────────────────────────────────────────────────── */
+.dr-transport {
+  border-top: 1px solid var(--line);
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding-top: clamp(2rem, 5vw, 3rem);
+}
+
+.dr-transport__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.dr-transport__eyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+  white-space: nowrap;
+}
+
+.dr-transport__rule {
+  flex: 1;
   height: 1px;
   background: var(--line);
   border: none;
   margin: 0;
 }
 
-/* 길찾기 버튼 */
-.dir-info__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.dir-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-  transition: background 0.15s var(--ease), color 0.15s var(--ease);
-}
-
-.dir-btn--primary {
-  background: var(--brand);
-  color: #fff;
-}
-
-.dir-btn--primary:hover {
-  background: var(--brand-mid);
-}
-
-.dir-btn--outline {
-  background: transparent;
-  color: var(--brand);
-  border: 1.5px solid var(--brand);
-}
-
-.dir-btn--outline:hover {
-  background: var(--canvas);
-}
-
-.dir-btn--skel {
-  height: 2.75rem;
-  border-radius: 6px;
-}
-
-/* ── 교통 정보 섹션 ──────────────────────────────────── */
-.dir-transport {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.dir-transport__heading {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.dir-transport__label {
+/* 교통 행 목록 */
+.dr-transport__list {
+  list-style: none;
   margin: 0;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--brand);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.dir-transport__title {
-  margin: 0;
-  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-}
-
-.dir-transport__grid {
+.dr-trow {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: 2rem 7rem 1fr;
+  gap: 0 clamp(1.25rem, 3vw, 2rem);
+  padding: clamp(1.25rem, 3vw, 1.75rem) 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
 }
 
-/* 교통 카드 */
-.dir-tcard {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 1.5rem;
+.dr-trow:last-child {
+  border-bottom: none;
+}
+
+.dr-trow__icon {
+  margin-top: 0.15rem;
+  color: var(--brand);
+  opacity: 0.75;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.dir-tcard::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--brand), var(--brand-deep));
-}
-
-.dir-tcard__head {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.dir-tcard__icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 8px;
-  background: var(--canvas);
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  flex-shrink: 0;
 }
 
-.dir-tcard__icon svg {
+.dr-trow__icon svg {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--brand);
-}
-
-.dir-tcard__icon--skel {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 8px;
   flex-shrink: 0;
 }
 
-.dir-tcard__name {
+.dr-trow__name {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--ink);
+  line-height: 1.4;
+  padding-top: 0.05rem;
 }
 
-.dir-tcard__body {
+/* 세부 정보 그리드 */
+.dr-trow__details {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.75rem;
 }
 
-.dir-tcard__item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+.dr-trow__detail {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 0 1rem;
+  align-items: baseline;
 }
 
-.dir-tcard__item-label {
+.dr-trow__detail-key {
   font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--brand);
-}
-
-.dir-tcard__item-value {
-  font-size: 0.9rem;
+  color: var(--muted);
   line-height: 1.55;
+}
+
+.dr-trow__detail-val {
+  font-size: 0.9375rem;
   color: var(--ink);
+  line-height: 1.55;
 }
 
-/* 스켈레톤 텍스트 */
-.dir-tcard__skel-line {
-  height: 0.8125rem;
-  border-radius: 4px;
-  margin-bottom: 0.375rem;
+/* 교통 스켈레톤 */
+.dr-trow__skel-name {
+  height: 0.9375rem;
+  width: 3rem;
 }
 
-.dir-tcard__skel-line--short {
-  width: 55%;
+.dr-trow__skel-val {
+  height: 0.875rem;
+  margin-bottom: 0.3rem;
 }
 
-.dir-tcard__skel-line--mid {
-  width: 80%;
-}
+.dr-trow__skel-val--wide  { width: 75%; }
+.dr-trow__skel-val--short { width: 50%; }
 
-/* ── 반응형 ─────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .dir-map {
-    grid-template-columns: 1fr;
-  }
-
-  .dir-map__frame {
+/* ── 반응형 ─────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .dr-map {
     aspect-ratio: 16 / 9;
-    min-height: 260px;
+  }
+
+  .dr-info-panel {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .dr-info-divider {
+    display: none;
+  }
+
+  .dr-address {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2rem;
+  }
+
+  .dr-contact {
+    padding-top: 2rem;
+  }
+
+  .dr-trow {
+    grid-template-columns: 1.75rem 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .dr-trow__name {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .dr-trow__icon {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .dr-trow__details {
+    grid-column: 1 / -1;
+    padding-left: calc(1.75rem + clamp(1.25rem, 3vw, 2rem));
+    margin-top: 0.75rem;
   }
 }
 
-@media (max-width: 600px) {
-  .dir-transport__grid {
-    grid-template-columns: 1fr;
+@media (max-width: 520px) {
+  .dr-map {
+    aspect-ratio: 4 / 3;
   }
 
-  .dir-map__frame {
-    aspect-ratio: 4 / 3;
-    min-height: 220px;
+  .dr-trow__detail {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+
+  .dr-trow__details {
+    padding-left: 0;
   }
 }

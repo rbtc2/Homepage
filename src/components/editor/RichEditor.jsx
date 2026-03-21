@@ -9,10 +9,13 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
+import TextStyle from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
 
 import icons from './icons';
 import { ToolbarBtn, Divider } from './ToolbarBtn';
 import TableGridPicker from './TableGridPicker';
+import ColorPicker from './ColorPicker';
 import DatePicker from './DatePicker';
 
 /**
@@ -53,6 +56,8 @@ export default function RichEditor({
         orderedList: { keepMarks: true, keepAttributes: false },
       }),
       Underline,
+      TextStyle,
+      Color,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({ placeholder: '본문을 입력하세요...' }),
       Table.configure({ resizable: true }),
@@ -194,6 +199,7 @@ export default function RichEditor({
               <ToolbarBtn title="기울임 (Ctrl+I)" active={editor?.isActive('italic')}    onClick={() => editor?.chain().focus().toggleItalic().run()}>{icons.italic}</ToolbarBtn>
               <ToolbarBtn title="밑줄 (Ctrl+U)"   active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>{icons.underline}</ToolbarBtn>
               <ToolbarBtn title="취소선"           active={editor?.isActive('strike')}    onClick={() => editor?.chain().focus().toggleStrike().run()}>{icons.strike}</ToolbarBtn>
+              <ColorPicker editor={editor} />
             </div>
 
             <Divider />
