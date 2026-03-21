@@ -108,18 +108,28 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
   }
 
   async function getPrevNext(id) {
-    const { data, error } = await supabase
-      .from(tableName)
-      .select('id, title')
-      .order('id', { ascending: true });
-
-    if (error) throw new Error(error.message);
-
     const numId = Number(id);
-    const idx = data.findIndex((r) => r.id === numId);
+    const [prevResult, nextResult] = await Promise.all([
+      supabase
+        .from(tableName)
+        .select('id, title')
+        .lt('id', numId)
+        .order('id', { ascending: false })
+        .limit(1),
+      supabase
+        .from(tableName)
+        .select('id, title')
+        .gt('id', numId)
+        .order('id', { ascending: true })
+        .limit(1),
+    ]);
+
+    if (prevResult.error) throw new Error(prevResult.error.message);
+    if (nextResult.error) throw new Error(nextResult.error.message);
+
     return {
-      prev: idx > 0 ? data[idx - 1] : null,
-      next: idx < data.length - 1 ? data[idx + 1] : null,
+      prev: prevResult.data?.[0] ?? null,
+      next: nextResult.data?.[0] ?? null,
     };
   }
 
