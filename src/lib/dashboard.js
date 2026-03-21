@@ -1,21 +1,15 @@
-import { getNotices } from './notices';
-import { getArchives } from './archive';
-import { getDisclosures } from './disclosures';
-
 /**
- * Fetches up to `limit` most recent items across all three content sections,
+ * Builds a recent activity list from pre-fetched content arrays.
+ * Returns up to `limit` most recent items across all three sections,
  * merged and sorted by createdAt descending.
  *
+ * @param {Array} notices - pre-fetched notices array
+ * @param {Array} archives - pre-fetched archives array
+ * @param {Array} disclosures - pre-fetched disclosures array
  * @param {number} limit - max items to return (default 5)
- * @returns {Promise<Array<{section: string, sectionHref: string, title: string, createdAt: string, editHref: string}>>}
+ * @returns {Array<{section: string, sectionHref: string, title: string, createdAt: string, editHref: string}>}
  */
-export async function getRecentActivity(limit = 5) {
-  const [notices, archives, disclosures] = await Promise.all([
-    getNotices(),
-    getArchives(),
-    getDisclosures(),
-  ]);
-
+export function buildRecentActivity(notices, archives, disclosures, limit = 5) {
   const tagged = [
     ...notices.map((n) => ({
       section: '공지',

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getNotices } from '@/lib/notices';
 import { getArchives } from '@/lib/archive';
 import { getDisclosures } from '@/lib/disclosures';
-import { getRecentActivity } from '@/lib/dashboard';
+import { buildRecentActivity } from '@/lib/dashboard';
 
 export const metadata = { title: '대시보드 | EJJ 관리자' };
 export const dynamic = 'force-dynamic';
@@ -16,12 +16,12 @@ const SECTION_BADGE_STYLE = {
 export default async function AdminPage() {
   const thisMonth = new Date().toISOString().slice(0, 7);
 
-  const [notices, archives, disclosures, recentActivity] = await Promise.all([
+  const [notices, archives, disclosures] = await Promise.all([
     getNotices(),
     getArchives(),
     getDisclosures(),
-    getRecentActivity(5),
   ]);
+  const recentActivity = buildRecentActivity(notices, archives, disclosures, 5);
 
   const stats = [
     {
