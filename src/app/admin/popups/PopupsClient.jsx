@@ -135,7 +135,7 @@ export default function PopupsClient({ initialPopups }) {
       </div>
 
       {/* 팝업 목록 테이블 */}
-      <div className="an-table-wrap">
+      <div className="an-table-wrap an-table-wrap--popup">
         <table className="an-table">
           <thead>
             <tr>
@@ -157,20 +157,20 @@ export default function PopupsClient({ initialPopups }) {
                   <td className="an-table__td an-table__td--title">
                     <span className="an-table__notice-title">{popup.title}</span>
                   </td>
-                  <td className="an-table__td an-table__td--date">
+                  <td className="an-table__td an-table__td--date" data-label="노출 기간">
                     <span className="an-popup-period">
                       {popup.startDate} ~ {popup.endDate}
                     </span>
                   </td>
-                  <td className="an-table__td an-table__td--date">
+                  <td className="an-table__td an-table__td--date" data-label="위치">
                     {POSITION_LABELS[popup.position] ?? popup.position}
                   </td>
-                  <td className="an-table__td">
+                  <td className="an-table__td" data-label="상태">
                     <span className={`an-status-badge an-status-badge--${status}`}>
                       {STATUS_LABEL[status]}
                     </span>
                   </td>
-                  <td className="an-table__td an-table__td--popup-active">
+                  <td className="an-table__td an-table__td--popup-active" data-label="활성화">
                     <button
                       className={`an-toggle${popup.isActive ? ' an-toggle--on' : ''}`}
                       onClick={() => handleToggleActive(popup)}

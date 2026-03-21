@@ -635,6 +635,61 @@
   .an-field-row {
     grid-template-columns: 1fr;
   }
+
+  /* 모달 모바일 최적화 */
+  .an-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .an-modal {
+    border-radius: 16px 16px 0 0;
+    max-height: 92svh;
+  }
+
+  .an-modal--sm {
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .an-modal--popup-form {
+    max-width: 100%;
+  }
+
+  .an-modal__hd {
+    padding: 1rem 1.25rem;
+  }
+
+  .an-modal__body {
+    padding: 1.25rem;
+  }
+
+  .an-modal__ft {
+    padding: 0.875rem 1.25rem;
+    padding-bottom: max(0.875rem, env(safe-area-inset-bottom));
+  }
+
+  /* 헤더 바 버튼 전체 너비 */
+  .an__bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .an__bar .an-btn--primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* 통계 카드 균등 분할 */
+  .an-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .an-stat {
+    min-width: 0;
+    padding: 0.75rem 0.5rem;
+  }
 }
 
 /* 체크박스 그룹 */
@@ -662,6 +717,105 @@
   background-position: right 0.75rem center;
   padding-right: 2rem;
   cursor: pointer;
+}
+
+/* ── 팝업 테이블 모바일 카드 레이아웃 ──────────────────────────── */
+@media (max-width: 720px) {
+  .an-table-wrap--popup {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .an-table-wrap--popup .an-table {
+    display: block;
+  }
+
+  .an-table-wrap--popup .an-table thead {
+    display: none;
+  }
+
+  .an-table-wrap--popup .an-table tbody {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .an-table-wrap--popup .an-table__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    column-gap: 0.75rem;
+    row-gap: 0.625rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .an-table-wrap--popup .an-table__row:last-child {
+    border-bottom: none;
+  }
+
+  /* 번호 숨김 */
+  .an-table-wrap--popup .an-table__td--num {
+    display: none;
+  }
+
+  /* 제목 — 전체 너비 */
+  .an-table-wrap--popup .an-table__td--title {
+    grid-column: 1 / -1;
+    padding: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  /* data-label 기반 셀 레이아웃 */
+  .an-table-wrap--popup .an-table__td[data-label] {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0;
+  }
+
+  .an-table-wrap--popup .an-table__td[data-label]::before {
+    content: attr(data-label);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* 노출 기간 — 전체 너비 */
+  .an-table-wrap--popup .an-table__td.an-table__td--date:first-of-type,
+  .an-table-wrap--popup .an-table__td[data-label="노출 기간"] {
+    grid-column: 1 / -1;
+  }
+
+  /* 활성화 토글 — 오른쪽 정렬 */
+  .an-table-wrap--popup .an-table__td--popup-active {
+    text-align: left;
+  }
+
+  /* 액션 — 전체 너비, 오른쪽 정렬 */
+  .an-table-wrap--popup .an-table__td--actions {
+    grid-column: 1 / -1;
+    padding: 0;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--line);
+    text-align: right;
+  }
+
+  .an-table-wrap--popup .an-table__td--actions .an-actions {
+    justify-content: flex-end;
+  }
+
+  /* 노출 기간 텍스트 줄바꿈 허용 */
+  .an-table-wrap--popup .an-popup-period {
+    white-space: normal;
+  }
+
+  /* 빈 상태 */
+  .an-table-wrap--popup .an-table__empty {
+    display: table-cell;
+  }
 }
 
 /* ── 삭제 확인 ──────────────────────────────────────────────── */
