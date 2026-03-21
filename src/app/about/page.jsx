@@ -10,72 +10,97 @@ export default function AboutPage() {
     <>
       <Header />
       <main role="main">
+
+        {/* 페이지 헤더 */}
         <div className="page-header">
           <div className="page-header__inner">
             <p className="page-header__label">조직 소개</p>
             <h1 className="page-header__title">소개</h1>
           </div>
         </div>
-        <div className="main">
-          <div className="about-intro">
-            <div className="about-intro__stack">
-              <section className="about-section" aria-label="비전">
-                <div className="about-section__head">
-                  <p className="about-section__label">VISION</p>
-                  <h2 className="about-section__title">비전</h2>
-                </div>
-                <div className="about-placeholder about-placeholder--lg" aria-hidden="true" />
-              </section>
 
-              <section className="about-section" aria-label="미션">
-                <div className="about-section__head">
-                  <p className="about-section__label">MISSION</p>
-                  <h2 className="about-section__title">미션</h2>
-                </div>
-                <div className="about-placeholder about-placeholder--md" aria-hidden="true" />
-              </section>
+        <div className="ab-wrap">
 
-              <section className="about-section" aria-label="핵심가치">
-                <div className="about-section__head">
-                  <p className="about-section__label">CORE VALUE</p>
-                  <h2 className="about-section__title">핵심가치</h2>
-                </div>
-
-                <ul className="about-values" aria-hidden="true">
-                  <li className="about-values__item">
-                    <div className="about-placeholder about-placeholder--value" />
-                  </li>
-                  <li className="about-values__item">
-                    <div className="about-placeholder about-placeholder--value" />
-                  </li>
-                  <li className="about-values__item">
-                    <div className="about-placeholder about-placeholder--value" />
-                  </li>
-                  <li className="about-values__item">
-                    <div className="about-placeholder about-placeholder--value" />
-                  </li>
-                </ul>
-              </section>
-
-              <section className="about-section" aria-label="CI 소개">
-                <div className="about-section__head">
-                  <p className="about-section__label">CI</p>
-                  <h2 className="about-section__title">CI 소개</h2>
-                </div>
-
-                <div className="about-ci">
-                  <div
-                    className="about-ci__emblem about-placeholder"
-                    aria-hidden="true"
-                  />
-                  <div className="about-ci__copy" aria-hidden="true">
-                    <div className="about-placeholder about-placeholder--md" />
-                    <div className="about-placeholder about-placeholder--sm" />
-                  </div>
-                </div>
-              </section>
+          {/* ── 비전 ── */}
+          <section className="ab-section" aria-label="비전">
+            <div className="ab-section__header">
+              <p className="ab-section__eyebrow">Vision</p>
+              <h2 className="ab-section__title">비전</h2>
+              <hr className="ab-section__rule" />
             </div>
-          </div>
+            <div className="ab-lines" aria-hidden="true">
+              <span className="ab-line ab-skel" style={{ width: '78%' }} />
+              <span className="ab-line ab-skel" style={{ width: '92%' }} />
+              <span className="ab-line ab-skel" style={{ width: '65%' }} />
+              <span className="ab-line ab-skel" style={{ width: '85%', marginTop: '0.5rem' }} />
+              <span className="ab-line ab-skel" style={{ width: '70%' }} />
+            </div>
+          </section>
+
+          {/* ── 미션 ── */}
+          <section className="ab-section" aria-label="미션">
+            <div className="ab-section__header">
+              <p className="ab-section__eyebrow">Mission</p>
+              <h2 className="ab-section__title">미션</h2>
+              <hr className="ab-section__rule" />
+            </div>
+            <div className="ab-lines" aria-hidden="true">
+              <span className="ab-line ab-skel" style={{ width: '88%' }} />
+              <span className="ab-line ab-skel" style={{ width: '72%' }} />
+              <span className="ab-line ab-skel" style={{ width: '60%' }} />
+            </div>
+          </section>
+
+          {/* ── 핵심가치 ── */}
+          <section className="ab-section" aria-label="핵심가치">
+            <div className="ab-section__header">
+              <p className="ab-section__eyebrow">Core Value</p>
+              <h2 className="ab-section__title">핵심가치</h2>
+              <hr className="ab-section__rule" />
+            </div>
+            <ul className="ab-values" aria-hidden="true">
+              {[1, 2, 3, 4].map((n) => (
+                <li key={n} className="ab-values__item">
+                  <div className="ab-value-card">
+                    <span className="ab-value-card__num">0{n}</span>
+                    <div className="ab-value-card__lines">
+                      <span className="ab-value-card__line ab-skel" style={{ width: '60%' }} />
+                      <span className="ab-value-card__line ab-skel" style={{ width: '85%' }} />
+                      <span className="ab-value-card__line ab-skel" style={{ width: '50%' }} />
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* ── CI 소개 ── */}
+          <section className="ab-section" aria-label="CI 소개">
+            <div className="ab-section__header">
+              <p className="ab-section__eyebrow">CI</p>
+              <h2 className="ab-section__title">CI 소개</h2>
+              <hr className="ab-section__rule" />
+            </div>
+            <div className="ab-ci">
+              <div className="ab-ci__emblem" role="img" aria-label="CI 엠블럼 (준비 중)">
+                <span className="ab-ci__emblem-note">Emblem</span>
+              </div>
+              <div className="ab-ci__copy" aria-hidden="true">
+                <div className="ab-ci__copy-block">
+                  <span className="ab-line ab-skel" style={{ width: '45%', height: '0.8125rem' }} />
+                  <span className="ab-line ab-skel" style={{ width: '100%' }} />
+                  <span className="ab-line ab-skel" style={{ width: '88%' }} />
+                  <span className="ab-line ab-skel" style={{ width: '72%' }} />
+                </div>
+                <div className="ab-ci__copy-block">
+                  <span className="ab-line ab-skel" style={{ width: '45%', height: '0.8125rem' }} />
+                  <span className="ab-line ab-skel" style={{ width: '95%' }} />
+                  <span className="ab-line ab-skel" style={{ width: '80%' }} />
+                </div>
+              </div>
+            </div>
+          </section>
+
         </div>
       </main>
       <Footer />

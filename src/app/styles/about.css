@@ -1,132 +1,183 @@
-/* ── About intro (비전/미션/핵심가치/CI) ─────────────────────── */
-.about-intro {
-  background: transparent;
-  padding: 0;
+/* ── About (소개) ───────────────────────────────────────────────
+   Design language: same as directions page
+   - Section opener: 2px solid ink (first) / 1px solid line (rest)
+   - Eyebrow + horizontal rule header per section
+   - Skeleton: pulse animation, visible canvas background
+   - No left border stripes, no cards
+   ─────────────────────────────────────────────────────────────── */
+
+/* 스켈레톤 pulse (directions와 동일) */
+@keyframes ab-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.38; }
 }
 
-.about-intro__stack {
+.ab-skel {
+  background: #cfd6e0;
+  border-radius: 2px;
+  animation: ab-pulse 2s ease-in-out infinite;
+  display: block;
+}
+
+/* ── 전체 래퍼 ─────────────────────────────────────────────── */
+.ab-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3.5rem, 8vw, 5rem);
   display: flex;
   flex-direction: column;
-  gap: clamp(1.25rem, 3vw, 1.75rem);
 }
 
-.about-section {
-  position: relative;
-  padding: 1.5rem 1.5rem 1.5rem 1.25rem;
-  overflow: hidden;
+/* ── 개별 섹션 ─────────────────────────────────────────────── */
+.ab-section {
+  padding-top: clamp(2rem, 5vw, 3rem);
+  padding-bottom: clamp(2rem, 5vw, 3rem);
+  border-top: 1px solid var(--line);
 }
 
-.about-section::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1rem;
-  bottom: 1rem;
-  width: 3px;
-  background: linear-gradient(180deg, var(--brand), var(--brand-deep));
-  opacity: 0.65;
+.ab-section:first-child {
+  border-top: 2px solid var(--ink);
 }
 
-.about-section__head {
+/* ── 섹션 헤더: eyebrow + rule ─────────────────────────────── */
+.ab-section__header {
   display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  margin-bottom: 1rem;
-  position: relative;
-  z-index: 1;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
 }
 
-.about-section__label {
+.ab-section__eyebrow {
   margin: 0;
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--brand);
+  white-space: nowrap;
 }
 
-.about-section__title {
+.ab-section__title {
   margin: 0;
-  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
   color: var(--ink);
+  white-space: nowrap;
 }
 
-.about-placeholder {
-  position: relative;
-  border-radius: 0;
+.ab-section__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
   border: none;
-  background: transparent;
-  box-shadow: none;
+  margin: 0;
 }
 
-.about-placeholder--lg {
-  min-height: 10rem;
+/* ── 본문 스켈레톤 텍스트 블록 ─────────────────────────────── */
+.ab-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.about-placeholder--md {
-  min-height: 7.5rem;
+.ab-line {
+  height: 0.9375rem;
 }
 
-.about-placeholder--sm {
-  min-height: 5.5rem;
-}
-
-.about-placeholder--value {
-  min-height: 6rem;
-}
-
-.about-values {
+/* ── 핵심가치 그리드 ────────────────────────────────────────── */
+.ab-values {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-  position: relative;
-  z-index: 1;
+  gap: 1rem;
 }
 
-.about-values__item {
+.ab-values__item {
   min-width: 0;
 }
 
-.about-ci {
-  display: grid;
-  grid-template-columns: minmax(0, 0.45fr) minmax(0, 0.55fr);
-  gap: 1.25rem;
-  align-items: stretch;
-  position: relative;
-  z-index: 1;
-}
-
-.about-ci__emblem {
-  min-height: 12rem;
-  border-radius: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.about-ci__copy {
+.ab-value-card {
+  background: var(--canvas);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
+  min-height: 8rem;
+  animation: ab-pulse 2s ease-in-out infinite;
 }
 
+.ab-value-card__num {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--line);
+  line-height: 1;
+}
+
+.ab-value-card__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.ab-value-card__line {
+  height: 0.875rem;
+}
+
+/* ── CI 레이아웃 ───────────────────────────────────────────── */
+.ab-ci {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  align-items: start;
+}
+
+.ab-ci__emblem {
+  aspect-ratio: 4 / 3;
+  background: var(--canvas);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ab-pulse 2.2s ease-in-out infinite;
+}
+
+.ab-ci__emblem-note {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.ab-ci__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.25rem;
+}
+
+.ab-ci__copy-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ── 반응형 ─────────────────────────────────────────────────── */
 @media (max-width: 720px) {
-  .about-section {
-    padding: 1.25rem 1.25rem 1.25rem 1rem;
-  }
-
-  .about-values {
+  .ab-values {
     grid-template-columns: 1fr;
   }
 
-  .about-ci {
+  .ab-ci {
     grid-template-columns: 1fr;
+  }
+
+  .ab-ci__emblem {
+    aspect-ratio: 16 / 7;
   }
 }
-
