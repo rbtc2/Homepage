@@ -1,0 +1,124 @@
+<h2>관리자 내비게이션 레이아웃</h2>
+<p class="subtitle">어떤 네비게이션 구조가 관리자 작업 흐름에 더 잘 맞을까요?</p>
+
+<div class="cards">
+
+  <!-- Option A: Left Sidebar -->
+  <div class="card" data-choice="sidebar" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; overflow: hidden; background: #f5f7fa; border-radius: 6px;">
+      <div style="display: flex; height: 180px; font-size: 11px;">
+        <div style="width: 140px; background: #0c1424; display: flex; flex-direction: column; flex-shrink: 0;">
+          <div style="padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <span style="color: #fff; font-weight: 700; font-size: 11px;">EJJ 관리자</span>
+          </div>
+          <nav style="padding: 8px 0; flex: 1;">
+            <div style="padding: 6px 14px; color: rgba(255,255,255,0.4); font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;">콘텐츠</div>
+            <div style="padding: 7px 14px; background: rgba(18,79,166,0.35); color: #fff; border-left: 2px solid #1e62c4; font-size: 11px;">📋 공지사항</div>
+            <div style="padding: 7px 14px; color: rgba(255,255,255,0.6); font-size: 11px;">📁 자료실</div>
+            <div style="padding: 7px 14px; color: rgba(255,255,255,0.6); font-size: 11px;">📢 공시자료</div>
+            <div style="padding: 7px 14px; color: rgba(255,255,255,0.6); font-size: 11px;">🖼️ 팝업 관리</div>
+          </nav>
+          <div style="padding: 8px 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="color: rgba(255,255,255,0.45); font-size: 10px;">⬡ 사이트 보기 &nbsp;·&nbsp; 로그아웃</div>
+          </div>
+        </div>
+        <div style="flex: 1; background: #eef2f7; padding: 12px; overflow: hidden;">
+          <div style="font-size: 10px; color: #5c6d82; margin-bottom: 8px;">대시보드 / 공지사항</div>
+          <div style="background: #fff; border: 1px solid #d8dee8; border-radius: 6px; padding: 8px;">
+            <div style="font-size: 10px; color: #0c1424; font-weight: 600; margin-bottom: 6px;">공지사항 관리</div>
+            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+              <div style="background: #fff; border: 1px solid #d8dee8; border-radius: 4px; padding: 3px 7px; font-size: 9px; color: #5c6d82;">전체 12건</div>
+              <div style="background: rgba(18,79,166,0.06); border: 1px solid rgba(18,79,166,0.2); border-radius: 4px; padding: 3px 7px; font-size: 9px; color: #124fa6;">고정 2건</div>
+            </div>
+            <div style="height: 1px; background: #d8dee8; margin-bottom: 6px;"></div>
+            <div style="font-size: 9px; color: #5c6d82;">공지 | 제목 | 날짜 | 조회 | 액션</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — 좌측 사이드바</h3>
+      <p>모든 섹션 항상 노출. 한 번 클릭으로 섹션 이동. 현재 위치 명확. 콘텐츠 영역이 좁아지는 단점.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Top Tab Nav -->
+  <div class="card" data-choice="tabs" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; overflow: hidden; background: #f5f7fa; border-radius: 6px;">
+      <div style="display: flex; flex-direction: column; height: 180px; font-size: 11px;">
+        <div style="background: #0c1424; padding: 0 16px; height: 38px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+          <span style="color: #fff; font-weight: 700; font-size: 11px;">EJJ 관리자</span>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span style="color: rgba(255,255,255,0.5); font-size: 10px;">🏠 사이트 보기</span>
+            <span style="color: rgba(255,255,255,0.5); font-size: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; padding: 1px 6px;">로그아웃</span>
+          </div>
+        </div>
+        <div style="background: #fff; border-bottom: 1px solid #d8dee8; padding: 0 16px; display: flex; gap: 0; flex-shrink: 0;">
+          <div style="padding: 7px 12px; font-size: 10px; font-weight: 600; color: #124fa6; border-bottom: 2px solid #124fa6; margin-bottom: -1px;">공지사항</div>
+          <div style="padding: 7px 12px; font-size: 10px; color: #5c6d82;">자료실</div>
+          <div style="padding: 7px 12px; font-size: 10px; color: #5c6d82;">공시자료</div>
+          <div style="padding: 7px 12px; font-size: 10px; color: #5c6d82;">팝업 관리</div>
+        </div>
+        <div style="flex: 1; background: #eef2f7; padding: 12px;">
+          <div style="font-size: 10px; color: #5c6d82; margin-bottom: 8px;">대시보드 / 공지사항</div>
+          <div style="background: #fff; border: 1px solid #d8dee8; border-radius: 6px; padding: 8px;">
+            <div style="font-size: 10px; color: #0c1424; font-weight: 600; margin-bottom: 6px;">공지사항 관리</div>
+            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+              <div style="background: #fff; border: 1px solid #d8dee8; border-radius: 4px; padding: 3px 7px; font-size: 9px; color: #5c6d82;">전체 12건</div>
+              <div style="background: rgba(18,79,166,0.06); border: 1px solid rgba(18,79,166,0.2); border-radius: 4px; padding: 3px 7px; font-size: 9px; color: #124fa6;">고정 2건</div>
+            </div>
+            <div style="height: 1px; background: #d8dee8; margin-bottom: 6px;"></div>
+            <div style="font-size: 9px; color: #5c6d82;">공지 | 제목 | 날짜 | 조회 | 액션</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — 상단 탭 네비게이션</h3>
+      <p>현재 헤더 구조 유지, 그 아래에 탭 바 추가. 수평 공간 활용. 전체 너비 동일. 섹션 증가 시 탭이 좁아짐.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Inline header nav + breadcrumb -->
+  <div class="card" data-choice="hybrid" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; overflow: hidden; background: #f5f7fa; border-radius: 6px;">
+      <div style="display: flex; flex-direction: column; height: 180px; font-size: 11px;">
+        <div style="background: #0c1424; padding: 0 16px; height: 44px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+          <span style="color: #fff; font-weight: 700; font-size: 11px; flex-shrink: 0;">EJJ 관리자</span>
+          <div style="width: 1px; height: 14px; background: rgba(255,255,255,0.15); flex-shrink: 0;"></div>
+          <nav style="display: flex; gap: 2px; flex: 1; overflow: hidden;">
+            <div style="padding: 4px 9px; background: rgba(255,255,255,0.13); border-radius: 4px; color: #fff; font-size: 10px; font-weight: 600; white-space: nowrap;">공지사항</div>
+            <div style="padding: 4px 9px; color: rgba(255,255,255,0.6); font-size: 10px; white-space: nowrap; border-radius: 4px;">자료실</div>
+            <div style="padding: 4px 9px; color: rgba(255,255,255,0.6); font-size: 10px; white-space: nowrap; border-radius: 4px;">공시자료</div>
+            <div style="padding: 4px 9px; color: rgba(255,255,255,0.6); font-size: 10px; white-space: nowrap; border-radius: 4px;">팝업</div>
+          </nav>
+          <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
+            <span style="color: rgba(255,255,255,0.5); font-size: 10px;">🏠</span>
+            <span style="color: rgba(255,255,255,0.5); font-size: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; padding: 1px 6px;">로그아웃</span>
+          </div>
+        </div>
+        <div style="background: #fff; border-bottom: 1px solid #d8dee8; padding: 5px 16px; display: flex; align-items: center; gap: 5px; flex-shrink: 0;">
+          <span style="font-size: 9px; color: #b0bac9;">대시보드</span>
+          <span style="font-size: 9px; color: #b0bac9;">/</span>
+          <span style="font-size: 9px; font-weight: 600; color: #0c1424;">공지사항 관리</span>
+        </div>
+        <div style="flex: 1; background: #eef2f7; padding: 12px;">
+          <div style="background: #fff; border: 1px solid #d8dee8; border-radius: 6px; padding: 8px;">
+            <div style="font-size: 10px; color: #0c1424; font-weight: 600; margin-bottom: 6px;">공지사항 관리</div>
+            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+              <div style="background: #fff; border: 1px solid #d8dee8; border-radius: 4px; padding: 3px 7px; font-size: 9px; color: #5c6d82;">전체 12건</div>
+              <div style="background: rgba(18,79,166,0.06); border: 1px solid rgba(18,79,166,0.2); border-radius: 4px; padding: 3px 7px; font-size: 9px; color: #124fa6;">고정 2건</div>
+            </div>
+            <div style="height: 1px; background: #d8dee8; margin-bottom: 6px;"></div>
+            <div style="font-size: 9px; color: #5c6d82;">공지 | 제목 | 날짜 | 조회 | 액션</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — 헤더 통합 내비 + 브레드크럼</h3>
+      <p>헤더에 섹션 링크 통합, 별도 UI 추가 없음. 콘텐츠 영역 최대. 브레드크럼 바로 위치 맥락 제공.</p>
+    </div>
+  </div>
+
+</div>
