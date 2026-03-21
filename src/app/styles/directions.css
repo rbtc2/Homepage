@@ -1,0 +1,351 @@
+/* ── Directions (오시는 길) ────────────────────────────────────── */
+
+/* 스켈레톤 공통 shimmer */
+@keyframes dir-shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+.dir-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--canvas) 25%,
+    #dde3ec 50%,
+    var(--canvas) 75%
+  );
+  background-size: 1200px 100%;
+  animation: dir-shimmer 1.6s infinite linear;
+  border-radius: 4px;
+}
+
+/* ── 전체 래퍼 ──────────────────────────────────────── */
+.dir-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3rem, 7vw, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+/* ── 지도 + 정보 (2단) ──────────────────────────────── */
+.dir-map {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* 지도 스켈레톤 */
+.dir-map__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 320px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dir-map__frame-inner {
+  width: 100%;
+  height: 100%;
+}
+
+/* 지도 위 "지도 준비 중" 배지 */
+.dir-map__badge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  pointer-events: none;
+}
+
+.dir-map__badge-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dir-map__badge-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--brand);
+}
+
+.dir-map__badge-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: rgba(255,255,255,0.72);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* ── 정보 카드 ─────────────────────────────────────── */
+.dir-info {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dir-info__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.dir-info__row-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin: 0;
+}
+
+.dir-info__row-value {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* 스켈레톤 텍스트 줄 */
+.dir-info__skel-line {
+  height: 0.875rem;
+  border-radius: 4px;
+  margin-bottom: 0.375rem;
+}
+
+.dir-info__skel-line:last-child {
+  margin-bottom: 0;
+  width: 60%;
+}
+
+.dir-info__divider {
+  height: 1px;
+  background: var(--line);
+  border: none;
+  margin: 0;
+}
+
+/* 길찾기 버튼 */
+.dir-info__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dir-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.dir-btn--primary {
+  background: var(--brand);
+  color: #fff;
+}
+
+.dir-btn--primary:hover {
+  background: var(--brand-mid);
+}
+
+.dir-btn--outline {
+  background: transparent;
+  color: var(--brand);
+  border: 1.5px solid var(--brand);
+}
+
+.dir-btn--outline:hover {
+  background: var(--canvas);
+}
+
+.dir-btn--skel {
+  height: 2.75rem;
+  border-radius: 6px;
+}
+
+/* ── 교통 정보 섹션 ──────────────────────────────────── */
+.dir-transport {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dir-transport__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.dir-transport__label {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.dir-transport__title {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.dir-transport__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* 교통 카드 */
+.dir-tcard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dir-tcard::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--brand), var(--brand-deep));
+}
+
+.dir-tcard__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dir-tcard__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  background: var(--canvas);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dir-tcard__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--brand);
+}
+
+.dir-tcard__icon--skel {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.dir-tcard__name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.dir-tcard__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.dir-tcard__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dir-tcard__item-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.dir-tcard__item-value {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* 스켈레톤 텍스트 */
+.dir-tcard__skel-line {
+  height: 0.8125rem;
+  border-radius: 4px;
+  margin-bottom: 0.375rem;
+}
+
+.dir-tcard__skel-line--short {
+  width: 55%;
+}
+
+.dir-tcard__skel-line--mid {
+  width: 80%;
+}
+
+/* ── 반응형 ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .dir-map {
+    grid-template-columns: 1fr;
+  }
+
+  .dir-map__frame {
+    aspect-ratio: 16 / 9;
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dir-transport__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dir-map__frame {
+    aspect-ratio: 4 / 3;
+    min-height: 220px;
+  }
+}
