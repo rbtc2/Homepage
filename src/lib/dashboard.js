@@ -1,15 +1,16 @@
 /**
  * Builds a recent activity list from pre-fetched content arrays.
- * Returns up to `limit` most recent items across all three sections,
+ * Returns up to `limit` most recent items across all sections,
  * merged and sorted by createdAt descending.
  *
  * @param {Array} notices - pre-fetched notices array
  * @param {Array} archives - pre-fetched archives array
  * @param {Array} disclosures - pre-fetched disclosures array
+ * @param {Array} gallery - pre-fetched gallery array
  * @param {number} limit - max items to return (default 5)
  * @returns {Array<{section: string, sectionHref: string, title: string, createdAt: string, editHref: string}>}
  */
-export function buildRecentActivity(notices, archives, disclosures, limit = 5) {
+export function buildRecentActivity(notices, archives, disclosures, gallery, limit = 5) {
   const tagged = [
     ...notices.map((n) => ({
       section: '공지',
@@ -31,6 +32,13 @@ export function buildRecentActivity(notices, archives, disclosures, limit = 5) {
       title: d.title,
       createdAt: d.createdAt,
       editHref: `/admin/disclosures/${d.id}/edit`,
+    })),
+    ...gallery.map((g) => ({
+      section: '갤러리',
+      sectionHref: '/admin/gallery',
+      title: g.title,
+      createdAt: g.createdAt,
+      editHref: `/admin/gallery/${g.id}/edit`,
     })),
   ];
 

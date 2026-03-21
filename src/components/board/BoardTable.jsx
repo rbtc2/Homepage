@@ -33,12 +33,18 @@ export default function BoardTable({ rows, basePath, isSearching, query, emptyTe
                   <path d="M12 15h6M15 12v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </span>
-              <p className="notice-table__empty-title">검색 결과가 없습니다</p>
-              <p className="notice-table__empty-desc">
-                &ldquo;{query}&rdquo;에 해당하는 {emptyText} 찾지 못했습니다.
-                <br />다른 검색어를 입력하거나{' '}
-                <Link href={basePath} className="notice-table__empty-link">전체 목록</Link>을 확인하세요.
-              </p>
+              {isSearching ? (
+                <>
+                  <p className="notice-table__empty-title">검색 결과가 없습니다</p>
+                  <p className="notice-table__empty-desc">
+                    &ldquo;{query}&rdquo;에 해당하는 {emptyText} 찾지 못했습니다.
+                    <br />다른 검색어를 입력하거나{' '}
+                    <Link href={basePath} className="notice-table__empty-link">전체 목록</Link>을 확인하세요.
+                  </p>
+                </>
+              ) : (
+                <p className="notice-table__empty-title">등록된 게시물이 없습니다</p>
+              )}
             </td>
           </tr>
         ) : (

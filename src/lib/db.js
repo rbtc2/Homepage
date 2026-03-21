@@ -63,6 +63,14 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
   }
 
   /**
+   * ILIKE 패턴에서 와일드카드(%,_)와 이스케이프 문자(\)를 이스케이프합니다.
+   * 사용자 검색어를 그대로 리터럴 문자열로 매칭하기 위해 사용합니다.
+   */
+  function escapeLike(str) {
+    return str.replace(/[\\%_]/g, '\\$&');
+  }
+
+  /**
    * DB 레벨 검색 + 페이지네이션.
    * @param {{ query: string, page?: number, itemsPerPage?: number }} options
    * @returns {{ items: object[], totalCount: number }}
@@ -71,7 +79,7 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
     if (!query || !query.trim()) return getPage({ page, itemsPerPage });
     const from = (page - 1) * itemsPerPage;
     const to = from + itemsPerPage - 1;
-    const q = query.trim();
+    const q = escapeLike(query.trim());
     const { data, error, count } = await supabase
       .from(tableName)
       .select('*', { count: 'exact' })
@@ -80,20 +88,6 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
       .range(from, to);
     if (error) throw new Error(error.message);
     return { items: (data ?? []).map(normalize), totalCount: count ?? 0 };
-  }
-
-  async function search(query) {
-    if (!query || !query.trim()) return getAll();
-    const q = query.trim().toLowerCase();
-
-    const { data, error } = await supabase
-      .from(tableName)
-      .select('*')
-      .or(`title.ilike.%${q}%,content.ilike.%${q}%`)
-      .order('id', { ascending: false });
-
-    if (error) throw new Error(error.message);
-    return (data ?? []).map(normalize);
   }
 
   async function getById(id) {
@@ -133,5 +127,5 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
     };
   }
 
-  return { getAll, getWhere, getPage, search, searchPage, getById, getPrevNext };
+  return { getAll, getWhere, getPage, searchPage, getById, getPrevNext };
 }

@@ -108,7 +108,6 @@ export default function RichEditor({
     try {
       await onSave({ title, content: html, createdAt, isPinned, coverImage: coverImage.trim() || null });
       router.push(backHref);
-      router.refresh();
     } catch {
       alert('저장에 실패했습니다. 다시 시도해 주세요.');
     } finally {

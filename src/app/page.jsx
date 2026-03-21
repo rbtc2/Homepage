@@ -11,8 +11,7 @@ export default function Home() {
       <NoticeStrip />
       <main className="main" role="main">
         <div className="main__surface">
-          <p className="main__lead">본문 영역</p>
-          <p className="main__note">하단 콘텐츠는 이후 단계에서 구성됩니다.</p>
+          <p className="main__lead">진행 예정</p>
         </div>
       </main>
       <Footer />

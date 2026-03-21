@@ -12,6 +12,7 @@ const SECTION_BADGE_STYLE = {
   공지: { background: 'var(--brand)', color: '#fff' },
   자료: { background: 'var(--canvas)', color: 'var(--muted)', border: '1px solid var(--line)' },
   공시: { background: 'rgba(18,79,166,0.08)', color: 'var(--brand)' },
+  갤러리: { background: 'rgba(80,160,80,0.1)', color: '#2d7a2d' },
 };
 
 export default async function AdminPage() {
@@ -23,21 +24,22 @@ export default async function AdminPage() {
     getDisclosures(),
     getGalleryPosts(),
   ]);
-  const recentActivity = buildRecentActivity(notices, archives, disclosures, 5);
+  const recentActivity = buildRecentActivity(notices, archives, disclosures, gallery, 5);
 
   const stats = [
+    {
+      // Popups are not yet DB-backed. Show 0 until backend is implemented.
+      label: '활성 팝업',
+      href: '/admin/popups',
+      total: 0,
+      sub: '노출 중',
+      highlight: false,
+    },
     {
       label: '공지사항',
       href: '/admin/notices',
       total: notices.length,
       monthCount: notices.filter((n) => n.createdAt?.startsWith(thisMonth)).length,
-      highlight: false,
-    },
-    {
-      label: '자료실',
-      href: '/admin/archive',
-      total: archives.length,
-      monthCount: archives.filter((a) => a.createdAt?.startsWith(thisMonth)).length,
       highlight: false,
     },
     {
@@ -48,18 +50,17 @@ export default async function AdminPage() {
       highlight: false,
     },
     {
+      label: '자료실',
+      href: '/admin/archive',
+      total: archives.length,
+      monthCount: archives.filter((a) => a.createdAt?.startsWith(thisMonth)).length,
+      highlight: false,
+    },
+    {
       label: '포토갤러리',
       href: '/admin/gallery',
       total: gallery.length,
       monthCount: gallery.filter((g) => g.createdAt?.startsWith(thisMonth)).length,
-      highlight: false,
-    },
-    {
-      // Popups are not yet DB-backed. Show 0 until backend is implemented.
-      label: '활성 팝업',
-      href: '/admin/popups',
-      total: 0,
-      sub: '노출 중',
       highlight: false,
     },
   ];
@@ -98,8 +99,8 @@ export default async function AdminPage() {
             <p className="adm-dash-recent__empty">등록된 게시물이 없습니다.</p>
           ) : (
             <ul className="adm-dash-recent__list">
-              {recentActivity.map((item, i) => (
-                <li key={i} className="adm-dash-recent__item">
+              {recentActivity.map((item) => (
+                <li key={`${item.editHref}`} className="adm-dash-recent__item">
                   <span
                     className="adm-dash-recent__badge"
                     style={SECTION_BADGE_STYLE[item.section]}
@@ -119,8 +120,8 @@ export default async function AdminPage() {
           <div className="adm-dash-recent__ft">
             {[
               { label: '공지사항 →', href: '/admin/notices' },
-              { label: '자료실 →', href: '/admin/archive' },
               { label: '공시자료 →', href: '/admin/disclosures' },
+              { label: '자료실 →', href: '/admin/archive' },
             ].map((l) => (
               <Link key={l.href} href={l.href} className="adm-dash-recent__more">
                 {l.label}
