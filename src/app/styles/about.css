@@ -1,0 +1,132 @@
+/* ── About intro (비전/미션/핵심가치/CI) ─────────────────────── */
+.about-intro {
+  background: transparent;
+  padding: 0;
+}
+
+.about-intro__stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.about-section {
+  position: relative;
+  padding: 1.5rem 1.5rem 1.5rem 1.25rem;
+  overflow: hidden;
+}
+
+.about-section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  bottom: 1rem;
+  width: 3px;
+  background: linear-gradient(180deg, var(--brand), var(--brand-deep));
+  opacity: 0.65;
+}
+
+.about-section__head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.about-section__label {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.about-section__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.about-placeholder {
+  position: relative;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.about-placeholder--lg {
+  min-height: 10rem;
+}
+
+.about-placeholder--md {
+  min-height: 7.5rem;
+}
+
+.about-placeholder--sm {
+  min-height: 5.5rem;
+}
+
+.about-placeholder--value {
+  min-height: 6rem;
+}
+
+.about-values {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.about-values__item {
+  min-width: 0;
+}
+
+.about-ci {
+  display: grid;
+  grid-template-columns: minmax(0, 0.45fr) minmax(0, 0.55fr);
+  gap: 1.25rem;
+  align-items: stretch;
+  position: relative;
+  z-index: 1;
+}
+
+.about-ci__emblem {
+  min-height: 12rem;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.about-ci__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .about-section {
+    padding: 1.25rem 1.25rem 1.25rem 1rem;
+  }
+
+  .about-values {
+    grid-template-columns: 1fr;
+  }
+
+  .about-ci {
+    grid-template-columns: 1fr;
+  }
+}
+

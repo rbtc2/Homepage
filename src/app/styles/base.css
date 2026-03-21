@@ -1,0 +1,47 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --ink: #0c1424;
+  --muted: #5c6d82;
+  --line: #d8dee8;
+  --surface: #ffffff;
+  --canvas: #eef2f7;
+  --brand: #124fa6;
+  --brand-mid: #1e62c4;
+  --brand-deep: #0c3a78;
+  --focus: #0d3d7a;
+
+  --header-h: 4.25rem;
+  --pad-x: clamp(1.25rem, 4vw, 2rem);
+  --max-w: 1180px;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  font-family: var(--font-noto), "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--canvas);
+  display: flex;
+  flex-direction: column;
+}
+
+.is-skeleton {
+  pointer-events: none;
+  cursor: default;
+  user-select: none;
+}
+
+.is-skeleton:focus-visible {
+  outline: none;
+}
+

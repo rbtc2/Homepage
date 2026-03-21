@@ -1,0 +1,214 @@
+/* ── Notice Strip (홈 화면 공지 띠) ──────────────────────── */
+.ns {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 12px rgba(12, 20, 36, 0.05);
+}
+
+.ns__inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  min-height: 6rem;
+}
+
+.ns__head {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.45rem;
+  padding: 1.25rem 2rem 1.25rem 0;
+  border-right: 1px solid var(--line);
+}
+
+.ns__labelWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+.ns__label {
+  position: relative;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--brand);
+  padding-left: 0.75rem;
+  line-height: 1.1;
+}
+
+.ns__label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand), var(--brand-deep));
+}
+
+.ns__sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ns__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.18s var(--ease);
+  line-height: 1;
+}
+
+.ns__more:hover {
+  color: var(--brand);
+}
+
+.ns__more:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ns__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ns__item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ns__divider {
+  height: 1px;
+  background: var(--line);
+  margin: 0 0.75rem;
+}
+
+.ns__link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 4px;
+  transition: background 0.18s var(--ease);
+  min-width: 0;
+}
+
+.ns__link:hover {
+  background: rgba(18, 79, 166, 0.04);
+}
+
+.ns__link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.ns__badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.ns__title {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.18s var(--ease);
+}
+
+.ns__link:hover .ns__title {
+  color: var(--brand);
+}
+
+.ns__date {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.ns__arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--line);
+  transition: color 0.18s var(--ease), transform 0.18s var(--ease);
+}
+
+.ns__link:hover .ns__arrow {
+  color: var(--brand);
+  transform: translateX(2px);
+}
+
+/* ── Notice Strip 반응형 ──────────────────────────────────── */
+@media (max-width: 720px) {
+  .ns__inner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .ns__head {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.875rem 0;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ns__more {
+    margin-left: auto;
+  }
+
+  .ns__link {
+    padding: 0.875rem 0;
+  }
+
+  .ns__divider {
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .ns__date {
+    display: none;
+  }
+
+  .ns__title {
+    font-size: 0.875rem;
+  }
+}
+

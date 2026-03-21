@@ -1,0 +1,108 @@
+.footer {
+  margin-top: auto;
+  background: linear-gradient(180deg, rgba(12, 20, 36, 0.98), rgba(12, 20, 36, 0.92));
+  border-top: 1px solid rgba(216, 222, 232, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.footer__inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 1.75rem var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer__line {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgba(240, 245, 255, 0.86);
+  letter-spacing: -0.015em;
+  line-height: 1.75;
+}
+
+.footer__line + .footer__line {
+  margin-top: 0.35rem;
+}
+
+.footer__label {
+  font-weight: 500;
+  color: rgba(240, 245, 255, 0.62);
+}
+
+.footer__value {
+  font-weight: 700;
+  color: rgba(240, 245, 255, 0.92);
+}
+
+.footer__sep {
+  margin: 0 0.4rem;
+  color: rgba(240, 245, 255, 0.35);
+}
+
+.footer__copyright {
+  margin: 0.65rem 0 0;
+  font-size: 0.8125rem;
+  color: rgba(240, 245, 255, 0.55);
+  letter-spacing: -0.015em;
+}
+
+.footer__sns {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.9rem;
+}
+
+.footer__sns-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: rgba(240, 245, 255, 0.86);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.footer__sns-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.footer__sns-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 7px;
+  border: 1px solid rgba(216, 222, 232, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  transition: transform 0.18s var(--ease), background 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+
+.footer__sns-icon:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(216, 222, 232, 0.28);
+}
+
+.footer__sns-icon:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.footer__sns-img {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: block;
+}
+
+@media (max-width: 520px) {
+  .footer__sns {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
