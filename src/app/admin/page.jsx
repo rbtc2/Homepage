@@ -70,7 +70,7 @@ export default async function AdminPage() {
       <div className="adm-main__inner">
         <div className="adm-main__hd">
           <h1 className="adm-main__title">대시보드</h1>
-          <p className="adm-main__sub">EJJ 홈페이지 콘텐츠 현황</p>
+          <p className="adm-main__sub">국제인권연대 월드라이츠(WORLD RIGHTS) 콘텐츠 현황</p>
         </div>
 
         {/* Stats row */}

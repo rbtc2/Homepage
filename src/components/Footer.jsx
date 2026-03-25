@@ -55,7 +55,7 @@ export default function Footer() {
           <span className="footer__label">팩스</span>{' '}
           <span className="footer__value">00-000-0000</span>
         </p>
-        <p className="footer__copyright">ⓒ EJJ. ALL RIGHTS RESERVED.</p>
+        <p className="footer__copyright">ⓒ WORLD RIGHTS. ALL RIGHTS RESERVED.</p>
       </div>
     </footer>
   );

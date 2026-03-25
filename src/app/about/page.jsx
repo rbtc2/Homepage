@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: '소개 | EJJ 홈페이지',
+  title: '소개 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
 export default function AboutPage() {

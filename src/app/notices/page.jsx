@@ -7,7 +7,7 @@ import BoardPagination from '@/components/board/BoardPagination';
 import { getPinnedNotices, getNoticesPage, searchNoticesPage } from '@/lib/notices';
 import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
-export const metadata = { title: '공지사항 | EJJ 홈페이지' };
+export const metadata = { title: '공지사항 | 국제인권연대 월드라이츠(WORLD RIGHTS)' };
 export const revalidate = 60;
 
 const BASE = '/notices';

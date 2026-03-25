@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: '함께하는 사람들 | EJJ 홈페이지',
+  title: '함께하는 사람들 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
 /* 사람 실루엣 아이콘 */

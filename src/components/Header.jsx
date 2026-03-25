@@ -36,7 +36,7 @@ export default function Header() {
             alt=""
             decoding="async"
           />
-          <span className="header__wordmark">EJJ</span>
+          <span className="header__wordmark">국제인권연대 월드라이츠</span>
         </Link>
 
         <nav className="header__nav" aria-label="주 메뉴">

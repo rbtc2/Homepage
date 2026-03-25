@@ -9,7 +9,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata = {
-  title: 'EJJ 홈페이지',
+  title: '국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
 export default function RootLayout({ children }) {

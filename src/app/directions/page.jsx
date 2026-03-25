@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: '오시는 길 | EJJ 홈페이지',
+  title: '오시는 길 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
 function PinIcon() {

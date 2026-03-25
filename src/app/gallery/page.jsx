@@ -6,7 +6,7 @@ import GalleryFilterBar from '@/components/gallery/GalleryFilterBar';
 import { getGalleryPage, getGalleryYears, getLatestGallery } from '@/lib/gallery';
 import { calcTotalPages } from '@/lib/paginate';
 
-export const metadata = { title: '포토갤러리 | EJJ 홈페이지' };
+export const metadata = { title: '포토갤러리 | 국제인권연대 월드라이츠(WORLD RIGHTS)' };
 export const revalidate = 60;
 
 const BASE = '/gallery';

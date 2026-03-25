@@ -10,8 +10,8 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const archive = await getArchiveById(id);
-  if (!archive) return { title: '자료실 | EJJ 홈페이지' };
-  return { title: `${archive.title} | EJJ 홈페이지` };
+  if (!archive) return { title: '자료실 | 국제인권연대 월드라이츠(WORLD RIGHTS)' };
+  return { title: `${archive.title} | 국제인권연대 월드라이츠(WORLD RIGHTS)` };
 }
 
 export default async function ArchiveDetailPage({ params }) {

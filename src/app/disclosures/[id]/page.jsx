@@ -10,8 +10,8 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const disclosure = await getDisclosureById(id);
-  if (!disclosure) return { title: '공시자료 | EJJ 홈페이지' };
-  return { title: `${disclosure.title} | EJJ 홈페이지` };
+  if (!disclosure) return { title: '공시자료 | 국제인권연대 월드라이츠(WORLD RIGHTS)' };
+  return { title: `${disclosure.title} | 국제인권연대 월드라이츠(WORLD RIGHTS)` };
 }
 
 export default async function DisclosureDetailPage({ params }) {
