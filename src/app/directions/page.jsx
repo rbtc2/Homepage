@@ -72,10 +72,7 @@ export default function DirectionsPage() {
                 <div className="dr-address__main">
                   <div>
                     <p className="dr-address__label">도로명 주소</p>
-                    <div aria-label="주소 준비 중">
-                      <span className="dr-address__skel-line dr-skel" style={{ width: '100%', display: 'block' }} />
-                      <span className="dr-address__skel-line dr-skel" style={{ width: '65%', display: 'block', marginTop: '0.375rem' }} />
-                    </div>
+                    <p className="dr-address__value">서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호</p>
                   </div>
                 </div>
                 <div className="dr-address__actions">

@@ -47,7 +47,7 @@ export default function Footer() {
         </p>
         <p className="footer__line">
           <span className="footer__label">대표자</span>{' '}
-          <span className="footer__value">조은혜</span>
+          <span className="footer__value">김진영</span>
           <span className="footer__sep">|</span>
           <span className="footer__label">대표 전화</span>{' '}
           <span className="footer__value">010-0000-0000</span>
