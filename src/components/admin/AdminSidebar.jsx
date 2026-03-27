@@ -73,7 +73,7 @@ const NAV_ITEMS = [
 function SidebarContent({ pathname, onLogout, onNavClick }) {
   return (
     <>
-      <div className="adm-sidebar__brand">EJJ 관리자</div>
+      <div className="adm-sidebar__brand">WR 관리자</div>
       <nav className="adm-sidebar__nav" aria-label="관리자 메뉴">
         <span className="adm-sidebar__section-label">콘텐츠</span>
         {NAV_ITEMS.map((item) => {
@@ -149,7 +149,7 @@ export default function AdminSidebar() {
           <span />
           <span />
         </button>
-        <span className="adm-topbar__brand">EJJ 관리자</span>
+        <span className="adm-topbar__brand">WR 관리자</span>
         <button
           type="button"
           className="adm-sidebar__footer-link"

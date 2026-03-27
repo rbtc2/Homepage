@@ -5,7 +5,7 @@ import { getDisclosures } from '@/lib/disclosures';
 import { getGalleryPosts } from '@/lib/gallery';
 import { buildRecentActivity } from '@/lib/dashboard';
 
-export const metadata = { title: '대시보드 | EJJ 관리자' };
+export const metadata = { title: '대시보드 | 국제인권연대 월드라이츠 관리자' };
 export const dynamic = 'force-dynamic';
 
 const SECTION_BADGE_STYLE = {

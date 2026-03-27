@@ -8,6 +8,7 @@ const SECTION_LABELS = {
   '/admin/archive':     '자료실 관리',
   '/admin/disclosures': '공시자료 관리',
   '/admin/popups':      '팝업 관리',
+  '/admin/gallery':     '포토갤러리 관리',
 };
 
 const SUB_LABELS = {
