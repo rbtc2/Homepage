@@ -2,17 +2,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: '오시는 길 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
+  title: '오시는 길 | EJJ 홈페이지',
 };
-
-function PinIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 14 6 14s6-8.75 6-14c0-3.314-2.686-6-6-6z" />
-      <circle cx="12" cy="8" r="2" />
-    </svg>
-  );
-}
 
 function SubwayIcon() {
   return (
@@ -41,14 +32,6 @@ function BusIcon() {
   );
 }
 
-function ExternalIcon() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: '0.8125rem', height: '0.8125rem' }}>
-      <path d="M6 3H3v10h10v-3M9 3h4v4M13 3L7.5 8.5" />
-    </svg>
-  );
-}
-
 export default function DirectionsPage() {
   return (
     <>
@@ -68,20 +51,14 @@ export default function DirectionsPage() {
           {/* ── 지도 ── */}
           <section aria-label="지도">
             <div className="dr-map">
-              {/*
-                카카오맵 연동 시 이 영역을 대체:
-                <iframe
-                  className="dr-map__iframe"
-                  src="https://map.kakao.com/link/map/..."
-                  title="오시는 길 지도"
-                />
-              */}
-              <div className="dr-map__overlay" role="img" aria-label="카카오맵 지도 (준비 중)">
-                <div className="dr-map__pin">
-                  <PinIcon />
-                </div>
-                <span className="dr-map__note">카카오맵 연동 예정</span>
-              </div>
+              <iframe
+                className="dr-map__iframe"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3164.8904367987398!2d127.11014647569041!3d37.51050217205321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5764a9945e1%3A0x2d65515baa9e0627!2z64ukOuyYtCDsiqTrp4jtirjsmKTtlLzsiqQg7Iah7YyM64KY66Oo!5e0!3m2!1sko!2skr!4v1774569114385!5m2!1sko!2skr"
+                title="오시는 길 지도"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           </section>
 

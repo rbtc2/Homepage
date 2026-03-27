@@ -43,7 +43,7 @@ export default function Footer() {
         </div>
         <p className="footer__line">
           <span className="footer__label">사무실</span>{' '}
-          <span className="footer__value">서울특별시</span>
+          <span className="footer__value">서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호</span>
         </p>
         <p className="footer__line">
           <span className="footer__label">대표자</span>{' '}
