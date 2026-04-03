@@ -28,11 +28,3 @@
   color: var(--ink);
 }
 
-.page-header__lede {
-  margin: 1rem 0 0;
-  max-width: 40rem;
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--muted, #5c6570);
-}
-

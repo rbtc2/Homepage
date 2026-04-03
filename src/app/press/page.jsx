@@ -48,13 +48,11 @@ export default async function PressPage({ searchParams }) {
     <>
       <Header />
       <main role="main">
+        {/* 페이지 헤더 */}
         <div className="page-header">
           <div className="page-header__inner">
             <p className="page-header__label">조직 활동</p>
             <h1 className="page-header__title">언론보도</h1>
-            <p className="page-header__lede">
-              온라인 언론에 게재된 관련 보도를 안내합니다. 카드를 눌러 출처와 요약을 확인하고 원문으로 이동할 수 있습니다.
-            </p>
           </div>
         </div>
         <div className="notice-board press-board">
