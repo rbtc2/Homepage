@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
-const ALLOWED_TABLES = ['notices', 'archive', 'disclosures', 'gallery', 'press_coverage'];
+const ALLOWED_TABLES = [
+  'notices',
+  'archive',
+  'disclosures',
+  'gallery',
+  'press_coverage',
+  'wr_news',
+];
 
 export async function POST(request) {
   try {
