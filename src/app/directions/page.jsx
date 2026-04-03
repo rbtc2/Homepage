@@ -127,10 +127,13 @@ export default function DirectionsPage() {
                   <div className="dr-trow__details" aria-label="지하철 안내">
                     <div className="dr-trow__detail">
                       <span className="dr-trow__detail-key">노선 / 역</span>
-                      <div>
-                        <p className="dr-trow__detail-val" style={{ margin: 0 }}>지하철 3호선</p>
-                        <p className="dr-trow__detail-val" style={{ margin: '0.35rem 0 0' }}>경찰병원역</p>
-                      </div>
+                      <p className="dr-trow__detail-val" style={{ margin: 0 }}>
+                        지하철{' '}
+                        <span className="dr-line-badge dr-line-badge--3" title="3호선">
+                          3
+                        </span>
+                        호선 경찰병원역
+                      </p>
                     </div>
                     <div className="dr-trow__detail">
                       <span className="dr-trow__detail-key">출구 / 도보</span>

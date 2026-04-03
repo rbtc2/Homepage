@@ -364,6 +364,28 @@
   line-height: 1.55;
 }
 
+/* 서울 지하철 노선번호 배지 (3호선 — 주황 원 + 검정 숫자) */
+.dr-line-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 1.15em;
+  height: 1.15em;
+  padding: 0 0.1em;
+  margin: 0 0.06em;
+  border-radius: 50%;
+  font-size: 0.88em;
+  font-weight: 800;
+  line-height: 1;
+  vertical-align: 0.06em;
+}
+
+.dr-line-badge--3 {
+  background: #ef7c1c;
+  color: #0a0a0a;
+}
+
 /* 교통 스켈레톤 */
 .dr-trow__skel-name {
   height: 0.9375rem;
