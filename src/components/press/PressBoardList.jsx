@@ -43,22 +43,9 @@ export default function PressBoardList({ rows, basePath, isSearching, query, emp
         return (
           <li key={item.id}>
             <article className={`press-card${featured ? ' press-card--featured' : ''}`}>
-              <Link href={`${basePath}/${item.id}`} className="press-card__visual" tabIndex={-1} aria-hidden="true">
-                <div className="press-card__ph" aria-hidden="true">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M4 16l4.5-4.5 3 3L16 10l4 5v3H4v-2z"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinejoin="round"
-                    />
-                    <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.4" />
-                  </svg>
-                </div>
-                {featured && <span className="press-card__badge">대표</span>}
-              </Link>
               <div className="press-card__main">
                 <p className="press-card__meta">
+                  {featured && <span className="press-card__badge">대표</span>}
                   <span className="press-card__source">{item.sourceName}</span>
                   <span className="press-card__sep" aria-hidden="true">
                     ·

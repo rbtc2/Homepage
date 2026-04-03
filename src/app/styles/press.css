@@ -14,9 +14,7 @@
 }
 
 .press-card {
-  display: grid;
-  grid-template-columns: minmax(7.5rem, 10rem) 1fr;
-  gap: 1.125rem 1.25rem;
+  display: block;
   padding: 1.125rem 1.25rem;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -38,37 +36,10 @@
   );
 }
 
-.press-card__visual {
-  position: relative;
-  display: block;
-  border-radius: 10px;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  background: var(--line);
-  align-self: start;
-}
-
-.press-card__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.press-card__ph {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  min-height: 6rem;
-  color: color-mix(in srgb, var(--ink) 28%, transparent);
-  background: linear-gradient(145deg, var(--line) 0%, var(--surface) 100%);
-}
-
 .press-card__badge {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.5rem;
   padding: 0.2rem 0.5rem;
   font-size: 0.625rem;
   font-weight: 700;
@@ -88,6 +59,10 @@
 
 .press-card__meta {
   margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
   font-size: 0.8125rem;
   color: var(--muted, #5c6570);
 }
@@ -294,16 +269,6 @@
 
 .pd__body {
   margin-top: 1.75rem;
-}
-
-@media (max-width: 640px) {
-  .press-card {
-    grid-template-columns: 1fr;
-  }
-
-  .press-card__visual {
-    max-height: 11rem;
-  }
 }
 
 /* 관리자: 언론보도 편집기 — ep-* 레이아웃과 정렬 (RichEditor와 동일한 상·하단 흐름) */
