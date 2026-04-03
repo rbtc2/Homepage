@@ -124,17 +124,19 @@ export default function DirectionsPage() {
                     <SubwayIcon />
                   </div>
                   <h3 className="dr-trow__name">지하철</h3>
-                  <div className="dr-trow__details" aria-label="지하철 안내 준비 중">
+                  <div className="dr-trow__details" aria-label="지하철 안내">
                     <div className="dr-trow__detail">
                       <span className="dr-trow__detail-key">노선 / 역</span>
                       <div>
-                        <span className="dr-trow__skel-val dr-trow__skel-val--wide dr-skel" style={{ display: 'block' }} />
-                        <span className="dr-trow__skel-val dr-trow__skel-val--short dr-skel" style={{ display: 'block', marginTop: '0.35rem' }} />
+                        <p className="dr-trow__detail-val" style={{ margin: 0 }}>지하철 3호선</p>
+                        <p className="dr-trow__detail-val" style={{ margin: '0.35rem 0 0' }}>경찰병원역</p>
                       </div>
                     </div>
                     <div className="dr-trow__detail">
                       <span className="dr-trow__detail-key">출구 / 도보</span>
-                      <span className="dr-trow__skel-val dr-trow__skel-val--wide dr-skel" style={{ display: 'block' }} />
+                      <p className="dr-trow__detail-val" style={{ margin: 0 }}>
+                        3번 출구로 나와 우측으로 도보 약 1분 거리에 있습니다.
+                      </p>
                     </div>
                   </div>
                 </li>
