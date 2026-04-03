@@ -64,16 +64,12 @@ export async function updateDisclosure(id, { title, content, createdAt }) {
 
 export async function deleteDisclosure(id) {
   const idEq = rowIdForEq(id);
-  const { data, error } = await getSupabaseAdmin()
+  const { error } = await getSupabaseAdmin()
     .from('disclosures')
     .delete()
-    .eq('id', idEq)
-    .select('id');
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
-  if (!data?.length) {
-    throw new Error('삭제할 게시물을 찾을 수 없습니다. 목록을 새로고침한 뒤 다시 시도해 주세요.');
-  }
 
   revalidateDisclosurePaths(id);
 }

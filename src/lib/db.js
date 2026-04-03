@@ -10,13 +10,15 @@ const ITEMS_PER_PAGE = 10;
 export function createPostLib(tableName, { normalizeExtra } = {}) {
   function normalize(row) {
     if (!row) return null;
+    const viewsNum = Number(row.views);
     return {
-      id: row.id,
+      // bigint 등은 RSC→클라이언트 직렬화에 실패할 수 있어 문자열로 통일
+      id: row.id == null ? null : String(row.id),
       title: row.title,
       content: row.content,
       author: row.author,
       createdAt: row.created_at,
-      views: row.views,
+      views: Number.isFinite(viewsNum) ? viewsNum : 0,
       ...normalizeExtra?.(row),
     };
   }

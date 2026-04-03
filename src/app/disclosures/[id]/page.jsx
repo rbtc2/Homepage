@@ -59,7 +59,7 @@ export default async function DisclosureDetailPage({ params }) {
                 </time>
                 <span className="nd__byline-dot" aria-hidden="true" />
                 <span className="nd__byline-item">
-                  조회&nbsp;{disclosure.views.toLocaleString()}
+                  조회&nbsp;{Number(disclosure.views ?? 0).toLocaleString()}
                 </span>
               </div>
             </header>
