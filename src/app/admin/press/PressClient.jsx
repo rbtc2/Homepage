@@ -38,7 +38,7 @@ export default function PressClient({ initialItems }) {
 
   const featuredCount = items.filter((n) => n.isFeatured).length;
   const thisMonth = new Date().toISOString().slice(0, 7);
-  const thisMonthCount = items.filter((n) => n.createdAt.startsWith(thisMonth)).length;
+  const thisMonthCount = items.filter((n) => n.createdAt?.startsWith(thisMonth)).length;
 
   return (
     <div className="an">
@@ -116,7 +116,9 @@ export default function PressClient({ initialItems }) {
                 </td>
                 <td className="an-table__td">{row.sourceName}</td>
                 <td className="an-table__td an-table__td--date">{row.publishedAt}</td>
-                <td className="an-table__td an-table__td--views">{row.views.toLocaleString()}</td>
+                <td className="an-table__td an-table__td--views">
+                  {Number(row.views ?? 0).toLocaleString()}
+                </td>
                 <td className="an-table__td an-table__td--actions">
                   <div className="an-actions">
                     <Link href={`/admin/press/${row.id}/edit`} className="an-btn an-btn--sm an-btn--ghost">

@@ -3,8 +3,10 @@ import { ITEMS_PER_PAGE } from './paginate';
 
 function normalize(row) {
   if (!row) return null;
+  const viewsNum = Number(row.views);
   return {
-    id: row.id,
+    // press_coverage.id 는 BIGSERIAL — bigint 그대로면 RSC→클라이언트 직렬화 실패
+    id: row.id == null ? null : String(row.id),
     title: row.title,
     sourceName: row.source_name,
     articleUrl: row.article_url,
@@ -14,7 +16,7 @@ function normalize(row) {
     content: row.content ?? '',
     author: row.author,
     createdAt: row.created_at,
-    views: row.views ?? 0,
+    views: Number.isFinite(viewsNum) ? viewsNum : 0,
     isFeatured: Boolean(row.is_featured),
   };
 }
@@ -70,10 +72,12 @@ export async function searchPressPage({ query, page = 1, itemsPerPage = ITEMS_PE
 }
 
 export async function getPressById(id) {
+  if (id == null || id === '') return null;
+  const idEq = typeof id === 'number' ? id : String(id).trim();
   const { data, error } = await supabase
     .from('press_coverage')
     .select('*')
-    .eq('id', Number(id))
+    .eq('id', idEq)
     .single();
   if (error) return null;
   return normalize(data);
@@ -89,6 +93,7 @@ export async function getPrevNextPress(id) {
 
   const p = current.publishedAt;
   const numId = Number(current.id);
+  if (!Number.isFinite(numId)) return { prev: null, next: null };
 
   const { data: sameNewer, error: e1 } = await supabase
     .from('press_coverage')
@@ -134,7 +139,9 @@ export async function getPrevNextPress(id) {
     prevRow = earlier?.[0] ?? null;
   }
 
-  return { next: nextRow, prev: prevRow };
+  const sibling = (row) =>
+    row ? { id: String(row.id), title: row.title } : null;
+  return { next: sibling(nextRow), prev: sibling(prevRow) };
 }
 
 /** 관리자 목록용 전체 */

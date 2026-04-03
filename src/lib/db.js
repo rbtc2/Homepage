@@ -93,10 +93,12 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
   }
 
   async function getById(id) {
+    if (id == null || id === '') return null;
+    const idEq = typeof id === 'number' ? id : String(id).trim();
     const { data, error } = await supabase
       .from(tableName)
       .select('*')
-      .eq('id', Number(id))
+      .eq('id', idEq)
       .single();
 
     if (error) return null;
@@ -123,9 +125,11 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
     if (prevResult.error) throw new Error(prevResult.error.message);
     if (nextResult.error) throw new Error(nextResult.error.message);
 
+    const sibling = (row) =>
+      row ? { id: String(row.id), title: row.title } : null;
     return {
-      prev: prevResult.data?.[0] ?? null,
-      next: nextResult.data?.[0] ?? null,
+      prev: sibling(prevResult.data?.[0]),
+      next: sibling(nextResult.data?.[0]),
     };
   }
 
