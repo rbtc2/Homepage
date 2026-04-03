@@ -10,7 +10,7 @@ import { Link as TiptapLink } from '@tiptap/extension-link';
 import DatePicker from '@/components/editor/DatePicker';
 
 /**
- * 언론보도 전용 편집기 — 원문 URL·언론사·게재일 중심, 본문은 선택
+ * 언론보도 전용 편집기 — 공지/갤러리 에디터(ep-*)와 동일한 레이아웃 규칙을 따릅니다.
  */
 export default function PressEditor({ post, backHref, editTitle, newTitle, onSave }) {
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function PressEditor({ post, backHref, editTitle, newTitle, onSav
     ],
     content: post?.content ?? '',
     editorProps: {
-      attributes: { class: 'ep-content press-ep__editor', spellCheck: 'false' },
+      attributes: { class: 'ep-content', spellCheck: 'false' },
     },
   });
 
@@ -135,12 +135,7 @@ export default function PressEditor({ post, backHref, editTitle, newTitle, onSav
 
       <main className="ep__main">
         <div className="ep__paper press-ep">
-          <div className="press-ep__intro">
-            <p>
-              외부에 게재된 기사를 소개합니다. <strong>원문 URL</strong>과 <strong>게재일</strong>을 정확히 입력해 주세요.
-            </p>
-          </div>
-
+          {/* RichEditor와 동일: 메타 행이 카드 최상단 */}
           <div className="ep__meta-row press-ep__meta-row">
             <label className="an-check">
               <input
@@ -172,53 +167,55 @@ export default function PressEditor({ post, backHref, editTitle, newTitle, onSav
             </div>
           </div>
 
-          <label className="press-ep__field">
-            <span className="press-ep__label">제목</span>
-            <input
-              type="text"
-              className="ep__title-input"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="기사 제목"
-              maxLength={200}
-            />
-          </label>
+          <p className="press-ep__hint">
+            외부에 게재된 기사를 소개합니다. <strong>원문 URL</strong>과 <strong>게재일</strong>을 정확히 입력해 주세요.
+          </p>
 
-          <div className="press-ep__grid2">
-            <label className="press-ep__field">
-              <span className="press-ep__label">언론사 · 매체</span>
-              <input
-                type="text"
-                className="press-ep__input"
-                value={sourceName}
-                onChange={(e) => setSourceName(e.target.value)}
-                placeholder="예: ○○일보"
-                maxLength={120}
-              />
-            </label>
-            <label className="press-ep__field">
-              <span className="press-ep__label">원문 URL</span>
-              <input
-                type="url"
-                className="press-ep__input"
-                value={articleUrl}
-                onChange={(e) => setArticleUrl(e.target.value)}
-                placeholder="https://"
+          <input
+            type="text"
+            className="ep__title-input"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="기사 제목을 입력하세요"
+            maxLength={200}
+          />
+
+          <div className="press-ep__block">
+            <div className="press-ep__grid2">
+              <label className="press-ep__field press-ep__field--tight">
+                <span className="press-ep__label">언론사 · 매체</span>
+                <input
+                  type="text"
+                  className="press-ep__input"
+                  value={sourceName}
+                  onChange={(e) => setSourceName(e.target.value)}
+                  placeholder="예: ○○일보"
+                  maxLength={120}
+                />
+              </label>
+              <label className="press-ep__field press-ep__field--tight">
+                <span className="press-ep__label">원문 URL</span>
+                <input
+                  type="url"
+                  className="press-ep__input"
+                  value={articleUrl}
+                  onChange={(e) => setArticleUrl(e.target.value)}
+                  placeholder="https://"
+                />
+              </label>
+            </div>
+            <label className="press-ep__field press-ep__field--tight">
+              <span className="press-ep__label">목록용 요약</span>
+              <textarea
+                className="press-ep__textarea"
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+                placeholder="기사 핵심을 1~3문장으로 요약해 주세요."
+                rows={3}
+                maxLength={500}
               />
             </label>
           </div>
-
-          <label className="press-ep__field">
-            <span className="press-ep__label">목록용 요약 (한 줄)</span>
-            <textarea
-              className="press-ep__textarea"
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              placeholder="기사 핵심을 1~3문장으로 요약해 주세요."
-              rows={3}
-              maxLength={500}
-            />
-          </label>
 
           <div className="ep-cover press-ep__thumb">
             <span className="ep-cover__label">썸네일 이미지 URL (선택)</span>
@@ -247,37 +244,45 @@ export default function PressEditor({ post, backHref, editTitle, newTitle, onSav
             </div>
           </div>
 
-          <div className="press-ep__body-block">
-            <span className="press-ep__label">추가 본문 (선택)</span>
-            <div className="press-ep__toolbar" role="toolbar" aria-label="본문 서식">
-              <button
-                type="button"
-                className="press-ep__tb"
-                onClick={() => editor?.chain().focus().toggleBold().run()}
-                aria-pressed={editor?.isActive('bold')}
-              >
-                굵게
-              </button>
-              <button
-                type="button"
-                className="press-ep__tb"
-                onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                aria-pressed={editor?.isActive('bulletList')}
-              >
-                목록
-              </button>
-              <button
-                type="button"
-                className="press-ep__tb"
-                onClick={() => {
-                  const url = window.prompt('링크 URL');
-                  if (url) editor?.chain().focus().setLink({ href: url }).run();
-                }}
-              >
-                링크
-              </button>
+          <div className="press-ep__body">
+            <div className="ep-toolbar ep-toolbar--press" role="toolbar" aria-label="추가 본문 서식">
+              <div className="ep-toolbar__group">
+                <span className="press-ep__toolbar-label">추가 본문 (선택)</span>
+              </div>
+              <div className="ep-toolbar__group">
+                <button
+                  type="button"
+                  className={`ep-toolbar__btn${editor?.isActive('bold') ? ' ep-toolbar__btn--on' : ''}`}
+                  title="굵게"
+                  disabled={!editor}
+                  onClick={() => editor?.chain().focus().toggleBold().run()}
+                >
+                  굵게
+                </button>
+                <button
+                  type="button"
+                  className={`ep-toolbar__btn${editor?.isActive('bulletList') ? ' ep-toolbar__btn--on' : ''}`}
+                  title="목록"
+                  disabled={!editor}
+                  onClick={() => editor?.chain().focus().toggleBulletList().run()}
+                >
+                  목록
+                </button>
+                <button
+                  type="button"
+                  className="ep-toolbar__btn"
+                  title="링크"
+                  disabled={!editor}
+                  onClick={() => {
+                    const url = window.prompt('링크 URL');
+                    if (url) editor?.chain().focus().setLink({ href: url }).run();
+                  }}
+                >
+                  링크
+                </button>
+              </div>
             </div>
-            <EditorContent editor={editor} className="ep-editor-wrap press-ep__editor-wrap" />
+            <EditorContent editor={editor} className="ep-editor-wrap" />
           </div>
         </div>
       </main>

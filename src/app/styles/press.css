@@ -306,20 +306,20 @@
   }
 }
 
-/* 관리자: 언론 편집기 보조 */
-.press-ep__intro {
-  margin-bottom: 1.25rem;
-  padding: 0.85rem 1rem;
-  font-size: 0.875rem;
+/* 관리자: 언론보도 편집기 — ep-* 레이아웃과 정렬 (RichEditor와 동일한 상·하단 흐름) */
+.press-ep__hint {
+  margin: 0;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.8125rem;
   line-height: 1.55;
   color: var(--muted, #5c6570);
-  background: color-mix(in srgb, var(--line) 50%, var(--surface));
-  border-radius: 10px;
-  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--line) 40%, var(--canvas));
+  border-bottom: 1px solid var(--line);
 }
 
-.press-ep__intro strong {
+.press-ep__hint strong {
   color: var(--ink);
+  font-weight: 600;
 }
 
 .press-ep__meta-row {
@@ -327,9 +327,17 @@
   gap: 1rem 1.5rem;
 }
 
+.press-ep__block {
+  padding: 1.25rem 1.75rem 1.35rem;
+  border-bottom: 1px solid var(--line);
+}
+
 .press-ep__field {
   display: block;
-  margin-top: 1.25rem;
+}
+
+.press-ep__field--tight {
+  margin-top: 0;
 }
 
 .press-ep__label {
@@ -344,7 +352,7 @@
 .press-ep__grid2 {
   display: grid;
   gap: 1rem 1.25rem;
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 @media (min-width: 640px) {
@@ -355,6 +363,7 @@
 
 .press-ep__input {
   width: 100%;
+  box-sizing: border-box;
   padding: 0.65rem 0.85rem;
   font-size: 0.9375rem;
   border: 1px solid var(--line);
@@ -362,52 +371,52 @@
   background: var(--surface);
 }
 
+.press-ep__input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(18, 79, 166, 0.1);
+}
+
 .press-ep__textarea {
   width: 100%;
+  box-sizing: border-box;
   padding: 0.75rem 0.85rem;
   font-size: 0.9375rem;
   line-height: 1.55;
   border: 1px solid var(--line);
   border-radius: 8px;
   resize: vertical;
-  min-height: 5rem;
+  min-height: 5.5rem;
   background: var(--surface);
 }
 
-.press-ep__thumb {
-  margin-top: 1.25rem;
-}
-
-.press-ep__body-block {
-  margin-top: 1.5rem;
-}
-
-.press-ep__toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-bottom: 0.5rem;
-}
-
-.press-ep__tb {
-  padding: 0.35rem 0.65rem;
-  font-size: 0.8125rem;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
-  cursor: pointer;
-}
-
-.press-ep__tb[aria-pressed='true'] {
+.press-ep__textarea:focus {
+  outline: none;
   border-color: var(--brand);
-  color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(18, 79, 166, 0.1);
 }
 
-.press-ep__editor-wrap {
-  border: 1px solid var(--line);
-  border-radius: 8px;
+.press-ep__body {
+  display: flex;
+  flex-direction: column;
 }
 
+/* 툴바 첫 줄에 섹션 라벨 + 공지 에디터와 동일한 ep-toolbar 스타일 */
+.ep-toolbar--press {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.press-ep__toolbar-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted, #5c6570);
+}
+
+/* 선택 본문: 공지 본문(500px)보다 낮게 두되, 10rem처럼 비어 보이지 않게 */
 .press-ep .ep-content {
-  min-height: 10rem;
+  min-height: 22rem;
 }
