@@ -1,6 +1,6 @@
 'use server';
 
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import { revalidatePath } from 'next/cache';
 
 function today() {
@@ -8,7 +8,7 @@ function today() {
 }
 
 export async function createDisclosure({ title, content, createdAt }) {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('disclosures')
     .insert({
       title: title.trim(),
@@ -29,7 +29,7 @@ export async function createDisclosure({ title, content, createdAt }) {
 }
 
 export async function updateDisclosure(id, { title, content, createdAt }) {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('disclosures')
     .update({
       title: title.trim(),
@@ -49,7 +49,7 @@ export async function updateDisclosure(id, { title, content, createdAt }) {
 }
 
 export async function deleteDisclosure(id) {
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from('disclosures')
     .delete()
     .eq('id', Number(id));
