@@ -67,7 +67,7 @@ export default function Header() {
               <a href="#" className="header__nav-item">조직 활동</a>
               <div className="header__mega-col" role="group" aria-label="조직 활동 하위 메뉴">
                 <ul className="header__mega-list">
-                  <li><a href="#" className="header__mega-link">WR뉴스</a></li>
+                  <li><Link href="/wr-news" className="header__mega-link">WR뉴스</Link></li>
                   <li><Link href="/press" className="header__mega-link">언론보도</Link></li>
                 </ul>
               </div>
