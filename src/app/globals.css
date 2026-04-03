@@ -10,6 +10,7 @@
      login-modal   — 로그인 모달
      footer        — 푸터
      board         — 게시판 목록·검색·테이블·상세·페이지네이션
+     press         — 언론보도 카드 목록·상세·관리자 편집
      notice-strip  — 홈 화면 공지 띠 (NoticeStrip)
      admin-layout  — 관리자 공통 레이아웃 (adm-*)
      admin-board   — 관리자 게시판 관리 (an-*)
@@ -25,6 +26,7 @@
 @import './styles/login-modal.css';
 @import './styles/footer.css';
 @import './styles/board.css';
+@import './styles/press.css';
 @import './styles/notice-strip.css';
 @import './styles/admin-layout.css';
 @import './styles/admin-board.css';
