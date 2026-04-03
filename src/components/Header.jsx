@@ -67,9 +67,8 @@ export default function Header() {
               <a href="#" className="header__nav-item">조직 활동</a>
               <div className="header__mega-col" role="group" aria-label="조직 활동 하위 메뉴">
                 <ul className="header__mega-list">
-                  <li><a href="#" className="header__mega-link">임시메뉴1</a></li>
-                  <li><a href="#" className="header__mega-link">임시메뉴2</a></li>
-                  <li><a href="#" className="header__mega-link">임시메뉴3</a></li>
+                  <li><a href="#" className="header__mega-link">재단뉴스</a></li>
+                  <li><a href="#" className="header__mega-link">언론보도</a></li>
                 </ul>
               </div>
             </li>
