@@ -27,8 +27,13 @@ export function useDelete(deleteFn) {
       await deleteFn(deleteTarget.id);
       setDeleteTarget(null);
       router.refresh();
-    } catch {
-      alert('삭제에 실패했습니다. 다시 시도해 주세요.');
+    } catch (err) {
+      console.error('[useDelete]', err);
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : '삭제에 실패했습니다. 다시 시도해 주세요.';
+      alert(msg);
     } finally {
       setDeleting(false);
     }

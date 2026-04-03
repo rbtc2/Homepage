@@ -1,6 +1,6 @@
 'use server';
 
-import { supabase } from '@/lib/supabase';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { revalidatePath } from 'next/cache';
 
 function today() {
@@ -8,7 +8,7 @@ function today() {
 }
 
 export async function createArchive({ title, content, createdAt }) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabaseAdmin()
     .from('archive')
     .insert({
       title: title.trim(),
@@ -29,7 +29,7 @@ export async function createArchive({ title, content, createdAt }) {
 }
 
 export async function updateArchive(id, { title, content, createdAt }) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabaseAdmin()
     .from('archive')
     .update({
       title: title.trim(),
@@ -49,7 +49,7 @@ export async function updateArchive(id, { title, content, createdAt }) {
 }
 
 export async function deleteArchive(id) {
-  const { error } = await supabase
+  const { error } = await getSupabaseAdmin()
     .from('archive')
     .delete()
     .eq('id', Number(id));
