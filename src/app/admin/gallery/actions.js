@@ -1,6 +1,6 @@
 'use server';
 
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { revalidatePath } from 'next/cache';
 
 function today() {
@@ -8,7 +8,7 @@ function today() {
 }
 
 export async function createGalleryPost({ title, content, coverImage, createdAt }) {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('gallery')
     .insert({
       title: title.trim(),
@@ -29,7 +29,7 @@ export async function createGalleryPost({ title, content, coverImage, createdAt 
 }
 
 export async function updateGalleryPost(id, { title, content, coverImage, createdAt }) {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('gallery')
     .update({
       title: title.trim(),
@@ -50,7 +50,7 @@ export async function updateGalleryPost(id, { title, content, coverImage, create
 }
 
 export async function deleteGalleryPost(id) {
-  const { error } = await supabaseAdmin
+  const { error } = await getSupabaseAdmin()
     .from('gallery')
     .delete()
     .eq('id', Number(id));

@@ -1,6 +1,6 @@
 'use server';
 
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { revalidatePath } from 'next/cache';
 
 function today() {
@@ -8,7 +8,7 @@ function today() {
 }
 
 export async function createNotice({ title, content, isPinned, createdAt }) {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('notices')
     .insert({
       title: title.trim(),
@@ -29,7 +29,7 @@ export async function createNotice({ title, content, isPinned, createdAt }) {
 }
 
 export async function updateNotice(id, { title, content, isPinned, createdAt }) {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('notices')
     .update({
       title: title.trim(),
@@ -50,7 +50,7 @@ export async function updateNotice(id, { title, content, isPinned, createdAt }) 
 }
 
 export async function deleteNotice(id) {
-  const { error } = await supabaseAdmin
+  const { error } = await getSupabaseAdmin()
     .from('notices')
     .delete()
     .eq('id', Number(id));
@@ -63,7 +63,7 @@ export async function deleteNotice(id) {
 }
 
 export async function togglePin(id) {
-  const { data: notice, error: fetchError } = await supabaseAdmin
+  const { data: notice, error: fetchError } = await getSupabaseAdmin()
     .from('notices')
     .select('is_pinned')
     .eq('id', Number(id))
@@ -71,7 +71,7 @@ export async function togglePin(id) {
 
   if (fetchError) throw new Error(fetchError.message);
 
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('notices')
     .update({ is_pinned: !notice.is_pinned })
     .eq('id', Number(id))

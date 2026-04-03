@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 const ALLOWED_TABLES = ['notices', 'archive', 'disclosures', 'gallery'];
 
@@ -16,7 +16,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
-    const { data, error: fetchError } = await supabaseAdmin
+    const { data, error: fetchError } = await getSupabaseAdmin()
       .from(table)
       .select('views')
       .eq('id', numId)
@@ -26,7 +26,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
-    const { error: updateError } = await supabaseAdmin
+    const { error: updateError } = await getSupabaseAdmin()
       .from(table)
       .update({ views: (data.views ?? 0) + 1 })
       .eq('id', numId);
