@@ -9,12 +9,17 @@ let adminClient;
 export function getSupabaseAdmin() {
   if (adminClient) return adminClient;
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
-  if (!supabaseUrl || !serviceRoleKey) {
+  if (!supabaseUrl) {
     throw new Error(
-      'NEXT_PUBLIC_SUPABASE_URL 또는 SUPABASE_SERVICE_ROLE_KEY 환경변수가 설정되지 않았습니다. (서버 전용, Vercel Environment Variables에 service_role 키를 추가하세요.)'
+      'NEXT_PUBLIC_SUPABASE_URL이 비어 있습니다. Vercel → Settings → Environment Variables에서 Production(또는 접속 중인 배포 환경)에 Key를 정확히 넣고, 저장 후 Redeploy 하세요.'
+    );
+  }
+  if (!serviceRoleKey) {
+    throw new Error(
+      'SUPABASE_SERVICE_ROLE_KEY가 비어 있습니다. Vercel에 서버 전용으로 추가하세요(Key 철자·대소문자 동일). Production/Preview 중 실제로 여는 URL과 같은 환경에 넣었는지 확인하고 Redeploy 하세요. (NEXT_PUBLIC_ 접두사 붙이지 마세요.)'
     );
   }
 
