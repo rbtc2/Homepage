@@ -3,6 +3,7 @@ import { getNotices } from '@/lib/notices';
 import { getArchives } from '@/lib/archive';
 import { getDisclosures } from '@/lib/disclosures';
 import { getGalleryPosts } from '@/lib/gallery';
+import { getWrNewsPosts } from '@/lib/wr-news';
 import { buildRecentActivity } from '@/lib/dashboard';
 
 export const metadata = { title: '대시보드 | 국제인권연대 월드라이츠 관리자' };
@@ -13,18 +14,20 @@ const SECTION_BADGE_STYLE = {
   자료: { background: 'var(--canvas)', color: 'var(--muted)', border: '1px solid var(--line)' },
   공시: { background: 'rgba(18,79,166,0.08)', color: 'var(--brand)' },
   갤러리: { background: 'rgba(80,160,80,0.1)', color: '#2d7a2d' },
+  'WR뉴스': { background: 'rgba(18,79,166,0.1)', color: 'var(--brand)' },
 };
 
 export default async function AdminPage() {
   const thisMonth = new Date().toISOString().slice(0, 7);
 
-  const [notices, archives, disclosures, gallery] = await Promise.all([
+  const [notices, archives, disclosures, gallery, wrNews] = await Promise.all([
     getNotices(),
     getArchives(),
     getDisclosures(),
     getGalleryPosts(),
+    getWrNewsPosts(),
   ]);
-  const recentActivity = buildRecentActivity(notices, archives, disclosures, gallery, 5);
+  const recentActivity = buildRecentActivity(notices, archives, disclosures, gallery, wrNews, 5);
 
   const stats = [
     {
@@ -61,6 +64,13 @@ export default async function AdminPage() {
       href: '/admin/gallery',
       total: gallery.length,
       monthCount: gallery.filter((g) => g.createdAt?.startsWith(thisMonth)).length,
+      highlight: false,
+    },
+    {
+      label: 'WR뉴스',
+      href: '/admin/wr-news',
+      total: wrNews.length,
+      monthCount: wrNews.filter((w) => w.createdAt?.startsWith(thisMonth)).length,
       highlight: false,
     },
   ];

@@ -79,6 +79,17 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    href: '/admin/wr-news',
+    label: 'WR뉴스',
+    icon: (
+      <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 4h16v12H4V4z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+        <path d="M8 20h8M4 8h4v4H4V8z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="15" cy="10" r="2" stroke="currentColor" strokeWidth="1.6" />
+      </svg>
+    ),
+  },
 ];
 
 function SidebarContent({ pathname, onLogout, onNavClick }) {

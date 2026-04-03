@@ -7,10 +7,11 @@
  * @param {Array} archives - pre-fetched archives array
  * @param {Array} disclosures - pre-fetched disclosures array
  * @param {Array} gallery - pre-fetched gallery array
+ * @param {Array} wrNews - pre-fetched WR뉴스 array
  * @param {number} limit - max items to return (default 5)
  * @returns {Array<{section: string, sectionHref: string, title: string, createdAt: string, editHref: string}>}
  */
-export function buildRecentActivity(notices, archives, disclosures, gallery, limit = 5) {
+export function buildRecentActivity(notices, archives, disclosures, gallery, wrNews, limit = 5) {
   const tagged = [
     ...notices.map((n) => ({
       section: '공지',
@@ -39,6 +40,13 @@ export function buildRecentActivity(notices, archives, disclosures, gallery, lim
       title: g.title,
       createdAt: g.createdAt,
       editHref: `/admin/gallery/${g.id}/edit`,
+    })),
+    ...wrNews.map((w) => ({
+      section: 'WR뉴스',
+      sectionHref: '/admin/wr-news',
+      title: w.title,
+      createdAt: w.createdAt,
+      editHref: `/admin/wr-news/${w.id}/edit`,
     })),
   ];
 
