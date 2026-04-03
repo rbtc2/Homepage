@@ -3,12 +3,19 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+/**
+ * 관리자 상단 경로(관리자 / ○○ 관리) 표시용.
+ * 새 `/admin/...` 콘텐츠 섹션을 만들 때마다 반드시 여기에 키를 추가하세요.
+ * 미등록이면 이 컴포넌트가 null을 반환해 상단 네비가 통째로 사라집니다.
+ * 사이드바(NAV_ITEMS)와 함께 갱신하는 것을 권장합니다.
+ */
 const SECTION_LABELS = {
   '/admin/notices':     '공지사항 관리',
   '/admin/archive':     '자료실 관리',
   '/admin/disclosures': '공시자료 관리',
   '/admin/popups':      '팝업 관리',
   '/admin/gallery':     '포토갤러리 관리',
+  '/admin/press':       '언론보도 관리',
 };
 
 const SUB_LABELS = {
