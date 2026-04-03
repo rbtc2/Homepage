@@ -1,0 +1,165 @@
+/* ── Greeting (인사말) ───────────────────────────────────────────
+   Editorial prose: comfortable measure, clear hierarchy, calm rhythm.
+   대표 사진: .gt-layout에 .gt-layout--with-photo 추가 후 .gt-aside 마크업 삽입.
+   ─────────────────────────────────────────────────────────────── */
+
+/* ── Shell ───────────────────────────────────────────────────── */
+.gt-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3.5rem, 8vw, 5.5rem);
+}
+
+.gt-layout {
+  display: block;
+}
+
+/* ── 대표 사진 레이아웃 (마크업 추가 시 활성화) ───────────────── */
+.gt-layout--with-photo {
+  display: grid;
+  grid-template-columns: minmax(0, 17.5rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: start;
+}
+
+.gt-aside {
+  position: relative;
+}
+
+.gt-portrait {
+  margin: 0;
+}
+
+.gt-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--line);
+  box-shadow:
+    0 1px 0 rgba(12, 20, 36, 0.06),
+    0 12px 40px -16px rgba(12, 20, 36, 0.18);
+}
+
+.gt-portrait figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 52rem) {
+  .gt-layout--with-photo {
+    grid-template-columns: 1fr;
+    gap: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .gt-layout--with-photo .gt-aside {
+    max-width: 16rem;
+    margin-inline: auto;
+  }
+}
+
+.gt-layout--with-photo .gt-prose {
+  max-width: none;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* ── Prose column ───────────────────────────────────────────── */
+.gt-prose {
+  max-width: 42rem;
+  margin: 0;
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 2px solid var(--ink);
+}
+
+.gt-section-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(1.75rem, 4vw, 2.35rem);
+}
+
+.gt-section-head__eyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+  white-space: nowrap;
+}
+
+.gt-section-head__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  border: none;
+  margin: 0;
+}
+
+.gt-prose__lead-wrap {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: clamp(1.75rem, 4vw, 2.25rem);
+}
+
+.gt-prose__lead-wrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  bottom: 0.35em;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--brand) 0%,
+    var(--brand-mid) 55%,
+    rgba(30, 98, 196, 0.35) 100%
+  );
+}
+
+.gt-prose__lead {
+  margin: 0;
+  font-size: clamp(1.125rem, 2.35vw, 1.3125rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.68;
+  color: var(--ink);
+}
+
+.gt-prose__body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.15rem, 2.5vw, 1.45rem);
+}
+
+.gt-prose__body p {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.78;
+  color: var(--ink);
+}
+
+.gt-prose__closing {
+  margin-top: clamp(2.25rem, 5vw, 3rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--line);
+}
+
+.gt-prose__closing p {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: var(--ink);
+}
