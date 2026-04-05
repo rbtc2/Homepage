@@ -89,6 +89,21 @@ export default function HeroBanner() {
             <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
+
+        <nav className="hero__dots" aria-label="배너 슬라이드 선택">
+          {HERO_SLIDES.map((s, i) => (
+            <button
+              key={i}
+              type="button"
+              className={`hero__dot ${i === index ? 'hero__dot--active' : ''}`}
+              aria-label={`${s.label} 보기`}
+              aria-current={i === index ? 'true' : undefined}
+              onClick={() => goTo(i)}
+            >
+              <span className="hero__dot-mark" aria-hidden="true" />
+            </button>
+          ))}
+        </nav>
       </div>
     </section>
   );
