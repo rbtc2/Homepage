@@ -90,7 +90,7 @@ export default function DirectionsPage() {
                 <ul className="dr-contact__list">
                   <li className="dr-contact__item">
                     <span className="dr-contact__sub">전화</span>
-                    <span className="dr-contact__val">070-8027-4830</span>
+                    <span className="dr-contact__val">070-8018-9232</span>
                   </li>
                   <li className="dr-contact__item">
                     <span className="dr-contact__sub">팩스</span>
