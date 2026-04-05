@@ -172,7 +172,9 @@
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 10px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .an-table {
@@ -198,7 +200,11 @@
 .an-table__th--title  { width: auto; }
 .an-table__th--date   { width: 7rem; }
 .an-table__th--views  { width: 4.5rem; text-align: right; }
-.an-table__th--actions { width: 7.5rem; text-align: center; }
+.an-table__th--actions {
+  width: 11.25rem;
+  min-width: 11.25rem;
+  text-align: center;
+}
 
 .an-table__row {
   border-bottom: 1px solid var(--line);
@@ -256,6 +262,8 @@
 
 .an-table__td--actions {
   text-align: center;
+  overflow: visible;
+  min-width: 11.25rem;
 }
 
 .an-table__notice-title {
@@ -317,7 +325,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 0.375rem;
+  row-gap: 0.35rem;
+}
+
+.an-actions .an-btn {
+  flex-shrink: 0;
 }
 
 .an-table__empty {

@@ -98,8 +98,8 @@ export default function DirectionsPage() {
                   </li>
                   <li className="dr-contact__item">
                     <span className="dr-contact__sub">운영시간</span>
-                    <span className="dr-contact__skel dr-skel" style={{ width: '80%', marginTop: '0.25rem' }} />
-                    <span className="dr-contact__skel dr-skel" style={{ width: '50%', marginTop: '0.375rem' }} />
+                    <span className="dr-contact__val">평일 08:30 ~ 17:30</span>
+                    <span className="dr-contact__val dr-contact__val--note">토·일·공휴일 휴무</span>
                   </li>
                 </ul>
               </div>

@@ -1153,7 +1153,10 @@
 
   .an-table__th--num   { width: 3.5rem; }
   .an-table__th--pin   { width: 3rem; }
-  .an-table__th--actions { width: 7rem; }
+  .an-table__th--actions {
+    width: 11.25rem;
+    min-width: 11.25rem;
+  }
 }
 
 @media (max-width: 480px) {
