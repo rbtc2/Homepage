@@ -10,18 +10,35 @@
   flex-direction: column;
   background: linear-gradient(145deg, #dfe8f2 0%, #c9d6e8 42%, #b8c9df 100%);
   overflow: hidden;
-  --hero-slide-bg-image: none;
 }
 
-.hero__bg {
+.hero__bgs {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image: var(--hero-slide-bg-image);
+}
+
+.hero__bg--layer {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.65s var(--ease, ease);
+}
+
+.hero__bg--layer.hero__bg--visible {
+  opacity: 1;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__bg--layer {
+    transition: none;
+  }
 }
 
 .hero__slide {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 const BG_BASE = '/images/hero/slides';
 
@@ -20,28 +20,49 @@ function slideUrl(filename) {
   return `${BG_BASE}/${filename}`;
 }
 
+function urlForSlide(slide) {
+  return slide?.backgroundImage ? slideUrl(slide.backgroundImage) : null;
+}
+
 export default function HeroBanner() {
+  const firstUrl = urlForSlide(HERO_SLIDES[0]);
   const [index, setIndex] = useState(0);
+  const [urlA, setUrlA] = useState(firstUrl);
+  const [urlB, setUrlB] = useState(firstUrl);
+  /** 어느 레이어가 위(불투명)인지 — 교차 시 상대 레이어에 다음 이미지를 깔고 전환 */
+  const [topLayer, setTopLayer] = useState('a');
 
   const slide = HERO_SLIDES[index];
-  const bgImage = useMemo(
-    () => (slide.backgroundImage ? slideUrl(slide.backgroundImage) : null),
-    [slide.backgroundImage],
-  );
-
-  const viewportStyle = bgImage
-    ? { '--hero-slide-bg-image': `url("${bgImage}")` }
-    : undefined;
 
   function goTo(newIndex) {
     if (newIndex === index) return;
+    const nextUrl = urlForSlide(HERO_SLIDES[newIndex]);
+    const incoming = topLayer === 'a' ? 'b' : 'a';
+    if (incoming === 'b') {
+      setUrlB(nextUrl);
+    } else {
+      setUrlA(nextUrl);
+    }
+    setTopLayer(incoming);
     setIndex(newIndex);
   }
 
+  const styleA = urlA ? { backgroundImage: `url("${urlA}")` } : undefined;
+  const styleB = urlB ? { backgroundImage: `url("${urlB}")` } : undefined;
+
   return (
     <section className="hero" aria-label="메인 배너 슬라이드">
-      <div className="hero__viewport" id="hero-viewport" style={viewportStyle}>
-        <div className="hero__bg" aria-hidden="true" />
+      <div className="hero__viewport" id="hero-viewport">
+        <div className="hero__bgs" aria-hidden="true">
+          <div
+            className={`hero__bg hero__bg--layer ${topLayer === 'a' ? 'hero__bg--visible' : ''}`}
+            style={styleA}
+          />
+          <div
+            className={`hero__bg hero__bg--layer ${topLayer === 'b' ? 'hero__bg--visible' : ''}`}
+            style={styleB}
+          />
+        </div>
         <div className="hero__slide hero__slide--images-only">
           <p className="hero__sr-only" aria-live="polite">
             {slide.label}, {index + 1}번째 슬라이드, 전체 {HERO_SLIDES.length}장 중
