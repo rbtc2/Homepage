@@ -53,7 +53,7 @@ export default function Footer() {
           <span className="footer__value">070-8018-9232</span>
           <span className="footer__sep">|</span>
           <span className="footer__label">팩스</span>{' '}
-          <span className="footer__value">00-000-0000</span>
+          <span className="footer__value">0504-287-7334</span>
         </p>
         <p className="footer__copyright">ⓒ WORLD RIGHTS. ALL RIGHTS RESERVED.</p>
       </div>

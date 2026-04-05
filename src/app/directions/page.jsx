@@ -94,7 +94,7 @@ export default function DirectionsPage() {
                   </li>
                   <li className="dr-contact__item">
                     <span className="dr-contact__sub">팩스</span>
-                    <span className="dr-contact__skel dr-skel" style={{ width: '55%', marginTop: '0.25rem' }} />
+                    <span className="dr-contact__val">0504-287-7334</span>
                   </li>
                   <li className="dr-contact__item">
                     <span className="dr-contact__sub">운영시간</span>
