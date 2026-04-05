@@ -7,7 +7,7 @@ const BG_BASE = '/images/hero/slides';
 /** 배경만 쓰는 풀블리드 슬라이드. 파일명은 public/images/hero/slides/ 기준 */
 const HERO_SLIDES = [
   { backgroundImage: 'slide-01.webp', label: '배너 이미지 1' },
-  { backgroundImage: 'slide-02.svg', label: '배너 이미지 2' },
+  { backgroundImage: 'slide-02.webp', label: '배너 이미지 2' },
   { backgroundImage: 'slide-03.svg', label: '배너 이미지 3' },
   { backgroundImage: 'slide-04.svg', label: '배너 이미지 4' },
 ];
