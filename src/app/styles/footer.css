@@ -104,5 +104,23 @@
     width: 100%;
     justify-content: flex-end;
   }
+
+  .footer__line {
+    font-size: 0.75rem;
+    letter-spacing: -0.02em;
+    line-height: 1.65;
+  }
+
+  .footer__sep {
+    margin: 0 0.28rem;
+  }
+
+  .footer__copyright {
+    font-size: 0.75rem;
+  }
+
+  .footer__sns-label {
+    font-size: 0.75rem;
+  }
 }
 

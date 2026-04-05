@@ -1,4 +1,30 @@
 /**
+ * @param {unknown} value - ISO 날짜 문자열 등 `Date`가 파싱 가능한 값
+ * @returns {number} UTC 밀리초, 파싱 불가 시 NaN
+ */
+function createdAtToMs(value) {
+  if (value == null || value === '') return NaN;
+  const t = new Date(value).getTime();
+  return Number.isFinite(t) ? t : NaN;
+}
+
+/**
+ * 최신순(내림차순). 파싱 실패 행은 뒤로 보냅니다.
+ * @param {{ createdAt?: unknown }} a
+ * @param {{ createdAt?: unknown }} b
+ */
+function compareRecentActivity(a, b) {
+  const ta = createdAtToMs(a.createdAt);
+  const tb = createdAtToMs(b.createdAt);
+  const aOk = Number.isFinite(ta);
+  const bOk = Number.isFinite(tb);
+  if (aOk && bOk) return tb - ta;
+  if (aOk && !bOk) return -1;
+  if (!aOk && bOk) return 1;
+  return 0;
+}
+
+/**
  * Builds a recent activity list from pre-fetched content arrays.
  * Returns up to `limit` most recent items across all sections,
  * merged and sorted by createdAt descending.
@@ -50,7 +76,5 @@ export function buildRecentActivity(notices, archives, disclosures, gallery, wrN
     })),
   ];
 
-  return tagged
-    .sort((a, b) => (b.createdAt > a.createdAt ? 1 : -1))
-    .slice(0, limit);
+  return tagged.sort(compareRecentActivity).slice(0, limit);
 }

@@ -17,12 +17,19 @@ const SECTION_LABELS = {
   '/admin/gallery':     '포토갤러리 관리',
   '/admin/press':       '언론보도 관리',
   '/admin/wr-news':     'WR뉴스 관리',
-  '/admin/settings':    '사이트 설정',
 };
 
 const SUB_LABELS = {
   '/new':  '새 게시물',
   '/edit': '게시물 수정',
+};
+
+const SETTINGS_BASE = '/admin/settings';
+
+const SETTINGS_SUBPAGE_LABELS = {
+  '/admin/settings/site': '사이트 기본 정보',
+  '/admin/settings/home': '홈페이지 노출',
+  '/admin/settings/account': '관리자 계정',
 };
 
 export default function AdminBreadcrumb() {
@@ -33,6 +40,34 @@ export default function AdminBreadcrumb() {
       <nav className="adm-breadcrumb" aria-label="경로">
         <div className="adm-breadcrumb__inner">
           <span className="adm-breadcrumb__current">대시보드</span>
+        </div>
+      </nav>
+    );
+  }
+
+  if (pathname === SETTINGS_BASE) {
+    return (
+      <nav className="adm-breadcrumb" aria-label="경로">
+        <div className="adm-breadcrumb__inner">
+          <Link href="/admin" className="adm-breadcrumb__item">관리자</Link>
+          <span className="adm-breadcrumb__sep" aria-hidden="true">/</span>
+          <span className="adm-breadcrumb__current">사이트 설정</span>
+        </div>
+      </nav>
+    );
+  }
+
+  if (pathname.startsWith(`${SETTINGS_BASE}/`)) {
+    const subLabel = SETTINGS_SUBPAGE_LABELS[pathname];
+    if (!subLabel) return null;
+    return (
+      <nav className="adm-breadcrumb" aria-label="경로">
+        <div className="adm-breadcrumb__inner">
+          <Link href="/admin" className="adm-breadcrumb__item">관리자</Link>
+          <span className="adm-breadcrumb__sep" aria-hidden="true">/</span>
+          <Link href={SETTINGS_BASE} className="adm-breadcrumb__item">사이트 설정</Link>
+          <span className="adm-breadcrumb__sep" aria-hidden="true">/</span>
+          <span className="adm-breadcrumb__current">{subLabel}</span>
         </div>
       </nav>
     );

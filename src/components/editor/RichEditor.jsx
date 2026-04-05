@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -20,9 +19,12 @@ import { ToolbarBtn, Divider } from './ToolbarBtn';
 import TableGridPicker from './TableGridPicker';
 import ColorPicker from './ColorPicker';
 import LinkPicker from './LinkPicker';
-import DatePicker from './DatePicker';
 import TableToolbar from './TableToolbar';
 import EditorContextMenu from './EditorContextMenu';
+import EditorPageFrame from './EditorPageFrame';
+import EditorCheckboxField from './EditorCheckboxField';
+import EditorMetaDate from './EditorMetaDate';
+import EditorCoverUrlField from './EditorCoverUrlField';
 
 /**
  * 공통 리치 텍스트 에디터 페이지
@@ -44,25 +46,25 @@ export default function RichEditor({
   showCoverImage = false,
   onSave,
 }) {
-  const router  = useRouter();
-  const isEdit  = Boolean(post);
+  const router = useRouter();
+  const isEdit = Boolean(post);
 
-  const [title,           setTitle]           = useState(post?.title      ?? '');
-  const [isPinned,        setIsPinned]        = useState(post?.isPinned   ?? false);
-  const [coverImage,      setCoverImage]      = useState(post?.coverImage ?? '');
-  const [createdAt,       setCreatedAt]       = useState(
+  const [title, setTitle] = useState(post?.title ?? '');
+  const [isPinned, setIsPinned] = useState(post?.isPinned ?? false);
+  const [coverImage, setCoverImage] = useState(post?.coverImage ?? '');
+  const [createdAt, setCreatedAt] = useState(
     post?.createdAt ?? new Date().toISOString().slice(0, 10)
   );
-  const [saving,          setSaving]          = useState(false);
+  const [saving, setSaving] = useState(false);
   const [tablePickerOpen, setTablePickerOpen] = useState(false);
-  const [contextMenu,     setContextMenu]     = useState(null);
+  const [contextMenu, setContextMenu] = useState(null);
 
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
-        heading:     { levels: [1, 2, 3] },
-        bulletList:  { keepMarks: true, keepAttributes: false },
+        heading: { levels: [1, 2, 3] },
+        bulletList: { keepMarks: true, keepAttributes: false },
         orderedList: { keepMarks: true, keepAttributes: false },
       }),
       Underline,
@@ -114,210 +116,165 @@ export default function RichEditor({
     }
   }, [title, createdAt, isPinned, coverImage, onSave, backHref, router, editor]);
 
+  const pageTitle = isEdit ? editTitle : newTitle;
+  const primaryLabel = isEdit ? '수정 완료' : '게시하기';
+
   return (
-    <div className="ep">
-      {/* 액션 바 */}
-      <div className="ep__actionbar">
-        <div className="ep__actionbar-inner">
-          <Link href={backHref} className="ep__back">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M8.5 3L5 7L8.5 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            목록으로
-          </Link>
-          <span className="ep__actionbar-title">
-            {isEdit ? editTitle : newTitle}
-          </span>
-          <div className="ep__actionbar-btns">
-            <Link href={backHref} className="an-btn an-btn--secondary an-btn--sm">
-              취소
-            </Link>
-            <button
-              className="an-btn an-btn--primary an-btn--sm"
-              onClick={handleSave}
-              disabled={saving}
-            >
-              {saving ? '저장 중...' : isEdit ? '수정 완료' : '게시하기'}
-            </button>
-          </div>
-        </div>
+    <EditorPageFrame
+      backHref={backHref}
+      pageTitle={pageTitle}
+      saving={saving}
+      onSave={handleSave}
+      primaryLabel={primaryLabel}
+      footer={
+        contextMenu ? (
+          <EditorContextMenu
+            editor={editor}
+            pos={contextMenu}
+            onClose={() => setContextMenu(null)}
+          />
+        ) : null
+      }
+    >
+      <div className="ep__meta-row">
+        {showPinToggle && (
+          <EditorCheckboxField checked={isPinned} onChange={setIsPinned} label="공지로 고정" />
+        )}
+        <EditorMetaDate label="작성일" value={createdAt} onChange={setCreatedAt} />
       </div>
 
-      {/* 에디터 영역 */}
-      <main className="ep__main">
-        <div className="ep__paper">
+      <input
+        type="text"
+        className="ep__title-input"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="제목을 입력하세요"
+        maxLength={100}
+      />
 
-          {/* 메타 행 (공지 고정 / 작성일) */}
-          <div className="ep__meta-row">
-            {showPinToggle && (
-              <label className="an-check">
-                <input
-                  type="checkbox"
-                  className="an-check__input"
-                  checked={isPinned}
-                  onChange={(e) => setIsPinned(e.target.checked)}
-                />
-                <span className="an-check__box" aria-hidden="true">
-                  <svg className="an-check__mark" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <path d="M1.5 5l2.5 2.5L8.5 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </span>
-                <span className="an-check__label">공지로 고정</span>
-              </label>
-            )}
-            <div className="ep__meta-date">
-              <span className="ep__meta-date-label">작성일</span>
-              <DatePicker value={createdAt} onChange={setCreatedAt} />
-            </div>
-          </div>
-
-          {/* 제목 입력 */}
-          <input
-            type="text"
-            className="ep__title-input"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요"
-            maxLength={100}
-          />
-
-          {/* 커버 이미지 URL (갤러리 전용) */}
-          {showCoverImage && (
-            <div className="ep-cover">
-              <span className="ep-cover__label">커버 이미지 URL</span>
-              <div className="ep-cover__row">
-                <input
-                  type="url"
-                  className="ep-cover__input"
-                  value={coverImage}
-                  onChange={(e) => setCoverImage(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                />
-                <div className="ep-cover__preview" aria-label="커버 이미지 미리보기">
-                  {coverImage.trim() ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={coverImage.trim()} alt="미리보기" />
-                  ) : (
-                    <div className="ep-cover__preview-empty" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                        <circle cx="8.5" cy="10.5" r="1.5" stroke="currentColor" strokeWidth="1.5" />
-                        <path d="M3 17l5-4 3 3 3-2 7 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 포매팅 툴바 */}
-          <div className="ep-toolbar" role="toolbar" aria-label="텍스트 서식">
-            <div className="ep-toolbar__group">
-              <ToolbarBtn title="실행 취소 (Ctrl+Z)" disabled={!editor?.can().undo()} onClick={() => editor?.chain().focus().undo().run()}>
-                {icons.undo}
-              </ToolbarBtn>
-              <ToolbarBtn title="다시 실행 (Ctrl+Y)" disabled={!editor?.can().redo()} onClick={() => editor?.chain().focus().redo().run()}>
-                {icons.redo}
-              </ToolbarBtn>
-            </div>
-
-            <Divider />
-
-            <div className="ep-toolbar__group">
-              <ToolbarBtn
-                title="본문"
-                active={editor?.isActive('paragraph') && !editor?.isActive('heading')}
-                onClick={() => editor?.chain().focus().setParagraph().run()}
-              >
-                <span className="ep-toolbar__label">본문</span>
-              </ToolbarBtn>
-              <ToolbarBtn title="제목 1" active={editor?.isActive('heading', { level: 1 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}>
-                <span className="ep-toolbar__label ep-toolbar__label--h1">H1</span>
-              </ToolbarBtn>
-              <ToolbarBtn title="제목 2" active={editor?.isActive('heading', { level: 2 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>
-                <span className="ep-toolbar__label">H2</span>
-              </ToolbarBtn>
-              <ToolbarBtn title="제목 3" active={editor?.isActive('heading', { level: 3 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>
-                <span className="ep-toolbar__label">H3</span>
-              </ToolbarBtn>
-            </div>
-
-            <Divider />
-
-            <div className="ep-toolbar__group">
-              <ToolbarBtn title="굵게 (Ctrl+B)"   active={editor?.isActive('bold')}      onClick={() => editor?.chain().focus().toggleBold().run()}>{icons.bold}</ToolbarBtn>
-              <ToolbarBtn title="기울임 (Ctrl+I)" active={editor?.isActive('italic')}    onClick={() => editor?.chain().focus().toggleItalic().run()}>{icons.italic}</ToolbarBtn>
-              <ToolbarBtn title="밑줄 (Ctrl+U)"   active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>{icons.underline}</ToolbarBtn>
-              <ToolbarBtn title="취소선"           active={editor?.isActive('strike')}    onClick={() => editor?.chain().focus().toggleStrike().run()}>{icons.strike}</ToolbarBtn>
-              <ColorPicker editor={editor} />
-            </div>
-
-            <Divider />
-
-            <div className="ep-toolbar__group">
-              <ToolbarBtn title="글머리 기호 목록" active={editor?.isActive('bulletList')}  onClick={() => editor?.chain().focus().toggleBulletList().run()}>{icons.bulletList}</ToolbarBtn>
-              <ToolbarBtn title="번호 매기기 목록" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>{icons.orderedList}</ToolbarBtn>
-              <ToolbarBtn title="인용구"           active={editor?.isActive('blockquote')}  onClick={() => editor?.chain().focus().toggleBlockquote().run()}>{icons.blockquote}</ToolbarBtn>
-            </div>
-
-            <Divider />
-
-            <div className="ep-toolbar__group">
-              <ToolbarBtn title="왼쪽 정렬"   active={editor?.isActive({ textAlign: 'left' })}   onClick={() => editor?.chain().focus().setTextAlign('left').run()}>{icons.alignLeft}</ToolbarBtn>
-              <ToolbarBtn title="가운데 정렬" active={editor?.isActive({ textAlign: 'center' })} onClick={() => editor?.chain().focus().setTextAlign('center').run()}>{icons.alignCenter}</ToolbarBtn>
-              <ToolbarBtn title="오른쪽 정렬" active={editor?.isActive({ textAlign: 'right' })}  onClick={() => editor?.chain().focus().setTextAlign('right').run()}>{icons.alignRight}</ToolbarBtn>
-            </div>
-
-            <Divider />
-
-            <div className="ep-toolbar__group">
-              <ToolbarBtn title="구분선" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
-                {icons.hr}
-              </ToolbarBtn>
-            </div>
-
-            <Divider />
-
-            <div className="ep-toolbar__group">
-              <LinkPicker editor={editor} />
-            </div>
-
-            <Divider />
-
-            <div className="ep-toolbar__group">
-              <div className="ep-tbl-wrap">
-                <ToolbarBtn title="표 삽입" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
-                  {icons.table}
-                </ToolbarBtn>
-                {tablePickerOpen && (
-                  <TableGridPicker
-                    onSelect={(rows, cols) => {
-                      editor?.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
-                      setTablePickerOpen(false);
-                    }}
-                    onClose={() => setTablePickerOpen(false)}
-                  />
-                )}
-              </div>
-            </div>
-
-            <TableToolbar editor={editor} />
-          </div>
-
-          {/* 본문 편집 영역 */}
-          <EditorContent editor={editor} className="ep-editor-wrap" />
-        </div>
-      </main>
-
-      {/* 우클릭 컨텍스트 메뉴 */}
-      {contextMenu && (
-        <EditorContextMenu
-          editor={editor}
-          pos={contextMenu}
-          onClose={() => setContextMenu(null)}
+      {showCoverImage && (
+        <EditorCoverUrlField
+          label="커버 이미지 URL"
+          value={coverImage}
+          onChange={setCoverImage}
+          placeholder="https://example.com/image.jpg"
         />
       )}
-    </div>
+
+      <div className="ep-toolbar" role="toolbar" aria-label="텍스트 서식">
+        <div className="ep-toolbar__group">
+          <ToolbarBtn title="실행 취소 (Ctrl+Z)" disabled={!editor?.can().undo()} onClick={() => editor?.chain().focus().undo().run()}>
+            {icons.undo}
+          </ToolbarBtn>
+          <ToolbarBtn title="다시 실행 (Ctrl+Y)" disabled={!editor?.can().redo()} onClick={() => editor?.chain().focus().redo().run()}>
+            {icons.redo}
+          </ToolbarBtn>
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <ToolbarBtn
+            title="본문"
+            active={editor?.isActive('paragraph') && !editor?.isActive('heading')}
+            onClick={() => editor?.chain().focus().setParagraph().run()}
+          >
+            <span className="ep-toolbar__label">본문</span>
+          </ToolbarBtn>
+          <ToolbarBtn title="제목 1" active={editor?.isActive('heading', { level: 1 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}>
+            <span className="ep-toolbar__label ep-toolbar__label--h1">H1</span>
+          </ToolbarBtn>
+          <ToolbarBtn title="제목 2" active={editor?.isActive('heading', { level: 2 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>
+            <span className="ep-toolbar__label">H2</span>
+          </ToolbarBtn>
+          <ToolbarBtn title="제목 3" active={editor?.isActive('heading', { level: 3 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>
+            <span className="ep-toolbar__label">H3</span>
+          </ToolbarBtn>
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <ToolbarBtn title="굵게 (Ctrl+B)" active={editor?.isActive('bold')} onClick={() => editor?.chain().focus().toggleBold().run()}>
+            {icons.bold}
+          </ToolbarBtn>
+          <ToolbarBtn title="기울임 (Ctrl+I)" active={editor?.isActive('italic')} onClick={() => editor?.chain().focus().toggleItalic().run()}>
+            {icons.italic}
+          </ToolbarBtn>
+          <ToolbarBtn title="밑줄 (Ctrl+U)" active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>
+            {icons.underline}
+          </ToolbarBtn>
+          <ToolbarBtn title="취소선" active={editor?.isActive('strike')} onClick={() => editor?.chain().focus().toggleStrike().run()}>
+            {icons.strike}
+          </ToolbarBtn>
+          <ColorPicker editor={editor} />
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <ToolbarBtn title="글머리 기호 목록" active={editor?.isActive('bulletList')} onClick={() => editor?.chain().focus().toggleBulletList().run()}>
+            {icons.bulletList}
+          </ToolbarBtn>
+          <ToolbarBtn title="번호 매기기 목록" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
+            {icons.orderedList}
+          </ToolbarBtn>
+          <ToolbarBtn title="인용구" active={editor?.isActive('blockquote')} onClick={() => editor?.chain().focus().toggleBlockquote().run()}>
+            {icons.blockquote}
+          </ToolbarBtn>
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <ToolbarBtn title="왼쪽 정렬" active={editor?.isActive({ textAlign: 'left' })} onClick={() => editor?.chain().focus().setTextAlign('left').run()}>
+            {icons.alignLeft}
+          </ToolbarBtn>
+          <ToolbarBtn title="가운데 정렬" active={editor?.isActive({ textAlign: 'center' })} onClick={() => editor?.chain().focus().setTextAlign('center').run()}>
+            {icons.alignCenter}
+          </ToolbarBtn>
+          <ToolbarBtn title="오른쪽 정렬" active={editor?.isActive({ textAlign: 'right' })} onClick={() => editor?.chain().focus().setTextAlign('right').run()}>
+            {icons.alignRight}
+          </ToolbarBtn>
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <ToolbarBtn title="구분선" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
+            {icons.hr}
+          </ToolbarBtn>
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <LinkPicker editor={editor} />
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <div className="ep-tbl-wrap">
+            <ToolbarBtn title="표 삽입" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
+              {icons.table}
+            </ToolbarBtn>
+            {tablePickerOpen && (
+              <TableGridPicker
+                onSelect={(rows, cols) => {
+                  editor?.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+                  setTablePickerOpen(false);
+                }}
+                onClose={() => setTablePickerOpen(false)}
+              />
+            )}
+          </div>
+        </div>
+
+        <TableToolbar editor={editor} />
+      </div>
+
+      <EditorContent editor={editor} className="ep-editor-wrap" />
+    </EditorPageFrame>
   );
 }
