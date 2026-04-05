@@ -12,6 +12,7 @@
      board         — 게시판 목록·검색·테이블·상세·페이지네이션
      press         — 언론보도 카드 목록·상세·관리자 편집
      notice-strip  — 홈 화면 공지 띠 (NoticeStrip)
+     home-wr-news  — 홈 진행 예정 WR뉴스 (1대2 스포트라이트)
      admin-layout  — 관리자 공통 레이아웃 (adm-*)
      admin-board   — 관리자 게시판 관리 (an-*)
      editor        — 리치 텍스트 에디터 (ep-*, dp-*, tgp-*)
@@ -28,6 +29,7 @@
 @import './styles/board.css';
 @import './styles/press.css';
 @import './styles/notice-strip.css';
+@import './styles/home-wr-news.css';
 @import './styles/admin-layout.css';
 @import './styles/admin-board.css';
 @import './styles/editor.css';
