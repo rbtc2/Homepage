@@ -17,6 +17,7 @@ const SECTION_LABELS = {
   '/admin/gallery':     '포토갤러리 관리',
   '/admin/press':       '언론보도 관리',
   '/admin/wr-news':     'WR뉴스 관리',
+  '/admin/settings':    '사이트 설정',
 };
 
 const SUB_LABELS = {

@@ -92,6 +92,24 @@ const NAV_ITEMS = [
   },
 ];
 
+const SETTINGS_NAV_ITEMS = [
+  {
+    href: '/admin/settings',
+    label: '사이트 설정',
+    icon: (
+      <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.7" />
+        <path
+          d="M12 1v2.2M12 20.8V23M4.22 4.22l1.56 1.56M18.22 18.22l1.56 1.56M1 12h2.2M20.8 12H23M4.22 19.78l1.56-1.56M18.22 5.78l1.56-1.56"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+];
+
 function SidebarContent({ pathname, onLogout, onNavClick }) {
   return (
     <>
@@ -102,6 +120,23 @@ function SidebarContent({ pathname, onLogout, onNavClick }) {
           const isActive = item.exact
             ? pathname === item.href
             : pathname === item.href || pathname.startsWith(item.href + '/');
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`adm-sidebar__item${isActive ? ' adm-sidebar__item--active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+              onClick={onNavClick}
+            >
+              {item.icon}
+              {item.label}
+            </Link>
+          );
+        })}
+        <span className="adm-sidebar__section-label">설정</span>
+        {SETTINGS_NAV_ITEMS.map((item) => {
+          const isActive =
+            pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link
               key={item.href}

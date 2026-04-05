@@ -102,15 +102,6 @@ export default async function PressDetailPage({ params }) {
               </div>
             </header>
 
-            {row.summary?.trim() && (
-              <section className="pd__summary" aria-labelledby="pd-summary-h">
-                <h2 id="pd-summary-h" className="pd__summary-h">
-                  요약
-                </h2>
-                <p className="pd__summary-text">{row.summary.trim()}</p>
-              </section>
-            )}
-
             {hasBody && (
               <div
                 className="nd__body nd__body--html pd__body"

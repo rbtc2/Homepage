@@ -210,7 +210,7 @@ export default function PressEditor({ post, backHref, editTitle, newTitle, onSav
                 className="press-ep__textarea"
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
-                placeholder="기사 핵심을 1~3문장으로 요약해 주세요."
+                placeholder="기사 첫 줄을 복사하거나 기사 핵심을 1~2문장으로 요약해주세요."
                 rows={3}
                 maxLength={500}
               />
