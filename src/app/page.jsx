@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 import HeroBanner from '@/components/HeroBanner';
 import NoticeStrip from '@/components/NoticeStrip';
 import Footer from '@/components/Footer';
-import HomeWrNewsSpotlight from '@/components/home/HomeWrNewsSpotlight';
+import HomeWrNewsBlock from '@/components/home/HomeWrNewsBlock';
 
 export const revalidate = 60;
 
@@ -12,10 +12,8 @@ export default function Home() {
       <Header />
       <HeroBanner />
       <NoticeStrip />
-      <main className="main" role="main">
-        <div className="main__surface">
-          <HomeWrNewsSpotlight />
-        </div>
+      <main className="main main--flush" role="main">
+        <HomeWrNewsBlock />
       </main>
       <Footer />
     </>

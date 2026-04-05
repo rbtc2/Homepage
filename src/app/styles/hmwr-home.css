@@ -1,0 +1,322 @@
+/* 홈 WR뉴스 — 전체 폭 섹션 (공지 띠와 동일한 가로 리듬) */
+
+.hmwr {
+  background: var(--surface);
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.hmwr__inner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(1.75rem, 4.5vw, 2.75rem) var(--pad-x)
+    clamp(2.25rem, 5.5vw, 3.25rem);
+}
+
+.hmwr__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 3.5vw, 2rem);
+}
+
+.hmwr__title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.8vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.hmwr__rule {
+  flex: 1;
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--line);
+}
+
+.hmwr__all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.18s var(--ease);
+}
+
+.hmwr__all:hover {
+  color: var(--brand);
+}
+
+.hmwr__all:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.hmwr__zero {
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+}
+
+.hmwr__zero a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.hmwr__zero a:hover {
+  text-decoration: none;
+}
+
+.hmwr__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  align-items: stretch;
+  min-height: clamp(320px, 48vw, 520px);
+}
+
+.hmwr__grid--one {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: clamp(280px, 52vw, 460px);
+}
+
+.hmwr__hero {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 4px;
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+  background: var(--canvas);
+  transition: box-shadow 0.28s var(--ease);
+}
+
+.hmwr__hero:hover {
+  box-shadow: 0 14px 42px rgba(12, 20, 36, 0.14);
+}
+
+.hmwr__hero:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.hmwr__hero-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(280px, 48vw, 520px);
+}
+
+.hmwr__grid--one .hmwr__hero-frame {
+  min-height: clamp(300px, 56vw, 480px);
+}
+
+.hmwr__hero-img {
+  transition: transform 0.55s var(--ease);
+}
+
+.hmwr__hero:hover .hmwr__hero-img {
+  transform: scale(1.04);
+}
+
+.hmwr__hero-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(165deg, #e8ecf2 0%, #c8d2e0 100%);
+}
+
+.hmwr__hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(12, 20, 36, 0.9) 0%,
+    rgba(12, 20, 36, 0.38) 42%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.hmwr__hero-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(1.25rem, 3.5vw, 2rem);
+  z-index: 1;
+}
+
+.hmwr__hero-name {
+  display: block;
+  font-size: clamp(1.05rem, 2.4vw, 1.65rem);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+  color: #fff;
+  word-break: keep-all;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.hmwr__hero-snip {
+  margin-top: 0.65rem;
+  font-size: clamp(0.8125rem, 1.5vw, 0.9375rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.hmwr__hero-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: -0.01em;
+}
+
+.hmwr__dot::before {
+  content: '·';
+  margin: 0 0.35rem;
+}
+
+.hmwr__subs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 2vw, 1rem);
+  min-height: 0;
+}
+
+.hmwr__sub-item {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.hmwr__sub {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  transition:
+    border-color 0.2s var(--ease),
+    box-shadow 0.22s var(--ease);
+}
+
+.hmwr__sub:hover {
+  border-color: rgba(18, 79, 166, 0.38);
+  box-shadow: 0 8px 26px rgba(12, 20, 36, 0.1);
+}
+
+.hmwr__sub:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.hmwr__sub-pic {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  background: var(--canvas);
+  overflow: hidden;
+}
+
+.hmwr__sub-img {
+  transition: transform 0.45s var(--ease);
+}
+
+.hmwr__sub:hover .hmwr__sub-img {
+  transform: scale(1.04);
+}
+
+.hmwr__sub-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e8ecf2, #d2dae6);
+}
+
+.hmwr__sub-text {
+  padding: 0.75rem 0.9rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.hmwr__sub-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  word-break: keep-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.hmwr__sub-snip {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--muted);
+  letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.hmwr__sub-when {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .hmwr__grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .hmwr__hero-frame {
+    min-height: clamp(240px, 62vw, 360px);
+  }
+
+  .hmwr__grid--one .hmwr__hero-frame {
+    min-height: clamp(260px, 68vw, 400px);
+  }
+}

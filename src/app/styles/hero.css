@@ -200,6 +200,13 @@
   padding: clamp(2.5rem, 6vw, 3.75rem) var(--pad-x);
 }
 
+/* 홈 등: 본문을 전체 폭 밴드로 쓸 때 — 폭·패딩은 섹션(.hmwr__inner 등)이 담당 */
+.main--flush {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 .main__surface {
   background: var(--surface);
   border: 1px solid var(--line);
