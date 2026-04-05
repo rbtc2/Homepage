@@ -113,6 +113,22 @@
   height: 0.9375rem;
 }
 
+.hy-row__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.hy-row__detail {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
 /* ── 반응형 ─────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .hy-block {

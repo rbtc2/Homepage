@@ -53,7 +53,7 @@ export default function DirectionsPage() {
             <div className="dr-map">
               <iframe
                 className="dr-map__iframe"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3164.8904367987398!2d127.11014647569041!3d37.51050217205321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5764a9945e1%3A0x2d65515baa9e0627!2z64ukOuyYtCDsiqTrp4jtirjsmKTtlLzsiqQg7Iah7YyM64KY66Oo!5e0!3m2!1sko!2skr!4v1774569114385!5m2!1sko!2skr"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d305.1195750166032!2d127.1241937522581!3d37.49543801957223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca594990dc2a3%3A0x99ea44589ae949ba!2z67Cx7JWU67mM65Sp!5e0!3m2!1sko!2skr!4v1775349506118!5m2!1sko!2skr"
                 title="오시는 길 지도"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

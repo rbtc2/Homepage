@@ -5,24 +5,20 @@ export const metadata = {
   title: '연혁 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
-/*
-  샘플 구조: 연도별 이벤트 수 (실제 내용 입력 전 자리 표시)
-  각 배열 요소는 해당 행의 내용 줄 수를 나타냄
-*/
-const SAMPLE_HISTORY = [
+/**
+ * @typedef {Object} HistoryEvent
+ * @property {string} month 월 숫자 (표시는 한 자리, 예: '3')
+ * @property {string} title 한 줄 제목
+ * @property {string} [detail] 선택: 부가 설명 (여러 줄일 때 사용)
+ */
+
+/** @type {Array<{ year: string, events: HistoryEvent[] }>} 같은 연도 안에서는 최신(월 큰 순)이 위 */
+const HISTORY_BY_YEAR = [
   {
     year: '2026',
-    rows: [
-      { lines: ['85%', '60%'] },
-      { lines: ['75%'] },
-      { lines: ['90%', '65%'] },
-      { lines: ['70%'] },
-    ],
+    events: [{ month: '3', title: '창립총회 개회' }],
   },
 ];
-
-/* 월 skeleton — 각 행마다 다른 너비로 자연스럽게 */
-const MONTH_WIDTHS = ['1.75rem', '1.875rem', '2rem', '1.75rem', '1.875rem', '2rem', '1.75rem'];
 
 export default function HistoryPage() {
   return (
@@ -30,7 +26,6 @@ export default function HistoryPage() {
       <Header />
       <main role="main">
 
-        {/* 페이지 헤더 */}
         <div className="page-header">
           <div className="page-header__inner">
             <p className="page-header__label">조직 소개</p>
@@ -39,37 +34,23 @@ export default function HistoryPage() {
         </div>
 
         <div className="hy-wrap">
-          {SAMPLE_HISTORY.map(({ year, rows }) => (
+          {HISTORY_BY_YEAR.map(({ year, events }) => (
             <div key={year} className="hy-block">
 
-              {/* 연도 — sticky */}
               <div className="hy-year" aria-hidden="true">
                 <p className="hy-year__num">{year}</p>
               </div>
 
-              {/* 이벤트 목록 */}
-              <ul className="hy-events" aria-label={`${year}년 연혁 (준비 중)`}>
-                {rows.map((row, i) => (
-                  <li key={i} className="hy-row">
-
-                    {/* 월 skeleton */}
-                    <span
-                      className="hy-row__month--skel hy-skel"
-                      style={{ width: MONTH_WIDTHS[i % MONTH_WIDTHS.length] }}
-                      aria-hidden="true"
-                    />
-
-                    {/* 내용 skeleton */}
-                    <div className="hy-row__content" aria-hidden="true">
-                      {row.lines.map((w, j) => (
-                        <span
-                          key={j}
-                          className="hy-row__line hy-skel"
-                          style={{ width: w }}
-                        />
-                      ))}
+              <ul className="hy-events" aria-label={`${year}년 연혁`}>
+                {events.map((ev, i) => (
+                  <li key={`${year}-${ev.month}-${i}`} className="hy-row">
+                    <span className="hy-row__month" aria-label={`${ev.month}월`}>
+                      {ev.month}
+                    </span>
+                    <div className="hy-row__content">
+                      <p className="hy-row__title">{ev.title}</p>
+                      {ev.detail ? <p className="hy-row__detail">{ev.detail}</p> : null}
                     </div>
-
                   </li>
                 ))}
               </ul>
