@@ -1,4 +1,4 @@
-/* 홈 — 진행 예정 WR뉴스 (1대2 비대칭, main__surface 내부) */
+/* 홈 — WR뉴스 스포트라이트 (1대2 비대칭, main__surface 내부) */
 
 .hw-spotlight {
   margin: 0;
@@ -21,6 +21,7 @@
   text-transform: uppercase;
   color: var(--brand);
   white-space: nowrap;
+  line-height: 1.2;
 }
 
 .hw-spotlight__rule {
@@ -54,16 +55,8 @@
   border-radius: 2px;
 }
 
-.hw-spotlight__title {
-  margin: 0 0 clamp(1.25rem, 3vw, 1.75rem);
-  font-size: clamp(1.375rem, 3vw, 1.75rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-}
-
 .hw-spotlight__empty {
-  margin: 0;
+  margin: clamp(1rem, 2.5vw, 1.5rem) 0 0;
   font-size: 0.9375rem;
   color: var(--muted);
   letter-spacing: -0.01em;
@@ -88,6 +81,7 @@
   gap: 0.5rem;
   align-items: stretch;
   min-height: clamp(260px, 36vw, 400px);
+  margin-top: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .hw-spotlight__body--single {

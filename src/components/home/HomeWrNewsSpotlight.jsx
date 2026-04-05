@@ -141,17 +141,15 @@ export default async function HomeWrNewsSpotlight() {
   const sidePosts = rest.slice(0, 2);
 
   return (
-    <section className="hw-spotlight" aria-label="진행 예정 WR뉴스">
+    <section className="hw-spotlight" aria-label="WR뉴스">
       <header className="hw-spotlight__head">
-        <p className="hw-spotlight__eyebrow">WR News</p>
+        <h2 className="hw-spotlight__eyebrow">WR뉴스</h2>
         <hr className="hw-spotlight__rule" />
         <Link href={BASE} className="hw-spotlight__more" aria-label="WR뉴스 전체보기">
           전체보기
           <ArrowIcon />
         </Link>
       </header>
-
-      <h2 className="hw-spotlight__title">진행 예정</h2>
 
       {items.length === 0 ? (
         <p className="hw-spotlight__empty">
