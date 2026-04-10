@@ -16,18 +16,19 @@
 /* ── 본문 좌 · 대표 이미지 우 ───────────────────────────────── */
 .gt-layout--with-photo {
   display: grid;
-  grid-template-columns: minmax(0, min(40rem, 100%)) minmax(13.5rem, 19rem);
-  gap: clamp(2.25rem, 5.5vw, 4.25rem);
+  grid-template-columns: minmax(0, min(40rem, 100%)) minmax(16rem, 22.5rem);
+  gap: clamp(2rem, 4vw, 3rem);
   align-items: start;
-  justify-content: space-between;
-  column-gap: clamp(2rem, 5vw, 3.75rem);
+  /* space-between은 열 사이에 여백을 벌려 ‘빈칸’처럼 보이므로 사용하지 않음 */
+  justify-content: start;
+  column-gap: clamp(1.75rem, 4vw, 2.75rem);
 }
 
 .gt-aside {
   position: relative;
-  justify-self: end;
+  justify-self: start;
   width: 100%;
-  max-width: 19rem;
+  max-width: 22.5rem;
 }
 
 .gt-portrait {
