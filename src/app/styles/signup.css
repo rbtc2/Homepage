@@ -94,22 +94,6 @@
   color: var(--ink);
 }
 
-/* 마무리: 연대 제안 + 신뢰 약속 — 시각적 구획으로 ‘행동 유도’ 전환 */
-.su-intro__closing {
-  margin-top: clamp(2rem, 4.5vw, 2.75rem);
-  padding-top: clamp(1.5rem, 3vw, 2rem);
-  border-top: 1px solid var(--line);
-}
-
-.su-intro__closing p {
-  margin: 0;
-  font-size: 1.0625rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.75;
-  color: var(--ink);
-}
-
 @media (max-width: 30rem) {
   .su-intro__title {
     flex-direction: column;
