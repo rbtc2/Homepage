@@ -85,68 +85,23 @@
   height: 0.9375rem;
 }
 
-/* ── 미션: 에디토리얼 풀쿼트 ───────────────────────────────── */
-.ab-section--mission {
-  padding-bottom: clamp(2.75rem, 6vw, 4rem);
-}
-
-.ab-mission {
-  max-width: min(36ch, 100%);
+/* ── 미션 본문: 회원가입 .su-prose__lead와 동일 스케일·리듬 (전폭, 카드/좌바 없음) ── */
+.ab-mission-lead {
   margin: 0;
-  padding: clamp(1.25rem, 3.5vw, 1.75rem) clamp(1rem, 3vw, 1.5rem);
-  border-left: 3px solid var(--brand);
-  border-radius: 0 6px 6px 0;
-  background: rgba(18, 79, 166, 0.06);
-  animation: ab-mission-in 0.42s var(--ease) both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ab-mission {
-    animation: none;
-  }
-}
-
-@keyframes ab-mission-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.ab-mission__statement {
-  margin: 0;
-  font-size: clamp(1.0625rem, 2.2vw, 1.25rem);
-  font-weight: 500;
-  line-height: 1.65;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-
-.ab-mission__hook {
-  display: block;
-  font-size: clamp(1.125rem, 2.35vw, 1.3125rem);
+  width: 100%;
+  max-width: none;
+  font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
   font-weight: 600;
-  letter-spacing: -0.022em;
-  margin-bottom: 0.35em;
+  letter-spacing: -0.025em;
+  line-height: 1.72;
   color: var(--ink);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
-.ab-mission__body {
-  display: block;
-}
-
-.ab-mission__accent {
+.ab-mission-lead__emph {
   color: var(--brand);
-  font-weight: 600;
-}
-
-.ab-mission__fin {
-  font-weight: 600;
-  color: var(--ink);
+  font-weight: 700;
 }
 
 /* ── 핵심가치 그리드 ────────────────────────────────────────── */
