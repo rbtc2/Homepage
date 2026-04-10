@@ -36,7 +36,7 @@ export default function PeoplePage() {
         {/* 페이지 헤더 */}
         <div className="page-header">
           <div className="page-header__inner">
-            <p className="page-header__label">조직 소개</p>
+            <p className="page-header__label">단체 소개</p>
             <h1 className="page-header__title">함께하는 사람들</h1>
           </div>
         </div>

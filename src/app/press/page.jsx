@@ -51,7 +51,7 @@ export default async function PressPage({ searchParams }) {
         {/* 페이지 헤더 */}
         <div className="page-header">
           <div className="page-header__inner">
-            <p className="page-header__label">조직 활동</p>
+            <p className="page-header__label">단체 활동</p>
             <h1 className="page-header__title">언론보도</h1>
           </div>
         </div>

@@ -42,8 +42,8 @@ export default function Header() {
         <nav className="header__nav" aria-label="주 메뉴">
           <ul className="header__nav-grid">
             <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">조직 소개</a>
-              <div className="header__mega-col" role="group" aria-label="조직 소개 하위 메뉴">
+              <a href="#" className="header__nav-item">단체 소개</a>
+              <div className="header__mega-col" role="group" aria-label="단체 소개 하위 메뉴">
                 <ul className="header__mega-list">
                   <li><Link href="/about" className="header__mega-link">소개</Link></li>
                   <li><Link href="/greeting" className="header__mega-link">인사말</Link></li>
@@ -54,8 +54,8 @@ export default function Header() {
               </div>
             </li>
             <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">조직 사업</a>
-              <div className="header__mega-col" role="group" aria-label="조직 사업 하위 메뉴">
+              <a href="#" className="header__nav-item">단체 사업</a>
+              <div className="header__mega-col" role="group" aria-label="단체 사업 하위 메뉴">
                 <ul className="header__mega-list">
                   <li><a href="#" className="header__mega-link">상호문화 연대</a></li>
                   <li><a href="#" className="header__mega-link">자립역량 강화</a></li>
@@ -64,8 +64,8 @@ export default function Header() {
               </div>
             </li>
             <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">조직 활동</a>
-              <div className="header__mega-col" role="group" aria-label="조직 활동 하위 메뉴">
+              <a href="#" className="header__nav-item">단체 활동</a>
+              <div className="header__mega-col" role="group" aria-label="단체 활동 하위 메뉴">
                 <ul className="header__mega-list">
                   <li><Link href="/wr-news" className="header__mega-link">WR뉴스</Link></li>
                   <li><Link href="/press" className="header__mega-link">언론보도</Link></li>
@@ -73,8 +73,8 @@ export default function Header() {
               </div>
             </li>
             <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">나의 후원</a>
-              <div className="header__mega-col" role="group" aria-label="나의 후원 하위 메뉴">
+              <a href="#" className="header__nav-item">단체 후원</a>
+              <div className="header__mega-col" role="group" aria-label="단체 후원 하위 메뉴">
                 <ul className="header__mega-list">
                   <li><Link href="/member" className="header__mega-link">회원가입</Link></li>
                   <li><a href="#" className="header__mega-link">회비납부</a></li>

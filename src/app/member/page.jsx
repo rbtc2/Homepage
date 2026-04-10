@@ -30,7 +30,7 @@ export default function MemberPage() {
       <main className="su-main" role="main">
         <div className="page-header">
           <div className="page-header__inner">
-            <p className="page-header__label">나의 후원</p>
+            <p className="page-header__label">단체 후원</p>
             <h1 className="page-header__title">회원가입</h1>
           </div>
         </div>

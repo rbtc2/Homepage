@@ -41,7 +41,7 @@ export default function DirectionsPage() {
         {/* 페이지 헤더 */}
         <div className="page-header">
           <div className="page-header__inner">
-            <p className="page-header__label">조직 소개</p>
+            <p className="page-header__label">단체 소개</p>
             <h1 className="page-header__title">오시는 길</h1>
           </div>
         </div>

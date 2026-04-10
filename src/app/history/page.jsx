@@ -28,7 +28,7 @@ export default function HistoryPage() {
 
         <div className="page-header">
           <div className="page-header__inner">
-            <p className="page-header__label">조직 소개</p>
+            <p className="page-header__label">단체 소개</p>
             <h1 className="page-header__title">연혁</h1>
           </div>
         </div>

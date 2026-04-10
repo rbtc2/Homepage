@@ -14,7 +14,7 @@ export default function GreetingPage() {
       <main role="main">
         <div className="page-header">
           <div className="page-header__inner">
-            <p className="page-header__label">조직 소개</p>
+            <p className="page-header__label">단체 소개</p>
             <h1 className="page-header__title" id="greeting-heading">
               인사말
             </h1>
