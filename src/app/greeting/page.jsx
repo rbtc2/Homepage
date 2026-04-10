@@ -27,17 +27,6 @@ export default function GreetingPage() {
           lang="ko"
         >
           <div className="gt-layout gt-layout--with-photo">
-            <aside className="gt-aside" aria-label="대표 사진">
-              <figure className="gt-portrait">
-                <img
-                  src="/images/greeting/representative.webp"
-                  alt="국제인권연대 월드라이츠 대표 이미지"
-                  width={1200}
-                  height={1600}
-                />
-                <figcaption>국제인권연대 월드라이츠</figcaption>
-              </figure>
-            </aside>
             <div className="gt-prose">
               <header className="gt-section-head">
                 <p className="gt-section-head__eyebrow">Greeting</p>
@@ -70,6 +59,19 @@ export default function GreetingPage() {
                 <p>감사합니다.</p>
               </footer>
             </div>
+
+            <aside className="gt-aside" aria-label="인사말 본문과 함께하는 이미지">
+              <figure className="gt-portrait">
+                <img
+                  src="/images/greeting/representative.webp"
+                  alt="국제인권연대 월드라이츠 대표 이미지"
+                  width={1200}
+                  height={1600}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            </aside>
           </div>
         </article>
       </main>

@@ -1,6 +1,5 @@
 /* ── Greeting (인사말) ───────────────────────────────────────────
-   Editorial prose: comfortable measure, clear hierarchy, calm rhythm.
-   대표 사진: .gt-layout에 .gt-layout--with-photo 추가 후 .gt-aside 마크업 삽입.
+   에디토리얼 본문 + 우측 포트레이트. 브랜드 컬러·타이포 스케일과 정렬.
    ─────────────────────────────────────────────────────────────── */
 
 /* ── Shell ───────────────────────────────────────────────────── */
@@ -14,53 +13,56 @@
   display: block;
 }
 
-/* ── 대표 사진 레이아웃 (마크업 추가 시 활성화) ───────────────── */
+/* ── 본문 좌 · 대표 이미지 우 ───────────────────────────────── */
 .gt-layout--with-photo {
   display: grid;
-  grid-template-columns: minmax(0, 17.5rem) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 3.5rem);
+  grid-template-columns: minmax(0, min(40rem, 100%)) minmax(13.5rem, 19rem);
+  gap: clamp(2.25rem, 5.5vw, 4.25rem);
   align-items: start;
+  justify-content: space-between;
+  column-gap: clamp(2rem, 5vw, 3.75rem);
 }
 
 .gt-aside {
   position: relative;
+  justify-self: end;
+  width: 100%;
+  max-width: 19rem;
 }
 
 .gt-portrait {
   margin: 0;
 }
 
+/* 프레임: 얇은 테두리 + 차분한 깊이감 (과한 드롭섀도우 지양) */
 .gt-portrait img {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  border-radius: 2px;
-  background: var(--line);
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: var(--surface);
   box-shadow:
-    0 1px 0 rgba(12, 20, 36, 0.06),
-    0 12px 40px -16px rgba(12, 20, 36, 0.18);
-}
-
-.gt-portrait figcaption {
-  margin-top: 0.75rem;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--muted);
-  line-height: 1.5;
+    0 1px 0 rgba(12, 20, 36, 0.04),
+    0 16px 40px -20px rgba(12, 20, 36, 0.22);
 }
 
 @media (max-width: 52rem) {
   .gt-layout--with-photo {
     grid-template-columns: 1fr;
-    gap: clamp(1.75rem, 4vw, 2.5rem);
+    gap: clamp(2rem, 5vw, 2.75rem);
   }
 
-  .gt-layout--with-photo .gt-aside {
-    max-width: 16rem;
-    margin-inline: auto;
+  .gt-aside {
+    justify-self: center;
+    max-width: min(17rem, 100%);
+    order: 2;
+  }
+
+  .gt-layout--with-photo .gt-prose {
+    order: 1;
   }
 }
 
@@ -82,7 +84,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: clamp(1.75rem, 4vw, 2.35rem);
+  margin-bottom: clamp(1.65rem, 3.8vw, 2.2rem);
 }
 
 .gt-section-head__eyebrow {
@@ -106,7 +108,7 @@
 .gt-prose__lead-wrap {
   position: relative;
   padding-left: 1rem;
-  margin-bottom: clamp(1.75rem, 4vw, 2.25rem);
+  margin-bottom: clamp(1.65rem, 3.8vw, 2.15rem);
 }
 
 .gt-prose__lead-wrap::before {
@@ -137,7 +139,7 @@
 .gt-prose__body {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.15rem, 2.5vw, 1.45rem);
+  gap: clamp(1.1rem, 2.4vw, 1.4rem);
 }
 
 .gt-prose__body p {
@@ -149,17 +151,18 @@
   color: var(--ink);
 }
 
+/* 맺음말: 구분선 없이 여백과 톤으로 마무리 (서명 느낌) */
 .gt-prose__closing {
-  margin-top: clamp(2.25rem, 5vw, 3rem);
-  padding-top: clamp(1.5rem, 3vw, 2rem);
-  border-top: 1px solid var(--line);
+  margin-top: clamp(2rem, 4.5vw, 2.75rem);
+  padding-top: 0;
+  border-top: none;
 }
 
 .gt-prose__closing p {
   margin: 0;
-  font-size: 1.0625rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  line-height: 1.6;
-  color: var(--ink);
+  letter-spacing: 0.12em;
+  line-height: 1.65;
+  color: var(--muted);
 }
