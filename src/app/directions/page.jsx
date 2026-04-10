@@ -150,17 +150,30 @@ export default function DirectionsPage() {
                     <BusIcon />
                   </div>
                   <h3 className="dr-trow__name">버스</h3>
-                  <div className="dr-trow__details" aria-label="버스 안내 준비 중">
+                  <div className="dr-trow__details" aria-label="버스 안내">
                     <div className="dr-trow__detail">
                       <span className="dr-trow__detail-key">버스 번호</span>
-                      <div>
-                        <span className="dr-trow__skel-val dr-trow__skel-val--wide dr-skel" style={{ display: 'block' }} />
-                        <span className="dr-trow__skel-val dr-trow__skel-val--short dr-skel" style={{ display: 'block', marginTop: '0.35rem' }} />
-                      </div>
+                      <p className="dr-trow__detail-val" style={{ margin: 0 }}>
+                        간선 301번, 간선 401번, 지선 3319번
+                      </p>
                     </div>
                     <div className="dr-trow__detail">
                       <span className="dr-trow__detail-key">정류장 / 도보</span>
-                      <span className="dr-trow__skel-val dr-trow__skel-val--wide dr-skel" style={{ display: 'block' }} />
+                      <p className="dr-trow__detail-val" style={{ margin: 0 }}>
+                        경찰병원역 앞 하차 후 도보 약 200m
+                      </p>
+                    </div>
+                    <div className="dr-trow__detail">
+                      <span className="dr-trow__detail-key">버스 번호</span>
+                      <p className="dr-trow__detail-val" style={{ margin: 0 }}>
+                        지선 3322번, 지선 3416번
+                      </p>
+                    </div>
+                    <div className="dr-trow__detail">
+                      <span className="dr-trow__detail-key">정류장 / 도보</span>
+                      <p className="dr-trow__detail-val" style={{ margin: 0 }}>
+                        경찰병원역 앞 하차 후 도보 약 250m
+                      </p>
                     </div>
                   </div>
                 </li>

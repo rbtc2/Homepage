@@ -26,18 +26,18 @@ export default function GreetingPage() {
           aria-labelledby="greeting-heading"
           lang="ko"
         >
-          {/*
-            대표 사진 추가 시:
-            1) .gt-layout에 클래스 gt-layout--with-photo 추가
-            2) .gt-prose 앞에 아래 블록 삽입
+          <div className="gt-layout gt-layout--with-photo">
             <aside className="gt-aside" aria-label="대표 사진">
               <figure className="gt-portrait">
-                <img src="..." alt="..." width={560} height={747} />
-                <figcaption>직함 · 이름</figcaption>
+                <img
+                  src="/images/greeting/representative.webp"
+                  alt="국제인권연대 월드라이츠 대표 이미지"
+                  width={1200}
+                  height={1600}
+                />
+                <figcaption>국제인권연대 월드라이츠</figcaption>
               </figure>
             </aside>
-          */}
-          <div className="gt-layout">
             <div className="gt-prose">
               <header className="gt-section-head">
                 <p className="gt-section-head__eyebrow">Greeting</p>
