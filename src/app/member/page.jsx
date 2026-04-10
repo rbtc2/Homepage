@@ -23,7 +23,7 @@ function FlowArrow() {
   );
 }
 
-export default function SignupPage() {
+export default function MemberPage() {
   return (
     <>
       <Header />

@@ -76,7 +76,7 @@ export default function Header() {
               <a href="#" className="header__nav-item">나의 후원</a>
               <div className="header__mega-col" role="group" aria-label="나의 후원 하위 메뉴">
                 <ul className="header__mega-list">
-                  <li><Link href="/signup" className="header__mega-link">회원가입</Link></li>
+                  <li><Link href="/member" className="header__mega-link">회원가입</Link></li>
                   <li><a href="#" className="header__mega-link">회비납부</a></li>
                   <li><a href="#" className="header__mega-link">기부금 안내</a></li>
                 </ul>

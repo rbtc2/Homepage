@@ -1,5 +1,5 @@
-/* ── Signup (회원가입) — full-width editorial + process grid
-   사이드 여백 없이 max-w 컨테이너만 사용. 본문 가독성은 ch 단위로만 제한.
+/* ── Signup (회원가입) — 단체 소개·절차·도식 모두 컨테이너 전폭
+   (사진 병렬 레이아웃 시 별도 조정)
    ─────────────────────────────────────────────────────────────── */
 
 .su-main {
@@ -57,7 +57,7 @@
 
 /* ── 단체 소개 본문 ───────────────────────────────────────────── */
 .su-prose {
-  max-width: min(65ch, 100%);
+  width: 100%;
 }
 
 .su-prose__lead {
@@ -90,7 +90,7 @@
 /* ── 절차 안내 + CTA 링크 ─────────────────────────────────────── */
 .su-procedure-lead {
   margin: 0 0 clamp(2.25rem, 5vw, 3rem);
-  max-width: min(62ch, 100%);
+  width: 100%;
   font-size: 1.0625rem;
   font-weight: 400;
   letter-spacing: -0.012em;
