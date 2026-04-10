@@ -49,19 +49,116 @@ export default function SignupPage() {
               <span className="su-procedure__title-text">회원가입 절차</span>
               <hr className="su-procedure__rule" />
             </h2>
-            <p className="su-procedure__text">
-              국제인권연대 월드라이츠의 목적과 취지에 동의하는 개인 및 기관(단체) 누구나 회원 가입 신청을 할 수
-              있습니다. 회원 신규가입을 원하시는 경우{' '}
-              <a
-                href="https://example.com"
-                className="su-procedure__link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                회원가입 신청 링크
-              </a>
-              를 통해 신청서를 제출해 주시기 바랍니다.
-            </p>
+            <div className="su-procedure__copy">
+              <p className="su-procedure__text">
+                국제인권연대 월드라이츠의 목적과 취지에 동의하는 개인 및 기관(단체) 누구나 회원 가입 신청을 할 수
+                있습니다. 회원 신규가입을 원하시는 경우{' '}
+                <a
+                  href="https://example.com"
+                  className="su-procedure__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  회원가입 신청 링크
+                </a>
+                를 통해 신청서를 제출해 주시기 바랍니다.
+              </p>
+            </div>
+
+            <div className="su-flow" role="group" aria-label="회원가입 4단계 절차">
+              <article className="su-flow__card" aria-labelledby="su-flow-step1-title">
+                <div className="su-flow__card-head">
+                  <p className="su-flow__step-label">
+                    <span className="su-flow__step-num">STEP</span> 1
+                  </p>
+                  <h3 id="su-flow-step1-title" className="su-flow__card-title">
+                    가입 신청
+                  </h3>
+                </div>
+                <div className="su-flow__card-body">
+                  <p>회원가입 신청서를 작성하여 제출합니다.</p>
+                </div>
+              </article>
+
+              <span className="su-flow__arrow" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M9 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+
+              <article className="su-flow__card" aria-labelledby="su-flow-step2-title">
+                <div className="su-flow__card-head">
+                  <p className="su-flow__step-label">
+                    <span className="su-flow__step-num">STEP</span> 2
+                  </p>
+                  <h3 id="su-flow-step2-title" className="su-flow__card-title">
+                    가입 승인
+                  </h3>
+                </div>
+                <div className="su-flow__card-body">
+                  <p>사무국 검토 및 이사회 승인 절차를 거칩니다.</p>
+                </div>
+                <p className="su-flow__card-note">※ 영업일 기준 2~3일 소요됩니다.</p>
+              </article>
+
+              <span className="su-flow__arrow" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M9 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+
+              <article className="su-flow__card" aria-labelledby="su-flow-step3-title">
+                <div className="su-flow__card-head">
+                  <p className="su-flow__step-label">
+                    <span className="su-flow__step-num">STEP</span> 3
+                  </p>
+                  <h3 id="su-flow-step3-title" className="su-flow__card-title">
+                    회비 납부
+                  </h3>
+                </div>
+                <div className="su-flow__card-body">
+                  <p>선택한 결제 수단을 통해 회비를 납부합니다.</p>
+                </div>
+              </article>
+
+              <span className="su-flow__arrow" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M9 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+
+              <article className="su-flow__card" aria-labelledby="su-flow-step4-title">
+                <div className="su-flow__card-head">
+                  <p className="su-flow__step-label">
+                    <span className="su-flow__step-num">STEP</span> 4
+                  </p>
+                  <h3 id="su-flow-step4-title" className="su-flow__card-title">
+                    회원 확정
+                  </h3>
+                </div>
+                <div className="su-flow__card-body">
+                  <p>회원 자격이 부여되며, 월드라이츠 회원 안내를 발송합니다.</p>
+                </div>
+              </article>
+            </div>
           </section>
         </section>
       </main>

@@ -1,5 +1,5 @@
 /* ── Signup (회원가입) ───────────────────────────────────────────
-   단체 소개 → 회원가입 절차(안내·링크) → (예정) 도식
+   단체 소개 → 회원가입 절차(안내·링크) → 4단계 도식
    에디토리얼 톤: 인사말(gt-*)과 같은 문법 — 측정·리드·구획으로 신뢰감
    ─────────────────────────────────────────────────────────────── */
 
@@ -108,10 +108,13 @@
 
 /* ── 회원가입 절차 ───────────────────────────────────────────── */
 .su-procedure {
-  max-width: 42rem;
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
   padding-top: clamp(2rem, 4vw, 2.75rem);
   border-top: 1px solid var(--line);
+}
+
+.su-procedure__copy {
+  max-width: 42rem;
 }
 
 .su-procedure__title {
@@ -177,5 +180,135 @@
 
   .su-procedure__rule {
     width: 100%;
+  }
+}
+
+/* ── 4단계 도식 (카드 + 화살표) ──────────────────────────────── */
+.su-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.35rem 0.2rem;
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--line);
+}
+
+.su-flow__card {
+  flex: 1 1 10rem;
+  min-width: min(100%, 9.5rem);
+  max-width: 15.5rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(12, 20, 36, 0.05),
+    0 8px 24px -12px rgba(12, 20, 36, 0.12);
+}
+
+.su-flow__card-head {
+  padding: 0.75rem 0.9rem 0.65rem;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 79, 166, 0.14) 0%,
+    rgba(18, 79, 166, 0.07) 100%
+  );
+  border-bottom: 1px solid rgba(18, 79, 166, 0.18);
+}
+
+.su-flow__step-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--brand-deep);
+}
+
+.su-flow__step-num {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.su-flow__card-title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.su-flow__card-body {
+  flex: 1;
+  padding: 0.9rem 0.95rem 1rem;
+  background: var(--surface);
+}
+
+.su-flow__card-body p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.62;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.su-flow__card-note {
+  margin: 0;
+  padding: 0.55rem 0.95rem 0.7rem;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: var(--muted);
+  background: rgba(18, 79, 166, 0.05);
+  border-top: 1px solid var(--line);
+}
+
+.su-flow__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  color: var(--brand-mid);
+  align-self: center;
+}
+
+.su-flow__arrow svg {
+  display: block;
+}
+
+@media (min-width: 56rem) {
+  .su-flow {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+
+  .su-flow__card {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+@media (max-width: 55.99rem) {
+  .su-flow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .su-flow__card {
+    max-width: none;
+    width: 100%;
+  }
+
+  .su-flow__arrow {
+    width: 100%;
+    height: 1.75rem;
+    margin: 0.2rem 0;
+    transform: rotate(90deg);
   }
 }
