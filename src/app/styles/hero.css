@@ -1,11 +1,16 @@
 .hero {
+  /* 배너 이미지와 맞출 와이드 비율 (슬라이드 원본이 16:9면 16 / 9 로 바꿔도 됨) */
+  --hero-banner-aspect: 21 / 9;
   background: var(--surface);
 }
 
 .hero__viewport {
   position: relative;
   max-width: 100%;
-  min-height: clamp(17rem, 42vw, 28rem);
+  width: 100%;
+  aspect-ratio: var(--hero-banner-aspect);
+  max-height: 28rem;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background: linear-gradient(145deg, #dfe8f2 0%, #c9d6e8 42%, #b8c9df 100%);
