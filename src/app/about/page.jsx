@@ -22,16 +22,22 @@ export default function AboutPage() {
         <div className="ab-wrap">
 
           {/* ── 미션 ── */}
-          <section className="ab-section" aria-label="미션">
+          <section className="ab-section ab-section--mission" aria-labelledby="mission-heading">
             <div className="ab-section__header">
               <p className="ab-section__eyebrow">Mission</p>
-              <h2 className="ab-section__title">미션</h2>
+              <h2 id="mission-heading" className="ab-section__title">
+                미션
+              </h2>
               <hr className="ab-section__rule" />
             </div>
-            <div className="ab-lines" aria-hidden="true">
-              <span className="ab-line ab-skel" style={{ width: '88%' }} />
-              <span className="ab-line ab-skel" style={{ width: '72%' }} />
-              <span className="ab-line ab-skel" style={{ width: '60%' }} />
+            <div className="ab-mission">
+              <p className="ab-mission__statement">
+                <span className="ab-mission__hook">월드라이츠는</span>
+                <span className="ab-mission__body">
+                  <span className="ab-mission__accent">권리의 언어가 닿지 않는 곳</span>에{' '}
+                  <span className="ab-mission__fin">먼저 갑니다</span>.
+                </span>
+              </p>
             </div>
           </section>
 
