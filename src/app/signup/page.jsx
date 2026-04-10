@@ -17,7 +17,7 @@ export default function SignupPage() {
           </div>
         </div>
 
-        <section className="su-wrap" aria-labelledby="su-intro-heading">
+        <section className="su-wrap" aria-label="회원가입 안내">
           <div className="su-intro">
             <h2 id="su-intro-heading" className="su-intro__title">
               <span className="su-intro__title-text">단체 소개</span>
@@ -45,6 +45,26 @@ export default function SignupPage() {
               </div>
             </article>
           </div>
+
+          <section className="su-procedure" aria-labelledby="su-procedure-heading">
+            <h2 id="su-procedure-heading" className="su-procedure__title">
+              <span className="su-procedure__title-text">회원가입 절차</span>
+              <hr className="su-procedure__rule" />
+            </h2>
+            <p className="su-procedure__text">
+              국제인권연대 월드라이츠의 목적과 취지에 동의하는 개인 및 기관(단체) 누구나 회원 가입 신청을 할 수
+              있습니다. 회원 신규가입을 원하시는 경우{' '}
+              <a
+                href="https://example.com"
+                className="su-procedure__link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                회원가입 신청 링크
+              </a>
+              를 통해 신청서를 제출해 주시기 바랍니다.
+            </p>
+          </section>
         </section>
       </main>
       <Footer />

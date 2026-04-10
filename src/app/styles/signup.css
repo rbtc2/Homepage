@@ -1,5 +1,5 @@
 /* ── Signup (회원가입) ───────────────────────────────────────────
-   상단 page-header 이후: 단체 소개 문구 → (예정) 절차 · 링크 · 도식
+   단체 소개 → 회원가입 절차(안내·링크) → (예정) 도식
    에디토리얼 톤: 인사말(gt-*)과 같은 문법 — 측정·리드·구획으로 신뢰감
    ─────────────────────────────────────────────────────────────── */
 
@@ -118,6 +118,80 @@
   }
 
   .su-intro__rule {
+    width: 100%;
+  }
+}
+
+/* ── 회원가입 절차 ───────────────────────────────────────────── */
+.su-procedure {
+  max-width: 42rem;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-top: clamp(2rem, 4vw, 2.75rem);
+  border-top: 1px solid var(--line);
+}
+
+.su-procedure__title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 clamp(1.25rem, 3vw, 1.75rem);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+  line-height: 1.3;
+}
+
+.su-procedure__title-text {
+  white-space: nowrap;
+}
+
+.su-procedure__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  border: none;
+  margin: 0;
+}
+
+.su-procedure__text {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.78;
+  color: var(--ink);
+}
+
+.su-procedure__link {
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.15s var(--ease), text-decoration-color 0.15s var(--ease);
+}
+
+.su-procedure__link:hover {
+  color: var(--brand-deep);
+  text-decoration-thickness: 2px;
+}
+
+.su-procedure__link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (max-width: 30rem) {
+  .su-procedure__title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .su-procedure__rule {
     width: 100%;
   }
 }
