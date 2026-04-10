@@ -78,7 +78,7 @@ export default function MemberPage() {
             </header>
 
             <p className="su-procedure-lead">
-              국제인권연대 월드라이츠의 목적과 취지에 동의하는 개인 및 기관(단체) 누구나 회원 가입 신청을 할 수 있습니다. 회원 신규가입을 원하시는 경우{' '}
+              국제인권연대 월드라이츠의 목적과 취지에 동의하는 분이라면 누구나 월드라이츠의 회원이 되실 수 있습니다. 회원 신규가입을 원하시는 경우{' '}
               <a
                 href="https://example.com"
                 className="su-cta-link"

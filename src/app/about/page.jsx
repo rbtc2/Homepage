@@ -21,6 +21,20 @@ export default function AboutPage() {
 
         <div className="ab-wrap">
 
+          {/* ── 미션 ── */}
+          <section className="ab-section" aria-label="미션">
+            <div className="ab-section__header">
+              <p className="ab-section__eyebrow">Mission</p>
+              <h2 className="ab-section__title">미션</h2>
+              <hr className="ab-section__rule" />
+            </div>
+            <div className="ab-lines" aria-hidden="true">
+              <span className="ab-line ab-skel" style={{ width: '88%' }} />
+              <span className="ab-line ab-skel" style={{ width: '72%' }} />
+              <span className="ab-line ab-skel" style={{ width: '60%' }} />
+            </div>
+          </section>
+
           {/* ── 비전 ── */}
           <section className="ab-section" aria-label="비전">
             <div className="ab-section__header">
@@ -34,20 +48,6 @@ export default function AboutPage() {
               <span className="ab-line ab-skel" style={{ width: '65%' }} />
               <span className="ab-line ab-skel" style={{ width: '85%', marginTop: '0.5rem' }} />
               <span className="ab-line ab-skel" style={{ width: '70%' }} />
-            </div>
-          </section>
-
-          {/* ── 미션 ── */}
-          <section className="ab-section" aria-label="미션">
-            <div className="ab-section__header">
-              <p className="ab-section__eyebrow">Mission</p>
-              <h2 className="ab-section__title">미션</h2>
-              <hr className="ab-section__rule" />
-            </div>
-            <div className="ab-lines" aria-hidden="true">
-              <span className="ab-line ab-skel" style={{ width: '88%' }} />
-              <span className="ab-line ab-skel" style={{ width: '72%' }} />
-              <span className="ab-line ab-skel" style={{ width: '60%' }} />
             </div>
           </section>
 

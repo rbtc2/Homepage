@@ -57,9 +57,9 @@ export default function Header() {
               <a href="#" className="header__nav-item">단체 사업</a>
               <div className="header__mega-col" role="group" aria-label="단체 사업 하위 메뉴">
                 <ul className="header__mega-list">
-                  <li><a href="#" className="header__mega-link">상호문화 연대</a></li>
-                  <li><a href="#" className="header__mega-link">자립역량 강화</a></li>
-                  <li><a href="#" className="header__mega-link">권리인식 개선</a></li>
+                  <li><a href="#" className="header__mega-link">상호연대</a></li>
+                  <li><a href="#" className="header__mega-link">자립지원</a></li>
+                  <li><a href="#" className="header__mega-link">권리옹호</a></li>
                 </ul>
               </div>
             </li>
