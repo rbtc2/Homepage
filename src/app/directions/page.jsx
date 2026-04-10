@@ -5,6 +5,13 @@ export const metadata = {
   title: '오시는 길 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
+/** 페이지 지도·주소와 동일한 위치 (백암빌딩) */
+const DR_ROAD_ADDRESS =
+  '서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호';
+
+const DR_MAP_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(DR_ROAD_ADDRESS)}`;
+const DR_MAP_PLACE_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(DR_ROAD_ADDRESS)}`;
+
 function SubwayIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -72,12 +79,28 @@ export default function DirectionsPage() {
                 <div className="dr-address__main">
                   <div>
                     <p className="dr-address__label">도로명 주소</p>
-                    <p className="dr-address__value">서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호</p>
+                    <p className="dr-address__value">{DR_ROAD_ADDRESS}</p>
                   </div>
                 </div>
                 <div className="dr-address__actions">
-                  <span className="dr-cta--skel dr-skel" aria-hidden="true" style={{ display: 'inline-block' }} />
-                  <span className="dr-cta--skel dr-skel" aria-hidden="true" style={{ display: 'inline-block', width: '6.5rem' }} />
+                  <a
+                    className="dr-cta dr-cta--fill"
+                    href={DR_MAP_DIRECTIONS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Google 지도에서 길찾기. 새 창으로 열립니다."
+                  >
+                    길찾기
+                  </a>
+                  <a
+                    className="dr-cta dr-cta--ghost"
+                    href={DR_MAP_PLACE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Google 지도에서 위치 보기. 새 창으로 열립니다."
+                  >
+                    지도
+                  </a>
                 </div>
               </div>
 
