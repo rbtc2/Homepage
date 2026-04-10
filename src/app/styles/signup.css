@@ -1,0 +1,10 @@
+/* ── Signup (회원가입) ───────────────────────────────────────────
+   상단은 page-header.css와 동일한 바를 쓰고, 본문은 추후 콘텐츠용 여백만 둠.
+   ─────────────────────────────────────────────────────────────── */
+
+.su-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3.5rem, 8vw, 5rem);
+  min-height: min(40vh, 28rem);
+}

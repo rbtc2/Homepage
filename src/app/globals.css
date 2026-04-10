@@ -16,6 +16,7 @@
      admin-layout  — 관리자 공통 레이아웃 (adm-*)
      admin-board   — 관리자 게시판 관리 (an-*)
      editor        — 리치 텍스트 에디터 (ep-*, dp-*, tgp-*)
+     signup        — 회원가입 (본문 영역)
 ────────────────────────────────────────────────────────────── */
 
 @import './styles/base.css';
@@ -36,5 +37,6 @@
 @import './styles/directions.css';
 @import './styles/people.css';
 @import './styles/history.css';
+@import './styles/signup.css';
 @import './styles/gallery.css';
 @import './styles/wr-news.css';
