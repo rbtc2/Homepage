@@ -1,10 +1,123 @@
 /* ── Signup (회원가입) ───────────────────────────────────────────
-   상단은 page-header.css와 동일한 바를 쓰고, 본문은 추후 콘텐츠용 여백만 둠.
+   상단 page-header 이후: 단체 소개 문구 → (예정) 절차 · 링크 · 도식
+   에디토리얼 톤: 인사말(gt-*)과 같은 문법 — 측정·리드·구획으로 신뢰감
    ─────────────────────────────────────────────────────────────── */
 
 .su-wrap {
   max-width: var(--max-w);
   margin: 0 auto;
   padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3.5rem, 8vw, 5rem);
-  min-height: min(40vh, 28rem);
+}
+
+/* ── 단체 소개 블록 ───────────────────────────────────────────── */
+.su-intro {
+  max-width: 42rem;
+}
+
+/* 페이지 내 두 번째 위계: 단체 소개 (인사말·소개 페이지의 섹션 헤드와 동일 역할) */
+.su-intro__title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 clamp(1.25rem, 3vw, 1.75rem);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+  line-height: 1.3;
+}
+
+.su-intro__title-text {
+  white-space: nowrap;
+}
+
+.su-intro__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  border: none;
+  margin: 0;
+}
+
+.su-intro__article {
+  margin: 0;
+  padding-top: clamp(1.25rem, 3vw, 1.75rem);
+  border-top: 2px solid var(--ink);
+}
+
+/* 첫 문단: 단체 정체성 — 시선 고정용 리드 + 브랜드 액센트 바 */
+.su-intro__lead-wrap {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: clamp(1.5rem, 3.5vw, 2rem);
+}
+
+.su-intro__lead-wrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  bottom: 0.35em;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--brand) 0%,
+    var(--brand-mid) 55%,
+    rgba(30, 98, 196, 0.35) 100%
+  );
+}
+
+.su-intro__lead {
+  margin: 0;
+  font-size: clamp(1.125rem, 2.35vw, 1.3125rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.68;
+  color: var(--ink);
+}
+
+/* 중간 설명: 본문 톤으로 리드와 대비 */
+.su-intro__body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.15rem, 2.5vw, 1.45rem);
+}
+
+.su-intro__body p {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.78;
+  color: var(--ink);
+}
+
+/* 마무리: 연대 제안 + 신뢰 약속 — 시각적 구획으로 ‘행동 유도’ 전환 */
+.su-intro__closing {
+  margin-top: clamp(2rem, 4.5vw, 2.75rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--line);
+}
+
+.su-intro__closing p {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+@media (max-width: 30rem) {
+  .su-intro__title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .su-intro__rule {
+    width: 100%;
+  }
 }
