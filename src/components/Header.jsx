@@ -59,7 +59,7 @@ export default function Header() {
                 <ul className="header__mega-list">
                   <li><a href="#" className="header__mega-link">상호문화 연대</a></li>
                   <li><a href="#" className="header__mega-link">자립역량 강화</a></li>
-                  <li><a href="#" className="header__mega-link">관리인식 개선</a></li>
+                  <li><a href="#" className="header__mega-link">권리인식 개선</a></li>
                 </ul>
               </div>
             </li>

@@ -7,7 +7,7 @@ export default function Footer() {
           <div className="footer__sns-icons" aria-label="인스타그램/페이스북">
             <a
               className="footer__sns-icon"
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/worldrights_official?igsh=MTJjcDFlN2Z2Z3Voeg=="
               target="_blank"
               rel="noopener noreferrer"
               aria-label="인스타그램 링크"
@@ -24,7 +24,7 @@ export default function Footer() {
             </a>
             <a
               className="footer__sns-icon"
-              href="https://www.facebook.com/"
+              href="https://www.facebook.com/worldrightsofficial"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="페이스북 링크"
