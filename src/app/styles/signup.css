@@ -1,278 +1,234 @@
-/* ── Signup (회원가입) ───────────────────────────────────────────
-   단체 소개 → 회원가입 절차(안내·링크) → 4단계 도식
-   에디토리얼 톤: 인사말(gt-*)과 같은 문법 — 측정·리드·구획으로 신뢰감
+/* ── Signup (회원가입) — full-width editorial + process grid
+   사이드 여백 없이 max-w 컨테이너만 사용. 본문 가독성은 ch 단위로만 제한.
    ─────────────────────────────────────────────────────────────── */
 
+.su-main {
+  background: var(--canvas);
+}
+
 .su-wrap {
+  box-sizing: border-box;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) var(--pad-x) clamp(3.5rem, 8vw, 5rem);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--pad-x) clamp(4rem, 10vw, 6rem);
 }
 
-/* ── 단체 소개 블록 ───────────────────────────────────────────── */
-.su-intro {
-  max-width: 42rem;
+/* ── 섹션 블록 ───────────────────────────────────────────────── */
+.su-block + .su-block {
+  margin-top: clamp(3rem, 7vw, 5rem);
+  padding-top: clamp(2.5rem, 6vw, 3.5rem);
+  border-top: 1px solid rgba(18, 79, 166, 0.12);
 }
 
-/* 페이지 내 두 번째 위계: 단체 소개 (인사말·소개 페이지의 섹션 헤드와 동일 역할) */
-.su-intro__title {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 0 0 clamp(1.25rem, 3vw, 1.75rem);
-  font-size: 0.6875rem;
+.su-block-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 1.75rem);
+  align-items: end;
+  margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.su-block-head__mark {
+  font-size: clamp(3rem, 8vw, 4.5rem);
   font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brand);
-  line-height: 1.3;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: rgba(18, 79, 166, 0.14);
+  user-select: none;
 }
 
-.su-intro__title-text {
-  white-space: nowrap;
-}
-
-.su-intro__rule {
-  flex: 1;
-  height: 1px;
-  background: var(--line);
-  border: none;
-  margin: 0;
-}
-
-.su-intro__article {
-  margin: 0;
-  padding-top: clamp(1.25rem, 3vw, 1.75rem);
-  border-top: 2px solid var(--ink);
-}
-
-/* 첫 문단: 단체 정체성 — 시선 고정용 리드 + 브랜드 액센트 바 */
-.su-intro__lead-wrap {
-  position: relative;
-  padding-left: 1rem;
-  margin-bottom: clamp(1.5rem, 3.5vw, 2rem);
-}
-
-.su-intro__lead-wrap::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.35em;
-  bottom: 0.35em;
-  width: 3px;
-  border-radius: 2px;
-  background: linear-gradient(
-    180deg,
-    var(--brand) 0%,
-    var(--brand-mid) 55%,
-    rgba(30, 98, 196, 0.35) 100%
-  );
-}
-
-.su-intro__lead {
-  margin: 0;
-  font-size: clamp(1.125rem, 2.35vw, 1.3125rem);
+.su-block-head__kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.68;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brand-mid);
+}
+
+.su-block-head__title {
+  margin: 0;
+  font-size: clamp(1.375rem, 2.8vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
   color: var(--ink);
 }
 
-/* 중간 설명: 본문 톤으로 리드와 대비 */
-.su-intro__body {
+/* ── 단체 소개 본문 ───────────────────────────────────────────── */
+.su-prose {
+  max-width: min(65ch, 100%);
+}
+
+.su-prose__lead {
+  margin: 0 0 clamp(1.5rem, 3vw, 2rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2rem);
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.72;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.su-prose__body {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.15rem, 2.5vw, 1.45rem);
+  gap: clamp(1.2rem, 2.8vw, 1.5rem);
 }
 
-.su-intro__body p {
+.su-prose__body p {
   margin: 0;
   font-size: 1.0625rem;
   font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.78;
+  letter-spacing: -0.012em;
+  line-height: 1.82;
   color: var(--ink);
 }
 
-@media (max-width: 30rem) {
-  .su-intro__title {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .su-intro__rule {
-    width: 100%;
-  }
+/* ── 절차 안내 + CTA 링크 ─────────────────────────────────────── */
+.su-procedure-lead {
+  margin: 0 0 clamp(2.25rem, 5vw, 3rem);
+  max-width: min(62ch, 100%);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.82;
+  color: var(--ink);
 }
 
-/* ── 회원가입 절차 ───────────────────────────────────────────── */
-.su-procedure {
-  margin-top: clamp(2.5rem, 5vw, 3.5rem);
-  padding-top: clamp(2rem, 4vw, 2.75rem);
-  border-top: 1px solid var(--line);
-}
-
-.su-procedure__copy {
-  max-width: 42rem;
-}
-
-.su-procedure__title {
-  display: flex;
+.su-cta-link {
+  display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  margin: 0 0 clamp(1.25rem, 3vw, 1.75rem);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brand);
-  line-height: 1.3;
-}
-
-.su-procedure__title-text {
-  white-space: nowrap;
-}
-
-.su-procedure__rule {
-  flex: 1;
-  height: 1px;
-  background: var(--line);
-  border: none;
-  margin: 0;
-}
-
-.su-procedure__text {
-  margin: 0;
-  font-size: 1.0625rem;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.78;
-  color: var(--ink);
-}
-
-.su-procedure__link {
+  gap: 0.35rem;
+  margin-inline: 0.1rem;
+  padding: 0.15rem 0;
   font-weight: 600;
   color: var(--brand);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-  transition: color 0.15s var(--ease), text-decoration-color 0.15s var(--ease);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(18, 79, 166, 0.35);
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    gap 0.2s var(--ease);
 }
 
-.su-procedure__link:hover {
+.su-cta-link:hover {
   color: var(--brand-deep);
-  text-decoration-thickness: 2px;
+  border-bottom-color: var(--brand-deep);
 }
 
-.su-procedure__link:focus-visible {
+.su-cta-link:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
-@media (max-width: 30rem) {
-  .su-procedure__title {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .su-procedure__rule {
-    width: 100%;
-  }
+.su-cta-link__icon {
+  font-size: 0.85em;
+  line-height: 1;
+  opacity: 0.85;
+  transition: transform 0.2s var(--ease);
 }
 
-/* ── 4단계 도식 (카드 + 화살표) ──────────────────────────────── */
+.su-cta-link:hover .su-cta-link__icon {
+  transform: translate(0.1rem, -0.1rem);
+}
+
+/* ── 4단계 도식 — 전폭 그리드 ─────────────────────────────────── */
 .su-flow {
+  --su-flow-gap: clamp(0.65rem, 1.5vw, 1rem);
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: stretch;
-  justify-content: center;
-  gap: 0.35rem 0.2rem;
-  margin-top: clamp(2rem, 4vw, 2.75rem);
-  padding-top: clamp(1.5rem, 3vw, 2rem);
-  border-top: 1px solid var(--line);
+  gap: var(--su-flow-gap);
+  width: 100%;
 }
 
 .su-flow__card {
-  flex: 1 1 10rem;
-  min-width: min(100%, 9.5rem);
-  max-width: 15.5rem;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  padding: clamp(1.1rem, 2.2vw, 1.35rem);
   background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  overflow: hidden;
+  border: 1px solid rgba(18, 79, 166, 0.14);
+  border-radius: 4px;
   box-shadow:
-    0 1px 0 rgba(12, 20, 36, 0.05),
-    0 8px 24px -12px rgba(12, 20, 36, 0.12);
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 12px 32px -20px rgba(12, 20, 36, 0.2);
+  transition:
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
 }
 
-.su-flow__card-head {
-  padding: 0.75rem 0.9rem 0.65rem;
-  background: linear-gradient(
-    180deg,
-    rgba(18, 79, 166, 0.14) 0%,
-    rgba(18, 79, 166, 0.07) 100%
-  );
-  border-bottom: 1px solid rgba(18, 79, 166, 0.18);
+.su-flow__card:hover {
+  border-color: rgba(18, 79, 166, 0.28);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 16px 40px -18px rgba(12, 20, 36, 0.18);
 }
 
-.su-flow__step-label {
-  margin: 0 0 0.35rem;
-  font-size: 0.625rem;
+.su-flow__card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.su-flow__badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--brand-deep);
-}
-
-.su-flow__step-num {
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--surface);
+  background: linear-gradient(145deg, var(--brand-mid) 0%, var(--brand-deep) 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(12, 58, 120, 0.25);
 }
 
 .su-flow__card-title {
   margin: 0;
-  font-size: 0.9375rem;
+  padding-top: 0.1rem;
+  font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 1.35;
   color: var(--ink);
 }
 
-.su-flow__card-body {
-  flex: 1;
-  padding: 0.9rem 0.95rem 1rem;
-  background: var(--surface);
-}
-
-.su-flow__card-body p {
+.su-flow__card-text {
   margin: 0;
+  flex: 1;
   font-size: 0.875rem;
-  line-height: 1.62;
+  line-height: 1.65;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--muted);
 }
 
 .su-flow__card-note {
-  margin: 0;
-  padding: 0.55rem 0.95rem 0.7rem;
-  font-size: 0.6875rem;
+  margin: 0.85rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(18, 79, 166, 0.2);
+  font-size: 0.75rem;
   line-height: 1.5;
   color: var(--muted);
-  background: rgba(18, 79, 166, 0.05);
-  border-top: 1px solid var(--line);
 }
 
 .su-flow__arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 1.5rem;
-  color: var(--brand-mid);
+  flex: 0 0 auto;
+  width: 1.25rem;
+  color: rgba(18, 79, 166, 0.45);
   align-self: center;
 }
 
@@ -280,35 +236,36 @@
   display: block;
 }
 
-@media (min-width: 56rem) {
-  .su-flow {
-    flex-wrap: nowrap;
-    gap: 0.25rem;
-  }
-
-  .su-flow__card {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: none;
-  }
-}
-
-@media (max-width: 55.99rem) {
+/* ── 반응형: 태블릿 이하 세로 플로우 ─────────────────────────── */
+@media (max-width: 56rem) {
   .su-flow {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
   }
 
-  .su-flow__card {
-    max-width: none;
-    width: 100%;
-  }
-
   .su-flow__arrow {
     width: 100%;
-    height: 1.75rem;
-    margin: 0.2rem 0;
+    height: 2rem;
+    margin: 0.15rem 0;
     transform: rotate(90deg);
+    color: rgba(18, 79, 166, 0.35);
+  }
+
+  .su-flow__card {
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 36rem) {
+  .su-block-head {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .su-block-head__mark {
+    font-size: 2.5rem;
+    margin-bottom: -0.25rem;
   }
 }
