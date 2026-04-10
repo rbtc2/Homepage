@@ -5,12 +5,15 @@ export const metadata = {
   title: '오시는 길 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
-/** 페이지 지도·주소와 동일한 위치 (백암빌딩) */
+/** 방문·우편용 전체 도로명 주소 */
 const DR_ROAD_ADDRESS =
   '서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호';
 
-const DR_MAP_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(DR_ROAD_ADDRESS)}`;
-const DR_MAP_PLACE_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(DR_ROAD_ADDRESS)}`;
+/** 지도/길찾기 검색용 (건물 단위 — 층·호수 포함 시 지오코딩이 어긋나는 경우가 있음) */
+const DR_MAP_QUERY = '서울특별시 송파구 중대로 150 백암빌딩';
+
+const DR_MAP_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(DR_MAP_QUERY)}`;
+const DR_MAP_PLACE_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(DR_MAP_QUERY)}`;
 
 function SubwayIcon() {
   return (
