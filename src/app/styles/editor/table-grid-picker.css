@@ -1,0 +1,48 @@
+/* ── 표 삽입 Picker (tgp-*) ─────────────────────────────────── */
+.ep-tbl-wrap {
+  position: relative;
+}
+
+.tgp {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 130;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(12, 20, 36, 0.13), 0 2px 8px rgba(12, 20, 36, 0.06);
+  padding: 0.75rem;
+  animation: dpIn 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tgp__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+  text-align: center;
+  min-height: 1.25em;
+  letter-spacing: -0.01em;
+}
+
+.tgp__grid {
+  display: grid;
+  gap: 3px;
+}
+
+.tgp__cell {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1.5px solid var(--line);
+  border-radius: 3px;
+  background: var(--canvas);
+  cursor: pointer;
+  transition: background 0.08s, border-color 0.08s;
+}
+
+.tgp__cell:hover,
+.tgp__cell--on {
+  background: rgba(18, 79, 166, 0.14);
+  border-color: var(--brand);
+}

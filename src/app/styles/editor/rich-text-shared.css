@@ -1,0 +1,86 @@
+/* ── 에디터 / 공개 페이지 링크 스타일 ──────────────────────── */
+.ep-content a,
+.nd__body--html a {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s var(--ease), opacity 0.15s var(--ease);
+}
+
+.ep-content a:hover,
+.nd__body--html a:hover {
+  color: var(--brand-mid);
+  opacity: 0.85;
+}
+
+/* ── 에디터 / 공개 페이지 공통 표 스타일 ────────────────────── */
+.ep-content table,
+.nd__body--html table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.25em 0;
+  table-layout: auto;
+  font-size: 0.9375rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.ep-content table td,
+.ep-content table th,
+.nd__body--html table td,
+.nd__body--html table th {
+  /* border shorthand 대신 분리 선언 → 인라인 border-color 적용 가능 */
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--line);
+  padding: 0.55em 0.875em;
+  min-width: 2.5em;
+  vertical-align: top;
+  line-height: 1.55;
+  position: relative;
+}
+
+.ep-content table th,
+.nd__body--html table th {
+  background: var(--canvas);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--ink);
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* 에디터 전용: 선택된 셀 강조 */
+.ep-content table .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 79, 166, 0.12);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 에디터 전용: 열 너비 조절 핸들 */
+.ep-content table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--brand);
+  cursor: col-resize;
+  z-index: 20;
+  border-radius: 2px;
+}
+
+/* 에디터 전용: 표 선택 커서 */
+.ep-content .tableWrapper {
+  overflow-x: auto;
+  cursor: default;
+}
+
+.ep-content .resize-cursor {
+  cursor: col-resize;
+}

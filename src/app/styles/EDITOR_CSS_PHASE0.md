@@ -1,11 +1,29 @@
-# editor.css Phase 0 인벤토리
+# editor.css 인벤토리 (Phase 0) + 분할 구조 (Phase 1)
 
-작성 목적: 파일 분할(Phase 1+) 전 **로드 경로·접두어·교차 의존**을 고정한다.  
-`editor.css`는 **전역 한 번만** `globals.css`에서 import된다.
+작성 목적: 파일 분할 전 **로드 경로·접두어·교차 의존**을 고정한다.
 
-```text
-src/app/globals.css  →  @import './styles/editor.css';
-```
+## Phase 1 — `editor.css`는 `@import`만 담고, 실제 규칙은 `styles/editor/` 아래
+
+`src/app/globals.css` → `@import './styles/editor.css';` (변경 없음)
+
+`src/app/styles/editor.css` 로드 순서(원본 단일 파일과 동일한 캐스케이드):
+
+1. `editor/ep-layout-content.css` — `ep-*`, 툴바, `ep-content` 타이포
+2. `editor/nd-body-html.css` — `.nd__body--html`
+3. `editor/ep-meta-date.css` — `ep__meta-date*`
+4. `editor/datepicker.css` — `dp-*`, `@keyframes dpIn`
+5. `editor/color-picker.css` — `ep-color-*`, `cp-*`
+6. `editor/table-grid-picker.css` — `ep-tbl-wrap`, `tgp-*`
+7. `editor/cell-border-picker.css` — `cbp-*`
+8. `editor/link-picker.css` — `ep-link-wrap`, `lp-*`
+9. `editor/rich-text-shared.css` — 링크·표 공통 (`.ep-content` / `.nd__body--html`)
+10. `editor/responsive-ep.css` — 에디터 페이지 미디어쿼리
+11. `editor/responsive-admin-notices.css` — `an-*` 관리자 목록 반응형
+12. `editor/context-menu.css` — `ecm-*`
+
+---
+
+## Phase 0 원문 (아래부터 인벤토리 본문)
 
 ---
 

@@ -69,7 +69,8 @@
   letter-spacing: -0.025em;
   line-height: 1.72;
   color: var(--ink);
-  text-wrap: balance;
+  /* 한글: text-wrap balance 제거 + keep-all로 어절 단위 줄바꿈 유도 */
+  word-break: keep-all;
 }
 
 .su-prose__body {
@@ -85,6 +86,7 @@
   letter-spacing: -0.012em;
   line-height: 1.82;
   color: var(--ink);
+  word-break: keep-all;
 }
 
 /* ── 절차 안내 + CTA 링크 ─────────────────────────────────────── */
@@ -96,6 +98,7 @@
   letter-spacing: -0.012em;
   line-height: 1.82;
   color: var(--ink);
+  word-break: keep-all;
 }
 
 .su-cta-link {

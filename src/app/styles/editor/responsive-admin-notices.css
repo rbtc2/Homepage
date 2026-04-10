@@ -1,0 +1,45 @@
+/* ── 관리자 공지사항 반응형 ──────────────────────────────────── */
+@media (max-width: 720px) {
+  .an-table__th--date,
+  .an-table__td--date,
+  .an-table__th--views,
+  .an-table__td--views {
+    display: none;
+  }
+
+  .an-table__th--num   { width: 3.5rem; }
+  .an-table__th--pin   { width: 3rem; }
+  .an-table__th--actions {
+    width: 11.25rem;
+    min-width: 11.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .an__bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .an-stats {
+    gap: 0.5rem;
+  }
+
+  .an-stat {
+    flex: 1;
+    min-width: 0;
+    padding: 0.75rem 0.875rem;
+  }
+
+  .an-modal {
+    max-height: calc(100svh - 2rem);
+  }
+
+  .an-modal__body {
+    padding: 1.25rem;
+  }
+
+  .an-modal__ft {
+    padding: 0.875rem 1.25rem;
+  }
+}

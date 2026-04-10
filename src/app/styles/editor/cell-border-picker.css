@@ -1,0 +1,129 @@
+/* ── 셀 테두리 피커 (cbp-*) ─────────────────────────────────── */
+.cbp {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 130;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(12, 20, 36, 0.13), 0 2px 8px rgba(12, 20, 36, 0.06);
+  padding: 0.75rem;
+  width: 224px;
+  animation: dpIn 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cbp__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0.5rem 0 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.cbp__label:first-child {
+  margin-top: 0;
+}
+
+.cbp__color-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.375rem;
+}
+
+.cbp__hex {
+  flex: 1;
+  min-width: 0;
+}
+
+.cbp__color-preview {
+  display: block;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 4px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.cbp__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-bottom: 0.5rem;
+}
+
+.cbp__preset {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 3px;
+}
+
+.cbp__options-row {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.375rem;
+}
+
+.cbp__opt-btn {
+  flex: 1;
+  padding: 0.25rem 0.125rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--canvas);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease),
+    color 0.12s var(--ease);
+}
+
+.cbp__opt-btn:hover {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: #b0bac9;
+}
+
+.cbp__opt-btn--on {
+  background: rgba(18, 79, 166, 0.1);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.cbp__pos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.cbp__pos-btn {
+  padding: 0.3rem 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--canvas);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease),
+    color 0.12s var(--ease);
+}
+
+.cbp__pos-btn:hover {
+  background: rgba(18, 79, 166, 0.08);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.cbp__pos-btn--full {
+  grid-column: span 2;
+  background: rgba(18, 79, 166, 0.04);
+}
