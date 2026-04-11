@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const BG_BASE = '/images/hero/slides';
+
+/** 자동 슬라이드 간격(ms) */
+const AUTO_PLAY_MS = 6000;
 
 /** 배경만 쓰는 풀블리드 슬라이드. 파일명은 public/images/hero/slides/ 기준 */
 const HERO_SLIDES = [
@@ -32,12 +35,35 @@ export default function HeroBanner() {
   /** 어느 레이어가 위(불투명)인지 — 교차 시 상대 레이어에 다음 이미지를 깔고 전환 */
   const [topLayer, setTopLayer] = useState('a');
 
-  const slide = HERO_SLIDES[index];
+  const indexRef = useRef(index);
+  const topLayerRef = useRef(topLayer);
+  indexRef.current = index;
+  topLayerRef.current = topLayer;
 
-  function goTo(newIndex) {
-    if (newIndex === index) return;
+  /** 호버·포커스(키보드) 시 자동 재생 일시정지 */
+  const [interactionPaused, setInteractionPaused] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [tabHidden, setTabHidden] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
+    const onMq = () => setPrefersReducedMotion(mq.matches);
+    mq.addEventListener('change', onMq);
+    return () => mq.removeEventListener('change', onMq);
+  }, []);
+
+  useEffect(() => {
+    const onVis = () => setTabHidden(document.hidden);
+    onVis();
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, []);
+
+  const goTo = useCallback((newIndex) => {
+    if (newIndex === indexRef.current) return;
     const nextUrl = urlForSlide(HERO_SLIDES[newIndex]);
-    const incoming = topLayer === 'a' ? 'b' : 'a';
+    const incoming = topLayerRef.current === 'a' ? 'b' : 'a';
     if (incoming === 'b') {
       setUrlB(nextUrl);
     } else {
@@ -45,6 +71,34 @@ export default function HeroBanner() {
     }
     setTopLayer(incoming);
     setIndex(newIndex);
+  }, []);
+
+  const autoPlayBlocked =
+    interactionPaused || tabHidden || prefersReducedMotion || HERO_SLIDES.length < 2;
+
+  useEffect(() => {
+    if (autoPlayBlocked) return undefined;
+    const id = window.setInterval(() => {
+      goTo(getNextIndex(indexRef.current, 1, HERO_SLIDES.length));
+    }, AUTO_PLAY_MS);
+    return () => window.clearInterval(id);
+  }, [autoPlayBlocked, goTo]);
+
+  const slide = HERO_SLIDES[index];
+
+  function handleBlurCapture(e) {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setInteractionPaused(false);
+    }
+  }
+
+  function handleMouseLeave(e) {
+    const root = e.currentTarget;
+    queueMicrotask(() => {
+      if (!root.contains(document.activeElement)) {
+        setInteractionPaused(false);
+      }
+    });
   }
 
   const styleA = urlA ? { backgroundImage: `url("${urlA}")` } : undefined;
@@ -52,7 +106,14 @@ export default function HeroBanner() {
 
   return (
     <section className="hero" aria-label="메인 배너 슬라이드">
-      <div className="hero__viewport" id="hero-viewport">
+      <div
+        className="hero__viewport"
+        id="hero-viewport"
+        onMouseEnter={() => setInteractionPaused(true)}
+        onMouseLeave={handleMouseLeave}
+        onFocusCapture={() => setInteractionPaused(true)}
+        onBlurCapture={handleBlurCapture}
+      >
         <div className="hero__bgs" aria-hidden="true">
           <div
             className={`hero__bg hero__bg--layer ${topLayer === 'a' ? 'hero__bg--visible' : ''}`}
