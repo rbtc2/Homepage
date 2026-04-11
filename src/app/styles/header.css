@@ -29,18 +29,11 @@
   display: block;
   height: 2rem;
   width: auto;
-  flex-shrink: 0;
+  max-width: min(58vw, 13rem);
+  flex-shrink: 1;
+  min-width: 0;
   object-fit: contain;
-}
-
-.header__wordmark {
-  font-size: 1.0625rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  white-space: normal;
-  overflow-wrap: anywhere;
-  line-height: 1.15;
+  object-position: left center;
 }
 
 .header__nav {

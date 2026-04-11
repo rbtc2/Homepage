@@ -195,10 +195,6 @@
     --header-h: auto;
   }
 
-  .header__wordmark {
-    font-size: 1rem;
-  }
-
   .header__action-text {
     position: absolute;
     width: 1px;

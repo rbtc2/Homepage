@@ -30,13 +30,12 @@ export default function Header() {
         <Link href="/" className="header__brand" aria-label="홈으로 이동">
           <img
             className="header__logo"
-            src="/images/logo-sample.svg"
-            width="32"
-            height="32"
+            src="/images/ci-logo.svg"
+            width="329"
+            height="51"
             alt=""
             decoding="async"
           />
-          <span className="header__wordmark">국제인권연대 월드라이츠</span>
         </Link>
 
         <nav className="header__nav" aria-label="주 메뉴">
