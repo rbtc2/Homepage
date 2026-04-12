@@ -246,16 +246,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: ab-pulse 2.2s ease-in-out infinite;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  min-height: 0;
 }
 
-.ab-ci__emblem-note {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  opacity: 0.5;
+.ab-ci__emblem-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .ab-ci__copy {

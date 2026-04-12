@@ -136,8 +136,15 @@ export default function AboutPage() {
               <hr className="ab-section__rule" />
             </div>
             <div className="ab-ci">
-              <div className="ab-ci__emblem" role="img" aria-label="CI 엠블럼 (준비 중)">
-                <span className="ab-ci__emblem-note">Emblem</span>
+              <div className="ab-ci__emblem">
+                <img
+                  className="ab-ci__emblem-img"
+                  src="/images/ci-logo.svg"
+                  width={329}
+                  height={51}
+                  alt="국제인권연대 월드라이츠 CI 로고"
+                  decoding="async"
+                />
               </div>
               <div className="ab-ci__copy" aria-hidden="true">
                 <div className="ab-ci__copy-block">
