@@ -36,19 +36,34 @@ export default function AboutPage() {
           </section>
 
           {/* ── 비전 ── */}
-          <section className="ab-section" aria-label="비전">
+          <section className="ab-section" aria-labelledby="vision-heading">
             <div className="ab-section__header">
               <p className="ab-section__eyebrow">Vision</p>
-              <h2 className="ab-section__title">비전</h2>
+              <h2 id="vision-heading" className="ab-section__title">
+                비전
+              </h2>
               <hr className="ab-section__rule" />
             </div>
-            <div className="ab-lines" aria-hidden="true">
-              <span className="ab-line ab-skel" style={{ width: '78%' }} />
-              <span className="ab-line ab-skel" style={{ width: '92%' }} />
-              <span className="ab-line ab-skel" style={{ width: '65%' }} />
-              <span className="ab-line ab-skel" style={{ width: '85%', marginTop: '0.5rem' }} />
-              <span className="ab-line ab-skel" style={{ width: '70%' }} />
-            </div>
+            <ol className="ab-vision-list" lang="ko">
+              <li className="ab-vision-list__item">
+                <span className="ab-vision-list__index" aria-hidden="true">
+                  01
+                </span>
+                <p className="ab-vision-list__text">다름이 가능성이 되는 일상</p>
+              </li>
+              <li className="ab-vision-list__item">
+                <span className="ab-vision-list__index" aria-hidden="true">
+                  02
+                </span>
+                <p className="ab-vision-list__text">누구나 자기 삶의 주인이 되는 사회</p>
+              </li>
+              <li className="ab-vision-list__item">
+                <span className="ab-vision-list__index" aria-hidden="true">
+                  03
+                </span>
+                <p className="ab-vision-list__text">인권이 상식이 되는 사회</p>
+              </li>
+            </ol>
           </section>
 
           {/* ── 핵심가치 ── */}

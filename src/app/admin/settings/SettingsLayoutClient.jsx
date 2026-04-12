@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const SETTINGS_NAV = [
-  { href: '/admin/settings/account', label: '관리자 계정' },
   { href: '/admin/settings', label: '개요', exact: true },
+  { href: '/admin/settings/account', label: '관리자 계정' },
   { href: '/admin/settings/site', label: '사이트 기본 정보' },
   { href: '/admin/settings/home', label: '홈페이지 노출' },
 ];
