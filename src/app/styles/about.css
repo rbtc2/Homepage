@@ -153,14 +153,15 @@
   }
 }
 
-/* ── 핵심가치 그리드 (2×2, 서피스 카드 · 스켈레톤 없음) ─────── */
+/* ── 핵심가치 (2026 에디토리얼: 캔버스 위 타이포만, 박스·그림자 없음) ─ */
 .ab-values {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.85rem, 2vw, 1.15rem);
+  column-gap: clamp(2rem, 5vw, 3.75rem);
+  row-gap: clamp(1.75rem, 4vw, 2.75rem);
 }
 
 .ab-values__item {
@@ -171,71 +172,64 @@
   height: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: clamp(1.35rem, 3.2vw, 1.85rem);
+  padding: 0;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: clamp(0.75rem, 2vw, 1.1rem);
+  grid-template-columns: minmax(2rem, auto) minmax(0, 1fr);
+  gap: clamp(0.65rem, 1.8vw, 1rem);
   align-items: start;
-  background: var(--surface);
-  border: 1px solid rgba(18, 79, 166, 0.12);
-  border-radius: 4px;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 14px 36px -22px rgba(12, 20, 36, 0.22);
-  transition:
-    border-color 0.25s var(--ease),
-    box-shadow 0.25s var(--ease);
-}
-
-.ab-value-card:hover {
-  border-color: rgba(18, 79, 166, 0.22);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 18px 44px -20px rgba(12, 20, 36, 0.18);
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .ab-value-card__index {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.22em;
   font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
   color: var(--brand-mid);
-  line-height: 1.45;
-  padding-top: 0.35em;
+  opacity: 0.72;
+  line-height: 1.5;
+  padding-top: 0.42em;
 }
 
 .ab-value-card__main {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.65rem, 1.5vw, 0.85rem);
+  gap: clamp(0.5rem, 1.5vw, 0.65rem);
 }
 
 .ab-value-card__title {
   margin: 0;
-  font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+  font-size: clamp(1.0625rem, 2.1vw, 1.25rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.35;
+  letter-spacing: -0.035em;
+  line-height: 1.3;
   color: var(--ink);
 }
 
 .ab-value-card__en {
-  font-size: 0.72em;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 0.68em;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   color: var(--muted);
 }
 
 .ab-value-card__desc {
   margin: 0;
-  font-size: 0.9375rem;
+  max-width: 52ch;
+  font-size: clamp(0.9375rem, 1.35vw, 1rem);
   font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.75;
+  letter-spacing: -0.012em;
+  line-height: 1.78;
   color: var(--ink);
+  opacity: 0.88;
   word-break: keep-all;
   overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 /* ── CI 레이아웃 ───────────────────────────────────────────── */
