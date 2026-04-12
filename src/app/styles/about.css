@@ -111,7 +111,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: clamp(1.35rem, 3vw, 1.85rem);
 }
 
 .ab-vision-list__item {
@@ -119,17 +119,6 @@
   grid-template-columns: auto minmax(0, 1fr);
   gap: clamp(1rem, 3vw, 1.5rem);
   align-items: baseline;
-  padding: clamp(1.35rem, 3vw, 1.85rem) 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.ab-vision-list__item:first-child {
-  padding-top: 0;
-}
-
-.ab-vision-list__item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
 }
 
 .ab-vision-list__index {
@@ -164,14 +153,14 @@
   }
 }
 
-/* ── 핵심가치 그리드 ────────────────────────────────────────── */
+/* ── 핵심가치 그리드 (2×2, 서피스 카드 · 스켈레톤 없음) ─────── */
 .ab-values {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: clamp(0.85rem, 2vw, 1.15rem);
 }
 
 .ab-values__item {
@@ -179,32 +168,74 @@
 }
 
 .ab-value-card {
-  background: var(--canvas);
-  padding: clamp(1.25rem, 3vw, 1.75rem);
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: clamp(1.35rem, 3.2vw, 1.85rem);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.1rem);
+  align-items: start;
+  background: var(--surface);
+  border: 1px solid rgba(18, 79, 166, 0.12);
+  border-radius: 4px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 14px 36px -22px rgba(12, 20, 36, 0.22);
+  transition:
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.ab-value-card:hover {
+  border-color: rgba(18, 79, 166, 0.22);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 18px 44px -20px rgba(12, 20, 36, 0.18);
+}
+
+.ab-value-card__index {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  font-variant-numeric: tabular-nums;
+  color: var(--brand-mid);
+  line-height: 1.45;
+  padding-top: 0.35em;
+}
+
+.ab-value-card__main {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  min-height: 8rem;
-  animation: ab-pulse 2s ease-in-out infinite;
+  gap: clamp(0.65rem, 1.5vw, 0.85rem);
 }
 
-.ab-value-card__num {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--line);
-  line-height: 1;
+.ab-value-card__title {
+  margin: 0;
+  font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.35;
+  color: var(--ink);
 }
 
-.ab-value-card__lines {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
+.ab-value-card__en {
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
 }
 
-.ab-value-card__line {
-  height: 0.875rem;
+.ab-value-card__desc {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.75;
+  color: var(--ink);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 /* ── CI 레이아웃 ───────────────────────────────────────────── */

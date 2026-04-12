@@ -5,6 +5,37 @@ export const metadata = {
   title: '소개 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
+const CORE_VALUES = [
+  {
+    id: 'solidarity',
+    index: '01',
+    titleKo: '연대',
+    titleEn: 'Solidarity',
+    description: '권리의 언어를 함께 만들고, 함께 전합니다.',
+  },
+  {
+    id: 'agency',
+    index: '02',
+    titleKo: '주체',
+    titleEn: 'Agency',
+    description: '모든 사람은 자기 삶을 스스로 써나갈 힘이 있습니다.',
+  },
+  {
+    id: 'inclusion',
+    index: '03',
+    titleKo: '포용',
+    titleEn: 'Inclusion',
+    description: '다름은 고쳐야 할 것이 아니라, 함께 살아갈 방식입니다.',
+  },
+  {
+    id: 'pioneer',
+    index: '04',
+    titleKo: '개척',
+    titleEn: 'Pioneer',
+    description: '권리가 닿지 않는 곳을 먼저 찾아갑니다.',
+  },
+];
+
 export default function AboutPage() {
   return (
     <>
@@ -67,23 +98,31 @@ export default function AboutPage() {
           </section>
 
           {/* ── 핵심가치 ── */}
-          <section className="ab-section" aria-label="핵심가치">
+          <section className="ab-section" aria-labelledby="values-heading">
             <div className="ab-section__header">
               <p className="ab-section__eyebrow">Core Value</p>
-              <h2 className="ab-section__title">핵심가치</h2>
+              <h2 id="values-heading" className="ab-section__title">
+                핵심가치
+              </h2>
               <hr className="ab-section__rule" />
             </div>
-            <ul className="ab-values" aria-hidden="true">
-              {[1, 2, 3, 4].map((n) => (
-                <li key={n} className="ab-values__item">
-                  <div className="ab-value-card">
-                    <span className="ab-value-card__num">0{n}</span>
-                    <div className="ab-value-card__lines">
-                      <span className="ab-value-card__line ab-skel" style={{ width: '60%' }} />
-                      <span className="ab-value-card__line ab-skel" style={{ width: '85%' }} />
-                      <span className="ab-value-card__line ab-skel" style={{ width: '50%' }} />
+            <ul className="ab-values" lang="ko">
+              {CORE_VALUES.map((v) => (
+                <li key={v.id} className="ab-values__item">
+                  <article className="ab-value-card" aria-labelledby={`ab-value-title-${v.id}`}>
+                    <span className="ab-value-card__index" aria-hidden="true">
+                      {v.index}
+                    </span>
+                    <div className="ab-value-card__main">
+                      <h3 id={`ab-value-title-${v.id}`} className="ab-value-card__title">
+                        {v.titleKo}{' '}
+                        <span className="ab-value-card__en" lang="en" translate="no">
+                          ({v.titleEn})
+                        </span>
+                      </h3>
+                      <p className="ab-value-card__desc">{v.description}</p>
                     </div>
-                  </div>
+                  </article>
                 </li>
               ))}
             </ul>
