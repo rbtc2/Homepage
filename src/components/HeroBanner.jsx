@@ -12,7 +12,7 @@ const HERO_SLIDES = [
   { backgroundImage: 'slide-01.webp', label: '배너 이미지 1' },
   { backgroundImage: 'slide-02.webp', label: '배너 이미지 2' },
   { backgroundImage: 'slide-03.webp', label: '배너 이미지 3' },
-  { backgroundImage: 'slide-04.svg', label: '배너 이미지 4' },
+  { backgroundImage: 'slide-04.webp', label: '배너 이미지 4' },
 ];
 
 function getNextIndex(current, delta, total) {
