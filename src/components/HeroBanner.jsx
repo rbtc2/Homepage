@@ -11,7 +11,7 @@ const AUTO_PLAY_MS = 6000;
 const HERO_SLIDES = [
   { backgroundImage: 'slide-01.webp', label: '배너 이미지 1' },
   { backgroundImage: 'slide-02.webp', label: '배너 이미지 2' },
-  { backgroundImage: 'slide-03.svg', label: '배너 이미지 3' },
+  { backgroundImage: 'slide-03.webp', label: '배너 이미지 3' },
   { backgroundImage: 'slide-04.svg', label: '배너 이미지 4' },
 ];
 
