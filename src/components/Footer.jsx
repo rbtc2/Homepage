@@ -1,4 +1,8 @@
-export default function Footer() {
+import { getSiteFooterSettings } from '@/lib/site-settings';
+
+export default async function Footer() {
+  const { officeAddress, representativeName, mainPhone, faxNumber } = await getSiteFooterSettings();
+
   return (
     <footer className="footer" role="contentinfo">
       <div className="footer__inner">
@@ -43,17 +47,17 @@ export default function Footer() {
         </div>
         <p className="footer__line">
           <span className="footer__label">사무실</span>{' '}
-          <span className="footer__value">서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호</span>
+          <span className="footer__value">{officeAddress}</span>
         </p>
         <p className="footer__line">
           <span className="footer__label">대표자</span>{' '}
-          <span className="footer__value">김진영</span>
+          <span className="footer__value">{representativeName}</span>
           <span className="footer__sep">|</span>
           <span className="footer__label">대표 전화</span>{' '}
-          <span className="footer__value">070-8018-9232</span>
+          <span className="footer__value">{mainPhone}</span>
           <span className="footer__sep">|</span>
           <span className="footer__label">팩스</span>{' '}
-          <span className="footer__value">0504-287-7334</span>
+          <span className="footer__value">{faxNumber}</span>
         </p>
         <p className="footer__copyright">ⓒ WORLD RIGHTS. ALL RIGHTS RESERVED.</p>
       </div>

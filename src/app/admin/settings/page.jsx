@@ -11,7 +11,7 @@ const HUB_LINKS = [
   {
     href: '/admin/settings/site',
     title: '사이트 기본 정보',
-    desc: '조직명, 연락처 등 공통 메타',
+    desc: '푸터 주소·대표자·대표번호·팩스',
   },
   {
     href: '/admin/settings/home',

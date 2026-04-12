@@ -77,7 +77,6 @@ export default function Header() {
                 <ul className="header__mega-list">
                   <li><Link href="/member" className="header__mega-link">회원가입</Link></li>
                   <li><a href="#" className="header__mega-link">회비납부</a></li>
-                  <li><a href="#" className="header__mega-link">기부금 안내</a></li>
                 </ul>
               </div>
             </li>

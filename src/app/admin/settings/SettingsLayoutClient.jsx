@@ -38,7 +38,7 @@ export default function SettingsLayoutClient({ children }) {
         </nav>
 
         <p className="adm-settings__notice" role="status">
-          현재 화면은 레이아웃·폼 구조만 제공합니다. 변경 사항은 서버에 반영되지 않습니다.
+          「사이트 기본 정보」는 저장 시 반영됩니다. 「홈페이지 노출」 등 일부 메뉴는 아직 준비 중일 수 있습니다.
         </p>
 
         {children}
