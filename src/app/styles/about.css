@@ -185,44 +185,127 @@
   text-wrap: pretty;
 }
 
-/* ── CI 레이아웃 ───────────────────────────────────────────── */
-.ab-ci {
-  display: grid;
-  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-  align-items: start;
+/* ── CI 소개 · 옵션 B (스토리 → 로고 블록 → 브랜드 컬러) ─────── */
+.ab-ci-b {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.ab-ci__emblem {
-  aspect-ratio: 4 / 3;
-  background: var(--canvas);
+.ab-ci-b__story {
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+}
+
+.ab-ci-b__heading {
+  margin: 0 0 0.85rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.ab-ci-b__palette .ab-ci-b__heading {
+  margin-bottom: clamp(1rem, 3vw, 1.25rem);
+}
+
+.ab-ci-b__p {
+  margin: 0 0 1rem;
+  max-width: 62ch;
+  font-size: clamp(0.9375rem, 1.35vw, 1rem);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.78;
+  color: var(--ink);
+  opacity: 0.92;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+.ab-ci-b__p:last-child {
+  margin-bottom: 0;
+}
+
+.ab-ci-b__logo-wrap {
+  margin: 0 0 clamp(1.75rem, 4vw, 2.5rem);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(216, 222, 232, 0.9);
+  border-radius: 2px;
+}
+
+.ab-ci-b__emblem {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 3vw, 1.75rem);
-  min-height: 0;
+  min-height: 6rem;
+  background: transparent;
 }
 
-.ab-ci__emblem-img {
+.ab-ci-b__emblem-img {
   display: block;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: min(100%, 22rem);
   width: auto;
   height: auto;
   object-fit: contain;
 }
 
-.ab-ci__copy {
+.ab-ci-b__colors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding-top: 0.25rem;
+  gap: clamp(1.35rem, 3vw, 1.75rem);
 }
 
-.ab-ci__copy-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.ab-ci-b__color {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(0.85rem, 2vw, 1.15rem);
+  align-items: start;
+}
+
+.ab-ci-b__chip {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(12, 20, 36, 0.06);
+}
+
+.ab-ci-b__color-body {
+  min-width: 0;
+}
+
+.ab-ci-b__color-name {
+  margin: 0 0 0.5rem;
+  font-size: clamp(0.9375rem, 1.5vw, 1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ab-ci-b__hex {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.ab-ci-b__color-desc {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(0.9375rem, 1.35vw, 1rem);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.78;
+  color: var(--ink);
+  opacity: 0.88;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 /* ── 반응형 ─────────────────────────────────────────────────── */
@@ -231,11 +314,12 @@
     grid-template-columns: 1fr;
   }
 
-  .ab-ci {
+  .ab-ci-b__color {
     grid-template-columns: 1fr;
   }
 
-  .ab-ci__emblem {
-    aspect-ratio: 16 / 7;
+  .ab-ci-b__chip {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }

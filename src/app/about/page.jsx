@@ -152,36 +152,78 @@ export default function AboutPage() {
             </ul>
           </section>
 
-          {/* ── CI 소개 ── */}
-          <section className="ab-section" aria-label="CI 소개">
+          {/* ── CI 소개 (옵션 B: 스토리 → 로고 블록 → 브랜드 컬러) ── */}
+          <section className="ab-section" aria-labelledby="ci-heading">
             <div className="ab-section__header">
               <p className="ab-section__eyebrow">CI</p>
-              <h2 className="ab-section__title">CI 소개</h2>
+              <h2 id="ci-heading" className="ab-section__title">
+                CI 소개
+              </h2>
               <hr className="ab-section__rule" />
             </div>
-            <div className="ab-ci">
-              <div className="ab-ci__emblem">
-                <img
-                  className="ab-ci__emblem-img"
-                  src="/images/ci-logo.svg"
-                  width={329}
-                  height={51}
-                  alt="국제인권연대 월드라이츠 CI 로고"
-                  decoding="async"
-                />
+
+            <div className="ab-ci-b">
+              <div className="ab-ci-b__story">
+                <h3 className="ab-ci-b__heading">로고</h3>
+                <p className="ab-ci-b__p">
+                  World Rights의 W와 R을 하나로 이어 굽이치는 물결처럼 시각화했습니다.
+                </p>
+                <p className="ab-ci-b__p">
+                  두 글자가 끊김 없이 연결된 형태는 권리의 언어가 닿지 않는 곳까지 월드라이츠의
+                  활동이 파동처럼 넓게 확산되어 세상의 긍정적인 변화를 이끌어내겠다는 의지를 담고
+                  있습니다.
+                </p>
               </div>
-              <div className="ab-ci__copy" aria-hidden="true">
-                <div className="ab-ci__copy-block">
-                  <span className="ab-line ab-skel" style={{ width: '45%', height: '0.8125rem' }} />
-                  <span className="ab-line ab-skel" style={{ width: '100%' }} />
-                  <span className="ab-line ab-skel" style={{ width: '88%' }} />
-                  <span className="ab-line ab-skel" style={{ width: '72%' }} />
+
+              <div className="ab-ci-b__logo-wrap">
+                <div className="ab-ci-b__emblem">
+                  <img
+                    className="ab-ci-b__emblem-img"
+                    src="/images/ci-logo.svg"
+                    width={329}
+                    height={51}
+                    alt="국제인권연대 월드라이츠 CI 로고"
+                    decoding="async"
+                  />
                 </div>
-                <div className="ab-ci__copy-block">
-                  <span className="ab-line ab-skel" style={{ width: '45%', height: '0.8125rem' }} />
-                  <span className="ab-line ab-skel" style={{ width: '95%' }} />
-                  <span className="ab-line ab-skel" style={{ width: '80%' }} />
-                </div>
+              </div>
+
+              <div className="ab-ci-b__palette">
+                <h3 className="ab-ci-b__heading">브랜드 컬러</h3>
+                <ul className="ab-ci-b__colors">
+                  <li className="ab-ci-b__color">
+                    <span
+                      className="ab-ci-b__chip"
+                      style={{ background: '#001c65' }}
+                      aria-hidden
+                    />
+                    <div className="ab-ci-b__color-body">
+                      <p className="ab-ci-b__color-name" lang="en">
+                        Deep Navy <span className="ab-ci-b__hex">#001c65</span>
+                      </p>
+                      <p className="ab-ci-b__color-desc">
+                        흔들리지 않는 신념과 전문성, 그리고 조직의 신뢰감을 나타냅니다. 깊고 묵직한
+                        색감은 월드라이츠가 인권의 가치를 지켜나가는 일관된 의지를 상징합니다.
+                      </p>
+                    </div>
+                  </li>
+                  <li className="ab-ci-b__color">
+                    <span
+                      className="ab-ci-b__chip"
+                      style={{ background: '#0071ce' }}
+                      aria-hidden
+                    />
+                    <div className="ab-ci-b__color-body">
+                      <p className="ab-ci-b__color-name" lang="en">
+                        Vivid Blue <span className="ab-ci-b__hex">#0071ce</span>
+                      </p>
+                      <p className="ab-ci-b__color-desc">
+                        당사자의 존엄과 희망, 월드라이츠가 지향하는 변화의 역동성을 의미합니다. 맑고
+                        선명한 색감은 더 나은 세상을 향한 진정성 있는 활동을 표현합니다.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </section>
