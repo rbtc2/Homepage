@@ -194,22 +194,6 @@ export default function AboutPage() {
                   <li className="ab-ci-b__color">
                     <span
                       className="ab-ci-b__chip"
-                      style={{ background: '#001c65' }}
-                      aria-hidden
-                    />
-                    <div className="ab-ci-b__color-body">
-                      <p className="ab-ci-b__color-name" lang="en">
-                        Deep Navy <span className="ab-ci-b__hex">#001c65</span>
-                      </p>
-                      <p className="ab-ci-b__color-desc">
-                        흔들리지 않는 신념과 전문성, 그리고 조직의 신뢰감을 나타냅니다. 깊고 묵직한
-                        색감은 월드라이츠가 인권의 가치를 지켜나가는 일관된 의지를 상징합니다.
-                      </p>
-                    </div>
-                  </li>
-                  <li className="ab-ci-b__color">
-                    <span
-                      className="ab-ci-b__chip"
                       style={{ background: '#0071ce' }}
                       aria-hidden
                     />
@@ -220,6 +204,22 @@ export default function AboutPage() {
                       <p className="ab-ci-b__color-desc">
                         당사자의 존엄과 희망, 월드라이츠가 지향하는 변화의 역동성을 의미합니다. 맑고
                         선명한 색감은 더 나은 세상을 향한 진정성 있는 활동을 표현합니다.
+                      </p>
+                    </div>
+                  </li>
+                  <li className="ab-ci-b__color">
+                    <span
+                      className="ab-ci-b__chip"
+                      style={{ background: '#001c65' }}
+                      aria-hidden
+                    />
+                    <div className="ab-ci-b__color-body">
+                      <p className="ab-ci-b__color-name" lang="en">
+                        Deep Navy <span className="ab-ci-b__hex">#001c65</span>
+                      </p>
+                      <p className="ab-ci-b__color-desc">
+                        흔들리지 않는 신념과 전문성, 그리고 조직의 신뢰감을 나타냅니다. 깊고 묵직한
+                        색감은 월드라이츠가 인권의 가치를 지켜나가는 일관된 의지를 상징합니다.
                       </p>
                     </div>
                   </li>
