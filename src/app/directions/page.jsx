@@ -10,7 +10,7 @@ const DR_ROAD_ADDRESS =
   '서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호';
 
 /** 임베드 지도와 동일한 핀 (주소 문구만으로는 핀이 어긋날 수 있어 좌표 사용) */
-const DR_MAP_COORDS = '37.49546910000825,127.11954328360882';
+const DR_MAP_COORDS = '37.49546910000825,127.11954328360876';
 
 const DR_MAP_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(DR_MAP_COORDS)}`;
 const DR_MAP_PLACE_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(DR_MAP_COORDS)}`;
@@ -63,7 +63,7 @@ export default function DirectionsPage() {
             <div className="dr-map">
               <iframe
                 className="dr-map__iframe"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.527752832191!2d127.11954328360882!3d37.49546910000825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca57c8ccde613%3A0x26de1cb60c14b30a!2z6rWt7KCc7J246raM7Jew64yAIOyblOuTnOudvOydtOy4oA!5e0!3m2!1sko!2skr!4v1776595143300!5m2!1sko!2skr"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.527752832191!2d127.11954328360876!3d37.49546910000825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca57c8ccde613%3A0x26de1cb60c14b30a!2z6rWt7KCc7J246raM7Jew64yAIOyblOuTnOudvOydtOy4oA!5e0!3m2!1sko!2skr!4v1776595368895!5m2!1sko!2skr"
                 title="오시는 길 지도"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

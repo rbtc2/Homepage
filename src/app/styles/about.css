@@ -211,7 +211,8 @@
 
 .ab-ci-b__p {
   margin: 0 0 1rem;
-  max-width: 62ch;
+  max-width: none;
+  width: 100%;
   font-size: clamp(0.9375rem, 1.35vw, 1rem);
   font-weight: 400;
   letter-spacing: -0.012em;
@@ -296,7 +297,7 @@
 
 .ab-ci-b__color-desc {
   margin: 0;
-  max-width: 62ch;
+  max-width: none;
   font-size: clamp(0.9375rem, 1.35vw, 1rem);
   font-weight: 400;
   letter-spacing: -0.012em;
