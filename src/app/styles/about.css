@@ -104,54 +104,7 @@
   font-weight: 700;
 }
 
-/* ── 비전 목록 (미션과 동일 타이포 스케일, 순번으로 리듬만 부여) ── */
-.ab-vision-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1.35rem, 3vw, 1.85rem);
-}
-
-.ab-vision-list__item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: clamp(1rem, 3vw, 1.5rem);
-  align-items: baseline;
-}
-
-.ab-vision-list__index {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  font-variant-numeric: tabular-nums;
-  color: var(--brand-mid);
-  line-height: 1;
-  padding-top: 0.35em;
-}
-
-.ab-vision-list__text {
-  margin: 0;
-  font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.72;
-  color: var(--ink);
-  word-break: keep-all;
-  overflow-wrap: break-word;
-}
-
-@media (max-width: 480px) {
-  .ab-vision-list__item {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-
-  .ab-vision-list__index {
-    padding-top: 0;
-  }
-}
+/* ── 비전: 핵심가치와 동일 .ab-values + .ab-value-card 패턴 사용 ── */
 
 /* ── 핵심가치 (2026 에디토리얼: 캔버스 위 타이포만, 박스·그림자 없음) ─ */
 .ab-values {

@@ -5,6 +5,30 @@ export const metadata = {
   title: '소개 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
+const VISION_ITEMS = [
+  {
+    id: 'vision-diversity',
+    index: '01',
+    titleKo: '다름과 가능성',
+    titleEn: 'Possibility',
+    description: '다름이 가능성이 되는 일상',
+  },
+  {
+    id: 'vision-agency',
+    index: '02',
+    titleKo: '삶의 주체',
+    titleEn: 'Agency',
+    description: '누구나 자기 삶의 주인이 되는 사회',
+  },
+  {
+    id: 'vision-rights',
+    index: '03',
+    titleKo: '인권의 상식',
+    titleEn: 'Common sense',
+    description: '인권이 상식이 되는 사회',
+  },
+];
+
 const CORE_VALUES = [
   {
     id: 'solidarity',
@@ -75,26 +99,26 @@ export default function AboutPage() {
               </h2>
               <hr className="ab-section__rule" />
             </div>
-            <ol className="ab-vision-list" lang="ko">
-              <li className="ab-vision-list__item">
-                <span className="ab-vision-list__index" aria-hidden="true">
-                  01
-                </span>
-                <p className="ab-vision-list__text">다름이 가능성이 되는 일상</p>
-              </li>
-              <li className="ab-vision-list__item">
-                <span className="ab-vision-list__index" aria-hidden="true">
-                  02
-                </span>
-                <p className="ab-vision-list__text">누구나 자기 삶의 주인이 되는 사회</p>
-              </li>
-              <li className="ab-vision-list__item">
-                <span className="ab-vision-list__index" aria-hidden="true">
-                  03
-                </span>
-                <p className="ab-vision-list__text">인권이 상식이 되는 사회</p>
-              </li>
-            </ol>
+            <ul className="ab-values" lang="ko">
+              {VISION_ITEMS.map((v) => (
+                <li key={v.id} className="ab-values__item">
+                  <article className="ab-value-card" aria-labelledby={`ab-vision-title-${v.id}`}>
+                    <span className="ab-value-card__index" aria-hidden="true">
+                      {v.index}
+                    </span>
+                    <div className="ab-value-card__main">
+                      <h3 id={`ab-vision-title-${v.id}`} className="ab-value-card__title">
+                        {v.titleKo}{' '}
+                        <span className="ab-value-card__en" lang="en" translate="no">
+                          ({v.titleEn})
+                        </span>
+                      </h3>
+                      <p className="ab-value-card__desc">{v.description}</p>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
           </section>
 
           {/* ── 핵심가치 ── */}
