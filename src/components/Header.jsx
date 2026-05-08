@@ -76,7 +76,7 @@ export default function Header() {
               <div className="header__mega-col" role="group" aria-label="단체 후원 하위 메뉴">
                 <ul className="header__mega-list">
                   <li><Link href="/member" className="header__mega-link">회원가입</Link></li>
-                  <li><a href="#" className="header__mega-link">회비납부</a></li>
+                  <li><Link href="/dues" className="header__mega-link">회비납부</Link></li>
                 </ul>
               </div>
             </li>
