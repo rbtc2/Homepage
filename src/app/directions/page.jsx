@@ -9,11 +9,11 @@ export const metadata = {
 const DR_ROAD_ADDRESS =
   '서울특별시 송파구 중대로 150 백암빌딩 6층 602-A23호';
 
-/** 임베드·외부 링크 공통: 도로명 주소(백암빌딩) 기준 좌표 — 사업장 Place 핀과 혼동되지 않도록 좌표만 사용 */
-const DR_MAP_COORDS = '37.4954692,127.1244142';
+/** 임베드 지도와 동일 장소로 열리도록 주소 기반 쿼리 사용 */
+const DR_MAP_QUERY = DR_ROAD_ADDRESS;
 
-const DR_MAP_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(DR_MAP_COORDS)}`;
-const DR_MAP_PLACE_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(DR_MAP_COORDS)}`;
+const DR_MAP_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(DR_MAP_QUERY)}`;
+const DR_MAP_PLACE_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(DR_MAP_QUERY)}`;
 
 function SubwayIcon() {
   return (
