@@ -1,18 +1,10 @@
-/* 홈 WR뉴스 — 공지(글래스)와 동일 토큰: 반경 14·틴트 보더·소프트 섀도·헤더 룰 */
+/* 홈 WR뉴스 — 공지와 같은 흰 배경 연속 · 카드형 콘텐츠는 유지 */
 
 .hmwr {
-  /* 상단: 공지 섹션 캔버스와 톤 브릿지 → 아래로 서페이스로 전환 */
-  background: linear-gradient(
-    180deg,
-    rgba(239, 244, 250, 0.95) 0%,
-    rgba(245, 248, 252, 0.72) 14%,
-    rgba(248, 250, 252, 0.45) 28%,
-    var(--surface) 48%,
-    var(--surface) 100%
-  );
+  background: var(--surface);
   border-top: none;
-  border-bottom: 1px solid rgba(216, 222, 232, 0.55);
-  box-shadow: 0 -1px 0 rgba(18, 79, 166, 0.04);
+  border-bottom: 1px solid var(--line);
+  box-shadow: none;
 }
 
 .hmwr__inner {
@@ -34,11 +26,10 @@
 
 .hmwr__title {
   margin: 0;
-  font-size: clamp(0.75rem, 1.95vw, 0.8125rem);
+  font-size: clamp(1.25rem, 2.8vw, 1.5rem);
   font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--brand);
+  letter-spacing: -0.03em;
+  color: var(--ink);
   white-space: nowrap;
 }
 
