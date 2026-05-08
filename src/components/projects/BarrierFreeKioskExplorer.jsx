@@ -1,34 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const REGIONS = ['전체', '서울', '경기', '부산'];
-const REGION_META = {
-  서울: { lat: 37.5665, lng: 126.978, level: 8 },
-  경기: { lat: 37.4138, lng: 127.5183, level: 9 },
-  부산: { lat: 35.1796, lng: 129.0756, level: 8 },
-};
-const DEFAULT_CENTER = { lat: 36.35, lng: 127.9, level: 13 };
-const REGION_POLYGONS = {
-  서울: [
-    { lat: 37.701, lng: 126.764 },
-    { lat: 37.704, lng: 127.183 },
-    { lat: 37.426, lng: 127.184 },
-    { lat: 37.423, lng: 126.766 },
-  ],
-  경기: [
-    { lat: 38.294, lng: 126.385 },
-    { lat: 38.296, lng: 127.806 },
-    { lat: 36.894, lng: 127.808 },
-    { lat: 36.892, lng: 126.387 },
-  ],
-  부산: [
-    { lat: 35.405, lng: 128.752 },
-    { lat: 35.407, lng: 129.315 },
-    { lat: 34.916, lng: 129.317 },
-    { lat: 34.914, lng: 128.754 },
-  ],
-};
 function boolLabel(value) {
   return value ? '가능' : '미흡';
 }
@@ -36,14 +10,9 @@ function boolLabel(value) {
 export default function BarrierFreeKioskExplorer({ initialPoints }) {
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedId, setSelectedId] = useState(initialPoints[0]?.id ?? null);
-  const [mapError, setMapError] = useState('');
   const [searchField, setSearchField] = useState('facilityName');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchNotice, setSearchNotice] = useState('');
-  const mapRef = useRef(null);
-  const mapInstanceRef = useRef(null);
-  const pointMarkersRef = useRef([]);
-  const regionPolygonsRef = useRef([]);
 
   const points = useMemo(() => {
     if (selectedRegion === '전체') return initialPoints;
@@ -55,106 +24,6 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
     [points, selectedId],
   );
 
-  useEffect(() => {
-    if (!selectedPoint && points[0]) {
-      setSelectedId(points[0].id);
-    }
-  }, [points, selectedPoint]);
-
-  useEffect(() => {
-    const appKey = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
-    if (!appKey) {
-      setMapError('카카오맵 키가 설정되지 않아 지도를 불러올 수 없습니다.');
-      return;
-    }
-
-    const scriptId = 'kakao-maps-sdk';
-    const existing = document.getElementById(scriptId);
-    if (!existing) {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`;
-      script.async = true;
-      script.onload = () => {
-        window.kakao.maps.load(() => {
-          if (!mapRef.current) return;
-          const center = new window.kakao.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng);
-          const map = new window.kakao.maps.Map(mapRef.current, {
-            center,
-            level: DEFAULT_CENTER.level,
-          });
-          mapInstanceRef.current = map;
-          setMapError('');
-        });
-      };
-      script.onerror = () => setMapError('카카오맵 SDK 로딩에 실패했습니다.');
-      document.head.appendChild(script);
-    } else {
-      window.kakao.maps.load(() => {
-        if (!mapRef.current || mapInstanceRef.current) return;
-        const center = new window.kakao.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng);
-        const map = new window.kakao.maps.Map(mapRef.current, {
-          center,
-          level: DEFAULT_CENTER.level,
-        });
-        mapInstanceRef.current = map;
-        setMapError('');
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map || !window.kakao?.maps) return;
-
-    pointMarkersRef.current.forEach((marker) => marker.setMap(null));
-    regionPolygonsRef.current.forEach((polygon) => polygon.setMap(null));
-    pointMarkersRef.current = [];
-    regionPolygonsRef.current = [];
-
-    const currentCenter = REGION_META[selectedRegion] ?? DEFAULT_CENTER;
-    map.setCenter(new window.kakao.maps.LatLng(currentCenter.lat, currentCenter.lng));
-    map.setLevel(currentCenter.level);
-
-    points.forEach((item) => {
-      if (typeof item.lat !== 'number' || typeof item.lng !== 'number') return;
-      const marker = new window.kakao.maps.Marker({
-        position: new window.kakao.maps.LatLng(item.lat, item.lng),
-      });
-      marker.setMap(map);
-      window.kakao.maps.event.addListener(marker, 'click', () => {
-        setSelectedRegion(item.region);
-        setSelectedId(item.id);
-      });
-      pointMarkersRef.current.push(marker);
-    });
-
-    Object.entries(REGION_POLYGONS).forEach(([region, coords]) => {
-      const isActive = region === selectedRegion;
-      const path = coords.map((coord) => new window.kakao.maps.LatLng(coord.lat, coord.lng));
-      const polygon = new window.kakao.maps.Polygon({
-        path,
-        strokeWeight: isActive ? 3 : 2,
-        strokeColor: isActive ? '#124fa6' : '#7f8ea3',
-        strokeOpacity: 0.95,
-        strokeStyle: 'solid',
-        fillColor: isActive ? '#124fa6' : '#9eb4d3',
-        fillOpacity: isActive ? 0.22 : 0.12,
-      });
-      polygon.setMap(map);
-      window.kakao.maps.event.addListener(polygon, 'mouseover', () => {
-        polygon.setOptions({ fillOpacity: isActive ? 0.26 : 0.18 });
-      });
-      window.kakao.maps.event.addListener(polygon, 'mouseout', () => {
-        polygon.setOptions({ fillOpacity: isActive ? 0.22 : 0.12 });
-      });
-      window.kakao.maps.event.addListener(polygon, 'click', () => {
-        setSelectedRegion(region);
-      });
-      regionPolygonsRef.current.push(polygon);
-    });
-  }, [points, selectedRegion]);
-
   return (
     <section className="bfk" aria-labelledby="bfk-heading">
       <div className="bfk__inner">
@@ -162,79 +31,70 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
           배리어프리 키오스크 접근성 데이터 뷰어
         </h2>
         <p className="bfk__summary">
-          좌측 행정구역을 선택하면 우측에 시설별 5개 접근성 축 평가 결과가 표시됩니다.
+          지도 없이 데이터 중심으로 탐색할 수 있도록 목록/상세 화면을 분리했습니다.
         </p>
 
+        <div className="bfk__controls">
+          <div className="bfk__region-list" aria-label="지역 필터">
+            {REGIONS.map((region) => (
+              <button
+                key={region}
+                type="button"
+                className={`bfk__region-btn${selectedRegion === region ? ' is-active' : ''}`}
+                onClick={() => setSelectedRegion(region)}
+              >
+                {region}
+              </button>
+            ))}
+          </div>
+
+          <form
+            className="bfk__search"
+            onSubmit={(event) => {
+              event.preventDefault();
+              setSearchNotice('검색 기능은 준비 중입니다. 현재는 지역 선택과 목록 클릭으로 확인해 주세요.');
+            }}
+            aria-label="키오스크 데이터 검색"
+          >
+            <label className="bfk__search-label" htmlFor="bfk-search-keyword">
+              데이터 검색 (스켈레톤)
+            </label>
+            <div className="bfk__search-row">
+              <select
+                className="bfk__search-select"
+                value={searchField}
+                onChange={(event) => setSearchField(event.target.value)}
+                aria-label="검색 항목"
+              >
+                <option value="facilityName">시설명</option>
+                <option value="district">지역(구/시)</option>
+                <option value="facilityType">시설 유형</option>
+              </select>
+              <input
+                id="bfk-search-keyword"
+                className="bfk__search-input"
+                type="search"
+                value={searchKeyword}
+                onChange={(event) => setSearchKeyword(event.target.value)}
+                placeholder="예: 송파구청"
+              />
+              <button type="submit" className="bfk__search-btn">
+                검색
+              </button>
+            </div>
+          </form>
+        </div>
+        <p className="bfk__search-help">
+          실제 필터링 로직은 다음 단계에서 Supabase 데이터 조회와 연결됩니다.
+        </p>
+        {searchNotice && (
+          <p className="bfk__search-notice" role="status" aria-live="polite">
+            {searchNotice}
+          </p>
+        )}
+
         <div className="bfk__layout">
-          <aside className="bfk__map" aria-label="한국 지도 영역">
-            <div className="bfk__map-head">
-              <strong>지도 영역</strong>
-              <span>행정구역 폴리곤(서울/경기/부산)을 클릭하면 우측 목록이 필터됩니다.</span>
-            </div>
-            <div className="bfk__map-panel">
-              <div ref={mapRef} className="bfk__kakao-map" role="img" aria-label="카카오 지도" />
-              {mapError && <p className="bfk__map-error">{mapError}</p>}
-              <p className="bfk__map-text">빠른 필터</p>
-              <div className="bfk__region-list">
-                {REGIONS.map((region) => (
-                  <button
-                    key={region}
-                    type="button"
-                    className={`bfk__region-btn${selectedRegion === region ? ' is-active' : ''}`}
-                    onClick={() => setSelectedRegion(region)}
-                  >
-                    {region}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </aside>
-
-          <div className="bfk__side">
-            <form
-              className="bfk__search"
-              onSubmit={(event) => {
-                event.preventDefault();
-                setSearchNotice('검색 기능은 준비 중입니다. 현재는 지역 선택과 목록 클릭으로 확인해 주세요.');
-              }}
-              aria-label="키오스크 데이터 검색"
-            >
-              <label className="bfk__search-label" htmlFor="bfk-search-keyword">
-                데이터 검색 (스켈레톤)
-              </label>
-              <div className="bfk__search-row">
-                <select
-                  className="bfk__search-select"
-                  value={searchField}
-                  onChange={(event) => setSearchField(event.target.value)}
-                  aria-label="검색 항목"
-                >
-                  <option value="facilityName">시설명</option>
-                  <option value="district">지역(구/시)</option>
-                  <option value="facilityType">시설 유형</option>
-                </select>
-                <input
-                  id="bfk-search-keyword"
-                  className="bfk__search-input"
-                  type="search"
-                  value={searchKeyword}
-                  onChange={(event) => setSearchKeyword(event.target.value)}
-                  placeholder="예: 송파구청"
-                />
-                <button type="submit" className="bfk__search-btn">
-                  검색
-                </button>
-              </div>
-              <p className="bfk__search-help">
-                실제 필터링 로직은 다음 단계에서 Supabase 데이터 조회와 연결됩니다.
-              </p>
-              {searchNotice && (
-                <p className="bfk__search-notice" role="status" aria-live="polite">
-                  {searchNotice}
-                </p>
-              )}
-            </form>
-
+          <section className="bfk__panel bfk__panel--list" aria-label="시설 목록">
             <div className="bfk__meta">
               <p>
                 선택 지역: <strong>{selectedRegion}</strong>
@@ -244,7 +104,7 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
               </p>
             </div>
 
-            <ul className="bfk__list" aria-label="시설 목록">
+            <ul className="bfk__list">
               {points.map((item) => (
                 <li key={item.id}>
                   <button
@@ -254,10 +114,16 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                   >
                     <div className="bfk__item-top">
                       <strong>{item.facilityName}</strong>
+                      <span className="bfk__pill">{item.facilityType}</span>
                     </div>
                     <p className="bfk__item-sub">
-                      {item.region} {item.district} · {item.facilityType}
+                      {item.region} {item.district}
                     </p>
+                    <div className="bfk__item-flags">
+                      <span>고대비 {boolLabel(item.digitalLanguage?.hasHighContrastMode)}</span>
+                      <span>음성안내 {boolLabel(item.voiceAlternative?.hasVoiceGuide)}</span>
+                      <span>호출벨 {boolLabel(item.interactionManagement?.callBellReachable)}</span>
+                    </div>
                   </button>
                 </li>
               ))}
@@ -265,8 +131,10 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                 <li className="bfk__empty">선택 지역에 등록된 데이터가 없습니다.</li>
               )}
             </ul>
+          </section>
 
-            {selectedPoint && (
+          <section className="bfk__panel bfk__panel--detail" aria-label="시설 상세">
+            {selectedPoint ? (
               <article className="bfk__detail" aria-label="선택 시설 상세">
                 <h3 className="bfk__detail-title">{selectedPoint.facilityName}</h3>
                 <p className="bfk__detail-sub">
@@ -328,8 +196,10 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                   </section>
                 </div>
               </article>
+            ) : (
+              <p className="bfk__empty">표시할 상세 데이터가 없습니다.</p>
             )}
-          </div>
+          </section>
         </div>
       </div>
     </section>

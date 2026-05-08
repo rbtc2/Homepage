@@ -3,8 +3,8 @@ import Footer from '@/components/Footer';
 import BarrierFreeKioskExplorer from '@/components/projects/BarrierFreeKioskExplorer';
 
 export const metadata = {
-  title: '배리어프리 키오스크 지도 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
-  description: '지역별 배리어프리 키오스크 접근성 공익 데이터를 지도와 목록으로 확인합니다.',
+  title: '배리어프리 키오스크 데이터 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
+  description: '지역별 배리어프리 키오스크 접근성 공익 데이터를 데이터 패널에서 확인합니다.',
 };
 
 const MOCK_POINTS = [
@@ -150,7 +150,7 @@ export default function BarrierFreeKioskPage() {
         <div className="page-header">
           <div className="page-header__inner">
             <p className="page-header__label">공익 데이터 프로젝트</p>
-            <h1 className="page-header__title">배리어프리 키오스크 지도</h1>
+            <h1 className="page-header__title">배리어프리 키오스크 데이터</h1>
           </div>
         </div>
         <BarrierFreeKioskExplorer initialPoints={MOCK_POINTS} />
