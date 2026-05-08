@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
@@ -28,13 +27,8 @@ function FlowArrow() {
   );
 }
 
-export default async function MemberPage({ searchParams }) {
+export default async function MemberPage() {
   const { signupApplicationUrl } = await getSiteFooterSettings();
-  const resolvedSearchParams = await searchParams;
-  const requestedStyle = Array.isArray(resolvedSearchParams?.tableStyle)
-    ? resolvedSearchParams.tableStyle[0]
-    : resolvedSearchParams?.tableStyle;
-  const tableStyle = ['a', 'b', 'c'].includes(requestedStyle) ? requestedStyle : 'a';
   const applicationHref =
     signupApplicationUrl && /^https?:\/\//i.test(signupApplicationUrl.trim())
       ? signupApplicationUrl.trim()
@@ -180,33 +174,7 @@ export default async function MemberPage({ searchParams }) {
               </div>
             </header>
 
-            <div className="su-style-switch" role="group" aria-label="표 스타일 선택">
-              <span className="su-style-switch__label">표 스타일</span>
-              <Link
-                href="/member?tableStyle=a#su-eligibility-heading"
-                className={`su-style-switch__chip${tableStyle === 'a' ? ' is-active' : ''}`}
-              >
-                A안
-              </Link>
-              <Link
-                href="/member?tableStyle=b#su-eligibility-heading"
-                className={`su-style-switch__chip${tableStyle === 'b' ? ' is-active' : ''}`}
-              >
-                B안
-              </Link>
-              <Link
-                href="/member?tableStyle=c#su-eligibility-heading"
-                className={`su-style-switch__chip${tableStyle === 'c' ? ' is-active' : ''}`}
-              >
-                C안
-              </Link>
-            </div>
-
-            <div
-              className={`su-table-wrap su-table-wrap--${tableStyle}`}
-              role="region"
-              aria-label="회원 유형별 자격 및 혜택 표"
-            >
+            <div className="su-table-wrap" role="region" aria-label="회원 유형별 자격 및 혜택 표">
               <table className="su-table">
                 <caption className="su-table__caption">회원 유형별 자격 및 혜택 안내</caption>
                 <thead>
@@ -277,8 +245,8 @@ export default async function MemberPage({ searchParams }) {
 
             <div className="su-extra-notes" aria-label="회원 안내 추가 고지">
               <p>
-                ※ 1년 이상 회비를 납부하지 않는 경우에는 이사회를 거쳐 회원으로서의 자격이 상실될
-                수 있습니다.
+                ※ 정회원과 후원회원의 경우, 1년 이상 회비를 납부하지 않을 경우 이사회를 거쳐
+                회원으로서의 자격이 상실될 수 있습니다.
               </p>
               <p>
                 ※ 기관 및 단체 후원/협력 문의는 사무국(
