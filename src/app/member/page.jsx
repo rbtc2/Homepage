@@ -8,7 +8,7 @@ import {
 export const metadata = {
   title: '회원가입 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
   description:
-    '월드라이츠 회원가입 안내. 단체 소개, 가입 절차 및 신청 링크, 4단계 가입 프로세스를 확인할 수 있습니다.',
+    '월드라이츠 회원가입 안내. 단체 소개, 가입 절차 및 신청 링크, 회원 자격 및 혜택을 확인할 수 있습니다.',
 };
 
 function FlowArrow() {
@@ -158,6 +158,103 @@ export default async function MemberPage() {
                 </div>
                 <p className="su-flow__card-text">회원 자격이 부여되며, 월드라이츠 회원 안내를 발송합니다.</p>
               </article>
+            </div>
+          </section>
+
+          <section className="su-block" aria-labelledby="su-eligibility-heading">
+            <header className="su-block-head">
+              <span className="su-block-head__mark" aria-hidden="true">
+                03
+              </span>
+              <div className="su-block-head__meta">
+                <p className="su-block-head__kicker">Membership</p>
+                <h2 id="su-eligibility-heading" className="su-block-head__title">
+                  회원 자격 및 혜택
+                </h2>
+              </div>
+            </header>
+
+            <div className="su-table-wrap" role="region" aria-label="회원 유형별 자격 및 혜택 표">
+              <table className="su-table">
+                <caption className="su-table__caption">회원 유형별 자격 및 혜택 안내</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">회원 구분</th>
+                    <th scope="col">회원 자격 및 의무</th>
+                    <th scope="col">회원 혜택</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">정회원</th>
+                    <td>
+                      <ul className="su-table__list">
+                        <li>가입신청서 작성 및 제출</li>
+                        <li>월 2만 원 이상 회비 납부</li>
+                      </ul>
+                    </td>
+                    <td>
+                      <ul className="su-table__list">
+                        <li>총회 의결권 및 운영 참여권</li>
+                        <li>단체 제공 프로그램 우선 초대 및 무료 참가</li>
+                        <li>단체 뉴스레터 발송</li>
+                        <li>디지털 웰컴 키트 제공</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">후원회원</th>
+                    <td>
+                      <ul className="su-table__list">
+                        <li>가입신청서 작성 및 제출</li>
+                        <li>월 1만 원 이상 회비 납부</li>
+                      </ul>
+                    </td>
+                    <td>
+                      <ul className="su-table__list">
+                        <li>단체 제공 프로그램 우선 초대 및 무료 참가</li>
+                        <li>단체 뉴스레터 발송</li>
+                        <li>디지털 웰컴 키트 제공</li>
+                      </ul>
+                      <p className="su-table__note">
+                        ※ 총회 의결권 및 운영 참여권이 없습니다
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">준회원</th>
+                    <td>
+                      <ul className="su-table__list">
+                        <li>가입신청서 작성 및 제출 또는 단체 제공 프로그램 수료</li>
+                      </ul>
+                    </td>
+                    <td>
+                      <ul className="su-table__list">
+                        <li>단체 제공 프로그램 우선 초대</li>
+                        <li>단체 뉴스레터 발송</li>
+                        <li>디지털 웰컴 키트 제공</li>
+                      </ul>
+                      <p className="su-table__note">
+                        ※ 총회 의결권 및 운영 참여권이 없습니다
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="su-extra-notes" aria-label="회원 안내 추가 고지">
+              <p>
+                ※ 1년 이상 회비를 납부하지 않는 경우에는 이사회를 거쳐 회원으로서의 자격이 상실될
+                수 있습니다.
+              </p>
+              <p>
+                ※ 기관 및 단체 후원/협력 문의는 사무국(
+                <a href="mailto:official@worldrights.or.kr" className="su-cta-link">
+                  <span className="su-cta-link__label">official@worldrights.or.kr</span>
+                </a>
+                )으로 연락 부탁드립니다.
+              </p>
             </div>
           </section>
         </div>
