@@ -705,6 +705,11 @@
   gap: 1rem;
 }
 
+/* author display:flex가 UA [hidden]보다 우선해 탭 내용이 겹쳐 보이는 것 방지 */
+.adm-site-tabs__panel[hidden] {
+  display: none !important;
+}
+
 .adm-settings__field-hint {
   margin: 0.15rem 0 0;
   font-size: 0.75rem;
