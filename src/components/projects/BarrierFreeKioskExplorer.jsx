@@ -1,8 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const REGIONS = ['전체', '서울', '경기', '부산'];
+const REGION_META = {
+  서울: { lat: 37.5665, lng: 126.978, level: 8 },
+  경기: { lat: 37.4138, lng: 127.5183, level: 9 },
+  부산: { lat: 35.1796, lng: 129.0756, level: 8 },
+};
+const DEFAULT_CENTER = { lat: 36.35, lng: 127.9, level: 13 };
 
 function scoreLabel(score) {
   if (score >= 85) return '우수';
@@ -13,6 +19,11 @@ function scoreLabel(score) {
 export default function BarrierFreeKioskExplorer({ initialPoints }) {
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedId, setSelectedId] = useState(initialPoints[0]?.id ?? null);
+  const [mapError, setMapError] = useState('');
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const pointMarkersRef = useRef([]);
+  const regionOverlaysRef = useRef([]);
 
   const points = useMemo(() => {
     if (selectedRegion === '전체') return initialPoints;
@@ -23,6 +34,112 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
     () => points.find((item) => item.id === selectedId) ?? points[0] ?? null,
     [points, selectedId],
   );
+
+  useEffect(() => {
+    if (!selectedPoint && points[0]) {
+      setSelectedId(points[0].id);
+    }
+  }, [points, selectedPoint]);
+
+  useEffect(() => {
+    const appKey = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
+    if (!appKey) {
+      setMapError('카카오맵 키가 설정되지 않아 지도를 불러올 수 없습니다.');
+      return;
+    }
+
+    const scriptId = 'kakao-maps-sdk';
+    const existing = document.getElementById(scriptId);
+    if (!existing) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`;
+      script.async = true;
+      script.onload = () => {
+        window.kakao.maps.load(() => {
+          if (!mapRef.current) return;
+          const center = new window.kakao.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng);
+          const map = new window.kakao.maps.Map(mapRef.current, {
+            center,
+            level: DEFAULT_CENTER.level,
+          });
+          mapInstanceRef.current = map;
+          setMapError('');
+        });
+      };
+      script.onerror = () => setMapError('카카오맵 SDK 로딩에 실패했습니다.');
+      document.head.appendChild(script);
+    } else {
+      window.kakao.maps.load(() => {
+        if (!mapRef.current || mapInstanceRef.current) return;
+        const center = new window.kakao.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng);
+        const map = new window.kakao.maps.Map(mapRef.current, {
+          center,
+          level: DEFAULT_CENTER.level,
+        });
+        mapInstanceRef.current = map;
+        setMapError('');
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map || !window.kakao?.maps) return;
+
+    pointMarkersRef.current.forEach((marker) => marker.setMap(null));
+    regionOverlaysRef.current.forEach((overlay) => overlay.setMap(null));
+    pointMarkersRef.current = [];
+    regionOverlaysRef.current = [];
+
+    const currentCenter = REGION_META[selectedRegion] ?? DEFAULT_CENTER;
+    map.setCenter(new window.kakao.maps.LatLng(currentCenter.lat, currentCenter.lng));
+    map.setLevel(currentCenter.level);
+
+    points.forEach((item) => {
+      if (typeof item.lat !== 'number' || typeof item.lng !== 'number') return;
+      const marker = new window.kakao.maps.Marker({
+        position: new window.kakao.maps.LatLng(item.lat, item.lng),
+      });
+      marker.setMap(map);
+      window.kakao.maps.event.addListener(marker, 'click', () => {
+        setSelectedRegion(item.region);
+        setSelectedId(item.id);
+      });
+      pointMarkersRef.current.push(marker);
+    });
+
+    Object.entries(REGION_META).forEach(([region, meta]) => {
+      const isActive = region === selectedRegion;
+      const content = `
+        <button type="button" class="bfk-map-chip${isActive ? ' is-active' : ''}" data-region="${region}">
+          ${region}
+        </button>
+      `;
+      const overlay = new window.kakao.maps.CustomOverlay({
+        position: new window.kakao.maps.LatLng(meta.lat, meta.lng),
+        content,
+        yAnchor: 1,
+      });
+      overlay.setMap(map);
+      regionOverlaysRef.current.push(overlay);
+    });
+  }, [points, selectedRegion]);
+
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+    const rootNode = map.getNode();
+    const handleClick = (event) => {
+      const target = event.target.closest('[data-region]');
+      if (!target) return;
+      const region = target.getAttribute('data-region');
+      if (!region) return;
+      setSelectedRegion(region);
+    };
+    rootNode.addEventListener('click', handleClick);
+    return () => rootNode.removeEventListener('click', handleClick);
+  }, []);
 
   return (
     <section className="bfk" aria-labelledby="bfk-heading">
@@ -38,10 +155,12 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
           <aside className="bfk__map" aria-label="한국 지도 영역">
             <div className="bfk__map-head">
               <strong>지도 영역</strong>
-              <span>차기 단계에서 실제 지도 SDK 연동</span>
+              <span>지역 라벨(서울/경기/부산)을 클릭하면 우측 목록이 필터됩니다.</span>
             </div>
             <div className="bfk__map-panel">
-              <p className="bfk__map-text">대한민국 지역 선택</p>
+              <div ref={mapRef} className="bfk__kakao-map" role="img" aria-label="카카오 지도" />
+              {mapError && <p className="bfk__map-error">{mapError}</p>}
+              <p className="bfk__map-text">빠른 필터</p>
               <div className="bfk__region-list">
                 {REGIONS.map((region) => (
                   <button

@@ -62,6 +62,20 @@
   padding: 1rem;
 }
 
+.bfk__kakao-map {
+  width: 100%;
+  height: 18rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #eef2f7;
+}
+
+.bfk__map-error {
+  margin: 0.625rem 0 0;
+  font-size: 0.8125rem;
+  color: #b42318;
+}
+
 .bfk__map-text {
   margin: 0 0 0.875rem;
   font-size: 0.875rem;
@@ -89,6 +103,24 @@
   border-color: var(--brand);
   color: var(--brand);
   background: rgba(18, 79, 166, 0.06);
+}
+
+.bfk-map-chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+}
+
+.bfk-map-chip.is-active {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: rgba(18, 79, 166, 0.08);
 }
 
 .bfk__side {
