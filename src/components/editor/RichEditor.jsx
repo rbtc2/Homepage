@@ -35,6 +35,7 @@ import EditorCoverUrlField from './EditorCoverUrlField';
  * @param {string}   newTitle         - 신규 작성 모드 제목
  * @param {boolean}  showPinToggle    - 공지 고정 체크박스 표시 여부
  * @param {boolean}  showCoverImage   - 커버 이미지 URL 입력 표시 여부 (갤러리용)
+ * @param {'wr-news'|'gallery'} [coverUploadFolder] - 설정 시 Storage에서 파일 업로드 가능
  * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage? }) => void
  */
 export default function RichEditor({
@@ -44,6 +45,7 @@ export default function RichEditor({
   newTitle,
   showPinToggle = false,
   showCoverImage = false,
+  coverUploadFolder,
   onSave,
 }) {
   const router = useRouter();
@@ -158,6 +160,7 @@ export default function RichEditor({
           value={coverImage}
           onChange={setCoverImage}
           placeholder="https://example.com/image.jpg"
+          uploadFolder={coverUploadFolder}
         />
       )}
 

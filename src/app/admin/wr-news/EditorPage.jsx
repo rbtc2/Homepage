@@ -19,6 +19,7 @@ export default function WrNewsEditorPage({ post }) {
       editTitle="WR뉴스 게시물 수정"
       newTitle="새 WR뉴스 게시물 작성"
       showCoverImage
+      coverUploadFolder="wr-news"
       onSave={handleSave}
     />
   );

@@ -19,6 +19,7 @@ export default function GalleryEditorPage({ post }) {
       editTitle="갤러리 게시물 수정"
       newTitle="새 갤러리 게시물 작성"
       showCoverImage
+      coverUploadFolder="gallery"
       onSave={handleSave}
     />
   );
