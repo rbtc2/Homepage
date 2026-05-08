@@ -13,7 +13,7 @@ export default async function AdminSettingsSitePage() {
       <header className="adm-main__hd">
         <h1 className="adm-main__title">사이트 기본 정보</h1>
         <p className="adm-main__sub">
-          푸터에 노출되는 사무실 주소·대표자·연락처를 관리합니다. 저장 즉시 공개 페이지에 반영됩니다.
+          푸터 연락처와 단체 후원(회원가입 신청 링크) 등 공개 페이지에 노출되는 값을 관리합니다. 저장 즉시 반영됩니다.
         </p>
       </header>
 

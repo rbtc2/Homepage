@@ -644,3 +644,70 @@
   background: rgba(180, 40, 40, 0.06);
   border: 1px solid rgba(180, 40, 40, 0.18);
 }
+
+/* 사이트 설정: 푸터 / 단체 후원 탭 */
+.adm-site-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.adm-site-tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  margin: 0 0 0.25rem;
+  list-style: none;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.adm-site-tabs__tab {
+  flex: 1 1 auto;
+  min-width: 8rem;
+  margin: 0;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.12s ease,
+    background 0.12s ease;
+}
+
+.adm-site-tabs__tab:hover {
+  color: var(--ink);
+  background: rgba(18, 79, 166, 0.06);
+}
+
+.adm-site-tabs__tab--active {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.adm-site-tabs__tab:focus-visible {
+  outline: 2px solid rgba(18, 79, 166, 0.45);
+  outline-offset: 2px;
+}
+
+.adm-site-tabs__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.adm-settings__field-hint {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--muted);
+}

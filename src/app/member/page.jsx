@@ -1,5 +1,9 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import {
+  DEFAULT_SIGNUP_APPLICATION_URL,
+  getSiteFooterSettings,
+} from '@/lib/site-settings';
 
 export const metadata = {
   title: '회원가입 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
@@ -23,7 +27,13 @@ function FlowArrow() {
   );
 }
 
-export default function MemberPage() {
+export default async function MemberPage() {
+  const { signupApplicationUrl } = await getSiteFooterSettings();
+  const applicationHref =
+    signupApplicationUrl && /^https?:\/\//i.test(signupApplicationUrl.trim())
+      ? signupApplicationUrl.trim()
+      : DEFAULT_SIGNUP_APPLICATION_URL;
+
   return (
     <>
       <Header />
@@ -80,7 +90,7 @@ export default function MemberPage() {
             <p className="su-procedure-lead">
               국제인권연대 월드라이츠의 목적과 취지에 동의하는 분이라면 누구나 월드라이츠의 회원이 되실 수 있습니다. 회원 신규가입을 원하시는 경우{' '}
               <a
-                href="https://example.com"
+                href={applicationHref}
                 className="su-cta-link"
                 target="_blank"
                 rel="noopener noreferrer"

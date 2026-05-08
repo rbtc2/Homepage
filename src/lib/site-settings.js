@@ -9,16 +9,31 @@ export const DEFAULT_SITE_FOOTER = {
   faxNumber: '0504-287-7334',
 };
 
+/** 회원가입 신청 버튼(단체 후원 안내 페이지) 외부 URL 기본값 */
+export const DEFAULT_SIGNUP_APPLICATION_URL = 'https://example.com';
+
 async function fetchSiteFooterFromDb() {
   const { data, error } = await supabase
     .from('site_settings')
-    .select('office_address, representative_name, main_phone, fax_number')
+    .select(
+      'office_address, representative_name, main_phone, fax_number, signup_application_url'
+    )
     .eq('id', 1)
     .maybeSingle();
 
   if (error || !data) {
-    return { ...DEFAULT_SITE_FOOTER };
+    return {
+      ...DEFAULT_SITE_FOOTER,
+      signupApplicationUrl: DEFAULT_SIGNUP_APPLICATION_URL,
+    };
   }
+
+  const rawSignup =
+    data.signup_application_url != null
+      ? String(data.signup_application_url).trim()
+      : '';
+  const signupApplicationUrl =
+    rawSignup.length > 0 ? rawSignup : DEFAULT_SIGNUP_APPLICATION_URL;
 
   return {
     officeAddress:
@@ -29,6 +44,7 @@ async function fetchSiteFooterFromDb() {
         : DEFAULT_SITE_FOOTER.representativeName,
     mainPhone: data.main_phone != null ? String(data.main_phone).trim() : DEFAULT_SITE_FOOTER.mainPhone,
     faxNumber: data.fax_number != null ? String(data.fax_number).trim() : DEFAULT_SITE_FOOTER.faxNumber,
+    signupApplicationUrl,
   };
 }
 
