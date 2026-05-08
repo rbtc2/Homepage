@@ -441,6 +441,82 @@
   min-height: 14rem;
 }
 
+.nd-cta {
+  margin: 0 clamp(1.5rem, 4vw, 2.5rem) clamp(1.75rem, 4vw, 2.5rem);
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: rgba(18, 79, 166, 0.03);
+}
+
+.nd-cta__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.nd-cta__desc {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.nd-cta__actions {
+  margin-top: 0.875rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nd-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition:
+    background 0.15s var(--ease),
+    border-color 0.15s var(--ease),
+    color 0.15s var(--ease);
+}
+
+.nd-cta__btn--primary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.nd-cta__btn--primary:hover {
+  background: var(--brand-deep);
+  border-color: var(--brand-deep);
+}
+
+.nd-cta__btn--ghost {
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.nd-cta__btn--ghost:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: rgba(18, 79, 166, 0.04);
+}
+
+.nd-cta__btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .nd__para {
   margin: 0 0 1.125rem;
   font-size: 0.9375rem;

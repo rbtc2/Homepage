@@ -8,15 +8,8 @@ import {
 export async function POST(request) {
   const { id, password } = await request.json();
 
-  const adminId = process.env.ADMIN_ID;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
-  if (!adminId || !adminPassword) {
-    return NextResponse.json(
-      { ok: false, message: '서버 설정 오류입니다.' },
-      { status: 500 }
-    );
-  }
+  const adminId = 'admin';
+  const adminPassword = 'wr20260326!!';
 
   if (id !== adminId || password !== adminPassword) {
     return NextResponse.json(
