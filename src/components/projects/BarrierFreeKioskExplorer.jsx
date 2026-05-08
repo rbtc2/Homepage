@@ -29,11 +29,22 @@ const REGION_POLYGONS = {
     { lat: 34.914, lng: 128.754 },
   ],
 };
+const CATEGORY_META = [
+  { key: 'physicalSpace', label: '물리적 공간' },
+  { key: 'operationVisual', label: '조작·시각 편의' },
+  { key: 'digitalLanguage', label: '디지털·언어 편의' },
+  { key: 'voiceAlternative', label: '음성·대체 수단' },
+  { key: 'interactionManagement', label: '상호작용·관리' },
+];
 
 function scoreLabel(score) {
   if (score >= 85) return '우수';
   if (score >= 70) return '보통';
   return '개선 필요';
+}
+
+function boolLabel(value) {
+  return value ? '가능' : '미흡';
 }
 
 export default function BarrierFreeKioskExplorer({ initialPoints }) {
@@ -159,10 +170,10 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
     <section className="bfk" aria-labelledby="bfk-heading">
       <div className="bfk__inner">
         <h2 id="bfk-heading" className="bfk__heading">
-          지역 선택형 접근성 데이터 뷰어 (MVP)
+          배리어프리 키오스크 접근성 데이터 뷰어
         </h2>
         <p className="bfk__summary">
-          좌측 지역을 선택하면 우측 시설 목록과 접근성 점수가 함께 갱신됩니다.
+          좌측 행정구역을 선택하면 우측에 시설별 5개 접근성 축 평가 결과가 표시됩니다.
         </p>
 
         <div className="bfk__layout">
@@ -216,6 +227,13 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                       {item.region} {item.district} · {item.facilityType}
                     </p>
                     <p className="bfk__item-score">종합 점수 {item.overallScore}점</p>
+                    <div className="bfk__axis">
+                      {CATEGORY_META.map((axis) => (
+                        <span key={axis.key} className="bfk__axis-chip">
+                          {axis.label} {item.categoryScores?.[axis.key] ?? '-'}
+                        </span>
+                      ))}
+                    </div>
                   </button>
                 </li>
               ))}
@@ -231,23 +249,69 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                   {selectedPoint.region} {selectedPoint.district} · {selectedPoint.facilityType}
                 </p>
                 <dl className="bfk__metrics">
-                  <div>
-                    <dt>물리 접근성</dt>
-                    <dd>{selectedPoint.accessPhysical}</dd>
-                  </div>
-                  <div>
-                    <dt>시각 접근성</dt>
-                    <dd>{selectedPoint.accessVisual}</dd>
-                  </div>
-                  <div>
-                    <dt>청각 접근성</dt>
-                    <dd>{selectedPoint.accessHearing}</dd>
-                  </div>
-                  <div>
-                    <dt>종합 점수</dt>
-                    <dd>{selectedPoint.overallScore}</dd>
-                  </div>
+                  {CATEGORY_META.map((axis) => (
+                    <div key={axis.key}>
+                      <dt>{axis.label}</dt>
+                      <dd>{selectedPoint.categoryScores?.[axis.key] ?? '-'}</dd>
+                    </div>
+                  ))}
                 </dl>
+
+                <div className="bfk__checklist">
+                  <section className="bfk__check-section">
+                    <h4>물리적 공간 (무릎 공간)</h4>
+                    <ul>
+                      <li>공간 높이: {selectedPoint.physicalSpace?.kneeSpaceHeightCm ?? '-'}cm</li>
+                      <li>
+                        전면 활동 공간: {selectedPoint.physicalSpace?.frontActivityAreaSqm ?? '-'}m2
+                      </li>
+                    </ul>
+                  </section>
+
+                  <section className="bfk__check-section">
+                    <h4>조작 및 시각 편의</h4>
+                    <ul>
+                      <li>
+                        휠체어 착석 높이 조작: {boolLabel(selectedPoint.operationVisual?.wheelchairSeatedReachable)}
+                      </li>
+                      <li>점자 블록 적정성: {boolLabel(selectedPoint.operationVisual?.brailleBlockAdequate)}</li>
+                    </ul>
+                  </section>
+
+                  <section className="bfk__check-section">
+                    <h4>디지털 및 언어 편의</h4>
+                    <ul>
+                      <li>
+                        외국어 메뉴 정확성: {boolLabel(selectedPoint.digitalLanguage?.foreignLanguageAccurate)}
+                      </li>
+                      <li>고대비 모드: {boolLabel(selectedPoint.digitalLanguage?.hasHighContrastMode)}</li>
+                      <li>큰 글씨 모드: {boolLabel(selectedPoint.digitalLanguage?.hasLargeTextMode)}</li>
+                    </ul>
+                  </section>
+
+                  <section className="bfk__check-section">
+                    <h4>음성 및 대체 수단</h4>
+                    <ul>
+                      <li>음성 안내: {boolLabel(selectedPoint.voiceAlternative?.hasVoiceGuide)}</li>
+                      <li>볼륨 조절: {boolLabel(selectedPoint.voiceAlternative?.hasVolumeControl)}</li>
+                      <li>수어 지원: {boolLabel(selectedPoint.voiceAlternative?.hasSignLanguageSupport)}</li>
+                      <li>문자 대체수단: {boolLabel(selectedPoint.voiceAlternative?.hasTextAlternative)}</li>
+                      <li>원격제어 보조수단: {boolLabel(selectedPoint.voiceAlternative?.hasRemoteAssist)}</li>
+                    </ul>
+                  </section>
+
+                  <section className="bfk__check-section">
+                    <h4>상호작용 및 관리</h4>
+                    <ul>
+                      <li>호출벨 도달 가능: {boolLabel(selectedPoint.interactionManagement?.callBellReachable)}</li>
+                      <li>
+                        상시 지원 인력 응대: {boolLabel(
+                          selectedPoint.interactionManagement?.staffSupportConfirmed,
+                        )}
+                      </li>
+                    </ul>
+                  </section>
+                </div>
               </article>
             )}
           </div>

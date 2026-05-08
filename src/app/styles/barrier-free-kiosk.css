@@ -190,6 +190,24 @@
   color: var(--muted);
 }
 
+.bfk__axis {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.bfk__axis-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  background: #fff;
+}
+
 .bfk__empty {
   border: 1px dashed var(--line);
   border-radius: 3px;
@@ -221,7 +239,7 @@
 .bfk__metrics {
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
 }
 
@@ -245,6 +263,39 @@
   color: var(--ink);
 }
 
+.bfk__checklist {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.bfk__check-section {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+  padding: 0.625rem 0.75rem;
+}
+
+.bfk__check-section h4 {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.bfk__check-section ul {
+  margin: 0.45rem 0 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.bfk__check-section li {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 @media (max-width: 960px) {
   .bfk__layout {
     grid-template-columns: 1fr;
@@ -252,5 +303,9 @@
 
   .bfk__map-panel {
     min-height: 14rem;
+  }
+
+  .bfk__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

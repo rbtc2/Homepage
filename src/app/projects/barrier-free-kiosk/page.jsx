@@ -17,9 +17,37 @@ const MOCK_POINTS = [
     lng: 127.1068,
     facilityType: '공공기관',
     overallScore: 86,
-    accessPhysical: 90,
-    accessVisual: 80,
-    accessHearing: 88,
+    categoryScores: {
+      physicalSpace: 88,
+      operationVisual: 84,
+      digitalLanguage: 83,
+      voiceAlternative: 90,
+      interactionManagement: 85,
+    },
+    physicalSpace: {
+      kneeSpaceHeightCm: 72,
+      frontActivityAreaSqm: 1.45,
+    },
+    operationVisual: {
+      wheelchairSeatedReachable: true,
+      brailleBlockAdequate: true,
+    },
+    digitalLanguage: {
+      foreignLanguageAccurate: true,
+      hasHighContrastMode: true,
+      hasLargeTextMode: true,
+    },
+    voiceAlternative: {
+      hasVoiceGuide: true,
+      hasVolumeControl: true,
+      hasSignLanguageSupport: false,
+      hasTextAlternative: true,
+      hasRemoteAssist: true,
+    },
+    interactionManagement: {
+      callBellReachable: true,
+      staffSupportConfirmed: true,
+    },
   },
   {
     id: 'kiosk-2',
@@ -30,9 +58,37 @@ const MOCK_POINTS = [
     lng: 127.0473,
     facilityType: '보건',
     overallScore: 79,
-    accessPhysical: 82,
-    accessVisual: 74,
-    accessHearing: 81,
+    categoryScores: {
+      physicalSpace: 80,
+      operationVisual: 76,
+      digitalLanguage: 77,
+      voiceAlternative: 81,
+      interactionManagement: 79,
+    },
+    physicalSpace: {
+      kneeSpaceHeightCm: 69,
+      frontActivityAreaSqm: 1.18,
+    },
+    operationVisual: {
+      wheelchairSeatedReachable: true,
+      brailleBlockAdequate: false,
+    },
+    digitalLanguage: {
+      foreignLanguageAccurate: true,
+      hasHighContrastMode: true,
+      hasLargeTextMode: false,
+    },
+    voiceAlternative: {
+      hasVoiceGuide: true,
+      hasVolumeControl: true,
+      hasSignLanguageSupport: false,
+      hasTextAlternative: true,
+      hasRemoteAssist: false,
+    },
+    interactionManagement: {
+      callBellReachable: true,
+      staffSupportConfirmed: false,
+    },
   },
   {
     id: 'kiosk-3',
@@ -43,9 +99,37 @@ const MOCK_POINTS = [
     lng: 127.0286,
     facilityType: '공공기관',
     overallScore: 72,
-    accessPhysical: 77,
-    accessVisual: 66,
-    accessHearing: 73,
+    categoryScores: {
+      physicalSpace: 75,
+      operationVisual: 68,
+      digitalLanguage: 70,
+      voiceAlternative: 73,
+      interactionManagement: 74,
+    },
+    physicalSpace: {
+      kneeSpaceHeightCm: 67,
+      frontActivityAreaSqm: 1.04,
+    },
+    operationVisual: {
+      wheelchairSeatedReachable: true,
+      brailleBlockAdequate: false,
+    },
+    digitalLanguage: {
+      foreignLanguageAccurate: false,
+      hasHighContrastMode: true,
+      hasLargeTextMode: false,
+    },
+    voiceAlternative: {
+      hasVoiceGuide: true,
+      hasVolumeControl: false,
+      hasSignLanguageSupport: false,
+      hasTextAlternative: true,
+      hasRemoteAssist: false,
+    },
+    interactionManagement: {
+      callBellReachable: false,
+      staffSupportConfirmed: true,
+    },
   },
   {
     id: 'kiosk-4',
@@ -56,9 +140,37 @@ const MOCK_POINTS = [
     lng: 129.0421,
     facilityType: '교통',
     overallScore: 75,
-    accessPhysical: 78,
-    accessVisual: 71,
-    accessHearing: 76,
+    categoryScores: {
+      physicalSpace: 76,
+      operationVisual: 72,
+      digitalLanguage: 74,
+      voiceAlternative: 79,
+      interactionManagement: 73,
+    },
+    physicalSpace: {
+      kneeSpaceHeightCm: 68,
+      frontActivityAreaSqm: 1.1,
+    },
+    operationVisual: {
+      wheelchairSeatedReachable: true,
+      brailleBlockAdequate: true,
+    },
+    digitalLanguage: {
+      foreignLanguageAccurate: true,
+      hasHighContrastMode: false,
+      hasLargeTextMode: true,
+    },
+    voiceAlternative: {
+      hasVoiceGuide: true,
+      hasVolumeControl: true,
+      hasSignLanguageSupport: false,
+      hasTextAlternative: false,
+      hasRemoteAssist: true,
+    },
+    interactionManagement: {
+      callBellReachable: true,
+      staffSupportConfirmed: false,
+    },
   },
 ];
 
