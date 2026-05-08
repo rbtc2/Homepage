@@ -16,7 +16,6 @@ const MOCK_POINTS = [
     lat: 37.5145,
     lng: 127.1068,
     facilityType: '공공기관',
-    overallScore: 86,
     categoryScores: {
       physicalSpace: 88,
       operationVisual: 84,
@@ -57,7 +56,6 @@ const MOCK_POINTS = [
     lat: 37.5172,
     lng: 127.0473,
     facilityType: '보건',
-    overallScore: 79,
     categoryScores: {
       physicalSpace: 80,
       operationVisual: 76,
@@ -98,7 +96,6 @@ const MOCK_POINTS = [
     lat: 37.2636,
     lng: 127.0286,
     facilityType: '공공기관',
-    overallScore: 72,
     categoryScores: {
       physicalSpace: 75,
       operationVisual: 68,
@@ -139,7 +136,6 @@ const MOCK_POINTS = [
     lat: 35.1151,
     lng: 129.0421,
     facilityType: '교통',
-    overallScore: 75,
     categoryScores: {
       physicalSpace: 76,
       operationVisual: 72,

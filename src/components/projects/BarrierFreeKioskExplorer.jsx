@@ -37,12 +37,6 @@ const CATEGORY_META = [
   { key: 'interactionManagement', label: '상호작용·관리' },
 ];
 
-function scoreLabel(score) {
-  if (score >= 85) return '우수';
-  if (score >= 70) return '보통';
-  return '개선 필요';
-}
-
 function boolLabel(value) {
   return value ? '가능' : '미흡';
 }
@@ -221,12 +215,10 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                   >
                     <div className="bfk__item-top">
                       <strong>{item.facilityName}</strong>
-                      <span className="bfk__badge">{scoreLabel(item.overallScore)}</span>
                     </div>
                     <p className="bfk__item-sub">
                       {item.region} {item.district} · {item.facilityType}
                     </p>
-                    <p className="bfk__item-score">종합 점수 {item.overallScore}점</p>
                     <div className="bfk__axis">
                       {CATEGORY_META.map((axis) => (
                         <span key={axis.key} className="bfk__axis-chip">
