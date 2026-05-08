@@ -26,7 +26,12 @@ export default function SecretArchiveGate({ id }) {
 
   return (
     <section className="nd-secret" aria-label="비밀글 확인">
-      <h2 className="nd-secret__title">비밀 게시글입니다</h2>
+      <div className="nd-secret__head">
+        <span className="nd-secret__icon" aria-hidden="true">
+          🔒
+        </span>
+        <h2 className="nd-secret__title">비밀 게시글입니다</h2>
+      </div>
       <p className="nd-secret__desc">게시글 비밀번호를 입력하면 내용을 볼 수 있습니다.</p>
       <form className="nd-secret__form" onSubmit={onSubmit}>
         <input
@@ -43,6 +48,7 @@ export default function SecretArchiveGate({ id }) {
           {isPending ? '확인 중...' : '확인'}
         </button>
       </form>
+      <p className="nd-secret__hint">작성자가 설정한 비밀번호로만 열람할 수 있습니다.</p>
       {errorMessage && <p className="nd-secret__error">{errorMessage}</p>}
     </section>
   );
