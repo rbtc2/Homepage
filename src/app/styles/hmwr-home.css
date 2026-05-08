@@ -2,8 +2,10 @@
 
 .hmwr {
   background: var(--surface);
-  border-top: 2px solid var(--ink);
-  border-bottom: 1px solid var(--line);
+  /* 공지 글래스 패널과 이어지게 — 검은 라인 없이 헤어라인만 */
+  border-top: none;
+  border-bottom: 1px solid rgba(216, 222, 232, 0.65);
+  box-shadow: 0 -1px 0 rgba(18, 79, 166, 0.05);
 }
 
 .hmwr__inner {
