@@ -45,6 +45,9 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedId, setSelectedId] = useState(initialPoints[0]?.id ?? null);
   const [mapError, setMapError] = useState('');
+  const [searchField, setSearchField] = useState('facilityName');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchNotice, setSearchNotice] = useState('');
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const pointMarkersRef = useRef([]);
@@ -196,6 +199,50 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
           </aside>
 
           <div className="bfk__side">
+            <form
+              className="bfk__search"
+              onSubmit={(event) => {
+                event.preventDefault();
+                setSearchNotice('검색 기능은 준비 중입니다. 현재는 지역 선택과 목록 클릭으로 확인해 주세요.');
+              }}
+              aria-label="키오스크 데이터 검색"
+            >
+              <label className="bfk__search-label" htmlFor="bfk-search-keyword">
+                데이터 검색 (스켈레톤)
+              </label>
+              <div className="bfk__search-row">
+                <select
+                  className="bfk__search-select"
+                  value={searchField}
+                  onChange={(event) => setSearchField(event.target.value)}
+                  aria-label="검색 항목"
+                >
+                  <option value="facilityName">시설명</option>
+                  <option value="district">지역(구/시)</option>
+                  <option value="facilityType">시설 유형</option>
+                </select>
+                <input
+                  id="bfk-search-keyword"
+                  className="bfk__search-input"
+                  type="search"
+                  value={searchKeyword}
+                  onChange={(event) => setSearchKeyword(event.target.value)}
+                  placeholder="예: 송파구청"
+                />
+                <button type="submit" className="bfk__search-btn">
+                  검색
+                </button>
+              </div>
+              <p className="bfk__search-help">
+                실제 필터링 로직은 다음 단계에서 Supabase 데이터 조회와 연결됩니다.
+              </p>
+              {searchNotice && (
+                <p className="bfk__search-notice" role="status" aria-live="polite">
+                  {searchNotice}
+                </p>
+              )}
+            </form>
+
             <div className="bfk__meta">
               <p>
                 선택 지역: <strong>{selectedRegion}</strong>

@@ -127,6 +127,67 @@
   padding: 1rem;
 }
 
+.bfk__search {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #fff;
+  padding: 0.75rem;
+  margin-bottom: 0.875rem;
+}
+
+.bfk__search-label {
+  display: block;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.bfk__search-row {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 8rem 1fr 4.2rem;
+  gap: 0.4rem;
+}
+
+.bfk__search-select,
+.bfk__search-input {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8125rem;
+  min-height: 2rem;
+  padding: 0 0.55rem;
+}
+
+.bfk__search-btn {
+  border: none;
+  border-radius: 3px;
+  background: var(--brand);
+  color: #fff;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bfk__search-btn:hover {
+  background: var(--brand-deep);
+}
+
+.bfk__search-help,
+.bfk__search-notice {
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.bfk__search-notice {
+  color: var(--brand);
+}
+
 .bfk__meta {
   display: flex;
   gap: 0.875rem;
@@ -303,6 +364,10 @@
 
   .bfk__map-panel {
     min-height: 14rem;
+  }
+
+  .bfk__search-row {
+    grid-template-columns: 1fr;
   }
 
   .bfk__metrics {
