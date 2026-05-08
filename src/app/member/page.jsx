@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
@@ -27,8 +28,13 @@ function FlowArrow() {
   );
 }
 
-export default async function MemberPage() {
+export default async function MemberPage({ searchParams }) {
   const { signupApplicationUrl } = await getSiteFooterSettings();
+  const resolvedSearchParams = await searchParams;
+  const requestedStyle = Array.isArray(resolvedSearchParams?.tableStyle)
+    ? resolvedSearchParams.tableStyle[0]
+    : resolvedSearchParams?.tableStyle;
+  const tableStyle = ['a', 'b', 'c'].includes(requestedStyle) ? requestedStyle : 'a';
   const applicationHref =
     signupApplicationUrl && /^https?:\/\//i.test(signupApplicationUrl.trim())
       ? signupApplicationUrl.trim()
@@ -174,7 +180,33 @@ export default async function MemberPage() {
               </div>
             </header>
 
-            <div className="su-table-wrap" role="region" aria-label="회원 유형별 자격 및 혜택 표">
+            <div className="su-style-switch" role="group" aria-label="표 스타일 선택">
+              <span className="su-style-switch__label">표 스타일</span>
+              <Link
+                href="/member?tableStyle=a#su-eligibility-heading"
+                className={`su-style-switch__chip${tableStyle === 'a' ? ' is-active' : ''}`}
+              >
+                A안
+              </Link>
+              <Link
+                href="/member?tableStyle=b#su-eligibility-heading"
+                className={`su-style-switch__chip${tableStyle === 'b' ? ' is-active' : ''}`}
+              >
+                B안
+              </Link>
+              <Link
+                href="/member?tableStyle=c#su-eligibility-heading"
+                className={`su-style-switch__chip${tableStyle === 'c' ? ' is-active' : ''}`}
+              >
+                C안
+              </Link>
+            </div>
+
+            <div
+              className={`su-table-wrap su-table-wrap--${tableStyle}`}
+              role="region"
+              aria-label="회원 유형별 자격 및 혜택 표"
+            >
               <table className="su-table">
                 <caption className="su-table__caption">회원 유형별 자격 및 혜택 안내</caption>
                 <thead>
