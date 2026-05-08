@@ -65,7 +65,10 @@ export default function ArchiveClient({ initialArchives }) {
               <tr key={archive.id} className="an-table__row">
                 <td className="an-table__td an-table__td--num">{sorted.length - idx}</td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">{archive.title}</span>
+                  <span className="an-table__notice-title">
+                    {archive.isSecret ? '🔒 ' : ''}
+                    {archive.title}
+                  </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{archive.createdAt}</td>
                 <td className="an-table__td an-table__td--views">{Number(archive.views).toLocaleString()}</td>

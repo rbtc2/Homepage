@@ -60,6 +60,7 @@ export default function BoardTable({ rows, basePath, isSearching, query, emptyTe
                 </td>
                 <td className="notice-table__td notice-table__td--title">
                   <Link href={`${basePath}/${post.id}`} className="notice-table__link">
+                    {post.isSecret ? '🔒 ' : ''}
                     {isSearching
                       ? <HighlightedText text={post.title} query={query} />
                       : post.title}

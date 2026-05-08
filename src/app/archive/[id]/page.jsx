@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
-import { getArchiveById, getPrevNext } from '@/lib/archive';
+import { getArchiveById, getArchiveSecretAuth, getPrevNext } from '@/lib/archive';
+import SecretArchiveGate from './SecretArchiveGate';
 
 export const revalidate = 3600;
 
@@ -18,7 +20,14 @@ export default async function ArchiveDetailPage({ params }) {
   const { id } = await params;
   const archive = await getArchiveById(id);
   if (!archive) notFound();
+  const secretAuth = await getArchiveSecretAuth(id);
   const isKioskProjectPost = String(id) === '1';
+  const cookieStore = await cookies();
+  const unlockedByCookie =
+    secretAuth.isSecret &&
+    Boolean(secretAuth.secretPasswordHash) &&
+    cookieStore.get(`archive-secret-${id}`)?.value === secretAuth.secretPasswordHash;
+  const canRead = !secretAuth.isSecret || unlockedByCookie;
 
   const { prev, next } = await getPrevNext(id);
 
@@ -65,11 +74,15 @@ export default async function ArchiveDetailPage({ params }) {
               </div>
             </header>
 
-            <div
-              className="nd__body nd__body--html"
-              dangerouslySetInnerHTML={{ __html: archive.content }}
-            />
-            {isKioskProjectPost && (
+            {canRead ? (
+              <div
+                className="nd__body nd__body--html"
+                dangerouslySetInnerHTML={{ __html: archive.content }}
+              />
+            ) : (
+              <SecretArchiveGate id={id} />
+            )}
+            {canRead && isKioskProjectPost && (
               <section className="nd-cta" aria-label="프로젝트 참여 안내">
                 <h2 className="nd-cta__title">배리어프리 키오스크 공익 데이터 프로젝트</h2>
                 <p className="nd-cta__desc">

@@ -34,9 +34,10 @@ import EditorCoverUrlField from './EditorCoverUrlField';
  * @param {string}   editTitle        - 수정 모드 제목
  * @param {string}   newTitle         - 신규 작성 모드 제목
  * @param {boolean}  showPinToggle    - 공지 고정 체크박스 표시 여부
+ * @param {boolean}  showSecretToggle - 비밀글 토글 및 비밀번호 입력 표시 여부
  * @param {boolean}  showCoverImage   - 커버 이미지 URL 입력 표시 여부 (갤러리용)
  * @param {'wr-news'|'gallery'} [coverUploadFolder] - 설정 시 Storage에서 파일 업로드 가능
- * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage? }) => void
+ * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage?, isSecret?, secretPassword? }) => void
  */
 export default function RichEditor({
   post,
@@ -44,6 +45,7 @@ export default function RichEditor({
   editTitle,
   newTitle,
   showPinToggle = false,
+  showSecretToggle = false,
   showCoverImage = false,
   coverUploadFolder,
   onSave,
@@ -53,6 +55,8 @@ export default function RichEditor({
 
   const [title, setTitle] = useState(post?.title ?? '');
   const [isPinned, setIsPinned] = useState(post?.isPinned ?? false);
+  const [isSecret, setIsSecret] = useState(post?.isSecret ?? false);
+  const [secretPassword, setSecretPassword] = useState('');
   const [coverImage, setCoverImage] = useState(post?.coverImage ?? '');
   const [createdAt, setCreatedAt] = useState(
     post?.createdAt ?? new Date().toISOString().slice(0, 10)
@@ -107,16 +111,41 @@ export default function RichEditor({
       alert('내용을 입력해 주세요.');
       return;
     }
+    if (showSecretToggle && isSecret && !secretPassword.trim() && !post?.hasSecretPassword) {
+      alert('비밀글 비밀번호를 입력해 주세요.');
+      return;
+    }
     setSaving(true);
     try {
-      await onSave({ title, content: html, createdAt, isPinned, coverImage: coverImage.trim() || null });
+      await onSave({
+        title,
+        content: html,
+        createdAt,
+        isPinned,
+        coverImage: coverImage.trim() || null,
+        isSecret,
+        secretPassword,
+      });
       router.push(backHref);
     } catch {
       alert('저장에 실패했습니다. 다시 시도해 주세요.');
     } finally {
       setSaving(false);
     }
-  }, [title, createdAt, isPinned, coverImage, onSave, backHref, router, editor]);
+  }, [
+    title,
+    createdAt,
+    isPinned,
+    isSecret,
+    secretPassword,
+    coverImage,
+    showSecretToggle,
+    post?.hasSecretPassword,
+    onSave,
+    backHref,
+    router,
+    editor,
+  ]);
 
   const pageTitle = isEdit ? editTitle : newTitle;
   const primaryLabel = isEdit ? '수정 완료' : '게시하기';
@@ -142,8 +171,23 @@ export default function RichEditor({
         {showPinToggle && (
           <EditorCheckboxField checked={isPinned} onChange={setIsPinned} label="공지로 고정" />
         )}
+        {showSecretToggle && (
+          <EditorCheckboxField checked={isSecret} onChange={setIsSecret} label="비밀 게시글" />
+        )}
         <EditorMetaDate label="작성일" value={createdAt} onChange={setCreatedAt} />
       </div>
+
+      {showSecretToggle && isSecret && (
+        <input
+          type="password"
+          className="ep__title-input"
+          value={secretPassword}
+          onChange={(e) => setSecretPassword(e.target.value)}
+          placeholder={isEdit ? '비밀번호 변경 시에만 입력하세요' : '열람 비밀번호를 입력하세요'}
+          autoComplete="new-password"
+          maxLength={100}
+        />
+      )}
 
       <input
         type="text"
