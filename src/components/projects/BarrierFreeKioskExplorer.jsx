@@ -9,6 +9,26 @@ const REGION_META = {
   부산: { lat: 35.1796, lng: 129.0756, level: 8 },
 };
 const DEFAULT_CENTER = { lat: 36.35, lng: 127.9, level: 13 };
+const REGION_POLYGONS = {
+  서울: [
+    { lat: 37.701, lng: 126.764 },
+    { lat: 37.704, lng: 127.183 },
+    { lat: 37.426, lng: 127.184 },
+    { lat: 37.423, lng: 126.766 },
+  ],
+  경기: [
+    { lat: 38.294, lng: 126.385 },
+    { lat: 38.296, lng: 127.806 },
+    { lat: 36.894, lng: 127.808 },
+    { lat: 36.892, lng: 126.387 },
+  ],
+  부산: [
+    { lat: 35.405, lng: 128.752 },
+    { lat: 35.407, lng: 129.315 },
+    { lat: 34.916, lng: 129.317 },
+    { lat: 34.914, lng: 128.754 },
+  ],
+};
 
 function scoreLabel(score) {
   if (score >= 85) return '우수';
@@ -23,7 +43,7 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const pointMarkersRef = useRef([]);
-  const regionOverlaysRef = useRef([]);
+  const regionPolygonsRef = useRef([]);
 
   const points = useMemo(() => {
     if (selectedRegion === '전체') return initialPoints;
@@ -88,9 +108,9 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
     if (!map || !window.kakao?.maps) return;
 
     pointMarkersRef.current.forEach((marker) => marker.setMap(null));
-    regionOverlaysRef.current.forEach((overlay) => overlay.setMap(null));
+    regionPolygonsRef.current.forEach((polygon) => polygon.setMap(null));
     pointMarkersRef.current = [];
-    regionOverlaysRef.current = [];
+    regionPolygonsRef.current = [];
 
     const currentCenter = REGION_META[selectedRegion] ?? DEFAULT_CENTER;
     map.setCenter(new window.kakao.maps.LatLng(currentCenter.lat, currentCenter.lng));
@@ -109,37 +129,31 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
       pointMarkersRef.current.push(marker);
     });
 
-    Object.entries(REGION_META).forEach(([region, meta]) => {
+    Object.entries(REGION_POLYGONS).forEach(([region, coords]) => {
       const isActive = region === selectedRegion;
-      const content = `
-        <button type="button" class="bfk-map-chip${isActive ? ' is-active' : ''}" data-region="${region}">
-          ${region}
-        </button>
-      `;
-      const overlay = new window.kakao.maps.CustomOverlay({
-        position: new window.kakao.maps.LatLng(meta.lat, meta.lng),
-        content,
-        yAnchor: 1,
+      const path = coords.map((coord) => new window.kakao.maps.LatLng(coord.lat, coord.lng));
+      const polygon = new window.kakao.maps.Polygon({
+        path,
+        strokeWeight: isActive ? 3 : 2,
+        strokeColor: isActive ? '#124fa6' : '#7f8ea3',
+        strokeOpacity: 0.95,
+        strokeStyle: 'solid',
+        fillColor: isActive ? '#124fa6' : '#9eb4d3',
+        fillOpacity: isActive ? 0.22 : 0.12,
       });
-      overlay.setMap(map);
-      regionOverlaysRef.current.push(overlay);
+      polygon.setMap(map);
+      window.kakao.maps.event.addListener(polygon, 'mouseover', () => {
+        polygon.setOptions({ fillOpacity: isActive ? 0.26 : 0.18 });
+      });
+      window.kakao.maps.event.addListener(polygon, 'mouseout', () => {
+        polygon.setOptions({ fillOpacity: isActive ? 0.22 : 0.12 });
+      });
+      window.kakao.maps.event.addListener(polygon, 'click', () => {
+        setSelectedRegion(region);
+      });
+      regionPolygonsRef.current.push(polygon);
     });
   }, [points, selectedRegion]);
-
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map) return;
-    const rootNode = map.getNode();
-    const handleClick = (event) => {
-      const target = event.target.closest('[data-region]');
-      if (!target) return;
-      const region = target.getAttribute('data-region');
-      if (!region) return;
-      setSelectedRegion(region);
-    };
-    rootNode.addEventListener('click', handleClick);
-    return () => rootNode.removeEventListener('click', handleClick);
-  }, []);
 
   return (
     <section className="bfk" aria-labelledby="bfk-heading">
@@ -155,7 +169,7 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
           <aside className="bfk__map" aria-label="한국 지도 영역">
             <div className="bfk__map-head">
               <strong>지도 영역</strong>
-              <span>지역 라벨(서울/경기/부산)을 클릭하면 우측 목록이 필터됩니다.</span>
+              <span>행정구역 폴리곤(서울/경기/부산)을 클릭하면 우측 목록이 필터됩니다.</span>
             </div>
             <div className="bfk__map-panel">
               <div ref={mapRef} className="bfk__kakao-map" role="img" aria-label="카카오 지도" />
