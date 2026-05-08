@@ -1,11 +1,18 @@
-/* 홈 WR뉴스 — 전체 폭 섹션 (공지 띠와 동일한 가로 리듬) */
+/* 홈 WR뉴스 — 공지(글래스)와 동일 토큰: 반경 14·틴트 보더·소프트 섀도·헤더 룰 */
 
 .hmwr {
-  background: var(--surface);
-  /* 공지 글래스 패널과 이어지게 — 검은 라인 없이 헤어라인만 */
+  /* 상단: 공지 섹션 캔버스와 톤 브릿지 → 아래로 서페이스로 전환 */
+  background: linear-gradient(
+    180deg,
+    rgba(239, 244, 250, 0.95) 0%,
+    rgba(245, 248, 252, 0.72) 14%,
+    rgba(248, 250, 252, 0.45) 28%,
+    var(--surface) 48%,
+    var(--surface) 100%
+  );
   border-top: none;
-  border-bottom: 1px solid rgba(216, 222, 232, 0.65);
-  box-shadow: 0 -1px 0 rgba(18, 79, 166, 0.05);
+  border-bottom: 1px solid rgba(216, 222, 232, 0.55);
+  box-shadow: 0 -1px 0 rgba(18, 79, 166, 0.04);
 }
 
 .hmwr__inner {
@@ -13,23 +20,25 @@
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: clamp(1.75rem, 4.5vw, 2.75rem) var(--pad-x)
-    clamp(2.25rem, 5.5vw, 3.25rem);
+  padding: clamp(1.5rem, 4.2vw, 2.5rem) var(--pad-x)
+    clamp(2.1rem, 5.2vw, 3.05rem);
 }
 
 .hmwr__head {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: clamp(1.5rem, 3.5vw, 2rem);
+  padding: 0 0 clamp(0.9rem, 2.2vw, 1.15rem);
+  margin-bottom: clamp(1.35rem, 3.2vw, 1.75rem);
 }
 
 .hmwr__title {
   margin: 0;
-  font-size: clamp(1.25rem, 2.8vw, 1.5rem);
+  font-size: clamp(0.75rem, 1.95vw, 0.8125rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--ink);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand);
   white-space: nowrap;
 }
 
@@ -38,30 +47,38 @@
   height: 1px;
   border: 0;
   margin: 0;
-  background: var(--line);
+  background: linear-gradient(
+    90deg,
+    rgba(18, 79, 166, 0.16) 0%,
+    rgba(216, 222, 232, 0.45) 45%,
+    rgba(216, 222, 232, 0) 100%
+  );
 }
 
 .hmwr__all {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.8125rem;
+  gap: 0.35rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--muted);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.18s var(--ease);
+  transition:
+    color 0.22s var(--ease),
+    transform 0.22s var(--ease);
 }
 
 .hmwr__all:hover {
-  color: var(--brand);
+  color: var(--brand-mid);
+  transform: translateX(2px);
 }
 
 .hmwr__all:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: 6px;
 }
 
 .hmwr__zero {
@@ -100,21 +117,33 @@
   display: block;
   text-decoration: none;
   color: inherit;
-  border-radius: 4px;
+  border-radius: 14px;
   overflow: hidden;
   min-height: 0;
   height: 100%;
   background: var(--canvas);
-  transition: box-shadow 0.28s var(--ease);
+  border: 1px solid rgba(18, 79, 166, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 4px 6px rgba(12, 20, 36, 0.03);
+  transition:
+    border-color 0.22s var(--ease),
+    box-shadow 0.25s var(--ease),
+    transform 0.22s var(--ease);
 }
 
 .hmwr__hero:hover {
-  box-shadow: 0 14px 42px rgba(12, 20, 36, 0.14);
+  border-color: rgba(18, 79, 166, 0.18);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.65) inset,
+    0 8px 24px rgba(12, 20, 36, 0.07);
+  transform: translateY(-1px);
 }
 
 .hmwr__hero:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
+  border-radius: 14px;
 }
 
 .hmwr__hero-frame {
@@ -226,23 +255,31 @@
   min-height: 0;
   text-decoration: none;
   color: inherit;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  background: rgba(247, 250, 255, 0.72);
+  border: 1px solid rgba(18, 79, 166, 0.08);
+  border-radius: 14px;
   overflow: hidden;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
   transition:
-    border-color 0.2s var(--ease),
-    box-shadow 0.22s var(--ease);
+    background 0.22s var(--ease),
+    border-color 0.22s var(--ease),
+    box-shadow 0.25s var(--ease),
+    transform 0.22s var(--ease);
 }
 
 .hmwr__sub:hover {
-  border-color: rgba(18, 79, 166, 0.38);
-  box-shadow: 0 8px 26px rgba(12, 20, 36, 0.1);
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(18, 79, 166, 0.18);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 8px 24px rgba(12, 20, 36, 0.07);
+  transform: translateY(-1px);
 }
 
 .hmwr__sub:focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 14px;
 }
 
 .hmwr__sub-pic {
@@ -308,6 +345,21 @@
   margin-top: auto;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .hmwr__all:hover,
+  .hmwr__hero,
+  .hmwr__hero:hover,
+  .hmwr__sub,
+  .hmwr__sub:hover {
+    transition-duration: 0.01ms;
+    transform: none;
+  }
+
+  .hmwr__all:hover {
+    transform: none;
+  }
+}
+
 @media (max-width: 768px) {
   .hmwr__grid {
     grid-template-columns: 1fr;
@@ -320,5 +372,10 @@
 
   .hmwr__grid--one .hmwr__hero-frame {
     min-height: clamp(260px, 68vw, 400px);
+  }
+
+  .hmwr__hero,
+  .hmwr__sub {
+    border-radius: 13px;
   }
 }
