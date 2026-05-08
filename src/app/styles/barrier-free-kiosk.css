@@ -251,24 +251,6 @@
   color: var(--muted);
 }
 
-.bfk__axis {
-  margin-top: 0.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.bfk__axis-chip {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 0.12rem 0.45rem;
-  font-size: 0.72rem;
-  color: var(--muted);
-  background: #fff;
-}
-
 .bfk__empty {
   border: 1px dashed var(--line);
   border-radius: 3px;
@@ -295,33 +277,6 @@
   margin: 0.25rem 0 0.75rem;
   font-size: 0.8125rem;
   color: var(--muted);
-}
-
-.bfk__metrics {
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-}
-
-.bfk__metrics div {
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 0.5rem;
-  background: var(--surface);
-}
-
-.bfk__metrics dt {
-  margin: 0;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.bfk__metrics dd {
-  margin: 0.2rem 0 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--ink);
 }
 
 .bfk__checklist {
@@ -370,7 +325,4 @@
     grid-template-columns: 1fr;
   }
 
-  .bfk__metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }

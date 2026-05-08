@@ -16,13 +16,6 @@ const MOCK_POINTS = [
     lat: 37.5145,
     lng: 127.1068,
     facilityType: '공공기관',
-    categoryScores: {
-      physicalSpace: 88,
-      operationVisual: 84,
-      digitalLanguage: 83,
-      voiceAlternative: 90,
-      interactionManagement: 85,
-    },
     physicalSpace: {
       kneeSpaceHeightCm: 72,
       frontActivityAreaSqm: 1.45,
@@ -56,13 +49,6 @@ const MOCK_POINTS = [
     lat: 37.5172,
     lng: 127.0473,
     facilityType: '보건',
-    categoryScores: {
-      physicalSpace: 80,
-      operationVisual: 76,
-      digitalLanguage: 77,
-      voiceAlternative: 81,
-      interactionManagement: 79,
-    },
     physicalSpace: {
       kneeSpaceHeightCm: 69,
       frontActivityAreaSqm: 1.18,
@@ -96,13 +82,6 @@ const MOCK_POINTS = [
     lat: 37.2636,
     lng: 127.0286,
     facilityType: '공공기관',
-    categoryScores: {
-      physicalSpace: 75,
-      operationVisual: 68,
-      digitalLanguage: 70,
-      voiceAlternative: 73,
-      interactionManagement: 74,
-    },
     physicalSpace: {
       kneeSpaceHeightCm: 67,
       frontActivityAreaSqm: 1.04,
@@ -136,13 +115,6 @@ const MOCK_POINTS = [
     lat: 35.1151,
     lng: 129.0421,
     facilityType: '교통',
-    categoryScores: {
-      physicalSpace: 76,
-      operationVisual: 72,
-      digitalLanguage: 74,
-      voiceAlternative: 79,
-      interactionManagement: 73,
-    },
     physicalSpace: {
       kneeSpaceHeightCm: 68,
       frontActivityAreaSqm: 1.1,

@@ -29,14 +29,6 @@ const REGION_POLYGONS = {
     { lat: 34.914, lng: 128.754 },
   ],
 };
-const CATEGORY_META = [
-  { key: 'physicalSpace', label: '물리적 공간' },
-  { key: 'operationVisual', label: '조작·시각 편의' },
-  { key: 'digitalLanguage', label: '디지털·언어 편의' },
-  { key: 'voiceAlternative', label: '음성·대체 수단' },
-  { key: 'interactionManagement', label: '상호작용·관리' },
-];
-
 function boolLabel(value) {
   return value ? '가능' : '미흡';
 }
@@ -266,13 +258,6 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                     <p className="bfk__item-sub">
                       {item.region} {item.district} · {item.facilityType}
                     </p>
-                    <div className="bfk__axis">
-                      {CATEGORY_META.map((axis) => (
-                        <span key={axis.key} className="bfk__axis-chip">
-                          {axis.label} {item.categoryScores?.[axis.key] ?? '-'}
-                        </span>
-                      ))}
-                    </div>
                   </button>
                 </li>
               ))}
@@ -287,15 +272,6 @@ export default function BarrierFreeKioskExplorer({ initialPoints }) {
                 <p className="bfk__detail-sub">
                   {selectedPoint.region} {selectedPoint.district} · {selectedPoint.facilityType}
                 </p>
-                <dl className="bfk__metrics">
-                  {CATEGORY_META.map((axis) => (
-                    <div key={axis.key}>
-                      <dt>{axis.label}</dt>
-                      <dd>{selectedPoint.categoryScores?.[axis.key] ?? '-'}</dd>
-                    </div>
-                  ))}
-                </dl>
-
                 <div className="bfk__checklist">
                   <section className="bfk__check-section">
                     <h4>물리적 공간 (무릎 공간)</h4>
