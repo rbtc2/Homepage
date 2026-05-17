@@ -4,6 +4,12 @@ import { useCallback, useRef } from 'react';
 import { NodeViewWrapper } from '@tiptap/react';
 import { clampMargin, clampWidth, MAX_WIDTH, MIN_WIDTH, normalizeAlign } from './EditorImage';
 
+const ALIGN_JUSTIFY = {
+  left: 'flex-start',
+  center: 'center',
+  right: 'flex-end',
+};
+
 function getMaxResizeWidth(img, marginLeft, marginRight) {
   const natural = img.naturalWidth > 0 ? img.naturalWidth : MAX_WIDTH;
   const content = img.closest('.ep-content');
@@ -52,6 +58,9 @@ export default function EditorImageView({ node, updateAttributes, selected }) {
   );
 
   const wrapStyle = {
+    display: 'flex',
+    width: '100%',
+    justifyContent: ALIGN_JUSTIFY[align] ?? 'center',
     paddingLeft: `${marginLeft}px`,
     paddingRight: `${marginRight}px`,
     ['--ep-img-ml']: `${marginLeft}px`,

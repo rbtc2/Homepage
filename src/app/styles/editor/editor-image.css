@@ -43,30 +43,23 @@
 }
 
 /* ── 에디터 NodeView: 드래그 리사이즈 ─────────────────────────── */
+/* TipTap React NodeView 외곽 — 가로 전체를 써야 flex 정렬이 보입니다 */
+.ep-content .react-renderer.node-editorImage {
+  width: 100%;
+}
+
 .ep-content .ep-img-node-view__frame {
   position: relative;
   display: inline-block;
   max-width: 100%;
   vertical-align: top;
+  flex-shrink: 0;
 }
 
-/* NodeView는 frame이 shrink-to-fit이라 img의 margin:auto가 무효 — frame에 정렬 적용 */
-.ep-content .ep-img-node-view.ep-img-block--left .ep-img-node-view__frame {
-  margin-right: auto;
-  margin-left: 0;
-}
-
-.ep-content .ep-img-node-view.ep-img-block--center .ep-img-node-view__frame {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.ep-content .ep-img-node-view.ep-img-block--right .ep-img-node-view__frame {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.ep-content .ep-img-node-view__frame .ep-img-block__img {
+/* NodeView: 정렬은 EditorImageView flex로 처리 — img margin 규칙은 덮어씀 */
+.ep-content .ep-img-node-view.ep-img-block--left .ep-img-node-view__frame .ep-img-block__img,
+.ep-content .ep-img-node-view.ep-img-block--center .ep-img-node-view__frame .ep-img-block__img,
+.ep-content .ep-img-node-view.ep-img-block--right .ep-img-node-view__frame .ep-img-block__img {
   margin-left: 0;
   margin-right: 0;
   vertical-align: top;
