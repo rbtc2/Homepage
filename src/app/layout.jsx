@@ -1,4 +1,5 @@
 import { Noto_Sans_KR } from 'next/font/google';
+import SitePopupsLoader from '@/components/SitePopupsLoader';
 import './globals.css';
 
 const notoSansKR = Noto_Sans_KR({
@@ -18,7 +19,10 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="color-scheme" content="light" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SitePopupsLoader />
+      </body>
     </html>
   );
 }

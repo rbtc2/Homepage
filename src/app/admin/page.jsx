@@ -5,6 +5,7 @@ import { getDisclosures } from '@/lib/disclosures';
 import { getGalleryPosts } from '@/lib/gallery';
 import { getWrNewsPosts } from '@/lib/wr-news';
 import { buildRecentActivity } from '@/lib/dashboard';
+import { getActivePopupCount } from '@/lib/popups';
 
 export const metadata = { title: '대시보드 | 국제인권연대 월드라이츠 관리자' };
 export const dynamic = 'force-dynamic';
@@ -20,23 +21,23 @@ const SECTION_BADGE_STYLE = {
 export default async function AdminPage() {
   const thisMonth = new Date().toISOString().slice(0, 7);
 
-  const [notices, archives, disclosures, gallery, wrNews] = await Promise.all([
+  const [notices, archives, disclosures, gallery, wrNews, activePopupCount] = await Promise.all([
     getNotices(),
     getArchives(),
     getDisclosures(),
     getGalleryPosts(),
     getWrNewsPosts(),
+    getActivePopupCount().catch(() => 0),
   ]);
   const recentActivity = buildRecentActivity(notices, archives, disclosures, gallery, wrNews, 5);
 
   const stats = [
     {
-      // Popups are not yet DB-backed. Show 0 until backend is implemented.
       label: '활성 팝업',
       href: '/admin/popups',
-      total: 0,
+      total: activePopupCount,
       sub: '노출 중',
-      highlight: false,
+      highlight: activePopupCount > 0,
     },
     {
       label: '공지사항',

@@ -14,11 +14,11 @@ const MIME_TO_EXT = {
   'image/webp': 'webp',
   'image/gif': 'gif',
 };
-const ALLOWED_FOLDERS = new Set(['wr-news', 'gallery', 'editor-content']);
+const ALLOWED_FOLDERS = new Set(['wr-news', 'gallery', 'editor-content', 'popups']);
 
 /**
  * 관리자 세션 + Supabase Storage(`covers`)에 이미지 업로드 후 공개 URL 반환.
- * @param {FormData} formData - `file` (File), `folder` ('wr-news' | 'gallery' | 'editor-content')
+ * @param {FormData} formData - `file` (File), `folder` ('wr-news' | 'gallery' | 'editor-content' | 'popups')
  * @returns {Promise<{ ok: true, url: string } | { ok: false, message: string }>}
  */
 export async function uploadEditorCoverImage(formData) {

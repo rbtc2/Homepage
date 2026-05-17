@@ -1,10 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import PopupFormModal from './PopupFormModal';
+import { createPopup, updatePopup, deletePopup, togglePopupActive } from './actions';
 
 const POSITION_LABELS = {
   center: '중앙',
+  'top-left': '좌상단',
+  'top-right': '우상단',
   'bottom-left': '좌하단',
   'bottom-right': '우하단',
 };
@@ -31,18 +35,47 @@ const EMPTY_FORM = {
   startDate: '',
   endDate: '',
   position: 'center',
+  widthPx: '',
+  heightPx: '',
+  offsetX: 0,
+  offsetY: 0,
   showCloseForDay: true,
   isActive: false,
 };
 
+function formFromPopup(popup) {
+  return {
+    title: popup.title,
+    imageUrl: popup.imageUrl,
+    linkUrl: popup.linkUrl,
+    startDate: popup.startDate,
+    endDate: popup.endDate,
+    position: popup.position,
+    widthPx: popup.widthPx ?? '',
+    heightPx: popup.heightPx ?? '',
+    offsetX: popup.offsetX ?? 0,
+    offsetY: popup.offsetY ?? 0,
+    showCloseForDay: popup.showCloseForDay,
+    isActive: popup.isActive,
+  };
+}
+
 export default function PopupsClient({ initialPopups }) {
+  const router = useRouter();
   const [popups, setPopups] = useState(initialPopups);
   const [modalOpen, setModalOpen] = useState(false);
   const [editTarget, setEditTarget] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [togglingId, setTogglingId] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
-  const activeCount    = popups.filter((p) => getStatus(p) === 'active').length;
+  useEffect(() => {
+    setPopups(initialPopups);
+  }, [initialPopups]);
+
+  const activeCount = popups.filter((p) => getStatus(p) === 'active').length;
   const scheduledCount = popups.filter((p) => getStatus(p) === 'scheduled').length;
 
   const openCreate = () => {
@@ -53,16 +86,7 @@ export default function PopupsClient({ initialPopups }) {
 
   const openEdit = (popup) => {
     setEditTarget(popup);
-    setForm({
-      title: popup.title,
-      imageUrl: popup.imageUrl,
-      linkUrl: popup.linkUrl,
-      startDate: popup.startDate,
-      endDate: popup.endDate,
-      position: popup.position,
-      showCloseForDay: popup.showCloseForDay,
-      isActive: popup.isActive,
-    });
+    setForm(formFromPopup(popup));
     setModalOpen(true);
   };
 
@@ -77,35 +101,62 @@ export default function PopupsClient({ initialPopups }) {
     setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleImageUrlChange = (url) => {
+    setForm((prev) => ({ ...prev, imageUrl: url }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: createPopup / updatePopup Server Action 연결
-    alert('아직 구현되지 않은 기능입니다.');
-    closeModal();
+    setSaving(true);
+    try {
+      if (editTarget) {
+        await updatePopup(editTarget.id, form);
+      } else {
+        await createPopup(form);
+      }
+      closeModal();
+      router.refresh();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : '저장에 실패했습니다.');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleToggleActive = (popup) => {
-    // TODO: togglePopupActive Server Action 연결
-    setPopups((prev) =>
-      prev.map((p) => (p.id === popup.id ? { ...p, isActive: !p.isActive } : p))
-    );
+  const handleToggleActive = async (popup) => {
+    setTogglingId(popup.id);
+    try {
+      await togglePopupActive(popup.id);
+      router.refresh();
+    } catch {
+      alert('활성화 상태 변경에 실패했습니다.');
+    } finally {
+      setTogglingId(null);
+    }
   };
 
-  const handleDeleteConfirm = () => {
-    // TODO: deletePopup Server Action 연결
-    setPopups((prev) => prev.filter((p) => p.id !== deleteTarget.id));
-    setDeleteTarget(null);
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await deletePopup(deleteTarget.id);
+      setDeleteTarget(null);
+      router.refresh();
+    } catch {
+      alert('삭제에 실패했습니다.');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   return (
     <div className="an">
-      {/* 페이지 헤더 */}
       <div className="an__bar">
         <div className="an__bar-left">
           <h1 className="an__title">팝업 관리</h1>
           <p className="an__sub">홈페이지에 노출할 팝업을 등록·수정·삭제하거나 활성화할 수 있습니다.</p>
         </div>
-        <button className="an-btn an-btn--primary" onClick={openCreate}>
+        <button type="button" className="an-btn an-btn--primary" onClick={openCreate}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
           </svg>
@@ -113,7 +164,6 @@ export default function PopupsClient({ initialPopups }) {
         </button>
       </div>
 
-      {/* 통계 */}
       <div className="an-stats">
         <div className="an-stat">
           <span className="an-stat__num">{popups.length}</span>
@@ -129,7 +179,6 @@ export default function PopupsClient({ initialPopups }) {
         </div>
       </div>
 
-      {/* 팝업 목록 테이블 */}
       <div className="an-table-wrap an-table-wrap--popup">
         <table className="an-table">
           <thead>
@@ -167,8 +216,10 @@ export default function PopupsClient({ initialPopups }) {
                   </td>
                   <td className="an-table__td an-table__td--popup-active" data-label="활성화">
                     <button
+                      type="button"
                       className={`an-toggle${popup.isActive ? ' an-toggle--on' : ''}`}
                       onClick={() => handleToggleActive(popup)}
+                      disabled={togglingId === popup.id}
                       aria-label={popup.isActive ? '팝업 비활성화' : '팝업 활성화'}
                       aria-pressed={popup.isActive}
                       title={popup.isActive ? '클릭하여 비활성화' : '클릭하여 활성화'}
@@ -181,12 +232,14 @@ export default function PopupsClient({ initialPopups }) {
                   <td className="an-table__td an-table__td--actions">
                     <div className="an-actions">
                       <button
+                        type="button"
                         className="an-btn an-btn--sm an-btn--ghost"
                         onClick={() => openEdit(popup)}
                       >
                         수정
                       </button>
                       <button
+                        type="button"
                         className="an-btn an-btn--sm an-btn--danger-ghost"
                         onClick={() => setDeleteTarget(popup)}
                       >
@@ -202,6 +255,7 @@ export default function PopupsClient({ initialPopups }) {
                 <td className="an-table__empty" colSpan={7}>
                   등록된 팝업이 없습니다.{' '}
                   <button
+                    type="button"
                     className="an-table__empty-link"
                     style={{ background: 'none', border: 'none', cursor: 'pointer', font: 'inherit' }}
                     onClick={openCreate}
@@ -215,27 +269,33 @@ export default function PopupsClient({ initialPopups }) {
         </table>
       </div>
 
-      {/* 팝업 등록·수정 모달 */}
       {modalOpen && (
         <PopupFormModal
           editTarget={editTarget}
           form={form}
           onChange={handleFormChange}
+          onImageUrlChange={handleImageUrlChange}
           onSubmit={handleSubmit}
           onClose={closeModal}
+          saving={saving}
         />
       )}
 
-      {/* 삭제 확인 모달 */}
       {deleteTarget && (
         <div
           className="an-overlay"
-          onClick={(e) => e.target === e.currentTarget && setDeleteTarget(null)}
+          onClick={(e) => e.target === e.currentTarget && !deleting && setDeleteTarget(null)}
         >
           <div className="an-modal an-modal--sm" role="dialog" aria-modal="true">
             <div className="an-modal__hd">
               <h2 className="an-modal__title">팝업 삭제</h2>
-              <button className="an-modal__close" onClick={() => setDeleteTarget(null)} aria-label="닫기">
+              <button
+                type="button"
+                className="an-modal__close"
+                onClick={() => setDeleteTarget(null)}
+                aria-label="닫기"
+                disabled={deleting}
+              >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
@@ -245,7 +305,13 @@ export default function PopupsClient({ initialPopups }) {
               <div className="an-del-confirm">
                 <div className="an-del-confirm__icon" aria-hidden="true">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
                 <p className="an-del-confirm__q">이 팝업을 삭제할까요?</p>
@@ -254,11 +320,21 @@ export default function PopupsClient({ initialPopups }) {
               </div>
             </div>
             <div className="an-modal__ft">
-              <button className="an-btn an-btn--secondary" onClick={() => setDeleteTarget(null)}>
+              <button
+                type="button"
+                className="an-btn an-btn--secondary"
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleting}
+              >
                 취소
               </button>
-              <button className="an-btn an-btn--danger" onClick={handleDeleteConfirm}>
-                삭제
+              <button
+                type="button"
+                className="an-btn an-btn--danger"
+                onClick={handleDeleteConfirm}
+                disabled={deleting}
+              >
+                {deleting ? '삭제 중…' : '삭제'}
               </button>
             </div>
           </div>
