@@ -76,6 +76,7 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
   if (!editor) return null;
 
   const inTable    = editor.isActive('table');
+  const onImage    = editor.isActive('editorImage');
   const onLink     = editor.isActive('link');
   const hasSelect  = !editor.state.selection.empty;
   const linkHref   = editor.getAttributes('link').href ?? '';
@@ -126,6 +127,22 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
             onClick={() => run(() => editor.chain().focus().toggleUnderline().run())} />
           <Item icon={icons.strike}    label="취소선"
             onClick={() => run(() => editor.chain().focus().toggleStrike().run())} />
+          <Sep />
+        </>
+      )}
+
+      {/* ── 이미지 ── */}
+      {onImage && !linkInput && (
+        <>
+          <Section>이미지</Section>
+          <Item icon={icons.alignLeft} label="왼쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().updateEditorImage({ align: 'left' }).run())} />
+          <Item icon={icons.alignCenter} label="가운데 정렬"
+            onClick={() => run(() => editor.chain().focus().updateEditorImage({ align: 'center' }).run())} />
+          <Item icon={icons.alignRight} label="오른쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().updateEditorImage({ align: 'right' }).run())} />
+          <Item icon={icons.deleteImage} label="이미지 삭제" danger
+            onClick={() => run(() => editor.chain().focus().deleteSelection().run())} />
           <Sep />
         </>
       )}

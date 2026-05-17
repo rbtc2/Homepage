@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEditor, EditorContent } from '@tiptap/react';
+import { NodeSelection } from '@tiptap/pm/state';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
@@ -13,12 +14,15 @@ import { CustomTableHeader } from './CustomTableHeader';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import { Link as TiptapLink } from '@tiptap/extension-link';
+import { EditorImage } from './EditorImage';
 
 import icons from './icons';
 import { ToolbarBtn, Divider } from './ToolbarBtn';
 import TableGridPicker from './TableGridPicker';
 import ColorPicker from './ColorPicker';
 import LinkPicker from './LinkPicker';
+import ImagePicker from './ImagePicker';
+import ImageToolbar from './ImageToolbar';
 import TableToolbar from './TableToolbar';
 import EditorContextMenu from './EditorContextMenu';
 import EditorPageFrame from './EditorPageFrame';
@@ -87,6 +91,7 @@ export default function RichEditor({
       TableRow,
       CustomTableHeader,
       CustomTableCell,
+      EditorImage,
     ],
     content: post?.content ?? '',
     editorProps: {
@@ -97,6 +102,22 @@ export default function RichEditor({
           setContextMenu({ x: event.clientX, y: event.clientY });
           return true;
         },
+      },
+      handleClick: (view, _pos, event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return false;
+        const block = target.closest('.ep-img-block');
+        if (!block || !view.dom.contains(block)) return false;
+        try {
+          const nodePos = view.posAtDOM(block, 0);
+          const node = view.state.doc.nodeAt(nodePos);
+          if (node?.type.name !== 'editorImage') return false;
+          const { tr } = view.state;
+          view.dispatch(tr.setSelection(NodeSelection.create(view.state.doc, nodePos)));
+          return true;
+        } catch {
+          return false;
+        }
       },
     },
   });
@@ -302,6 +323,12 @@ export default function RichEditor({
         <Divider />
 
         <div className="ep-toolbar__group">
+          <ImagePicker editor={editor} />
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
           <div className="ep-tbl-wrap">
             <ToolbarBtn title="표 삽입" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
               {icons.table}
@@ -322,6 +349,7 @@ export default function RichEditor({
       </div>
 
       <EditorContent editor={editor} className="ep-editor-wrap" />
+      <ImageToolbar editor={editor} />
     </EditorPageFrame>
   );
 }

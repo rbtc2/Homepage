@@ -1,0 +1,237 @@
+/* ── 본문 이미지 블록 (에디터 + 공개 페이지 공통) ─────────────── */
+
+.ep-content .ep-img-block,
+.nd__body--html .ep-img-block {
+  margin: 1.25em 0;
+  padding-left: var(--ep-img-ml, 0px);
+  padding-right: var(--ep-img-mr, 0px);
+  line-height: 0;
+}
+
+.ep-content .ep-img-block__img,
+.nd__body--html .ep-img-block__img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.ep-content .ep-img-block--left .ep-img-block__img,
+.nd__body--html .ep-img-block--left .ep-img-block__img {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.ep-content .ep-img-block--center .ep-img-block__img,
+.nd__body--html .ep-img-block--center .ep-img-block__img {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ep-content .ep-img-block--right .ep-img-block__img,
+.nd__body--html .ep-img-block--right .ep-img-block__img {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* 에디터: 선택된 이미지 강조 */
+.ep-content .ProseMirror-selectednode.ep-img-block,
+.ep-content .ep-img-block.ProseMirror-selectednode {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ── 이미지 삽입 팝오버 (.ip) ───────────────────────────────── */
+.ep-img-picker-wrap {
+  position: relative;
+}
+
+.ip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 50;
+  width: min(320px, calc(100vw - 2rem));
+  padding: 0.875rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(12, 20, 36, 0.12);
+}
+
+.ip__label {
+  margin: 0 0 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.ip__file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ip__upload-btn {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: var(--canvas);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--brand);
+  cursor: pointer;
+  transition: background 0.12s var(--ease), border-color 0.12s var(--ease);
+}
+
+.ip__upload-btn:hover:not(:disabled) {
+  background: rgba(18, 79, 166, 0.06);
+  border-color: var(--brand);
+}
+
+.ip__upload-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.ip__meta {
+  margin: 0.375rem 0 0;
+  font-size: 0.6875rem;
+  color: var(--muted);
+}
+
+.ip__or {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+}
+
+.ip__input-row {
+  margin-bottom: 0.5rem;
+}
+
+.ip__input {
+  width: 100%;
+  padding: 0.45rem 0.625rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--ink);
+  background: var(--surface);
+  outline: none;
+}
+
+.ip__input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(18, 79, 166, 0.12);
+}
+
+.ip__hint {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+.ip__hint--err {
+  color: #dc2626;
+}
+
+.ip__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ip__btn {
+  padding: 0.35rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ip__btn--apply {
+  background: var(--brand);
+  color: #fff;
+}
+
+.ip__btn--apply:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ip__btn--apply:not(:disabled):hover {
+  background: var(--brand-deep);
+}
+
+/* ── 이미지 플로팅 툴바 (BubbleMenu) ─────────────────────────── */
+.ep-img-bubble__inner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(12, 20, 36, 0.14);
+}
+
+.ep-img-bubble__sep {
+  display: block;
+  width: 1px;
+  height: 1.25rem;
+  background: var(--line);
+  margin: 0 0.15rem;
+  flex-shrink: 0;
+}
+
+.ep-img-toolbar__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-left: 0.125rem;
+}
+
+.ep-img-toolbar__field-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ep-img-toolbar__input {
+  width: 3.25rem;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--ink);
+  background: var(--surface);
+  -moz-appearance: textfield;
+}
+
+.ep-img-toolbar__input::-webkit-outer-spin-button,
+.ep-img-toolbar__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ep-img-toolbar__input:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.ep-img-toolbar__unit {
+  font-size: 0.6875rem;
+  color: var(--muted);
+}
