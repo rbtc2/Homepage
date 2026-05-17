@@ -15,6 +15,7 @@ export default function EditorPage({ disclosure }) {
   return (
     <RichEditor
       post={disclosure}
+      contentType="disclosures"
       backHref="/admin/disclosures"
       editTitle="공시자료 수정"
       newTitle="새 공시자료 작성"

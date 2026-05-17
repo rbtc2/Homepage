@@ -15,6 +15,7 @@ export default function WrNewsEditorPage({ post }) {
   return (
     <RichEditor
       post={post}
+      contentType="wr_news"
       backHref="/admin/wr-news"
       editTitle="WR뉴스 게시물 수정"
       newTitle="새 WR뉴스 게시물 작성"

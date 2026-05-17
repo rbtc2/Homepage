@@ -50,7 +50,25 @@
   vertical-align: top;
 }
 
+/* NodeView는 frame이 shrink-to-fit이라 img의 margin:auto가 무효 — frame에 정렬 적용 */
+.ep-content .ep-img-node-view.ep-img-block--left .ep-img-node-view__frame {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.ep-content .ep-img-node-view.ep-img-block--center .ep-img-node-view__frame {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ep-content .ep-img-node-view.ep-img-block--right .ep-img-node-view__frame {
+  margin-left: auto;
+  margin-right: 0;
+}
+
 .ep-content .ep-img-node-view__frame .ep-img-block__img {
+  margin-left: 0;
+  margin-right: 0;
   vertical-align: top;
 }
 

@@ -15,6 +15,7 @@ export default function EditorPage({ notice }) {
   return (
     <RichEditor
       post={notice}
+      contentType="notices"
       backHref="/admin/notices"
       editTitle="게시물 수정"
       newTitle="새 게시물 작성"

@@ -29,11 +29,14 @@ import EditorPageFrame from './EditorPageFrame';
 import EditorCheckboxField from './EditorCheckboxField';
 import EditorMetaDate from './EditorMetaDate';
 import EditorCoverUrlField from './EditorCoverUrlField';
+import DraftLoadModal from './DraftLoadModal';
+import { deleteAdminDraft, getAdminDraft, saveAdminDraft } from '@/app/admin/drafts/actions';
 
 /**
  * 공통 리치 텍스트 에디터 페이지
  *
  * @param {object}   post             - 수정 시 기존 게시물 데이터 (null이면 신규 작성)
+ * @param {string}   contentType      - admin_drafts.content_type (notices, wr_news, …)
  * @param {string}   backHref         - 목록으로 돌아가는 경로
  * @param {string}   editTitle        - 수정 모드 제목
  * @param {string}   newTitle         - 신규 작성 모드 제목
@@ -45,6 +48,7 @@ import EditorCoverUrlField from './EditorCoverUrlField';
  */
 export default function RichEditor({
   post,
+  contentType,
   backHref,
   editTitle,
   newTitle,
@@ -66,6 +70,9 @@ export default function RichEditor({
     post?.createdAt ?? new Date().toISOString().slice(0, 10)
   );
   const [saving, setSaving] = useState(false);
+  const [draftId, setDraftId] = useState(null);
+  const [draftSaving, setDraftSaving] = useState(false);
+  const [draftModalOpen, setDraftModalOpen] = useState(false);
   const [tablePickerOpen, setTablePickerOpen] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
 
@@ -158,6 +165,68 @@ export default function RichEditor({
     },
   });
 
+  const buildDraftPayload = useCallback(() => {
+    const html = editor?.getHTML() ?? '';
+    return {
+      title,
+      content: html,
+      createdAt,
+      isPinned,
+      isSecret,
+      coverImage: coverImage.trim() || null,
+    };
+  }, [title, createdAt, isPinned, isSecret, coverImage, editor]);
+
+  const applyDraftPayload = useCallback(
+    (payload) => {
+      setTitle(payload?.title ?? '');
+      setCreatedAt(payload?.createdAt ?? new Date().toISOString().slice(0, 10));
+      setIsPinned(Boolean(payload?.isPinned));
+      setIsSecret(Boolean(payload?.isSecret));
+      setCoverImage(payload?.coverImage ?? '');
+      setSecretPassword('');
+      const html = payload?.content ?? '';
+      editor?.commands.setContent(html || '<p></p>');
+    },
+    [editor]
+  );
+
+  const handleDraftSave = useCallback(async () => {
+    setDraftSaving(true);
+    try {
+      const saved = await saveAdminDraft({
+        id: draftId,
+        contentType,
+        sourcePostId: post?.id ?? null,
+        payload: buildDraftPayload(),
+      });
+      setDraftId(saved.id);
+      alert('임시저장되었습니다.');
+    } catch {
+      alert('임시저장에 실패했습니다. 다시 시도해 주세요.');
+    } finally {
+      setDraftSaving(false);
+    }
+  }, [draftId, contentType, post?.id, buildDraftPayload]);
+
+  const handleDraftLoad = useCallback(
+    async (loadDraftId) => {
+      try {
+        const draft = await getAdminDraft(loadDraftId);
+        if (draft.contentType !== contentType) {
+          alert('다른 게시판의 임시저장입니다.');
+          return;
+        }
+        applyDraftPayload(draft.payload);
+        setDraftId(draft.id);
+        setDraftModalOpen(false);
+      } catch {
+        alert('임시저장을 불러오지 못했습니다.');
+      }
+    },
+    [contentType, applyDraftPayload]
+  );
+
   const handleSave = useCallback(async () => {
     if (!title.trim()) {
       alert('제목을 입력해 주세요.');
@@ -183,6 +252,13 @@ export default function RichEditor({
         isSecret,
         secretPassword,
       });
+      if (draftId) {
+        try {
+          await deleteAdminDraft(draftId);
+        } catch {
+          /* 게시는 성공 — 임시저장 삭제 실패는 무시 */
+        }
+      }
       router.push(backHref);
     } catch {
       alert('저장에 실패했습니다. 다시 시도해 주세요.');
@@ -202,6 +278,7 @@ export default function RichEditor({
     backHref,
     router,
     editor,
+    draftId,
   ]);
 
   const pageTitle = isEdit ? editTitle : newTitle;
@@ -214,6 +291,9 @@ export default function RichEditor({
       saving={saving}
       onSave={handleSave}
       primaryLabel={primaryLabel}
+      onDraftSave={handleDraftSave}
+      onDraftLoadOpen={() => setDraftModalOpen(true)}
+      draftSaving={draftSaving}
       footer={
         contextMenu ? (
           <EditorContextMenu
@@ -386,6 +466,13 @@ export default function RichEditor({
 
       <EditorContent editor={editor} className="ep-editor-wrap" />
       <ImageToolbar editor={editor} />
+
+      <DraftLoadModal
+        open={draftModalOpen}
+        contentType={contentType}
+        onClose={() => setDraftModalOpen(false)}
+        onLoad={handleDraftLoad}
+      />
     </EditorPageFrame>
   );
 }

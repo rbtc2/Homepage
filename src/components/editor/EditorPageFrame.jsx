@@ -14,6 +14,9 @@ import EditorActionBar from './EditorActionBar';
  * @param {string} [props.paperClassName] - `ep__paper`에 추가할 클래스 (예: `press-ep`)
  * @param {import('react').ReactNode} props.children - 페이퍼 안쪽 본문
  * @param {import('react').ReactNode} [props.footer] - `.ep` 최하단 (컨텍스트 메뉴 오버레이 등)
+ * @param {() => void} [props.onDraftSave]
+ * @param {() => void} [props.onDraftLoadOpen]
+ * @param {boolean} [props.draftSaving]
  */
 export default function EditorPageFrame({
   backHref,
@@ -24,6 +27,9 @@ export default function EditorPageFrame({
   paperClassName,
   children,
   footer,
+  onDraftSave,
+  onDraftLoadOpen,
+  draftSaving,
 }) {
   const paperClass = paperClassName ? `ep__paper ${paperClassName}` : 'ep__paper';
 
@@ -35,6 +41,9 @@ export default function EditorPageFrame({
         saving={saving}
         onSave={onSave}
         primaryLabel={primaryLabel}
+        onDraftSave={onDraftSave}
+        onDraftLoadOpen={onDraftLoadOpen}
+        draftSaving={draftSaving}
       />
       <main className="ep__main">
         <div className={paperClass}>{children}</div>

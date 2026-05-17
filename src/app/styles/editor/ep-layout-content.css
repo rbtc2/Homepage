@@ -321,3 +321,109 @@
   pointer-events: none;
   height: 0;
 }
+
+/* ── 임시저장 불러오기 모달 ─────────────────────────────────── */
+.an-modal--draft-load {
+  max-width: 520px;
+}
+
+.ep-draft-modal__body {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.ep-draft-modal__status {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.ep-draft-modal__status--error {
+  color: var(--danger, #c53030);
+}
+
+.ep-draft-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ep-draft-list__row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.ep-draft-list__item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.ep-draft-list__item:hover {
+  border-color: var(--brand);
+  background: rgba(18, 79, 166, 0.04);
+}
+
+.ep-draft-list__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.ep-draft-list__meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.ep-draft-list__delete {
+  flex-shrink: 0;
+  align-self: center;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.ep-draft-list__delete:hover:not(:disabled) {
+  color: var(--danger, #c53030);
+  border-color: var(--danger, #c53030);
+}
+
+.ep-draft-list__delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .ep__actionbar-btns {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 100%;
+  }
+}

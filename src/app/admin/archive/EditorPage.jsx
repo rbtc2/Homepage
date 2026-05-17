@@ -15,6 +15,7 @@ export default function EditorPage({ archive }) {
   return (
     <RichEditor
       post={archive}
+      contentType="archive"
       backHref="/admin/archive"
       editTitle="자료 수정"
       newTitle="새 자료 작성"

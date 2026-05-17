@@ -25,8 +25,20 @@ function BackChevron() {
  * @param {boolean} props.saving
  * @param {() => void} props.onSave
  * @param {string} props.primaryLabel - 저장 버튼 문구 (예: 게시하기 / 등록하기 / 수정 완료)
+ * @param {() => void} [props.onDraftSave] - 임시저장 (없으면 버튼 숨김)
+ * @param {() => void} [props.onDraftLoadOpen] - 임시저장 불러오기 모달 열기
+ * @param {boolean} [props.draftSaving]
  */
-export default function EditorActionBar({ backHref, pageTitle, saving, onSave, primaryLabel }) {
+export default function EditorActionBar({
+  backHref,
+  pageTitle,
+  saving,
+  onSave,
+  primaryLabel,
+  onDraftSave,
+  onDraftLoadOpen,
+  draftSaving = false,
+}) {
   return (
     <div className="ep__actionbar">
       <div className="ep__actionbar-inner">
@@ -39,11 +51,31 @@ export default function EditorActionBar({ backHref, pageTitle, saving, onSave, p
           <Link href={backHref} className="an-btn an-btn--secondary an-btn--sm">
             취소
           </Link>
+          {onDraftLoadOpen && (
+            <button
+              type="button"
+              className="an-btn an-btn--secondary an-btn--sm"
+              onClick={onDraftLoadOpen}
+              disabled={saving || draftSaving}
+            >
+              임시저장 불러오기
+            </button>
+          )}
+          {onDraftSave && (
+            <button
+              type="button"
+              className="an-btn an-btn--secondary an-btn--sm"
+              onClick={onDraftSave}
+              disabled={saving || draftSaving}
+            >
+              {draftSaving ? '임시저장 중...' : '임시저장'}
+            </button>
+          )}
           <button
             type="button"
             className="an-btn an-btn--primary an-btn--sm"
             onClick={onSave}
-            disabled={saving}
+            disabled={saving || draftSaving}
           >
             {saving ? '저장 중...' : primaryLabel}
           </button>

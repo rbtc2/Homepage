@@ -48,6 +48,8 @@ export default function ImageToolbar({ editor }) {
   const [widthDraft, setWidthDraft] = useState('');
   const [marginLeftDraft, setMarginLeftDraft] = useState(0);
   const [marginRightDraft, setMarginRightDraft] = useState(0);
+  /** align만 바뀔 때 툴바 active 표시 갱신용 */
+  const [, bumpToolbar] = useState(0);
 
   const requestBubbleUpdate = useCallback(() => {
     if (!editor || editor.isDestroyed) return;
@@ -87,6 +89,7 @@ export default function ImageToolbar({ editor }) {
       updateEditorImageAt(editor, pos, attrs);
       refreshWidth();
       requestBubbleUpdate();
+      bumpToolbar((r) => r + 1);
     },
     [editor, refreshWidth, requestBubbleUpdate]
   );

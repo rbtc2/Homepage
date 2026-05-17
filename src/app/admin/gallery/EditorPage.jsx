@@ -15,6 +15,7 @@ export default function GalleryEditorPage({ post }) {
   return (
     <RichEditor
       post={post}
+      contentType="gallery"
       backHref="/admin/gallery"
       editTitle="갤러리 게시물 수정"
       newTitle="새 갤러리 게시물 작성"
