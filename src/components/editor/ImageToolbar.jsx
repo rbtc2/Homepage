@@ -11,6 +11,8 @@ import {
   MAX_WIDTH,
   MIN_WIDTH,
   normalizeAlign,
+  releaseImageNodeSelection,
+  updateEditorImageAt,
 } from './EditorImage';
 import icons from './icons';
 import { ToolbarBtn } from './ToolbarBtn';
@@ -23,7 +25,7 @@ function getImageNodeAt(editor, pos) {
 
 function getImageAttrs(editor, savedPos) {
   const node = getImageNodeAt(editor, savedPos);
-  return node?.attrs ?? editor?.getAttributes('editorImage') ?? {};
+  return node?.attrs ?? {};
 }
 
 /**
@@ -34,6 +36,9 @@ export default function ImageToolbar({ editor }) {
   const savedImagePosRef = useRef(null);
   const [displayWidth, setDisplayWidth] = useState(null);
   const [maxNaturalWidth, setMaxNaturalWidth] = useState(MAX_WIDTH);
+  const [widthDraft, setWidthDraft] = useState('');
+  const [marginLeftDraft, setMarginLeftDraft] = useState(0);
+  const [marginRightDraft, setMarginRightDraft] = useState(0);
 
   const isMenuActive = useCallback(() => {
     const el = menuRef.current;
@@ -54,26 +59,32 @@ export default function ImageToolbar({ editor }) {
     }
   }, [editor, isMenuActive]);
 
-  const restoreImageSelection = useCallback(() => {
+  const syncDraftsFromNode = useCallback(() => {
     const pos = savedImagePosRef.current;
-    if (pos == null || !editor || !getImageNodeAt(editor, pos)) return false;
-    const { state, view } = editor;
-    const sel = NodeSelection.create(state.doc, pos);
-    if (state.selection instanceof NodeSelection && state.selection.eq(sel)) {
-      return true;
-    }
-    view.dispatch(state.tr.setSelection(sel).scrollIntoView());
-    return true;
-  }, [editor]);
+    const attrs = getImageAttrs(editor, pos);
+    const w = clampWidth(attrs.width) ?? getEditorImageDisplayWidth(editor, pos);
+    setWidthDraft(w != null ? String(w) : '');
+    setMarginLeftDraft(clampMargin(attrs.marginLeft));
+    setMarginRightDraft(clampMargin(attrs.marginRight));
+    refreshWidth();
+  }, [editor, refreshWidth]);
 
-  const restoreAndPatch = useCallback(
+  const patchAtSaved = useCallback(
     (attrs) => {
-      if (!editor) return;
-      restoreImageSelection();
-      editor.chain().focus().updateEditorImage(attrs).run();
+      const pos = savedImagePosRef.current;
+      if (pos == null || !editor) return;
+      updateEditorImageAt(editor, pos, attrs);
+      refreshWidth();
     },
-    [editor, restoreImageSelection]
+    [editor, refreshWidth]
   );
+
+  const prepareInputEdit = useCallback(() => {
+    const pos = savedImagePosRef.current;
+    if (pos == null || !editor) return;
+    releaseImageNodeSelection(editor, pos);
+    syncDraftsFromNode();
+  }, [editor, syncDraftsFromNode]);
 
   const shouldShowBubble = useCallback(
     ({ editor: ed }) => {
@@ -94,11 +105,11 @@ export default function ImageToolbar({ editor }) {
     const onSelectionUpdate = () => {
       if (editor.isActive('editorImage')) {
         savedImagePosRef.current = editor.state.selection.from;
+        syncDraftsFromNode();
       }
-      refreshWidth();
     };
 
-    refreshWidth();
+    onSelectionUpdate();
     editor.on('selectionUpdate', onSelectionUpdate);
     editor.on('transaction', refreshWidth);
 
@@ -106,68 +117,80 @@ export default function ImageToolbar({ editor }) {
       editor.off('selectionUpdate', onSelectionUpdate);
       editor.off('transaction', refreshWidth);
     };
-  }, [editor, refreshWidth]);
+  }, [editor, refreshWidth, syncDraftsFromNode]);
 
   useEffect(() => {
     if (!editor) return undefined;
-    const pos = savedImagePosRef.current;
-    const img = getEditorImageElAtPos(editor, pos);
-    const onLoad = () => refreshWidth();
-    if (img && !img.complete) img.addEventListener('load', onLoad);
-    return () => img?.removeEventListener('load', onLoad);
-  }, [editor, refreshWidth, displayWidth]);
 
-  const handleMargin = useCallback(
-    (side, raw) => {
-      const value = clampMargin(raw);
-      restoreAndPatch(side === 'left' ? { marginLeft: value } : { marginRight: value });
-    },
-    [restoreAndPatch]
-  );
-
-  const handleWidthChange = useCallback(
-    (raw) => {
-      const next = clampWidth(raw);
-      if (next == null) return;
-      restoreAndPatch({ width: next });
-      setDisplayWidth(next);
-    },
-    [restoreAndPatch]
-  );
-
-  const handleMenuKeyDown = useCallback((e) => {
-    e.stopPropagation();
-  }, []);
-
-  const handleMenuPointerDown = useCallback(
-    (e) => {
+    const blockEditorKeys = (e) => {
+      if (!menuRef.current?.contains(document.activeElement)) return;
       e.stopPropagation();
-      restoreImageSelection();
-      if (e.target instanceof HTMLInputElement) {
-        return;
+      e.stopImmediatePropagation();
+    };
+
+    document.addEventListener('keydown', blockEditorKeys, true);
+    document.addEventListener('keypress', blockEditorKeys, true);
+    document.addEventListener('keyup', blockEditorKeys, true);
+
+    return () => {
+      document.removeEventListener('keydown', blockEditorKeys, true);
+      document.removeEventListener('keypress', blockEditorKeys, true);
+      document.removeEventListener('keyup', blockEditorKeys, true);
+    };
+  }, [editor]);
+
+  const applyWidthDraft = useCallback(() => {
+    const next = clampWidth(widthDraft);
+    if (next == null) {
+      syncDraftsFromNode();
+      return;
+    }
+    patchAtSaved({ width: next });
+    setWidthDraft(String(next));
+    setDisplayWidth(next);
+  }, [widthDraft, patchAtSaved, syncDraftsFromNode]);
+
+  const applyMarginDraft = useCallback(
+    (side) => {
+      if (side === 'left') {
+        patchAtSaved({ marginLeft: marginLeftDraft });
+      } else {
+        patchAtSaved({ marginRight: marginRightDraft });
       }
-      e.preventDefault();
     },
-    [restoreImageSelection]
+    [marginLeftDraft, marginRightDraft, patchAtSaved]
   );
 
   const handleDelete = useCallback(() => {
-    if (!editor) return;
-    restoreImageSelection();
+    const pos = savedImagePosRef.current;
+    if (pos == null || !editor) return;
+    const { state, view } = editor;
+    const sel = NodeSelection.create(state.doc, pos);
+    view.dispatch(state.tr.setSelection(sel));
     editor.chain().focus().deleteSelection().run();
     savedImagePosRef.current = null;
-  }, [editor, restoreImageSelection]);
+  }, [editor]);
 
   if (!editor) return null;
 
   const savedPos = savedImagePosRef.current;
   const attrs = getImageAttrs(editor, savedPos);
   const align = normalizeAlign(attrs.align);
-  const marginLeft = clampMargin(attrs.marginLeft);
-  const marginRight = clampMargin(attrs.marginRight);
-  const storedWidth = clampWidth(attrs.width);
-  const widthValue = storedWidth ?? displayWidth ?? '';
   const widthMax = Math.max(MIN_WIDTH, maxNaturalWidth);
+
+  const handleInputKeyDown = (e, apply) => {
+    e.stopPropagation();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      apply();
+      e.currentTarget.blur();
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      syncDraftsFromNode();
+      e.currentTarget.blur();
+    }
+  };
 
   return (
     <BubbleMenu
@@ -183,9 +206,7 @@ export default function ImageToolbar({ editor }) {
         className="ep-img-bubble__inner"
         role="toolbar"
         aria-label="이미지 서식"
-        onKeyDown={handleMenuKeyDown}
-        onKeyDownCapture={handleMenuKeyDown}
-        onPointerDown={handleMenuPointerDown}
+        onPointerDownCapture={(e) => e.stopPropagation()}
       >
         <label className="ep-img-toolbar__field ep-img-toolbar__field--width">
           <span className="ep-img-toolbar__field-label">
@@ -197,10 +218,14 @@ export default function ImageToolbar({ editor }) {
             min={MIN_WIDTH}
             max={widthMax}
             step={1}
-            value={widthValue}
-            onChange={(e) => handleWidthChange(e.target.value)}
+            value={widthDraft}
+            onFocus={prepareInputEdit}
+            onPointerDown={(e) => e.stopPropagation()}
+            onChange={(e) => setWidthDraft(e.target.value)}
+            onBlur={applyWidthDraft}
+            onKeyDown={(e) => handleInputKeyDown(e, applyWidthDraft)}
             aria-label="이미지 너비 px (비율 유지)"
-            title="숫자를 줄이면 가로·세로 비율이 유지된 채 크기가 조절됩니다"
+            title="Enter로 적용 · 비율은 자동 유지"
           />
           <span className="ep-img-toolbar__unit">px</span>
         </label>
@@ -208,21 +233,21 @@ export default function ImageToolbar({ editor }) {
         <ToolbarBtn
           title="왼쪽 정렬"
           active={align === 'left'}
-          onClick={() => restoreAndPatch({ align: 'left' })}
+          onClick={() => patchAtSaved({ align: 'left' })}
         >
           {icons.alignLeft}
         </ToolbarBtn>
         <ToolbarBtn
           title="가운데 정렬"
           active={align === 'center'}
-          onClick={() => restoreAndPatch({ align: 'center' })}
+          onClick={() => patchAtSaved({ align: 'center' })}
         >
           {icons.alignCenter}
         </ToolbarBtn>
         <ToolbarBtn
           title="오른쪽 정렬"
           active={align === 'right'}
-          onClick={() => restoreAndPatch({ align: 'right' })}
+          onClick={() => patchAtSaved({ align: 'right' })}
         >
           {icons.alignRight}
         </ToolbarBtn>
@@ -235,8 +260,12 @@ export default function ImageToolbar({ editor }) {
             min={0}
             max={400}
             step={1}
-            value={marginLeft}
-            onChange={(e) => handleMargin('left', e.target.value)}
+            value={marginLeftDraft}
+            onFocus={prepareInputEdit}
+            onPointerDown={(e) => e.stopPropagation()}
+            onChange={(e) => setMarginLeftDraft(clampMargin(e.target.value))}
+            onBlur={() => applyMarginDraft('left')}
+            onKeyDown={(e) => handleInputKeyDown(e, () => applyMarginDraft('left'))}
             aria-label="왼쪽 여백 px"
           />
           <span className="ep-img-toolbar__unit">px</span>
@@ -249,8 +278,12 @@ export default function ImageToolbar({ editor }) {
             min={0}
             max={400}
             step={1}
-            value={marginRight}
-            onChange={(e) => handleMargin('right', e.target.value)}
+            value={marginRightDraft}
+            onFocus={prepareInputEdit}
+            onPointerDown={(e) => e.stopPropagation()}
+            onChange={(e) => setMarginRightDraft(clampMargin(e.target.value))}
+            onBlur={() => applyMarginDraft('right')}
+            onKeyDown={(e) => handleInputKeyDown(e, () => applyMarginDraft('right'))}
             aria-label="오른쪽 여백 px"
           />
           <span className="ep-img-toolbar__unit">px</span>

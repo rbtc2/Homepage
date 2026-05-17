@@ -1,4 +1,5 @@
 import Image from '@tiptap/extension-image';
+import { NodeSelection, Plugin, PluginKey, TextSelection } from '@tiptap/pm/state';
 
 const ALIGNMENTS = new Set(['left', 'center', 'right']);
 
@@ -68,6 +69,28 @@ export function getSelectedEditorImageEl(editor) {
     return getEditorImageElAtPos(editor, selection.from);
   }
   return null;
+}
+
+/** NodeSelection 없이 저장된 위치의 이미지 속성만 갱신합니다. */
+export function updateEditorImageAt(editor, pos, attrs) {
+  if (!editor || pos == null) return false;
+  const { state } = editor;
+  const node = state.doc.nodeAt(pos);
+  if (!node || node.type.name !== 'editorImage') return false;
+  editor.view.dispatch(state.tr.setNodeMarkup(pos, undefined, { ...node.attrs, ...attrs }));
+  return true;
+}
+
+/** 툴바 입력용 — 이미지 노드 선택을 해제하고 인접 텍스트 커서로 옮깁니다. */
+export function releaseImageNodeSelection(editor, imagePos) {
+  if (!editor || imagePos == null) return;
+  const node = editor.state.doc.nodeAt(imagePos);
+  if (!node || node.type.name !== 'editorImage') return;
+  const after = imagePos + node.nodeSize;
+  const { state, view } = editor;
+  const $pos = state.doc.resolve(Math.min(after, state.doc.content.size));
+  view.dispatch(state.tr.setSelection(TextSelection.near($pos)));
+  view.dom.blur();
 }
 
 /** 저장된 너비 또는 현재 렌더 너비(px) */
@@ -227,6 +250,47 @@ export const EditorImage = Image.extend({
     ];
   },
 
+  addProseMirrorPlugins() {
+    const key = new PluginKey('editorImageKeyGuard');
+    return [
+      new Plugin({
+        key,
+        props: {
+          handleKeyDown(view, event) {
+            if (document.activeElement?.closest('.ep-img-bubble')) {
+              return true;
+            }
+            const { selection } = view.state;
+            if (
+              selection instanceof NodeSelection &&
+              selection.node.type.name === 'editorImage' &&
+              event.key.length === 1 &&
+              !event.ctrlKey &&
+              !event.metaKey &&
+              !event.altKey
+            ) {
+              return true;
+            }
+            return false;
+          },
+          handleTextInput(view) {
+            if (document.activeElement?.closest('.ep-img-bubble')) {
+              return true;
+            }
+            const { selection } = view.state;
+            if (
+              selection instanceof NodeSelection &&
+              selection.node.type.name === 'editorImage'
+            ) {
+              return true;
+            }
+            return false;
+          },
+        },
+      }),
+    ];
+  },
+
   addCommands() {
     return {
       setEditorImage:
@@ -246,6 +310,10 @@ export const EditorImage = Image.extend({
         (attrs) =>
         ({ commands }) =>
           commands.updateAttributes(this.name, attrs),
+      updateEditorImageAtPos:
+        (pos, attrs) =>
+        ({ editor }) =>
+          updateEditorImageAt(editor, pos, attrs),
     };
   },
 });

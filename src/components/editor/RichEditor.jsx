@@ -104,20 +104,31 @@ export default function RichEditor({
         },
       },
       handleKeyDown: (view, event) => {
-        const inImageToolbar = document.activeElement?.closest('.ep-img-bubble__inner');
-        if (
-          inImageToolbar &&
-          (event.key === 'Backspace' || event.key === 'Delete')
-        ) {
+        if (document.activeElement?.closest('.ep-img-bubble')) {
           return true;
         }
         const { selection } = view.state;
         if (
           selection instanceof NodeSelection &&
           selection.node.type.name === 'editorImage' &&
-          document.activeElement?.tagName === 'INPUT' &&
-          (event.key === 'Backspace' || event.key === 'Delete')
+          event.key.length === 1 &&
+          !event.ctrlKey &&
+          !event.metaKey &&
+          !event.altKey
         ) {
+          return true;
+        }
+        return false;
+      },
+      handleTextInput: (view) => {
+        const { selection } = view.state;
+        if (
+          selection instanceof NodeSelection &&
+          selection.node.type.name === 'editorImage'
+        ) {
+          return true;
+        }
+        if (document.activeElement?.closest('.ep-img-bubble')) {
           return true;
         }
         return false;
