@@ -131,12 +131,22 @@ export default function ImageToolbar({ editor }) {
     };
 
     onSelectionUpdate();
+    const onTransaction = () => {
+      refreshWidth();
+      const active = document.activeElement;
+      const typingInMenu =
+        active instanceof HTMLInputElement && menuRef.current?.contains(active);
+      if (menuPinnedRef.current && !typingInMenu) {
+        syncDraftsFromNode();
+      }
+    };
+
     editor.on('selectionUpdate', onSelectionUpdate);
-    editor.on('transaction', refreshWidth);
+    editor.on('transaction', onTransaction);
 
     return () => {
       editor.off('selectionUpdate', onSelectionUpdate);
-      editor.off('transaction', refreshWidth);
+      editor.off('transaction', onTransaction);
     };
   }, [editor, refreshWidth, syncDraftsFromNode]);
 

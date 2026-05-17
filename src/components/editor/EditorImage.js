@@ -1,5 +1,7 @@
 import Image from '@tiptap/extension-image';
+import { ReactNodeViewRenderer } from '@tiptap/react';
 import { NodeSelection, Plugin, PluginKey, TextSelection } from '@tiptap/pm/state';
+import EditorImageView from './EditorImageView';
 
 const ALIGNMENTS = new Set(['left', 'center', 'right']);
 
@@ -123,7 +125,7 @@ export const EditorImage = Image.extend({
 
   inline: false,
 
-  draggable: true,
+  draggable: false,
 
   selectable: true,
 
@@ -247,6 +249,10 @@ export const EditorImage = Image.extend({
       },
       ['img', imgAttrs],
     ];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(EditorImageView);
   },
 
   addProseMirrorPlugins() {

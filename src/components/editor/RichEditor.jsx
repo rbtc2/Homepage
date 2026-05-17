@@ -138,6 +138,9 @@ export default function RichEditor({
         if (target instanceof Element && target.closest('.ep-img-bubble')) {
           return true;
         }
+        if (target instanceof Element && target.closest('.ep-img-resize-handle')) {
+          return true;
+        }
         if (!(target instanceof Element)) return false;
         const block = target.closest('.ep-img-block');
         if (!block || !view.dom.contains(block)) return false;
