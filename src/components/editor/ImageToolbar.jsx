@@ -1,25 +1,56 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BubbleMenu } from '@tiptap/react/menus';
-import { clampMargin, normalizeAlign } from './EditorImage';
+import {
+  clampMargin,
+  clampWidth,
+  getEditorImageDisplayWidth,
+  getSelectedEditorImageEl,
+  MAX_WIDTH,
+  MIN_WIDTH,
+  normalizeAlign,
+} from './EditorImage';
 import icons from './icons';
 import { ToolbarBtn } from './ToolbarBtn';
 
 /**
- * 본문 이미지 선택 시 표시되는 플로팅 툴바 — 정렬·좌우 여백(px) 조절.
+ * 본문 이미지 선택 시 플로팅 툴바 — 너비(px), 정렬, 좌우 여백 조절.
  */
 export default function ImageToolbar({ editor }) {
-  if (!editor) return null;
+  const [displayWidth, setDisplayWidth] = useState(null);
+  const [maxNaturalWidth, setMaxNaturalWidth] = useState(MAX_WIDTH);
 
-  const attrs = editor.getAttributes('editorImage');
-  const align = normalizeAlign(attrs.align);
-  const marginLeft = clampMargin(attrs.marginLeft);
-  const marginRight = clampMargin(attrs.marginRight);
+  const refreshWidth = useCallback(() => {
+    if (!editor?.isActive('editorImage')) {
+      setDisplayWidth(null);
+      return;
+    }
+    setDisplayWidth(getEditorImageDisplayWidth(editor));
+    const img = getSelectedEditorImageEl(editor);
+    if (img?.naturalWidth > 0) {
+      setMaxNaturalWidth(Math.min(MAX_WIDTH, img.naturalWidth));
+    }
+  }, [editor]);
+
+  useEffect(() => {
+    if (!editor) return undefined;
+    refreshWidth();
+    editor.on('selectionUpdate', refreshWidth);
+    editor.on('transaction', refreshWidth);
+    const img = getSelectedEditorImageEl(editor);
+    const onLoad = () => refreshWidth();
+    if (img && !img.complete) img.addEventListener('load', onLoad);
+    return () => {
+      editor.off('selectionUpdate', refreshWidth);
+      editor.off('transaction', refreshWidth);
+      img?.removeEventListener('load', onLoad);
+    };
+  }, [editor, refreshWidth]);
 
   const patch = useCallback(
     (next) => {
-      editor.chain().focus().updateEditorImage(next).run();
+      editor?.chain().focus().updateEditorImage(next).run();
     },
     [editor]
   );
@@ -32,6 +63,26 @@ export default function ImageToolbar({ editor }) {
     [patch]
   );
 
+  const handleWidthChange = useCallback(
+    (raw) => {
+      const next = clampWidth(raw);
+      if (next == null) return;
+      patch({ width: next });
+      setDisplayWidth(next);
+    },
+    [patch]
+  );
+
+  if (!editor) return null;
+
+  const attrs = editor.getAttributes('editorImage');
+  const align = normalizeAlign(attrs.align);
+  const marginLeft = clampMargin(attrs.marginLeft);
+  const marginRight = clampMargin(attrs.marginRight);
+  const storedWidth = clampWidth(attrs.width);
+  const widthValue = storedWidth ?? displayWidth ?? '';
+  const widthMax = Math.max(MIN_WIDTH, maxNaturalWidth);
+
   return (
     <BubbleMenu
       editor={editor}
@@ -41,6 +92,24 @@ export default function ImageToolbar({ editor }) {
       tippyOptions={{ duration: 100, maxWidth: 'none' }}
     >
       <div className="ep-img-bubble__inner" role="toolbar" aria-label="이미지 서식">
+        <label className="ep-img-toolbar__field ep-img-toolbar__field--width">
+          <span className="ep-img-toolbar__field-label">
+            {displayWidth != null ? `현재 ${displayWidth}px` : '너비'}
+          </span>
+          <input
+            type="number"
+            className="ep-img-toolbar__input ep-img-toolbar__input--wide"
+            min={MIN_WIDTH}
+            max={widthMax}
+            step={1}
+            value={widthValue}
+            onChange={(e) => handleWidthChange(e.target.value)}
+            aria-label="이미지 너비 px (비율 유지)"
+            title="숫자를 줄이면 가로·세로 비율이 유지된 채 크기가 조절됩니다"
+          />
+          <span className="ep-img-toolbar__unit">px</span>
+        </label>
+        <span className="ep-img-bubble__sep" aria-hidden="true" />
         <ToolbarBtn
           title="왼쪽 정렬"
           active={align === 'left'}

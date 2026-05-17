@@ -202,6 +202,15 @@
   margin-left: 0.125rem;
 }
 
+.ep-img-toolbar__field--width .ep-img-toolbar__field-label {
+  min-width: 3.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ep-img-toolbar__input--wide {
+  width: 4.25rem;
+}
+
 .ep-img-toolbar__field-label {
   font-size: 0.6875rem;
   font-weight: 700;

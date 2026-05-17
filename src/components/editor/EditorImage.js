@@ -2,10 +2,39 @@ import Image from '@tiptap/extension-image';
 
 const ALIGNMENTS = new Set(['left', 'center', 'right']);
 
+const MIN_WIDTH = 40;
+const MAX_WIDTH = 2400;
+
 function clampMargin(value) {
   const n = Number.parseInt(String(value ?? 0), 10);
   if (Number.isNaN(n)) return 0;
   return Math.min(400, Math.max(0, n));
+}
+
+function parseWidthPx(value) {
+  if (value == null || value === '') return null;
+  const s = String(value).trim();
+  const match = s.match(/^(\d+(?:\.\d+)?)\s*px?$/i) ?? s.match(/^(\d+)/);
+  if (!match) return null;
+  const n = Math.round(Number(match[1]));
+  return Number.isNaN(n) || n <= 0 ? null : n;
+}
+
+function clampWidth(value) {
+  const n = Number.parseInt(String(value ?? 0), 10);
+  if (Number.isNaN(n) || n <= 0) return null;
+  return Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, n));
+}
+
+function readImageWidth(img) {
+  if (!img) return null;
+  const fromData = parseWidthPx(img.getAttribute('data-width'));
+  if (fromData) return clampWidth(fromData);
+  const fromAttr = parseWidthPx(img.getAttribute('width'));
+  if (fromAttr) return clampWidth(fromAttr);
+  const fromStyle = parseWidthPx(img.style?.width);
+  if (fromStyle) return clampWidth(fromStyle);
+  return null;
 }
 
 function normalizeAlign(value) {
@@ -21,8 +50,31 @@ function readWrapAttrs(wrap) {
   };
 }
 
+/** 에디터에서 선택된 본문 이미지의 img 요소 */
+export function getSelectedEditorImageEl(editor) {
+  const { selection } = editor?.state ?? {};
+  const node = selection?.node;
+  if (!node || node.type.name !== 'editorImage') return null;
+  const dom = editor.view.nodeDOM(selection.from);
+  if (!(dom instanceof HTMLElement)) return null;
+  const img = dom.querySelector('img.ep-img-block__img') ?? dom.querySelector('img');
+  return img instanceof HTMLImageElement ? img : null;
+}
+
+/** 저장된 너비 또는 현재 렌더 너비(px) */
+export function getEditorImageDisplayWidth(editor) {
+  const attrs = editor?.getAttributes('editorImage') ?? {};
+  if (attrs.width) return clampWidth(attrs.width);
+  const img = getSelectedEditorImageEl(editor);
+  if (!img) return null;
+  const rendered = Math.round(img.getBoundingClientRect().width);
+  if (rendered > 0) return rendered;
+  if (img.naturalWidth > 0) return img.naturalWidth;
+  return null;
+}
+
 /**
- * 본문용 블록 이미지 — 좌·우 여백(px)과 정렬(왼쪽/가운데/오른쪽)을 HTML에 보존합니다.
+ * 본문용 블록 이미지 — 너비(px), 좌·우 여백, 정렬을 HTML에 보존합니다.
  */
 export const EditorImage = Image.extend({
   name: 'editorImage',
@@ -78,6 +130,18 @@ export const EditorImage = Image.extend({
         },
         renderHTML: (attrs) => ({ 'data-margin-right': String(clampMargin(attrs.marginRight)) }),
       },
+      width: {
+        default: null,
+        parseHTML: (el) => {
+          const img = el.tagName === 'IMG' ? el : el.querySelector?.('img');
+          return readImageWidth(img);
+        },
+        renderHTML: (attrs) => {
+          const w = clampWidth(attrs.width);
+          if (!w) return {};
+          return { 'data-width': String(w) };
+        },
+      },
     };
   },
 
@@ -93,6 +157,7 @@ export const EditorImage = Image.extend({
             src: img.getAttribute('src'),
             alt: img.getAttribute('alt') ?? '',
             title: img.getAttribute('title'),
+            width: readImageWidth(img),
             ...readWrapAttrs(wrap),
           };
         },
@@ -103,6 +168,7 @@ export const EditorImage = Image.extend({
           src: node.getAttribute('src'),
           alt: node.getAttribute('alt') ?? '',
           title: node.getAttribute('title'),
+          width: readImageWidth(node),
           align: 'center',
           marginLeft: 0,
           marginRight: 0,
@@ -115,6 +181,20 @@ export const EditorImage = Image.extend({
     const align = normalizeAlign(node.attrs.align);
     const marginLeft = clampMargin(node.attrs.marginLeft);
     const marginRight = clampMargin(node.attrs.marginRight);
+    const width = clampWidth(node.attrs.width);
+
+    const imgAttrs = {
+      src: node.attrs.src,
+      alt: node.attrs.alt || '',
+      ...(node.attrs.title ? { title: node.attrs.title } : {}),
+      class: 'ep-img-block__img',
+      draggable: 'false',
+    };
+
+    if (width) {
+      imgAttrs['data-width'] = String(width);
+      imgAttrs.style = `width:${width}px;height:auto`;
+    }
 
     return [
       'div',
@@ -125,16 +205,7 @@ export const EditorImage = Image.extend({
         'data-margin-right': String(marginRight),
         style: `--ep-img-ml:${marginLeft}px;--ep-img-mr:${marginRight}px`,
       },
-      [
-        'img',
-        {
-          src: node.attrs.src,
-          alt: node.attrs.alt || '',
-          ...(node.attrs.title ? { title: node.attrs.title } : {}),
-          class: 'ep-img-block__img',
-          draggable: 'false',
-        },
-      ],
+      ['img', imgAttrs],
     ];
   },
 
@@ -161,4 +232,4 @@ export const EditorImage = Image.extend({
   },
 });
 
-export { clampMargin, normalizeAlign };
+export { clampMargin, clampWidth, normalizeAlign, MIN_WIDTH, MAX_WIDTH };
