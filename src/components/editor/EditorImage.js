@@ -90,7 +90,6 @@ export function releaseImageNodeSelection(editor, imagePos) {
   const { state, view } = editor;
   const $pos = state.doc.resolve(Math.min(after, state.doc.content.size));
   view.dispatch(state.tr.setSelection(TextSelection.near($pos)));
-  view.dom.blur();
 }
 
 /** 저장된 너비 또는 현재 렌더 너비(px) */
