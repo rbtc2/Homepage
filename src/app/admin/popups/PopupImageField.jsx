@@ -1,37 +1,26 @@
 'use client';
 
 import { useRef, useState, useCallback } from 'react';
-import { uploadEditorCoverImage } from '@/app/admin/upload-cover-image-action';
+import ImageUploadOptimizePanel from '@/components/editor/ImageUploadOptimizePanel';
 
 export default function PopupImageField({ imageUrl, onImageUrlChange }) {
   const fileRef = useRef(null);
-  const [uploading, setUploading] = useState(false);
+  const [pendingFile, setPendingFile] = useState(null);
   const [hint, setHint] = useState(null);
 
-  const handleFile = useCallback(
-    async (e) => {
-      const file = e.target.files?.[0];
-      e.target.value = '';
-      if (!file) return;
+  const handleFile = useCallback((e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setHint(null);
+    setPendingFile(file);
+  }, []);
 
-      setHint(null);
-      setUploading(true);
-      try {
-        const fd = new FormData();
-        fd.append('file', file);
-        fd.append('folder', 'popups');
-        const res = await uploadEditorCoverImage(fd);
-        if (res.ok) {
-          onImageUrlChange(res.url);
-          setHint('업로드되었습니다.');
-        } else {
-          setHint(res.message);
-        }
-      } catch {
-        setHint('업로드에 실패했습니다. 잠시 후 다시 시도해 주세요.');
-      } finally {
-        setUploading(false);
-      }
+  const handleUploadSuccess = useCallback(
+    (url) => {
+      onImageUrlChange(url);
+      setPendingFile(null);
+      setHint('업로드되었습니다.');
     },
     [onImageUrlChange]
   );
@@ -48,20 +37,34 @@ export default function PopupImageField({ imageUrl, onImageUrlChange }) {
         className="an-popup-img__file"
         accept="image/jpeg,image/png,image/webp,image/gif"
         onChange={handleFile}
-        disabled={uploading}
+        disabled={Boolean(pendingFile)}
         tabIndex={-1}
       />
-      <div className="an-popup-img__actions">
-        <button
-          type="button"
-          className="an-btn an-btn--secondary an-btn--sm"
-          disabled={uploading}
-          onClick={() => fileRef.current?.click()}
-        >
-          {uploading ? '업로드 중…' : '이미지 파일 업로드'}
-        </button>
-        <span className="an-popup-img__meta">최대 5MB · JPG, PNG, WebP, GIF</span>
-      </div>
+
+      {!pendingFile ? (
+        <div className="an-popup-img__actions">
+          <button
+            type="button"
+            className="an-btn an-btn--secondary an-btn--sm"
+            onClick={() => fileRef.current?.click()}
+          >
+            이미지 파일 선택
+          </button>
+          <span className="an-popup-img__meta">최대 5MB · JPG, PNG, WebP, GIF</span>
+        </div>
+      ) : null}
+
+      {pendingFile ? (
+        <div className="an-popup-img__optimize">
+          <ImageUploadOptimizePanel
+            file={pendingFile}
+            folder="popups"
+            applyLabel="업로드 후 적용"
+            onSuccess={handleUploadSuccess}
+            onCancel={() => setPendingFile(null)}
+          />
+        </div>
+      ) : null}
 
       <input
         id="popup-image"

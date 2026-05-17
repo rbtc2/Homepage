@@ -900,6 +900,14 @@
   margin-bottom: 0.5rem;
 }
 
+.an-popup-img__optimize {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--canvas);
+}
+
 .an-popup-img__meta {
   font-size: 0.75rem;
   color: var(--muted);

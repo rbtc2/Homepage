@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { uploadEditorCoverImage } from '@/app/admin/upload-cover-image-action';
+import ImageUploadOptimizePanel from './ImageUploadOptimizePanel';
 
 /**
  * 커버/썸네일 URL 입력 (`ep-cover` 레이아웃). 미리보기는 선택.
@@ -12,9 +12,9 @@ import { uploadEditorCoverImage } from '@/app/admin/upload-cover-image-action';
  * @param {string} props.value
  * @param {(next: string) => void} props.onChange
  * @param {string} [props.placeholder]
- * @param {string} [props.wrapperClassName] - `ep-cover`에 덧붙일 클래스
+ * @param {string} [props.wrapperClassName]
  * @param {boolean} [props.showPreview=true]
- * @param {'wr-news'|'gallery'} [props.uploadFolder] - 설정 시 PC에서 파일 업로드 허용
+ * @param {'wr-news'|'gallery'} [props.uploadFolder]
  */
 export default function EditorCoverUrlField({
   label,
@@ -26,7 +26,7 @@ export default function EditorCoverUrlField({
   uploadFolder,
 }) {
   const fileInputRef = useRef(null);
-  const [uploading, setUploading] = useState(false);
+  const [pendingFile, setPendingFile] = useState(null);
   const [uploadHint, setUploadHint] = useState(null);
   const rootClass = wrapperClassName ? `ep-cover ${wrapperClassName}` : 'ep-cover';
   const trimmed = value.trim();
@@ -35,32 +35,21 @@ export default function EditorCoverUrlField({
     fileInputRef.current?.click();
   }, []);
 
-  const handleFileChange = useCallback(
-    async (e) => {
-      const file = e.target.files?.[0];
-      e.target.value = '';
-      if (!file || !uploadFolder) return;
+  const handleFileChange = useCallback((e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !uploadFolder) return;
+    setUploadHint(null);
+    setPendingFile(file);
+  }, [uploadFolder]);
 
-      setUploadHint(null);
-      setUploading(true);
-      try {
-        const fd = new FormData();
-        fd.append('file', file);
-        fd.append('folder', uploadFolder);
-        const res = await uploadEditorCoverImage(fd);
-        if (res.ok) {
-          onChange(res.url);
-          setUploadHint('업로드되었습니다. 저장 시 반영됩니다.');
-        } else {
-          setUploadHint(res.message);
-        }
-      } catch {
-        setUploadHint('업로드에 실패했습니다. 잠시 후 다시 시도해 주세요.');
-      } finally {
-        setUploading(false);
-      }
+  const handleUploadSuccess = useCallback(
+    (url) => {
+      onChange(url);
+      setPendingFile(null);
+      setUploadHint('업로드되었습니다. 저장 시 반영됩니다.');
     },
-    [onChange, uploadFolder]
+    [onChange]
   );
 
   return (
@@ -75,23 +64,36 @@ export default function EditorCoverUrlField({
             className="ep-cover__file-input"
             accept="image/jpeg,image/png,image/webp,image/gif"
             onChange={handleFileChange}
-            disabled={uploading}
+            disabled={Boolean(pendingFile)}
             tabIndex={-1}
           />
-          <button
-            type="button"
-            className="ep-cover__upload-btn"
-            onClick={handlePickFile}
-            disabled={uploading}
-          >
-            {uploading ? '업로드 중…' : '이미지 파일 업로드'}
-          </button>
-          <span className="ep-cover__upload-meta">최대 5MB · JPG, PNG, WebP, GIF</span>
+          {!pendingFile ? (
+            <>
+              <button type="button" className="ep-cover__upload-btn" onClick={handlePickFile}>
+                이미지 파일 선택
+              </button>
+              <span className="ep-cover__upload-meta">최대 5MB · JPG, PNG, WebP, GIF</span>
+            </>
+          ) : null}
+        </div>
+      ) : null}
+
+      {pendingFile && uploadFolder ? (
+        <div className="ep-cover__optimize">
+          <ImageUploadOptimizePanel
+            file={pendingFile}
+            folder={uploadFolder}
+            applyLabel="업로드 후 적용"
+            onSuccess={handleUploadSuccess}
+            onCancel={() => setPendingFile(null)}
+          />
         </div>
       ) : null}
 
       {uploadHint ? (
-        <p className={`ep-cover__hint ${uploadHint.includes('업로드되었') ? 'ep-cover__hint--ok' : 'ep-cover__hint--err'}`}>
+        <p
+          className={`ep-cover__hint ${uploadHint.includes('업로드되었') ? 'ep-cover__hint--ok' : 'ep-cover__hint--err'}`}
+        >
           {uploadHint}
         </p>
       ) : null}

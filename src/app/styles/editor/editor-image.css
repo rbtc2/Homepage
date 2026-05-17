@@ -113,6 +113,10 @@
   box-shadow: 0 8px 28px rgba(12, 20, 36, 0.12);
 }
 
+.ip--wide {
+  width: min(360px, calc(100vw - 2rem));
+}
+
 .ip__label {
   margin: 0 0 0.625rem;
   font-size: 0.8125rem;
@@ -224,6 +228,165 @@
 
 .ip__btn--apply:not(:disabled):hover {
   background: var(--brand-deep);
+}
+
+/* ── 이미지 업로드 최적화 패널 ─────────────────────────────── */
+.iop {
+  margin-top: 0.5rem;
+  padding-top: 0.625rem;
+  border-top: 1px solid var(--line);
+}
+
+.iop__file {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 0 0.625rem;
+  font-size: 0.75rem;
+  color: var(--ink);
+}
+
+.iop__file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.iop__file-size {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.iop__note {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.iop__presets {
+  margin: 0 0 0.625rem;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+
+.iop__presets-legend {
+  padding: 0;
+  margin: 0 0 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.iop__preset {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.iop__preset--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.iop__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.iop__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.iop__btn--secondary {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  border-color: var(--brand);
+  color: var(--brand);
+  background: rgba(18, 79, 166, 0.06);
+}
+
+.iop__btn--secondary:hover:not(:disabled) {
+  background: rgba(18, 79, 166, 0.1);
+}
+
+.iop__btn--primary {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.iop__btn--primary:hover:not(:disabled) {
+  background: var(--brand-deep);
+}
+
+.iop__btn--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.iop__btn--ghost:hover:not(:disabled) {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.iop__result {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.iop__result--ok {
+  color: var(--ink);
+}
+
+.iop__result strong {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.iop__hint {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+.iop__hint--err {
+  color: #dc2626;
+}
+
+.iop__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.ep-cover__optimize {
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--canvas);
 }
 
 /* ── 이미지 플로팅 툴바 (BubbleMenu) ─────────────────────────── */
