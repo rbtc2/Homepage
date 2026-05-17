@@ -50,22 +50,40 @@ function readWrapAttrs(wrap) {
   };
 }
 
-/** 에디터에서 선택된 본문 이미지의 img 요소 */
-export function getSelectedEditorImageEl(editor) {
-  const { selection } = editor?.state ?? {};
-  const node = selection?.node;
-  if (!node || node.type.name !== 'editorImage') return null;
-  const dom = editor.view.nodeDOM(selection.from);
+/** 문서 위치의 본문 이미지 img 요소 */
+export function getEditorImageElAtPos(editor, pos) {
+  if (pos == null || !editor) return null;
+  const node = editor.state.doc.nodeAt(pos);
+  if (node?.type.name !== 'editorImage') return null;
+  const dom = editor.view.nodeDOM(pos);
   if (!(dom instanceof HTMLElement)) return null;
   const img = dom.querySelector('img.ep-img-block__img') ?? dom.querySelector('img');
   return img instanceof HTMLImageElement ? img : null;
 }
 
+/** 에디터에서 선택된 본문 이미지의 img 요소 */
+export function getSelectedEditorImageEl(editor) {
+  const { selection } = editor?.state ?? {};
+  if (selection?.node?.type.name === 'editorImage') {
+    return getEditorImageElAtPos(editor, selection.from);
+  }
+  return null;
+}
+
 /** 저장된 너비 또는 현재 렌더 너비(px) */
-export function getEditorImageDisplayWidth(editor) {
-  const attrs = editor?.getAttributes('editorImage') ?? {};
+export function getEditorImageDisplayWidth(editor, pos) {
+  const resolvedPos =
+    pos ??
+    (editor?.state.selection.node?.type.name === 'editorImage'
+      ? editor.state.selection.from
+      : null);
+  const node = resolvedPos != null ? editor?.state.doc.nodeAt(resolvedPos) : null;
+  const attrs = node?.attrs ?? editor?.getAttributes('editorImage') ?? {};
   if (attrs.width) return clampWidth(attrs.width);
-  const img = getSelectedEditorImageEl(editor);
+  const img =
+    resolvedPos != null
+      ? getEditorImageElAtPos(editor, resolvedPos)
+      : getSelectedEditorImageEl(editor);
   if (!img) return null;
   const rendered = Math.round(img.getBoundingClientRect().width);
   if (rendered > 0) return rendered;
