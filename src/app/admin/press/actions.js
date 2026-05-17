@@ -1,6 +1,7 @@
 'use server';
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { preparePostContentForStorage } from '@/lib/post-content';
 import { revalidatePath } from 'next/cache';
 
 function today() {
@@ -27,7 +28,7 @@ export async function createPress({
       published_at: publishedAt ?? today(),
       summary: (summary ?? '').trim(),
       thumbnail_url: thumbnailUrl?.trim() || null,
-      content: (content ?? '').trim(),
+      content: preparePostContentForStorage(content),
       author: '관리자',
       created_at: createdAt ?? today(),
       is_featured: Boolean(isFeatured),
@@ -65,7 +66,7 @@ export async function updatePress(
       published_at: publishedAt ?? today(),
       summary: (summary ?? '').trim(),
       thumbnail_url: thumbnailUrl?.trim() || null,
-      content: (content ?? '').trim(),
+      content: preparePostContentForStorage(content),
       created_at: createdAt ?? today(),
       is_featured: Boolean(isFeatured),
     })

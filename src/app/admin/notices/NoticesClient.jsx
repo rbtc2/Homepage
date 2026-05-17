@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { deleteNotice, togglePin } from './actions';
+import { comparePostIdsDesc } from '@/lib/compare-post-ids';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 
@@ -31,7 +32,7 @@ export default function NoticesClient({ initialNotices }) {
   const sorted = [...notices].sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
-    return b.id - a.id;
+    return comparePostIdsDesc(a, b);
   });
 
   const nonPinnedSorted = sorted.filter((n) => !n.isPinned);

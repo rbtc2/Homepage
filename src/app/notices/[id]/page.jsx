@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
+import SafeHtml from '@/components/board/SafeHtml';
 import { getNoticeById, getPrevNext } from '@/lib/notices';
 
 export const revalidate = 3600;
@@ -58,10 +59,7 @@ export default async function NoticeDetailPage({ params }) {
               </div>
             </header>
 
-            <div
-              className="nd__body nd__body--html"
-              dangerouslySetInnerHTML={{ __html: notice.content }}
-            />
+            <SafeHtml html={notice.content} className="nd__body nd__body--html" />
           </article>
 
           <nav className="nd-sibling" aria-label="이전·다음 글">

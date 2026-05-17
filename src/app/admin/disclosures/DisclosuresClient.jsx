@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { deleteDisclosure } from './actions';
+import { comparePostIdsDesc } from '@/lib/compare-post-ids';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 
@@ -13,7 +14,7 @@ export default function DisclosuresClient({ initialDisclosures }) {
 
   useEffect(() => { setDisclosures(initialDisclosures); }, [initialDisclosures]);
 
-  const sorted       = [...disclosures].sort((a, b) => b.id - a.id);
+  const sorted       = [...disclosures].sort(comparePostIdsDesc);
   const thisMonth    = new Date().toISOString().slice(0, 7);
   const thisMonthCount = disclosures.filter((d) => d.createdAt?.startsWith(thisMonth)).length;
 

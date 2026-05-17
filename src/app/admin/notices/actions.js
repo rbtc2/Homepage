@@ -1,6 +1,7 @@
 'use server';
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { preparePostContentForStorage } from '@/lib/post-content';
 import { revalidatePath } from 'next/cache';
 
 function today() {
@@ -12,7 +13,7 @@ export async function createNotice({ title, content, isPinned, createdAt }) {
     .from('notices')
     .insert({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       author: '관리자',
       created_at: createdAt ?? today(),
       is_pinned: Boolean(isPinned),
@@ -33,7 +34,7 @@ export async function updateNotice(id, { title, content, isPinned, createdAt }) 
     .from('notices')
     .update({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       is_pinned: Boolean(isPinned),
       created_at: createdAt ?? today(),
     })

@@ -1,6 +1,7 @@
 'use server';
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { preparePostContentForStorage } from '@/lib/post-content';
 import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 
 function today() {
@@ -30,7 +31,7 @@ export async function createDisclosure({ title, content, createdAt }) {
     .from('disclosures')
     .insert({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       author: '관리자',
       created_at: createdAt ?? today(),
       views: 0,
@@ -49,7 +50,7 @@ export async function updateDisclosure(id, { title, content, createdAt }) {
     .from('disclosures')
     .update({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       created_at: createdAt ?? today(),
     })
     .eq('id', rowIdForEq(id))

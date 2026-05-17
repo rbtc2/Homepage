@@ -1,6 +1,7 @@
 'use server';
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { preparePostContentForStorage } from '@/lib/post-content';
 import { revalidatePath } from 'next/cache';
 import { hashSecretPassword } from '@/lib/secret-password';
 
@@ -19,7 +20,7 @@ export async function createArchive({ title, content, createdAt, isSecret, secre
     .from('archive')
     .insert({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       author: '관리자',
       created_at: createdAt ?? today(),
       views: 0,
@@ -64,7 +65,7 @@ export async function updateArchive(id, { title, content, createdAt, isSecret, s
     .from('archive')
     .update({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       created_at: createdAt ?? today(),
       is_secret: secretEnabled,
       secret_password_hash: nextSecretHash,

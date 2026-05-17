@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { deleteArchive } from './actions';
+import { comparePostIdsDesc } from '@/lib/compare-post-ids';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 
@@ -13,7 +14,7 @@ export default function ArchiveClient({ initialArchives }) {
 
   useEffect(() => { setArchives(initialArchives); }, [initialArchives]);
 
-  const sorted       = [...archives].sort((a, b) => b.id - a.id);
+  const sorted       = [...archives].sort(comparePostIdsDesc);
   const thisMonth    = new Date().toISOString().slice(0, 7);
   const thisMonthCount = archives.filter((a) => a.createdAt?.startsWith(thisMonth)).length;
 

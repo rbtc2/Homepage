@@ -1,6 +1,7 @@
 'use server';
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { preparePostContentForStorage } from '@/lib/post-content';
 import { revalidatePath } from 'next/cache';
 
 function today() {
@@ -12,7 +13,7 @@ export async function createWrNewsPost({ title, content, coverImage, createdAt }
     .from('wr_news')
     .insert({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       author: '관리자',
       created_at: createdAt ?? today(),
       cover_image: coverImage ?? null,
@@ -33,7 +34,7 @@ export async function updateWrNewsPost(id, { title, content, coverImage, created
     .from('wr_news')
     .update({
       title: title.trim(),
-      content: content.trim(),
+      content: preparePostContentForStorage(content),
       created_at: createdAt ?? today(),
       cover_image: coverImage ?? null,
     })

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
+import SafeHtml from '@/components/board/SafeHtml';
 import { getWrNewsById, getWrNewsPrevNext } from '@/lib/wr-news';
 
 export const revalidate = 3600;
@@ -89,9 +90,7 @@ export default async function WrNewsDetailPage({ params }) {
               </div>
             </header>
 
-            {post.content && post.content !== '<p></p>' && (
-              <div className="nd__body nd__body--html" dangerouslySetInnerHTML={{ __html: post.content }} />
-            )}
+            <SafeHtml html={post.content} className="nd__body nd__body--html" />
           </article>
 
           <nav className="gd-sibling" aria-label="이전·다음 글">

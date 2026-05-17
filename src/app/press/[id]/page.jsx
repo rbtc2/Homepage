@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
+import SafeHtml from '@/components/board/SafeHtml';
+import { isEmptyPostHtml } from '@/lib/sanitize-html';
 import { getPressById, getPrevNextPress } from '@/lib/press-coverage';
 
 export const revalidate = 3600;
@@ -14,19 +16,13 @@ export async function generateMetadata({ params }) {
   return { title: `${row.title} | 언론보도 | 국제인권연대 월드라이츠(WORLD RIGHTS)` };
 }
 
-function isEmptyHtml(html) {
-  if (!html || !html.trim()) return true;
-  const t = html.replace(/\s/g, '');
-  return t === '<p></p>' || t === '<p><br></p>' || t === '<p><br/></p>';
-}
-
 export default async function PressDetailPage({ params }) {
   const { id } = await params;
   const row = await getPressById(id);
   if (!row) notFound();
 
   const { prev, next } = await getPrevNextPress(id);
-  const hasBody = !isEmptyHtml(row.content);
+  const hasBody = !isEmptyPostHtml(row.content);
 
   return (
     <>
@@ -103,10 +99,7 @@ export default async function PressDetailPage({ params }) {
             </header>
 
             {hasBody && (
-              <div
-                className="nd__body nd__body--html pd__body"
-                dangerouslySetInnerHTML={{ __html: row.content }}
-              />
+              <SafeHtml html={row.content} className="nd__body nd__body--html pd__body" />
             )}
           </article>
 

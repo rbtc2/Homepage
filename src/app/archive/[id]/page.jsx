@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
+import SafeHtml from '@/components/board/SafeHtml';
 import { getArchiveById, getArchiveSecretAuth, getPrevNext } from '@/lib/archive';
 import SecretArchiveGate from './SecretArchiveGate';
 
@@ -75,10 +76,7 @@ export default async function ArchiveDetailPage({ params }) {
             </header>
 
             {canRead ? (
-              <div
-                className="nd__body nd__body--html"
-                dangerouslySetInnerHTML={{ __html: archive.content }}
-              />
+              <SafeHtml html={archive.content} className="nd__body nd__body--html" />
             ) : (
               <SecretArchiveGate id={id} />
             )}
