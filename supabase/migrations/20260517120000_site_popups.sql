@@ -5,8 +5,10 @@ CREATE TABLE IF NOT EXISTS public.site_popups (
   title TEXT NOT NULL,
   image_url TEXT NOT NULL,
   link_url TEXT NOT NULL DEFAULT '',
-  start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
+  display_mode TEXT NOT NULL DEFAULT 'scheduled'
+    CHECK (display_mode IN ('immediate', 'scheduled')),
+  start_at TIMESTAMPTZ,
+  end_at TIMESTAMPTZ,
   position TEXT NOT NULL DEFAULT 'center'
     CHECK (position IN ('center', 'top-left', 'top-right', 'bottom-left', 'bottom-right')),
   width_px INTEGER,
@@ -18,8 +20,8 @@ CREATE TABLE IF NOT EXISTS public.site_popups (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS site_popups_active_dates_idx
-  ON public.site_popups (is_active, start_date, end_date);
+CREATE INDEX IF NOT EXISTS site_popups_schedule_idx
+  ON public.site_popups (display_mode, is_active, start_at, end_at);
 
 ALTER TABLE public.site_popups ENABLE ROW LEVEL SECURITY;
 

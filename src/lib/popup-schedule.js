@@ -1,6 +1,3 @@
-/** 팝업 노출 방식 */
-export const POPUP_DISPLAY_MODES = ['immediate', 'scheduled'];
-
 const KST_TZ = 'Asia/Seoul';
 
 const kstFormatter = new Intl.DateTimeFormat('en-CA', {
@@ -27,21 +24,7 @@ function partsToMap(parts) {
   return Object.fromEntries(parts.map((p) => [p.type, p.value]));
 }
 
-/** DATE 컬럼(레거시) → KST 해당일 00:00 ISO */
-export function kstDateToDayStartIso(dateStr) {
-  if (!dateStr) return null;
-  const day = String(dateStr).slice(0, 10);
-  return new Date(`${day}T00:00:00+09:00`).toISOString();
-}
-
-/** DATE 컬럼(레거시) → KST 해당일 23:59:59 ISO */
-export function kstDateToDayEndIso(dateStr) {
-  if (!dateStr) return null;
-  const day = String(dateStr).slice(0, 10);
-  return new Date(`${day}T23:59:59+09:00`).toISOString();
-}
-
-/** ISO(UTC) → datetime-local 입력값 (KST 기준 `YYYY-MM-DDTHH:mm`) */
+/** ISO(UTC) → datetime-local 입력값 (KST `YYYY-MM-DDTHH:mm`) */
 export function isoToKstDatetimeLocal(iso) {
   if (!iso) return '';
   const map = partsToMap(kstFormatter.formatToParts(new Date(iso)));
@@ -96,8 +79,4 @@ export function getPopupStatus(popup) {
   if (now < start) return 'scheduled';
   if (now > end) return 'expired';
   return 'active';
-}
-
-export function isPopupVisibleNow(popup) {
-  return getPopupStatus(popup) === 'active';
 }

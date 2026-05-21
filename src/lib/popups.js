@@ -1,9 +1,4 @@
 import { supabase } from './supabase';
-import {
-  isPopupVisibleNow,
-  kstDateToDayEndIso,
-  kstDateToDayStartIso,
-} from './popup-schedule';
 
 const VALID_POSITIONS = new Set([
   'center',
@@ -13,38 +8,16 @@ const VALID_POSITIONS = new Set([
   'bottom-right',
 ]);
 
-function isMissingScheduleColumnError(error) {
-  const msg = (error?.message ?? '').toLowerCase();
-  return (
-    msg.includes('display_mode') ||
-    msg.includes('start_at') ||
-    msg.includes('end_at') ||
-    error?.code === '42703' ||
-    error?.code === 'PGRST204'
-  );
-}
-
 function normalize(row) {
   if (!row) return null;
-
-  let displayMode = 'scheduled';
-  if (row.display_mode === 'immediate') displayMode = 'immediate';
-  else if (row.display_mode === 'scheduled') displayMode = 'scheduled';
-
-  let startAt = row.start_at ?? null;
-  let endAt = row.end_at ?? null;
-
-  if (!startAt && row.start_date) startAt = kstDateToDayStartIso(row.start_date);
-  if (!endAt && row.end_date) endAt = kstDateToDayEndIso(row.end_date);
-
   return {
     id: row.id == null ? null : String(row.id),
     title: row.title ?? '',
     imageUrl: row.image_url ?? '',
     linkUrl: row.link_url ?? '',
-    displayMode,
-    startAt,
-    endAt,
+    displayMode: row.display_mode === 'immediate' ? 'immediate' : 'scheduled',
+    startAt: row.start_at ?? null,
+    endAt: row.end_at ?? null,
     position: VALID_POSITIONS.has(row.position) ? row.position : 'center',
     widthPx: row.width_px == null ? null : Number(row.width_px),
     heightPx: row.height_px == null ? null : Number(row.height_px),
@@ -54,23 +27,6 @@ function normalize(row) {
     isActive: Boolean(row.is_active),
     createdAt: row.created_at?.slice?.(0, 10) ?? row.created_at,
   };
-}
-
-let scheduleSchemaSupported = null;
-
-/** 신규 스케줄 컬럼(display_mode, start_at, end_at) 존재 여부 */
-export async function supportsPopupScheduleSchema(client = supabase) {
-  if (scheduleSchemaSupported !== null) return scheduleSchemaSupported;
-  const { error } = await client.from('site_popups').select('display_mode').limit(1);
-  if (!error) {
-    scheduleSchemaSupported = true;
-    return true;
-  }
-  if (isMissingScheduleColumnError(error)) {
-    scheduleSchemaSupported = false;
-    return false;
-  }
-  throw new Error(error.message);
 }
 
 /** 관리자: 전체 팝업 목록 */
@@ -84,16 +40,37 @@ export async function getPopups() {
   return (data ?? []).map(normalize).filter(Boolean);
 }
 
-/** 사이트: 현재 노출 대상 팝업 (DB 컬럼 유무와 무관하게 JS에서 판별) */
+/** 사이트: 현재 노출 대상 팝업 */
 export async function getActiveSitePopups() {
-  const { data, error } = await supabase.from('site_popups').select('*');
+  const now = new Date().toISOString();
 
-  if (error) throw new Error(error.message);
+  const [immediateRes, scheduledRes] = await Promise.all([
+    supabase
+      .from('site_popups')
+      .select('*')
+      .eq('display_mode', 'immediate')
+      .eq('is_active', true),
+    supabase
+      .from('site_popups')
+      .select('*')
+      .eq('display_mode', 'scheduled')
+      .eq('is_active', true)
+      .lte('start_at', now)
+      .gte('end_at', now),
+  ]);
 
-  return (data ?? [])
-    .map(normalize)
-    .filter((popup) => popup && isPopupVisibleNow(popup))
-    .sort((a, b) => Number(b.id) - Number(a.id));
+  if (immediateRes.error) throw new Error(immediateRes.error.message);
+  if (scheduledRes.error) throw new Error(scheduledRes.error.message);
+
+  const merged = [...(immediateRes.data ?? []), ...(scheduledRes.data ?? [])];
+  const byId = new Map();
+
+  for (const row of merged) {
+    const item = normalize(row);
+    if (item) byId.set(item.id, item);
+  }
+
+  return [...byId.values()].sort((a, b) => Number(b.id) - Number(a.id));
 }
 
 /** 대시보드: 노출 중 팝업 수 */
@@ -102,4 +79,4 @@ export async function getActivePopupCount() {
   return items.length;
 }
 
-export { VALID_POSITIONS, isMissingScheduleColumnError };
+export { VALID_POSITIONS };
