@@ -3,13 +3,12 @@ import SitePopups from './SitePopups';
 
 /** 활성 팝업이 있을 때만 클라이언트 레이어를 렌더합니다. */
 export default async function SitePopupsLoader() {
-  let popups = [];
   try {
-    popups = await getActiveSitePopups();
-  } catch {
+    const popups = await getActiveSitePopups();
+    if (!popups.length) return null;
+    return <SitePopups popups={popups} />;
+  } catch (err) {
+    console.error('[SitePopupsLoader]', err);
     return null;
   }
-
-  if (!popups.length) return null;
-  return <SitePopups popups={popups} />;
 }

@@ -27,11 +27,27 @@ function partsToMap(parts) {
   return Object.fromEntries(parts.map((p) => [p.type, p.value]));
 }
 
+/** DATE 컬럼(레거시) → KST 해당일 00:00 ISO */
+export function kstDateToDayStartIso(dateStr) {
+  if (!dateStr) return null;
+  const day = String(dateStr).slice(0, 10);
+  return new Date(`${day}T00:00:00+09:00`).toISOString();
+}
+
+/** DATE 컬럼(레거시) → KST 해당일 23:59:59 ISO */
+export function kstDateToDayEndIso(dateStr) {
+  if (!dateStr) return null;
+  const day = String(dateStr).slice(0, 10);
+  return new Date(`${day}T23:59:59+09:00`).toISOString();
+}
+
 /** ISO(UTC) → datetime-local 입력값 (KST 기준 `YYYY-MM-DDTHH:mm`) */
 export function isoToKstDatetimeLocal(iso) {
   if (!iso) return '';
   const map = partsToMap(kstFormatter.formatToParts(new Date(iso)));
-  return `${map.year}-${map.month}-${map.day}T${map.hour}:${map.minute}`;
+  const hour = map.hour ?? map.hour12 ?? '00';
+  const minute = map.minute ?? '00';
+  return `${map.year}-${map.month}-${map.day}T${hour}:${minute}`;
 }
 
 /** datetime-local 입력값(KST) → ISO(UTC) */
