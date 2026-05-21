@@ -271,6 +271,11 @@
   opacity: 0.65;
 }
 
+.ep-content mark {
+  border-radius: 2px;
+  padding: 0.05em 0.1em;
+}
+
 .ep-content ul,
 .ep-content ol {
   margin: 0 0 0.875em 1.25em;

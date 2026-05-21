@@ -19,6 +19,24 @@
   flex-shrink: 0;
 }
 
+/* ── 형광펜 버튼 아이콘 ──────────────────────────────────────── */
+.ep-hl-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  line-height: 1;
+}
+
+.ep-hl-icon__bar {
+  display: block;
+  width: 12px;
+  height: 4px;
+  border-radius: 1px;
+  flex-shrink: 0;
+  opacity: 0.95;
+}
+
 /* ── 글자 색상 피커 드롭다운 (cp-*) ─────────────────────────── */
 .cp {
   position: absolute;

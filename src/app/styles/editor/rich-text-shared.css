@@ -1,4 +1,12 @@
 /* ── 에디터 / 공개 페이지 링크 스타일 ──────────────────────── */
+.ep-content mark,
+.nd__body--html mark {
+  border-radius: 2px;
+  padding: 0.05em 0.1em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .ep-content a,
 .nd__body--html a {
   color: var(--brand);

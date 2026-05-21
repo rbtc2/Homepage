@@ -13,6 +13,7 @@ import { CustomTableCell } from './CustomTableCell';
 import { CustomTableHeader } from './CustomTableHeader';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
+import Highlight from '@tiptap/extension-highlight';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import { EditorImage } from './EditorImage';
 
@@ -20,6 +21,7 @@ import icons from './icons';
 import { ToolbarBtn, Divider } from './ToolbarBtn';
 import TableGridPicker from './TableGridPicker';
 import ColorPicker from './ColorPicker';
+import HighlightPicker from './HighlightPicker';
 import LinkPicker from './LinkPicker';
 import ImagePicker from './ImagePicker';
 import ImageToolbar from './ImageToolbar';
@@ -87,6 +89,7 @@ export default function RichEditor({
       Underline,
       TextStyle,
       Color,
+      Highlight.configure({ multicolor: true }),
       TiptapLink.configure({
         openOnClick: false,
         autolink: true,
@@ -398,6 +401,7 @@ export default function RichEditor({
             {icons.strike}
           </ToolbarBtn>
           <ColorPicker editor={editor} />
+          <HighlightPicker editor={editor} />
         </div>
 
         <Divider />

@@ -10,6 +10,7 @@ const ALLOWED_TAGS = [
   'a', 'img', 'div', 'span',
   'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
   'blockquote', 'pre', 'code', 'hr', 'sub', 'sup',
+  'mark',
 ];
 
 const ALLOWED_ATTR = [
@@ -17,6 +18,7 @@ const ALLOWED_ATTR = [
   'class', 'colspan', 'rowspan', 'align',
   'data-align', 'data-width', 'data-margin-left', 'data-margin-right',
   'data-cell-bgcolor',
+  'data-color',
   'data-border-top', 'data-border-right', 'data-border-bottom', 'data-border-left',
   'style',
 ];
