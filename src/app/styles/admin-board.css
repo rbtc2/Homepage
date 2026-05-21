@@ -586,11 +586,13 @@
   color: #dc2626;
 }
 
-/* 노출 기간 텍스트 */
+/* 노출 설정 텍스트 */
 .an-popup-period {
+  display: block;
   font-size: 0.8125rem;
+  line-height: 1.45;
   color: var(--muted);
-  white-space: nowrap;
+  max-width: 16rem;
 }
 
 /* 활성화 토글 스위치 */
@@ -634,7 +636,7 @@
 }
 
 /* 팝업 테이블 컬럼 너비 */
-.an-table__th--popup-period { width: 13rem; }
+.an-table__th--popup-period { width: 15rem; }
 .an-table__th--popup-pos    { width: 5rem; text-align: center; }
 .an-table__th--popup-status { width: 6rem; }
 .an-table__th--popup-active { width: 4.5rem; text-align: center; }
@@ -648,6 +650,76 @@
   max-width: 560px;
 }
 
+/* 팝업 노출 방식 (즉시 / 기간 예약) */
+.an-popup-mode {
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.an-popup-mode__options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+}
+
+.an-popup-mode__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.an-popup-mode__option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 0.875rem;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+.an-popup-mode__option:hover {
+  border-color: rgba(18, 79, 166, 0.35);
+}
+
+.an-popup-mode__option--on {
+  border-color: var(--brand);
+  background: rgba(18, 79, 166, 0.05);
+  box-shadow: 0 0 0 3px rgba(18, 79, 166, 0.1);
+}
+
+.an-popup-mode__title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.an-popup-mode__desc {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.an-popup-live__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.an-popup-live__state {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
 /* 폼 가로 2열 레이아웃 */
 .an-field-row {
   display: grid;
@@ -657,6 +729,10 @@
 
 @media (max-width: 480px) {
   .an-field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .an-popup-mode__options {
     grid-template-columns: 1fr;
   }
 

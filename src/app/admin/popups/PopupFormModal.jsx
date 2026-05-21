@@ -29,11 +29,14 @@ export default function PopupFormModal({
   editTarget,
   form,
   onChange,
+  onDisplayModeChange,
   onImageUrlChange,
   onSubmit,
   onClose,
   saving,
 }) {
+  const isImmediate = form.displayMode === 'immediate';
+
   return (
     <div className="an-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="an-modal an-modal--popup-form" role="dialog" aria-modal="true">
@@ -80,36 +83,93 @@ export default function PopupFormModal({
               <p className="an-field__help">비우면 클릭해도 이동하지 않습니다.</p>
             </div>
 
-            <div className="an-field-row">
-              <div className="an-field">
-                <label className="an-field__label" htmlFor="popup-start">
-                  노출 시작일 <span className="an-field__req" aria-hidden="true">*</span>
+            <fieldset className="an-field an-popup-mode">
+              <legend className="an-field__label">노출 방식</legend>
+              <div className="an-popup-mode__options" role="radiogroup" aria-label="노출 방식">
+                <label className={`an-popup-mode__option${isImmediate ? ' an-popup-mode__option--on' : ''}`}>
+                  <input
+                    type="radio"
+                    name="displayMode"
+                    value="immediate"
+                    className="an-popup-mode__input"
+                    checked={isImmediate}
+                    onChange={() => onDisplayModeChange('immediate')}
+                  />
+                  <span className="an-popup-mode__title">즉시 노출</span>
+                  <span className="an-popup-mode__desc">저장 후 켜기·끄기로 바로 제어합니다.</span>
                 </label>
-                <input
-                  id="popup-start"
-                  name="startDate"
-                  type="date"
-                  className="an-field__input"
-                  value={form.startDate}
-                  onChange={onChange}
-                  required
-                />
-              </div>
-              <div className="an-field">
-                <label className="an-field__label" htmlFor="popup-end">
-                  노출 종료일 <span className="an-field__req" aria-hidden="true">*</span>
+                <label className={`an-popup-mode__option${!isImmediate ? ' an-popup-mode__option--on' : ''}`}>
+                  <input
+                    type="radio"
+                    name="displayMode"
+                    value="scheduled"
+                    className="an-popup-mode__input"
+                    checked={!isImmediate}
+                    onChange={() => onDisplayModeChange('scheduled')}
+                  />
+                  <span className="an-popup-mode__title">기간 예약</span>
+                  <span className="an-popup-mode__desc">KST 기준 시작·종료 시각에 맞춰 자동 노출합니다.</span>
                 </label>
-                <input
-                  id="popup-end"
-                  name="endDate"
-                  type="date"
-                  className="an-field__input"
-                  value={form.endDate}
-                  onChange={onChange}
-                  required
-                />
               </div>
-            </div>
+            </fieldset>
+
+            {isImmediate ? (
+              <div className="an-field an-popup-live">
+                <div className="an-popup-live__row">
+                  <span className="an-field__label" id="popup-live-label">
+                    노출 상태
+                  </span>
+                  <button
+                    type="button"
+                    className={`an-toggle${form.isActive ? ' an-toggle--on' : ''}`}
+                    onClick={() =>
+                      onChange({
+                        target: { name: 'isActive', type: 'checkbox', checked: !form.isActive },
+                      })
+                    }
+                    aria-labelledby="popup-live-label"
+                    aria-pressed={form.isActive}
+                  >
+                    <span className="an-toggle__track">
+                      <span className="an-toggle__thumb" />
+                    </span>
+                  </button>
+                  <span className="an-popup-live__state">{form.isActive ? '켜짐' : '꺼짐'}</span>
+                </div>
+                <p className="an-field__help">메인 페이지에서만 표시됩니다. 끄면 방문자에게 보이지 않습니다.</p>
+              </div>
+            ) : (
+              <div className="an-field-row">
+                <div className="an-field">
+                  <label className="an-field__label" htmlFor="popup-start">
+                    시작 시각 (KST) <span className="an-field__req" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="popup-start"
+                    name="startAt"
+                    type="datetime-local"
+                    className="an-field__input"
+                    value={form.startAt}
+                    onChange={onChange}
+                    required
+                  />
+                </div>
+                <div className="an-field">
+                  <label className="an-field__label" htmlFor="popup-end">
+                    종료 시각 (KST) <span className="an-field__req" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="popup-end"
+                    name="endAt"
+                    type="datetime-local"
+                    className="an-field__input"
+                    value={form.endAt}
+                    onChange={onChange}
+                    required
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="an-field">
               <label className="an-field__label" htmlFor="popup-position">
@@ -211,19 +271,6 @@ export default function PopupFormModal({
                   {CHECK_SVG}
                 </span>
                 <span className="an-check__label">오늘 하루 보지 않기 버튼 표시</span>
-              </label>
-              <label className="an-check">
-                <input
-                  type="checkbox"
-                  name="isActive"
-                  className="an-check__input"
-                  checked={form.isActive}
-                  onChange={onChange}
-                />
-                <span className="an-check__box" aria-hidden="true">
-                  {CHECK_SVG}
-                </span>
-                <span className="an-check__label">즉시 활성화</span>
               </label>
             </div>
           </div>

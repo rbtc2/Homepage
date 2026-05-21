@@ -56,7 +56,6 @@ function normalizePayload(data) {
     }
     payload.start_at = startAt;
     payload.end_at = endAt;
-    payload.is_active = true;
   }
 
   return payload;
