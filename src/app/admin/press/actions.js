@@ -4,6 +4,7 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
 import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
+import { actionOk, actionFail } from '@/lib/admin-action-result';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -25,25 +26,30 @@ export async function createPress({
   createdAt,
   isFeatured,
 }) {
-  const { error } = await getSupabaseAdmin()
-    .from('press_coverage')
-    .insert({
-      title: title.trim(),
-      source_name: sourceName.trim(),
-      article_url: articleUrl.trim(),
-      published_at: publishedAt ?? today(),
-      summary: (summary ?? '').trim(),
-      thumbnail_url: thumbnailUrl?.trim() || null,
-      content: preparePostContentForStorage(content),
-      author: '관리자',
-      created_at: createdAt ?? today(),
-      is_featured: Boolean(isFeatured),
-      views: 0,
-    });
+  try {
+    const contentStored = await preparePostContentForStorage(content);
+    const { error } = await getSupabaseAdmin()
+      .from('press_coverage')
+      .insert({
+        title: title.trim(),
+        source_name: sourceName.trim(),
+        article_url: articleUrl.trim(),
+        published_at: publishedAt ?? today(),
+        summary: (summary ?? '').trim(),
+        thumbnail_url: thumbnailUrl?.trim() || null,
+        content: contentStored,
+        author: '관리자',
+        created_at: createdAt ?? today(),
+        is_featured: Boolean(isFeatured),
+        views: 0,
+      });
 
-  if (error) throw new Error(error.message);
-
-  revalidatePressPaths();
+    if (error) return actionFail(error.message);
+    revalidatePressPaths();
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
 }
 
 export async function updatePress(
@@ -60,56 +66,68 @@ export async function updatePress(
     isFeatured,
   }
 ) {
-  const idEq = rowIdForEq(id);
-  const { error } = await getSupabaseAdmin()
-    .from('press_coverage')
-    .update({
-      title: title.trim(),
-      source_name: sourceName.trim(),
-      article_url: articleUrl.trim(),
-      published_at: publishedAt ?? today(),
-      summary: (summary ?? '').trim(),
-      thumbnail_url: thumbnailUrl?.trim() || null,
-      content: preparePostContentForStorage(content),
-      created_at: createdAt ?? today(),
-      is_featured: Boolean(isFeatured),
-    })
-    .eq('id', idEq);
+  try {
+    const idEq = rowIdForEq(id);
+    const contentStored = await preparePostContentForStorage(content);
+    const { error } = await getSupabaseAdmin()
+      .from('press_coverage')
+      .update({
+        title: title.trim(),
+        source_name: sourceName.trim(),
+        article_url: articleUrl.trim(),
+        published_at: publishedAt ?? today(),
+        summary: (summary ?? '').trim(),
+        thumbnail_url: thumbnailUrl?.trim() || null,
+        content: contentStored,
+        created_at: createdAt ?? today(),
+        is_featured: Boolean(isFeatured),
+      })
+      .eq('id', idEq);
 
-  if (error) throw new Error(error.message);
-
-  revalidatePressPaths(id);
+    if (error) return actionFail(error.message);
+    revalidatePressPaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
 }
 
 export async function deletePress(id) {
-  const idEq = rowIdForEq(id);
-  const { error } = await getSupabaseAdmin()
-    .from('press_coverage')
-    .delete()
-    .eq('id', idEq);
+  try {
+    const idEq = rowIdForEq(id);
+    const { error } = await getSupabaseAdmin()
+      .from('press_coverage')
+      .delete()
+      .eq('id', idEq);
 
-  if (error) throw new Error(error.message);
-
-  revalidatePressPaths(id);
+    if (error) return actionFail(error.message);
+    revalidatePressPaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
 }
 
 export async function togglePressFeatured(id) {
-  const idEq = rowIdForEq(id);
-  const { data: row, error: fetchError } = await getSupabaseAdmin()
-    .from('press_coverage')
-    .select('is_featured')
-    .eq('id', idEq)
-    .single();
+  try {
+    const idEq = rowIdForEq(id);
+    const { data: row, error: fetchError } = await getSupabaseAdmin()
+      .from('press_coverage')
+      .select('is_featured')
+      .eq('id', idEq)
+      .single();
 
-  if (fetchError) throw new Error(fetchError.message);
+    if (fetchError) return actionFail(fetchError.message);
 
-  const { error } = await getSupabaseAdmin()
-    .from('press_coverage')
-    .update({ is_featured: !row.is_featured })
-    .eq('id', idEq);
+    const { error } = await getSupabaseAdmin()
+      .from('press_coverage')
+      .update({ is_featured: !row.is_featured })
+      .eq('id', idEq);
 
-  if (error) throw new Error(error.message);
-
-  revalidatePressPaths(id);
-  return !row.is_featured;
+    if (error) return actionFail(error.message);
+    revalidatePressPaths(id);
+    return { ok: true, isFeatured: !row.is_featured };
+  } catch (e) {
+    return actionFail(e);
+  }
 }

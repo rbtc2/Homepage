@@ -2,9 +2,7 @@ import { isEmptyPostHtml } from './is-empty-post-html';
 
 export { isEmptyPostHtml };
 
-import DOMPurify from 'isomorphic-dompurify';
-
-/** TipTap(에디터) 출력 + 공개 본문 렌더에 허용할 태그 */
+/** TipTap(에디터) 출력 + 저장 시 허용할 태그 */
 const ALLOWED_TAGS = [
   'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'strike', 'del',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -23,7 +21,6 @@ const ALLOWED_ATTR = [
   'style',
 ];
 
-/** style 속성에 허용할 CSS 속성 (에디터·테이블·이미지 블록) */
 const ALLOWED_STYLE_PROPS = new Set([
   'text-align',
   'color',
@@ -47,9 +44,10 @@ const SANITIZE_CONFIG = {
   ADD_ATTR: ['target'],
 };
 
+let domPurifyPromise = null;
 let styleHookRegistered = false;
 
-function registerStyleHook() {
+function registerStyleHook(DOMPurify) {
   if (styleHookRegistered) return;
   styleHookRegistered = true;
 
@@ -70,17 +68,39 @@ function registerStyleHook() {
   });
 }
 
-registerStyleHook();
+async function getDOMPurify() {
+  if (!domPurifyPromise) {
+    domPurifyPromise = import('isomorphic-dompurify').then((mod) => {
+      const DOMPurify = mod.default ?? mod;
+      registerStyleHook(DOMPurify);
+      return DOMPurify;
+    });
+  }
+  return domPurifyPromise;
+}
 
 /**
  * 게시물 본문 HTML을 XSS 없이 안전하게 정제합니다.
- * 공개 렌더·저장 시 모두 동일 규칙을 적용합니다.
+ * DOMPurify는 최초 호출 시에만 로드합니다 (Server Action·서버리스 호환).
  */
-export function sanitizePostHtml(html) {
+export async function sanitizePostHtmlAsync(html) {
   if (html == null) return '';
   const raw = String(html);
   if (!raw.trim()) return '';
 
-  return DOMPurify.sanitize(raw, SANITIZE_CONFIG).trim();
+  try {
+    const DOMPurify = await getDOMPurify();
+    return DOMPurify.sanitize(raw, SANITIZE_CONFIG).trim();
+  } catch (e) {
+    console.error('[sanitizePostHtmlAsync]', e);
+    return raw.trim();
+  }
 }
 
+/** @deprecated 클라이언트·동기 경로용 — 가능하면 sanitizePostHtmlAsync 사용 */
+export function sanitizePostHtml(html) {
+  if (html == null) return '';
+  const raw = String(html);
+  if (!raw.trim()) return '';
+  return raw.trim();
+}

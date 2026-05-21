@@ -83,9 +83,15 @@ export default function PressEditor({ post, backHref, editTitle, newTitle, onSav
         content: html,
         isFeatured,
       });
+      router.refresh();
       router.push(backHref);
-    } catch {
-      alert('저장에 실패했습니다. 다시 시도해 주세요.');
+    } catch (err) {
+      const detail =
+        err instanceof Error && err.message
+          ? err.message
+          : '저장에 실패했습니다. 다시 시도해 주세요.';
+      console.error('[PressEditor] save failed:', err);
+      alert(detail);
     } finally {
       setSaving(false);
     }

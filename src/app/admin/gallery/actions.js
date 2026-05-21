@@ -4,6 +4,7 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
 import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
+import { actionOk, actionFail } from '@/lib/admin-action-result';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -16,47 +17,61 @@ function revalidateGalleryPaths(id) {
 }
 
 export async function createGalleryPost({ title, content, coverImage, createdAt }) {
-  const { error } = await getSupabaseAdmin()
-    .from('gallery')
-    .insert({
-      title: title.trim(),
-      content: preparePostContentForStorage(content),
-      author: '관리자',
-      created_at: createdAt ?? today(),
-      cover_image: coverImage ?? null,
-      views: 0,
-    });
+  try {
+    const contentStored = await preparePostContentForStorage(content);
+    const { error } = await getSupabaseAdmin()
+      .from('gallery')
+      .insert({
+        title: title.trim(),
+        content: contentStored,
+        author: '관리자',
+        created_at: createdAt ?? today(),
+        cover_image: coverImage ?? null,
+        views: 0,
+      });
 
-  if (error) throw new Error(error.message);
-
-  revalidateGalleryPaths();
+    if (error) return actionFail(error.message);
+    revalidateGalleryPaths();
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
 }
 
 export async function updateGalleryPost(id, { title, content, coverImage, createdAt }) {
-  const idEq = rowIdForEq(id);
-  const { error } = await getSupabaseAdmin()
-    .from('gallery')
-    .update({
-      title: title.trim(),
-      content: preparePostContentForStorage(content),
-      created_at: createdAt ?? today(),
-      cover_image: coverImage ?? null,
-    })
-    .eq('id', idEq);
+  try {
+    const idEq = rowIdForEq(id);
+    const contentStored = await preparePostContentForStorage(content);
+    const { error } = await getSupabaseAdmin()
+      .from('gallery')
+      .update({
+        title: title.trim(),
+        content: contentStored,
+        created_at: createdAt ?? today(),
+        cover_image: coverImage ?? null,
+      })
+      .eq('id', idEq);
 
-  if (error) throw new Error(error.message);
-
-  revalidateGalleryPaths(id);
+    if (error) return actionFail(error.message);
+    revalidateGalleryPaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
 }
 
 export async function deleteGalleryPost(id) {
-  const idEq = rowIdForEq(id);
-  const { error } = await getSupabaseAdmin()
-    .from('gallery')
-    .delete()
-    .eq('id', idEq);
+  try {
+    const idEq = rowIdForEq(id);
+    const { error } = await getSupabaseAdmin()
+      .from('gallery')
+      .delete()
+      .eq('id', idEq);
 
-  if (error) throw new Error(error.message);
-
-  revalidateGalleryPaths(id);
+    if (error) return actionFail(error.message);
+    revalidateGalleryPaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
 }

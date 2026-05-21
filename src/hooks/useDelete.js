@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { assertActionOk } from '@/lib/assert-action-ok';
 
 /**
  * 게시물 삭제 공통 로직 훅.
@@ -24,7 +25,7 @@ export function useDelete(deleteFn) {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await deleteFn(deleteTarget.id);
+      assertActionOk(await deleteFn(deleteTarget.id));
       setDeleteTarget(null);
       router.refresh();
     } catch (err) {

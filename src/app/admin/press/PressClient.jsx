@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { assertActionOk } from '@/lib/assert-action-ok';
 import { deletePress, togglePressFeatured } from './actions';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
@@ -21,10 +22,14 @@ export default function PressClient({ initialItems }) {
   const handleToggleFeatured = async (row) => {
     setTogglingId(row.id);
     try {
-      await togglePressFeatured(row.id);
+      assertActionOk(await togglePressFeatured(row.id));
       router.refresh();
-    } catch {
-      alert('대표 설정에 실패했습니다.');
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : '대표 설정에 실패했습니다.';
+      alert(msg);
     } finally {
       setTogglingId(null);
     }

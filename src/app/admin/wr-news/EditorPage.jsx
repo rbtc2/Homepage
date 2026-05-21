@@ -1,15 +1,15 @@
 'use client';
 
 import RichEditor from '@/components/editor/RichEditor';
+import { assertActionOk } from '@/lib/assert-action-ok';
 import { createWrNewsPost, updateWrNewsPost } from './actions';
 
 export default function WrNewsEditorPage({ post }) {
   const handleSave = async ({ title, content, createdAt, coverImage }) => {
-    if (post) {
-      await updateWrNewsPost(post.id, { title, content, coverImage, createdAt });
-    } else {
-      await createWrNewsPost({ title, content, coverImage, createdAt });
-    }
+    const result = post
+      ? await updateWrNewsPost(post.id, { title, content, coverImage, createdAt })
+      : await createWrNewsPost({ title, content, coverImage, createdAt });
+    assertActionOk(result);
   };
 
   return (

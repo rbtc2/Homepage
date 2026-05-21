@@ -1,15 +1,15 @@
 'use client';
 
 import RichEditor from '@/components/editor/RichEditor';
+import { assertActionOk } from '@/lib/assert-action-ok';
 import { createDisclosure, updateDisclosure } from './actions';
 
 export default function EditorPage({ disclosure }) {
   const handleSave = async ({ title, content, createdAt }) => {
-    if (disclosure) {
-      await updateDisclosure(disclosure.id, { title, content, createdAt });
-    } else {
-      await createDisclosure({ title, content, createdAt });
-    }
+    const result = disclosure
+      ? await updateDisclosure(disclosure.id, { title, content, createdAt })
+      : await createDisclosure({ title, content, createdAt });
+    assertActionOk(result);
   };
 
   return (

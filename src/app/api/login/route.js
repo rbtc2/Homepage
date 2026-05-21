@@ -8,8 +8,8 @@ import {
 export async function POST(request) {
   const { id, password } = await request.json();
 
-  const adminId = 'admin';
-  const adminPassword = 'wr20260326!!';
+  const adminId = process.env.ADMIN_ID?.trim() || 'admin';
+  const adminPassword = process.env.ADMIN_PASSWORD?.trim() || 'wr20260326!!';
 
   if (id !== adminId || password !== adminPassword) {
     return NextResponse.json(
@@ -21,9 +21,15 @@ export async function POST(request) {
   let token;
   try {
     token = await signAdminSession();
-  } catch {
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : '';
     return NextResponse.json(
-      { ok: false, message: '서버 설정 오류입니다.' },
+      {
+        ok: false,
+        message: msg.includes('ADMIN_SESSION_SECRET')
+          ? '서버에 ADMIN_SESSION_SECRET(32자 이상)이 설정되지 않았습니다.'
+          : '서버 설정 오류입니다.',
+      },
       { status: 500 }
     );
   }

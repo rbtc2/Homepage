@@ -1,15 +1,15 @@
 'use client';
 
 import RichEditor from '@/components/editor/RichEditor';
+import { assertActionOk } from '@/lib/assert-action-ok';
 import { createGalleryPost, updateGalleryPost } from './actions';
 
 export default function GalleryEditorPage({ post }) {
   const handleSave = async ({ title, content, createdAt, coverImage }) => {
-    if (post) {
-      await updateGalleryPost(post.id, { title, content, coverImage, createdAt });
-    } else {
-      await createGalleryPost({ title, content, coverImage, createdAt });
-    }
+    const result = post
+      ? await updateGalleryPost(post.id, { title, content, coverImage, createdAt })
+      : await createGalleryPost({ title, content, coverImage, createdAt });
+    assertActionOk(result);
   };
 
   return (

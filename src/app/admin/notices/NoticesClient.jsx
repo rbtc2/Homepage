@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { assertActionOk } from '@/lib/assert-action-ok';
 import { deleteNotice, togglePin } from './actions';
 import { comparePostIdsDesc } from '@/lib/compare-post-ids';
 import { useDelete } from '@/hooks/useDelete';
@@ -20,10 +21,14 @@ export default function NoticesClient({ initialNotices }) {
   const handleTogglePin = async (notice) => {
     setTogglingId(notice.id);
     try {
-      await togglePin(notice.id);
+      assertActionOk(await togglePin(notice.id));
       router.refresh();
-    } catch {
-      alert('공지 설정에 실패했습니다.');
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : '공지 설정에 실패했습니다.';
+      alert(msg);
     } finally {
       setTogglingId(null);
     }

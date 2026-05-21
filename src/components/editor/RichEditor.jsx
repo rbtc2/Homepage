@@ -263,13 +263,11 @@ export default function RichEditor({
       router.push(backHref);
     } catch (err) {
       const detail =
-        err instanceof Error && err.message ? err.message : '저장에 실패했습니다.';
+        err instanceof Error && err.message
+          ? err.message
+          : '저장에 실패했습니다. 다시 시도해 주세요.';
       console.error('[RichEditor] save failed:', err);
-      alert(
-        process.env.NODE_ENV === 'development'
-          ? detail
-          : '저장에 실패했습니다. 다시 시도해 주세요.'
-      );
+      alert(detail);
     } finally {
       setSaving(false);
     }

@@ -1,15 +1,15 @@
 'use client';
 
 import RichEditor from '@/components/editor/RichEditor';
+import { assertActionOk } from '@/lib/assert-action-ok';
 import { createArchive, updateArchive } from './actions';
 
 export default function EditorPage({ archive }) {
   const handleSave = async ({ title, content, createdAt, isSecret, secretPassword }) => {
-    if (archive) {
-      await updateArchive(archive.id, { title, content, createdAt, isSecret, secretPassword });
-    } else {
-      await createArchive({ title, content, createdAt, isSecret, secretPassword });
-    }
+    const result = archive
+      ? await updateArchive(archive.id, { title, content, createdAt, isSecret, secretPassword })
+      : await createArchive({ title, content, createdAt, isSecret, secretPassword });
+    assertActionOk(result);
   };
 
   return (
