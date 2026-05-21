@@ -6,6 +6,11 @@ import { usePathname } from 'next/navigation';
 
 const STORAGE_PREFIX = 'wr-popup-dismiss-';
 
+/** 사이트 팝업은 메인(홈) 페이지에서만 노출 */
+function isHomePathname(pathname) {
+  return pathname === '/';
+}
+
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -137,7 +142,7 @@ export default function SitePopups({ popups }) {
     setDismissedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
 
-  if (pathname?.startsWith('/admin')) return null;
+  if (!isHomePathname(pathname)) return null;
   if (!visible.length) return null;
 
   return (
