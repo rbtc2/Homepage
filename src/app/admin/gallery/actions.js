@@ -2,14 +2,21 @@
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
-import { revalidatePath } from 'next/cache';
+import { rowIdForEq } from '@/lib/row-id-for-eq';
+import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function revalidateGalleryPaths(id) {
+  safeRevalidatePath('/gallery');
+  if (id != null && id !== '') safeRevalidatePath(`/gallery/${id}`);
+  safeRevalidatePath('/');
+}
+
 export async function createGalleryPost({ title, content, coverImage, createdAt }) {
-  const { data, error } = await getSupabaseAdmin()
+  const { error } = await getSupabaseAdmin()
     .from('gallery')
     .insert({
       title: title.trim(),
@@ -18,19 +25,16 @@ export async function createGalleryPost({ title, content, coverImage, createdAt 
       created_at: createdAt ?? today(),
       cover_image: coverImage ?? null,
       views: 0,
-    })
-    .select()
-    .single();
+    });
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/gallery');
-  revalidatePath('/');
-  return data;
+  revalidateGalleryPaths();
 }
 
 export async function updateGalleryPost(id, { title, content, coverImage, createdAt }) {
-  const { data, error } = await getSupabaseAdmin()
+  const idEq = rowIdForEq(id);
+  const { error } = await getSupabaseAdmin()
     .from('gallery')
     .update({
       title: title.trim(),
@@ -38,27 +42,21 @@ export async function updateGalleryPost(id, { title, content, coverImage, create
       created_at: createdAt ?? today(),
       cover_image: coverImage ?? null,
     })
-    .eq('id', Number(id))
-    .select()
-    .single();
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/gallery');
-  revalidatePath(`/gallery/${id}`);
-  revalidatePath('/');
-  return data;
+  revalidateGalleryPaths(id);
 }
 
 export async function deleteGalleryPost(id) {
+  const idEq = rowIdForEq(id);
   const { error } = await getSupabaseAdmin()
     .from('gallery')
     .delete()
-    .eq('id', Number(id));
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/gallery');
-  revalidatePath(`/gallery/${id}`);
-  revalidatePath('/');
+  revalidateGalleryPaths(id);
 }

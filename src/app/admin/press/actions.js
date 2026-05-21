@@ -2,10 +2,16 @@
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
-import { revalidatePath } from 'next/cache';
+import { rowIdForEq } from '@/lib/row-id-for-eq';
+import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function revalidatePressPaths(id) {
+  safeRevalidatePath('/press');
+  if (id != null && id !== '') safeRevalidatePath(`/press/${id}`);
 }
 
 export async function createPress({
@@ -19,7 +25,7 @@ export async function createPress({
   createdAt,
   isFeatured,
 }) {
-  const { data, error } = await getSupabaseAdmin()
+  const { error } = await getSupabaseAdmin()
     .from('press_coverage')
     .insert({
       title: title.trim(),
@@ -33,14 +39,11 @@ export async function createPress({
       created_at: createdAt ?? today(),
       is_featured: Boolean(isFeatured),
       views: 0,
-    })
-    .select()
-    .single();
+    });
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/press');
-  return data;
+  revalidatePressPaths();
 }
 
 export async function updatePress(
@@ -57,7 +60,8 @@ export async function updatePress(
     isFeatured,
   }
 ) {
-  const { data, error } = await getSupabaseAdmin()
+  const idEq = rowIdForEq(id);
+  const { error } = await getSupabaseAdmin()
     .from('press_coverage')
     .update({
       title: title.trim(),
@@ -70,48 +74,42 @@ export async function updatePress(
       created_at: createdAt ?? today(),
       is_featured: Boolean(isFeatured),
     })
-    .eq('id', Number(id))
-    .select()
-    .single();
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/press');
-  revalidatePath(`/press/${id}`);
-  return data;
+  revalidatePressPaths(id);
 }
 
 export async function deletePress(id) {
+  const idEq = rowIdForEq(id);
   const { error } = await getSupabaseAdmin()
     .from('press_coverage')
     .delete()
-    .eq('id', Number(id));
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/press');
-  revalidatePath(`/press/${id}`);
+  revalidatePressPaths(id);
 }
 
 export async function togglePressFeatured(id) {
+  const idEq = rowIdForEq(id);
   const { data: row, error: fetchError } = await getSupabaseAdmin()
     .from('press_coverage')
     .select('is_featured')
-    .eq('id', Number(id))
+    .eq('id', idEq)
     .single();
 
   if (fetchError) throw new Error(fetchError.message);
 
-  const { data, error } = await getSupabaseAdmin()
+  const { error } = await getSupabaseAdmin()
     .from('press_coverage')
     .update({ is_featured: !row.is_featured })
-    .eq('id', Number(id))
-    .select()
-    .single();
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/press');
-  revalidatePath(`/press/${id}`);
-  return data.is_featured;
+  revalidatePressPaths(id);
+  return !row.is_featured;
 }

@@ -2,14 +2,21 @@
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
-import { revalidatePath } from 'next/cache';
+import { rowIdForEq } from '@/lib/row-id-for-eq';
+import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function revalidateWrNewsPaths(id) {
+  safeRevalidatePath('/wr-news');
+  if (id != null && id !== '') safeRevalidatePath(`/wr-news/${id}`);
+  safeRevalidatePath('/');
+}
+
 export async function createWrNewsPost({ title, content, coverImage, createdAt }) {
-  const { data, error } = await getSupabaseAdmin()
+  const { error } = await getSupabaseAdmin()
     .from('wr_news')
     .insert({
       title: title.trim(),
@@ -18,19 +25,16 @@ export async function createWrNewsPost({ title, content, coverImage, createdAt }
       created_at: createdAt ?? today(),
       cover_image: coverImage ?? null,
       views: 0,
-    })
-    .select()
-    .single();
+    });
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/wr-news');
-  revalidatePath('/');
-  return data;
+  revalidateWrNewsPaths();
 }
 
 export async function updateWrNewsPost(id, { title, content, coverImage, createdAt }) {
-  const { data, error } = await getSupabaseAdmin()
+  const idEq = rowIdForEq(id);
+  const { error } = await getSupabaseAdmin()
     .from('wr_news')
     .update({
       title: title.trim(),
@@ -38,27 +42,21 @@ export async function updateWrNewsPost(id, { title, content, coverImage, created
       created_at: createdAt ?? today(),
       cover_image: coverImage ?? null,
     })
-    .eq('id', Number(id))
-    .select()
-    .single();
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/wr-news');
-  revalidatePath(`/wr-news/${id}`);
-  revalidatePath('/');
-  return data;
+  revalidateWrNewsPaths(id);
 }
 
 export async function deleteWrNewsPost(id) {
+  const idEq = rowIdForEq(id);
   const { error } = await getSupabaseAdmin()
     .from('wr_news')
     .delete()
-    .eq('id', Number(id));
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/wr-news');
-  revalidatePath(`/wr-news/${id}`);
-  revalidatePath('/');
+  revalidateWrNewsPaths(id);
 }

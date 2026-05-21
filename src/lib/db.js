@@ -61,7 +61,8 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
     if (applyFilter) q = applyFilter(q);
     const { data, error, count } = await q;
     if (error) throw new Error(error.message);
-    return { items: (data ?? []).map(normalize), totalCount: count ?? 0 };
+    const totalCount = count == null ? 0 : Number(count);
+    return { items: (data ?? []).map(normalize), totalCount };
   }
 
   /**
@@ -89,7 +90,8 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
       .order('id', { ascending: false })
       .range(from, to);
     if (error) throw new Error(error.message);
-    return { items: (data ?? []).map(normalize), totalCount: count ?? 0 };
+    const totalCount = count == null ? 0 : Number(count);
+    return { items: (data ?? []).map(normalize), totalCount };
   }
 
   async function getById(id) {

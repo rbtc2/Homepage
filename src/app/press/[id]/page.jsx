@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
-import { isEmptyPostHtml } from '@/lib/sanitize-html';
+import { isEmptyPostHtml } from '@/lib/is-empty-post-html';
 import { getPressById, getPrevNextPress } from '@/lib/press-coverage';
 
 export const revalidate = 3600;

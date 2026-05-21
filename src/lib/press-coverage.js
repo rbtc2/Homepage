@@ -50,7 +50,8 @@ export async function getPressPage({ page = 1, itemsPerPage = ITEMS_PER_PAGE } =
     .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
-  return { items: (data ?? []).map(normalize), totalCount: count ?? 0 };
+  const totalCount = count == null ? 0 : Number(count);
+  return { items: (data ?? []).map(normalize), totalCount };
 }
 
 export async function searchPressPage({ query, page = 1, itemsPerPage = ITEMS_PER_PAGE }) {
@@ -68,7 +69,8 @@ export async function searchPressPage({ query, page = 1, itemsPerPage = ITEMS_PE
     .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
-  return { items: (data ?? []).map(normalize), totalCount: count ?? 0 };
+  const totalCount = count == null ? 0 : Number(count);
+  return { items: (data ?? []).map(normalize), totalCount };
 }
 
 export async function getPressById(id) {

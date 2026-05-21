@@ -259,9 +259,17 @@ export default function RichEditor({
           /* 게시는 성공 — 임시저장 삭제 실패는 무시 */
         }
       }
+      router.refresh();
       router.push(backHref);
-    } catch {
-      alert('저장에 실패했습니다. 다시 시도해 주세요.');
+    } catch (err) {
+      const detail =
+        err instanceof Error && err.message ? err.message : '저장에 실패했습니다.';
+      console.error('[RichEditor] save failed:', err);
+      alert(
+        process.env.NODE_ENV === 'development'
+          ? detail
+          : '저장에 실패했습니다. 다시 시도해 주세요.'
+      );
     } finally {
       setSaving(false);
     }

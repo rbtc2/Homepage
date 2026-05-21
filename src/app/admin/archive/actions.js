@@ -2,11 +2,18 @@
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
-import { revalidatePath } from 'next/cache';
+import { rowIdForEq } from '@/lib/row-id-for-eq';
+import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 import { hashSecretPassword } from '@/lib/secret-password';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function revalidateArchivePaths(id) {
+  safeRevalidatePath('/archive');
+  if (id != null && id !== '') safeRevalidatePath(`/archive/${id}`);
+  safeRevalidatePath('/');
 }
 
 export async function createArchive({ title, content, createdAt, isSecret, secretPassword }) {
@@ -27,19 +34,16 @@ export async function createArchive({ title, content, createdAt, isSecret, secre
       is_secret: secretEnabled,
       secret_password_hash: secretEnabled ? hashSecretPassword(normalizedPassword) : null,
     })
-    .select()
+    .select('id')
     .single();
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/archive');
-  revalidatePath(`/archive/${data.id}`);
-  revalidatePath('/');
-  return data;
+  revalidateArchivePaths(data?.id != null ? String(data.id) : null);
 }
 
 export async function updateArchive(id, { title, content, createdAt, isSecret, secretPassword }) {
-  const archiveId = Number(id);
+  const idEq = rowIdForEq(id);
   const secretEnabled = Boolean(isSecret);
   const normalizedPassword = String(secretPassword ?? '').trim();
 
@@ -51,7 +55,7 @@ export async function updateArchive(id, { title, content, createdAt, isSecret, s
       const { data: current, error: currentError } = await getSupabaseAdmin()
         .from('archive')
         .select('secret_password_hash')
-        .eq('id', archiveId)
+        .eq('id', idEq)
         .single();
       if (currentError) throw new Error(currentError.message);
       if (!current?.secret_password_hash) {
@@ -61,7 +65,7 @@ export async function updateArchive(id, { title, content, createdAt, isSecret, s
     }
   }
 
-  const { data, error } = await getSupabaseAdmin()
+  const { error } = await getSupabaseAdmin()
     .from('archive')
     .update({
       title: title.trim(),
@@ -70,27 +74,21 @@ export async function updateArchive(id, { title, content, createdAt, isSecret, s
       is_secret: secretEnabled,
       secret_password_hash: nextSecretHash,
     })
-    .eq('id', archiveId)
-    .select()
-    .single();
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/archive');
-  revalidatePath(`/archive/${id}`);
-  revalidatePath('/');
-  return data;
+  revalidateArchivePaths(id);
 }
 
 export async function deleteArchive(id) {
+  const idEq = rowIdForEq(id);
   const { error } = await getSupabaseAdmin()
     .from('archive')
     .delete()
-    .eq('id', Number(id));
+    .eq('id', idEq);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/archive');
-  revalidatePath(`/archive/${id}`);
-  revalidatePath('/');
+  revalidateArchivePaths(id);
 }

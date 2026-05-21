@@ -1,3 +1,7 @@
+import { isEmptyPostHtml } from './is-empty-post-html';
+
+export { isEmptyPostHtml };
+
 import DOMPurify from 'isomorphic-dompurify';
 
 /** TipTap(에디터) 출력 + 공개 본문 렌더에 허용할 태그 */
@@ -80,9 +84,3 @@ export function sanitizePostHtml(html) {
   return DOMPurify.sanitize(raw, SANITIZE_CONFIG).trim();
 }
 
-/** TipTap 빈 문서 등 표시하지 않을 본문 여부 */
-export function isEmptyPostHtml(html) {
-  if (html == null || !String(html).trim()) return true;
-  const t = String(html).replace(/\s/g, '');
-  return t === '<p></p>' || t === '<p><br></p>' || t === '<p><br/></p>';
-}
