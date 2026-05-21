@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { isPopupVisibleNow } from './popup-schedule';
 
 const VALID_POSITIONS = new Set([
   'center',
@@ -15,8 +16,9 @@ function normalize(row) {
     title: row.title ?? '',
     imageUrl: row.image_url ?? '',
     linkUrl: row.link_url ?? '',
-    startDate: row.start_date,
-    endDate: row.end_date,
+    displayMode: row.display_mode === 'immediate' ? 'immediate' : 'scheduled',
+    startAt: row.start_at ?? null,
+    endAt: row.end_at ?? null,
     position: VALID_POSITIONS.has(row.position) ? row.position : 'center',
     widthPx: row.width_px == null ? null : Number(row.width_px),
     heightPx: row.height_px == null ? null : Number(row.height_px),
@@ -26,10 +28,6 @@ function normalize(row) {
     isActive: Boolean(row.is_active),
     createdAt: row.created_at?.slice?.(0, 10) ?? row.created_at,
   };
-}
-
-function todayIso() {
-  return new Date().toISOString().slice(0, 10);
 }
 
 /** 관리자: 전체 팝업 목록 */
@@ -45,17 +43,36 @@ export async function getPopups() {
 
 /** 사이트: 현재 노출 대상 팝업 */
 export async function getActiveSitePopups() {
-  const today = todayIso();
-  const { data, error } = await supabase
-    .from('site_popups')
-    .select('*')
-    .eq('is_active', true)
-    .lte('start_date', today)
-    .gte('end_date', today)
-    .order('id', { ascending: false });
+  const now = new Date().toISOString();
 
-  if (error) throw new Error(error.message);
-  return (data ?? []).map(normalize);
+  const [immediateRes, scheduledRes] = await Promise.all([
+    supabase
+      .from('site_popups')
+      .select('*')
+      .eq('display_mode', 'immediate')
+      .eq('is_active', true),
+    supabase
+      .from('site_popups')
+      .select('*')
+      .eq('display_mode', 'scheduled')
+      .eq('is_active', true)
+      .lte('start_at', now)
+      .gte('end_at', now),
+  ]);
+
+  if (immediateRes.error) throw new Error(immediateRes.error.message);
+  if (scheduledRes.error) throw new Error(scheduledRes.error.message);
+
+  const merged = [...(immediateRes.data ?? []), ...(scheduledRes.data ?? [])];
+  const byId = new Map();
+  for (const row of merged) {
+    const item = normalize(row);
+    if (item && isPopupVisibleNow(item)) {
+      byId.set(item.id, item);
+    }
+  }
+
+  return [...byId.values()].sort((a, b) => Number(b.id) - Number(a.id));
 }
 
 /** 대시보드: 노출 중 팝업 수 */

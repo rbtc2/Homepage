@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PopupFormModal from './PopupFormModal';
 import { createPopup, updatePopup, deletePopup, togglePopupActive } from './actions';
+import {
+  defaultKstDatetimeLocal,
+  formatPopupPeriod,
+  getPopupStatus,
+  isoToKstDatetimeLocal,
+} from '@/lib/popup-schedule';
 
 const POSITION_LABELS = {
   center: '중앙',
@@ -13,18 +19,10 @@ const POSITION_LABELS = {
   'bottom-right': '우하단',
 };
 
-function getStatus(popup) {
-  const today = new Date().toISOString().slice(0, 10);
-  if (!popup.isActive) return 'inactive';
-  if (popup.startDate > today) return 'scheduled';
-  if (popup.endDate < today) return 'expired';
-  return 'active';
-}
-
 const STATUS_LABEL = {
   active: '노출 중',
   inactive: '비활성',
-  scheduled: '예약됨',
+  scheduled: '예약 대기',
   expired: '기간 만료',
 };
 
@@ -32,15 +30,16 @@ const EMPTY_FORM = {
   title: '',
   imageUrl: '',
   linkUrl: '',
-  startDate: '',
-  endDate: '',
+  displayMode: 'immediate',
+  isActive: false,
+  startAt: defaultKstDatetimeLocal(0),
+  endAt: defaultKstDatetimeLocal(60 * 24 * 7),
   position: 'center',
   widthPx: '',
   heightPx: '',
   offsetX: 0,
   offsetY: 0,
   showCloseForDay: true,
-  isActive: false,
 };
 
 function formFromPopup(popup) {
@@ -48,15 +47,16 @@ function formFromPopup(popup) {
     title: popup.title,
     imageUrl: popup.imageUrl,
     linkUrl: popup.linkUrl,
-    startDate: popup.startDate,
-    endDate: popup.endDate,
+    displayMode: popup.displayMode,
+    isActive: popup.isActive,
+    startAt: popup.startAt ? isoToKstDatetimeLocal(popup.startAt) : defaultKstDatetimeLocal(0),
+    endAt: popup.endAt ? isoToKstDatetimeLocal(popup.endAt) : defaultKstDatetimeLocal(60 * 24 * 7),
     position: popup.position,
     widthPx: popup.widthPx ?? '',
     heightPx: popup.heightPx ?? '',
     offsetX: popup.offsetX ?? 0,
     offsetY: popup.offsetY ?? 0,
     showCloseForDay: popup.showCloseForDay,
-    isActive: popup.isActive,
   };
 }
 
@@ -75,8 +75,8 @@ export default function PopupsClient({ initialPopups }) {
     setPopups(initialPopups);
   }, [initialPopups]);
 
-  const activeCount = popups.filter((p) => getStatus(p) === 'active').length;
-  const scheduledCount = popups.filter((p) => getStatus(p) === 'scheduled').length;
+  const activeCount = popups.filter((p) => getPopupStatus(p) === 'active').length;
+  const scheduledCount = popups.filter((p) => getPopupStatus(p) === 'scheduled').length;
 
   const openCreate = () => {
     setEditTarget(null);
@@ -99,6 +99,20 @@ export default function PopupsClient({ initialPopups }) {
   const handleFormChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  const handleDisplayModeChange = (mode) => {
+    setForm((prev) => ({
+      ...prev,
+      displayMode: mode,
+      ...(mode === 'scheduled' && !prev.startAt
+        ? {
+            startAt: defaultKstDatetimeLocal(0),
+            endAt: defaultKstDatetimeLocal(60 * 24 * 7),
+            isActive: true,
+          }
+        : null),
+    }));
   };
 
   const handleImageUrlChange = (url) => {
@@ -154,7 +168,9 @@ export default function PopupsClient({ initialPopups }) {
       <div className="an__bar">
         <div className="an__bar-left">
           <h1 className="an__title">팝업 관리</h1>
-          <p className="an__sub">홈페이지에 노출할 팝업을 등록·수정·삭제하거나 활성화할 수 있습니다.</p>
+          <p className="an__sub">
+            즉시 노출은 켜기·끄기로 제어하고, 기간 예약은 KST 기준 시각에 맞춰 자동으로 노출됩니다.
+          </p>
         </div>
         <button type="button" className="an-btn an-btn--primary" onClick={openCreate}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -175,7 +191,7 @@ export default function PopupsClient({ initialPopups }) {
         </div>
         <div className="an-stat">
           <span className="an-stat__num">{scheduledCount}</span>
-          <span className="an-stat__label">예약됨</span>
+          <span className="an-stat__label">예약 대기</span>
         </div>
       </div>
 
@@ -185,7 +201,7 @@ export default function PopupsClient({ initialPopups }) {
             <tr>
               <th className="an-table__th an-table__th--num">번호</th>
               <th className="an-table__th an-table__th--title">팝업 제목</th>
-              <th className="an-table__th an-table__th--popup-period">노출 기간</th>
+              <th className="an-table__th an-table__th--popup-period">노출 설정</th>
               <th className="an-table__th an-table__th--popup-pos">위치</th>
               <th className="an-table__th an-table__th--popup-status">상태</th>
               <th className="an-table__th an-table__th--popup-active">활성화</th>
@@ -194,17 +210,24 @@ export default function PopupsClient({ initialPopups }) {
           </thead>
           <tbody>
             {popups.map((popup, idx) => {
-              const status = getStatus(popup);
+              const status = getPopupStatus(popup);
+              const toggleLabel =
+                popup.displayMode === 'immediate'
+                  ? popup.isActive
+                    ? '즉시 노출 끄기'
+                    : '즉시 노출 켜기'
+                  : popup.isActive
+                    ? '예약 비활성화'
+                    : '예약 활성화';
+
               return (
                 <tr key={popup.id} className="an-table__row">
                   <td className="an-table__td an-table__td--num">{popups.length - idx}</td>
                   <td className="an-table__td an-table__td--title">
                     <span className="an-table__notice-title">{popup.title}</span>
                   </td>
-                  <td className="an-table__td an-table__td--date" data-label="노출 기간">
-                    <span className="an-popup-period">
-                      {popup.startDate} ~ {popup.endDate}
-                    </span>
+                  <td className="an-table__td an-table__td--date" data-label="노출 설정">
+                    <span className="an-popup-period">{formatPopupPeriod(popup)}</span>
                   </td>
                   <td className="an-table__td an-table__td--date" data-label="위치">
                     {POSITION_LABELS[popup.position] ?? popup.position}
@@ -220,9 +243,9 @@ export default function PopupsClient({ initialPopups }) {
                       className={`an-toggle${popup.isActive ? ' an-toggle--on' : ''}`}
                       onClick={() => handleToggleActive(popup)}
                       disabled={togglingId === popup.id}
-                      aria-label={popup.isActive ? '팝업 비활성화' : '팝업 활성화'}
+                      aria-label={toggleLabel}
                       aria-pressed={popup.isActive}
-                      title={popup.isActive ? '클릭하여 비활성화' : '클릭하여 활성화'}
+                      title={toggleLabel}
                     >
                       <span className="an-toggle__track">
                         <span className="an-toggle__thumb" />
@@ -274,6 +297,7 @@ export default function PopupsClient({ initialPopups }) {
           editTarget={editTarget}
           form={form}
           onChange={handleFormChange}
+          onDisplayModeChange={handleDisplayModeChange}
           onImageUrlChange={handleImageUrlChange}
           onSubmit={handleSubmit}
           onClose={closeModal}
