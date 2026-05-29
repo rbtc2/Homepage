@@ -14,22 +14,20 @@ function PeopleOrgChart() {
       <figcaption className="pp-org__caption">
         조직도: 총회, 이사회, 자문위원, 감사, 대표, 사무국으로 구성됩니다.
       </figcaption>
-      <div className="pp-org__diagram" role="presentation">
-        <div className="pp-org__node">총회</div>
-        <div className="pp-org__v" aria-hidden="true" />
-        <div className="pp-org__node">이사회</div>
-        <div className="pp-org__v" aria-hidden="true" />
-        <div className="pp-org__branch">
-          <div className="pp-org__node">자문위원</div>
-          <div className="pp-org__junction" aria-hidden="true">
-            <span className="pp-org__junction-v" />
-          </div>
-          <div className="pp-org__node">감사</div>
-        </div>
-        <div className="pp-org__v" aria-hidden="true" />
-        <div className="pp-org__node">대표</div>
-        <div className="pp-org__v" aria-hidden="true" />
-        <div className="pp-org__node">사무국</div>
+      <div className="pp-org__chart" role="presentation">
+        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r1">총회</div>
+        <span className="pp-org__v pp-org__v--spine pp-org__v--r2" aria-hidden="true" />
+        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r3">이사회</div>
+        <span className="pp-org__v pp-org__v--spine pp-org__v--r4" aria-hidden="true" />
+
+        <div className="pp-org__cell pp-org__cell--peer-a">자문위원</div>
+        <span className="pp-org__h pp-org__h--ab" aria-hidden="true" />
+        <div className="pp-org__cell pp-org__cell--peer-b">감사</div>
+        <span className="pp-org__h pp-org__h--bc" aria-hidden="true" />
+        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r5">대표</div>
+
+        <span className="pp-org__v pp-org__v--spine pp-org__v--r6" aria-hidden="true" />
+        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r7">사무국</div>
       </div>
     </figure>
   );
