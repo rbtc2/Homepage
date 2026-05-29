@@ -5,27 +5,35 @@ export const metadata = {
   title: '함께하는 사람들 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
-/* 사람 실루엣 아이콘 */
-function PersonSilhouette() {
-  return (
-    <div className="pp-person__photo-icon" aria-hidden="true">
-      <svg viewBox="0 0 48 60" fill="none">
-        <circle cx="24" cy="16" r="12" fill="currentColor" opacity="0.35" />
-        <path
-          d="M2 54c0-12.15 9.85-22 22-22h0c12.15 0 22 9.85 22 22"
-          stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"
-          fill="none" opacity="0.25"
-        />
-      </svg>
-    </div>
-  );
-}
-
-/* 샘플 인원 수: 이사 4명 */
-const BOARD_COUNT = 4;
-
 /* 샘플 파트너 수: 8개 */
 const PARTNER_COUNT = 8;
+
+function PeopleOrgChart() {
+  return (
+    <figure className="pp-org">
+      <figcaption className="pp-org__caption">
+        조직도: 총회, 이사회, 자문위원, 감사, 대표, 사무국으로 구성됩니다.
+      </figcaption>
+      <div className="pp-org__diagram" role="presentation">
+        <div className="pp-org__node">총회</div>
+        <div className="pp-org__v" aria-hidden="true" />
+        <div className="pp-org__node">이사회</div>
+        <div className="pp-org__v" aria-hidden="true" />
+        <div className="pp-org__branch">
+          <div className="pp-org__node">자문위원</div>
+          <div className="pp-org__junction" aria-hidden="true">
+            <span className="pp-org__junction-v" />
+          </div>
+          <div className="pp-org__node">감사</div>
+        </div>
+        <div className="pp-org__v" aria-hidden="true" />
+        <div className="pp-org__node">대표</div>
+        <div className="pp-org__v" aria-hidden="true" />
+        <div className="pp-org__node">사무국</div>
+      </div>
+    </figure>
+  );
+}
 
 export default function PeoplePage() {
   return (
@@ -43,31 +51,14 @@ export default function PeoplePage() {
 
         <div className="pp-wrap">
 
-          {/* ── 이사회 ── */}
-          <section className="pp-section" aria-label="이사회">
+          {/* ── 조직도 ── */}
+          <section className="pp-section" aria-labelledby="pp-org-heading">
             <div className="pp-section__header">
-              <p className="pp-section__eyebrow">Board</p>
-              <h2 className="pp-section__title">이사회</h2>
+              <p className="pp-section__eyebrow">Organization</p>
+              <h2 id="pp-org-heading" className="pp-section__title">조직도</h2>
               <hr className="pp-section__rule" />
             </div>
-
-            <ul className="pp-board" aria-label="이사회 구성원 (준비 중)">
-              {Array.from({ length: BOARD_COUNT }, (_, i) => (
-                <li key={i} className="pp-person">
-                  <div
-                    className="pp-person__photo"
-                    role="img"
-                    aria-label="프로필 사진 준비 중"
-                  >
-                    <PersonSilhouette />
-                  </div>
-                  <div className="pp-person__meta" aria-hidden="true">
-                    <span className="pp-person__name pp-skel" />
-                    <span className="pp-person__role pp-skel" />
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <PeopleOrgChart />
           </section>
 
           {/* ── 파트너 ── */}
