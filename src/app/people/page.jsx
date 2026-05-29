@@ -8,37 +8,74 @@ export const metadata = {
 /* 샘플 파트너 수: 8개 */
 const PARTNER_COUNT = 8;
 
-function PeopleOrgChart() {
+const ORG_CHART_CAPTION =
+  '조직도: 총회 아래 이사회, 이사회에서 자문위원·감사로 분기하며, 이사회 아래 대표와 사무국이 연결됩니다.';
+
+const ORG_VARIANT_SAMPLES = [
+  { id: 'a', label: 'A', note: '카드형 · 현행' },
+  { id: 'b', label: 'B', note: '에디토리얼 · 라인' },
+  { id: 'c', label: 'C', note: '브랜드 · 계층 강조' },
+];
+
+function OrgCell({ children, branch = false }) {
   return (
-    <figure className="pp-org">
-      <figcaption className="pp-org__caption">
-        조직도: 총회 아래 이사회, 이사회에서 자문위원·감사로 분기하며, 이사회 아래 대표와
-        사무국이 연결됩니다.
-      </figcaption>
+    <div className={`pp-org__cell${branch ? ' pp-org__cell--branch' : ' pp-org__cell--spine'}`}>
+      {children}
+    </div>
+  );
+}
+
+function PeopleOrgChart({ variant = 'a', hideCaption = false }) {
+  return (
+    <figure className={`pp-org pp-org--${variant}`}>
+      {!hideCaption ? (
+        <figcaption className="pp-org__caption">{ORG_CHART_CAPTION}</figcaption>
+      ) : null}
       <div className="pp-org__chart" role="presentation">
-        <div className="pp-org__cell">총회</div>
+        <OrgCell>총회</OrgCell>
         <span className="pp-org__v" aria-hidden="true" />
-        <div className="pp-org__cell">이사회</div>
+        <OrgCell>이사회</OrgCell>
         <span className="pp-org__v" aria-hidden="true" />
 
         <div className="pp-org__fork" role="presentation">
           <div className="pp-org__fork-side pp-org__fork-side--left">
             <span className="pp-org__h" aria-hidden="true" />
-            <div className="pp-org__cell">자문위원</div>
+            <OrgCell branch>자문위원</OrgCell>
           </div>
           <span className="pp-org__fork-spine" aria-hidden="true" />
           <div className="pp-org__fork-side pp-org__fork-side--right">
             <span className="pp-org__h" aria-hidden="true" />
-            <div className="pp-org__cell">감사</div>
+            <OrgCell branch>감사</OrgCell>
           </div>
         </div>
 
         <span className="pp-org__v" aria-hidden="true" />
-        <div className="pp-org__cell">대표</div>
+        <OrgCell>대표</OrgCell>
         <span className="pp-org__v" aria-hidden="true" />
-        <div className="pp-org__cell">사무국</div>
+        <OrgCell>사무국</OrgCell>
       </div>
     </figure>
+  );
+}
+
+function PeopleOrgChartSamples() {
+  return (
+    <div className="pp-org-samples" aria-describedby="pp-org-samples-desc">
+      <p id="pp-org-samples-desc" className="pp-org-samples__desc">
+        조직도 디자인 샘플입니다. 마음에 드는 안을 알려주시면 나머지는 제거하겠습니다.
+      </p>
+      <ul className="pp-org-samples__grid">
+        {ORG_VARIANT_SAMPLES.map(({ id, label, note }) => (
+          <li key={id} className="pp-org-samples__item">
+            <div className="pp-org-samples__meta">
+              <span className="pp-org-samples__tag">{label}</span>
+              <span className="pp-org-samples__note">{note}</span>
+            </div>
+            <PeopleOrgChart variant={id} hideCaption />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -65,7 +102,7 @@ export default function PeoplePage() {
               <h2 id="pp-org-heading" className="pp-section__title">조직도</h2>
               <hr className="pp-section__rule" />
             </div>
-            <PeopleOrgChart />
+            <PeopleOrgChartSamples />
           </section>
 
           {/* ── 파트너 ── */}
