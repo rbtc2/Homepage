@@ -68,7 +68,7 @@
 /* ─────────────────────────────────────────────────────────────
    조직도 (Organization chart)
    - 세로 축: 총회 → 이사회 → 대표 → 사무국
-   - 동일 단: 자문위원 — 감사 — 대표 (박스 사이에만 연결)
+   - 이사회 분기: 자문위원(좌), 감사(우) — 대표와는 비연결
    ─────────────────────────────────────────────────────────────── */
 .pp-org {
   margin: 0;
@@ -89,12 +89,10 @@
 .pp-org__chart {
   --pp-org-gap-x: clamp(0.5rem, 1.8vw, 0.875rem);
   --pp-org-gap-y: clamp(0.65rem, 1.6vw, 0.875rem);
+  --pp-org-line: rgba(18, 79, 166, 0.32);
 
-  display: grid;
-  grid-template-columns: auto var(--pp-org-gap-x) auto var(--pp-org-gap-x) auto;
-  grid-template-rows: repeat(5, auto) var(--pp-org-gap-y) auto;
-  justify-content: center;
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   width: fit-content;
   max-width: 100%;
@@ -120,40 +118,51 @@
     0 8px 24px -18px rgba(12, 20, 36, 0.14);
 }
 
-.pp-org__cell--spine,
-.pp-org__v--spine {
-  grid-column: 5;
+.pp-org__v {
+  flex-shrink: 0;
+  width: 1px;
+  height: var(--pp-org-gap-y);
+  background: var(--pp-org-line);
 }
 
-.pp-org__cell--r1 { grid-row: 1; }
-.pp-org__v--r2 { grid-row: 2; }
-.pp-org__cell--r3 { grid-row: 3; }
-.pp-org__v--r4 { grid-row: 4; }
-.pp-org__cell--peer-a { grid-column: 1; grid-row: 5; }
-.pp-org__h--ab { grid-column: 2; grid-row: 5; }
-.pp-org__cell--peer-b { grid-column: 3; grid-row: 5; }
-.pp-org__h--bc { grid-column: 4; grid-row: 5; }
-.pp-org__cell--r5 { grid-row: 5; }
-.pp-org__v--r6 { grid-row: 6; }
-.pp-org__cell--r7 { grid-row: 7; }
+/* 이사회 → 자문위원(좌) / 감사(대표·세로축 우측) 분기 */
+.pp-org__fork {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  align-items: center;
+  width: min(100%, 26rem);
+  column-gap: 0;
+}
 
-.pp-org__v {
-  width: 1px;
-  min-height: var(--pp-org-gap-y);
-  background: rgba(18, 79, 166, 0.32);
-  justify-self: center;
+.pp-org__fork-spine {
   align-self: stretch;
+  width: 1px;
+  min-height: 1px;
+  background: var(--pp-org-line);
+}
+
+.pp-org__fork-side {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.pp-org__fork-side--left {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.pp-org__fork-side--right {
+  justify-content: flex-start;
 }
 
 .pp-org__h {
+  flex: 0 0 var(--pp-org-gap-x);
   width: var(--pp-org-gap-x);
   height: 1px;
-  background: rgba(18, 79, 166, 0.32);
-  align-self: center;
-  justify-self: stretch;
+  background: var(--pp-org-line);
 }
 
-/* ── 반응형: 좁은 화면 — 동일 단은 가로 유지, 축만 중앙 정렬 ─── */
 @media (max-width: 400px) {
   .pp-org__cell {
     min-width: 4.75rem;

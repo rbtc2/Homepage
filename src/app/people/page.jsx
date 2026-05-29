@@ -12,22 +12,31 @@ function PeopleOrgChart() {
   return (
     <figure className="pp-org">
       <figcaption className="pp-org__caption">
-        조직도: 총회, 이사회, 자문위원, 감사, 대표, 사무국으로 구성됩니다.
+        조직도: 총회 아래 이사회, 이사회에서 자문위원·감사로 분기하며, 이사회 아래 대표와
+        사무국이 연결됩니다.
       </figcaption>
       <div className="pp-org__chart" role="presentation">
-        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r1">총회</div>
-        <span className="pp-org__v pp-org__v--spine pp-org__v--r2" aria-hidden="true" />
-        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r3">이사회</div>
-        <span className="pp-org__v pp-org__v--spine pp-org__v--r4" aria-hidden="true" />
+        <div className="pp-org__cell">총회</div>
+        <span className="pp-org__v" aria-hidden="true" />
+        <div className="pp-org__cell">이사회</div>
+        <span className="pp-org__v" aria-hidden="true" />
 
-        <div className="pp-org__cell pp-org__cell--peer-a">자문위원</div>
-        <span className="pp-org__h pp-org__h--ab" aria-hidden="true" />
-        <div className="pp-org__cell pp-org__cell--peer-b">감사</div>
-        <span className="pp-org__h pp-org__h--bc" aria-hidden="true" />
-        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r5">대표</div>
+        <div className="pp-org__fork" role="presentation">
+          <div className="pp-org__fork-side pp-org__fork-side--left">
+            <span className="pp-org__h" aria-hidden="true" />
+            <div className="pp-org__cell">자문위원</div>
+          </div>
+          <span className="pp-org__fork-spine" aria-hidden="true" />
+          <div className="pp-org__fork-side pp-org__fork-side--right">
+            <span className="pp-org__h" aria-hidden="true" />
+            <div className="pp-org__cell">감사</div>
+          </div>
+        </div>
 
-        <span className="pp-org__v pp-org__v--spine pp-org__v--r6" aria-hidden="true" />
-        <div className="pp-org__cell pp-org__cell--spine pp-org__cell--r7">사무국</div>
+        <span className="pp-org__v" aria-hidden="true" />
+        <div className="pp-org__cell">대표</div>
+        <span className="pp-org__v" aria-hidden="true" />
+        <div className="pp-org__cell">사무국</div>
       </div>
     </figure>
   );
