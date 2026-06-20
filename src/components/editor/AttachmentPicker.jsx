@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  getAttachmentFileExtension,
+  resolveAttachmentDisplayName,
+} from '@/lib/attachment-display-name';
 import { uploadEditorAttachmentFile } from '@/lib/upload-editor-attachment-client';
 import icons from './icons';
 
@@ -12,6 +16,16 @@ function normalizeFileUrl(raw) {
   if (!trimmed) return '';
   if (/^(https?:\/\/|\/)/i.test(trimmed)) return trimmed;
   return `https://${trimmed}`;
+}
+
+function fileNameFromUrl(href) {
+  try {
+    const segment = new URL(href).pathname.split('/').pop();
+    return segment ? decodeURIComponent(segment) : '';
+  } catch {
+    const segment = href.split('/').pop()?.split('?')[0];
+    return segment ? decodeURIComponent(segment) : '';
+  }
 }
 
 /**
@@ -26,6 +40,10 @@ export default function AttachmentPicker({ editor }) {
   const wrapRef = useRef(null);
   const fileRef = useRef(null);
   const urlRef = useRef(null);
+  const nameInputRef = useRef(null);
+  const fileNameRef = useRef('');
+
+  fileNameRef.current = fileName;
 
   const insertAttachment = useCallback(
     (href, name) => {
@@ -51,7 +69,7 @@ export default function AttachmentPicker({ editor }) {
     setFileName('');
     setHint(null);
     setOpen(true);
-    setTimeout(() => urlRef.current?.focus(), 40);
+    setTimeout(() => nameInputRef.current?.focus(), 40);
   }, []);
 
   useEffect(() => {
@@ -81,14 +99,16 @@ export default function AttachmentPicker({ editor }) {
       setHint(null);
       setUploading(true);
       try {
-        const result = await uploadEditorAttachmentFile(file);
+        const displayName = fileNameRef.current.trim();
+        const result = await uploadEditorAttachmentFile(file, displayName);
         if (!result.ok) {
           setHint(result.message);
           return;
         }
         insertAttachment(result.url, result.fileName);
-      } catch {
-        setHint('업로드에 실패했습니다. 다시 시도해 주세요.');
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : '';
+        setHint(msg ? `업로드 오류: ${msg}` : '업로드에 실패했습니다. 다시 시도해 주세요.');
       } finally {
         setUploading(false);
       }
@@ -99,11 +119,27 @@ export default function AttachmentPicker({ editor }) {
   const applyUrl = useCallback(() => {
     const href = normalizeFileUrl(url);
     if (!href) return;
-    insertAttachment(href, fileName.trim() || '첨부파일');
+    const fallbackName = fileNameFromUrl(href) || '첨부파일';
+    const resolved = resolveAttachmentDisplayName(
+      fileName,
+      fallbackName,
+      getAttachmentFileExtension(fallbackName) || getAttachmentFileExtension(href)
+    );
+    insertAttachment(href, resolved);
   }, [url, fileName, insertAttachment]);
 
   return (
     <div className="ep-attach-picker-wrap" ref={wrapRef}>
+      <input
+        ref={fileRef}
+        type="file"
+        className="ip__file-input"
+        accept={ACCEPT}
+        onChange={handleFileChange}
+        disabled={uploading}
+        tabIndex={-1}
+      />
+
       <button
         type="button"
         title="첨부파일 삽입"
@@ -122,15 +158,24 @@ export default function AttachmentPicker({ editor }) {
         <div className="ip" role="dialog" aria-label="첨부파일 삽입">
           <p className="ip__label">첨부파일 삽입</p>
 
-          <input
-            ref={fileRef}
-            type="file"
-            className="ip__file-input"
-            accept={ACCEPT}
-            onChange={handleFileChange}
-            disabled={uploading}
-            tabIndex={-1}
-          />
+          <div className="ip__input-row">
+            <input
+              ref={nameInputRef}
+              type="text"
+              className="ip__input"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+              placeholder="표시할 파일명 (선택, 업로드·URL 공통)"
+              maxLength={200}
+              disabled={uploading}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                }
+              }}
+            />
+          </div>
+
           <button
             type="button"
             className="ip__upload-btn"
@@ -165,18 +210,6 @@ export default function AttachmentPicker({ editor }) {
                   setOpen(false);
                 }
               }}
-            />
-          </div>
-
-          <div className="ip__input-row">
-            <input
-              type="text"
-              className="ip__input"
-              value={fileName}
-              onChange={(e) => setFileName(e.target.value)}
-              placeholder="표시할 파일명 (선택)"
-              maxLength={200}
-              disabled={uploading}
             />
           </div>
 

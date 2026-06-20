@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { resolveAttachmentDisplayName } from '@/lib/attachment-display-name';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 const BUCKET = 'attachments';
@@ -124,5 +125,12 @@ export async function processEditorAttachmentUpload(formData) {
     data: { publicUrl },
   } = supabase.storage.from(BUCKET).getPublicUrl(path);
 
-  return { ok: true, url: publicUrl, fileName: file.name || `첨부파일.${meta.ext}` };
+  const displayNameRaw = (formData.get('displayName') ?? '').toString();
+  const fileName = resolveAttachmentDisplayName(
+    displayNameRaw,
+    file.name || `첨부파일.${meta.ext}`,
+    meta.ext
+  );
+
+  return { ok: true, url: publicUrl, fileName };
 }
