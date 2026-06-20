@@ -16,6 +16,7 @@ import { Color } from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import { EditorImage } from './EditorImage';
+import { EditorAttachment } from './EditorAttachment';
 
 import icons from './icons';
 import { ToolbarBtn, Divider } from './ToolbarBtn';
@@ -24,6 +25,7 @@ import ColorPicker from './ColorPicker';
 import HighlightPicker from './HighlightPicker';
 import LinkPicker from './LinkPicker';
 import ImagePicker from './ImagePicker';
+import AttachmentPicker from './AttachmentPicker';
 import ImageToolbar from './ImageToolbar';
 import TableToolbar from './TableToolbar';
 import EditorContextMenu from './EditorContextMenu';
@@ -102,6 +104,7 @@ export default function RichEditor({
       CustomTableHeader,
       CustomTableCell,
       EditorImage,
+      EditorAttachment,
     ],
     content: post?.content ?? '',
     editorProps: {
@@ -450,6 +453,12 @@ export default function RichEditor({
 
         <div className="ep-toolbar__group">
           <ImagePicker editor={editor} />
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <AttachmentPicker editor={editor} />
         </div>
 
         <Divider />

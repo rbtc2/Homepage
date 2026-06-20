@@ -9,6 +9,7 @@
 @import './editor/cell-border-picker.css';
 @import './editor/link-picker.css';
 @import './editor/editor-image.css';
+@import './editor/editor-attachment.css';
 @import './editor/rich-text-shared.css';
 @import './editor/responsive-ep.css';
 @import './editor/responsive-admin-notices.css';

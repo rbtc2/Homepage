@@ -15,12 +15,14 @@ const ALLOWED_TAGS = [
 
 const ALLOWED_ATTR = [
   'href', 'target', 'rel', 'title', 'alt', 'src', 'width', 'height',
-  'class', 'colspan', 'rowspan', 'align',
+  'class', 'colspan', 'rowspan', 'align', 'download',
   'data-align', 'data-width', 'data-margin-left', 'data-margin-right',
+  'data-file-name',
   'data-cell-bgcolor',
   'data-color',
   'data-border-top', 'data-border-right', 'data-border-bottom', 'data-border-left',
   'style',
+  'aria-hidden',
 ];
 
 const ALLOWED_STYLE_PROPS = new Set([

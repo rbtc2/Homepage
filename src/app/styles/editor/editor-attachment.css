@@ -1,0 +1,90 @@
+/* ── 본문 첨부파일 블록 (.ep-attach-block) ───────────────────── */
+
+.ep-attach-picker-wrap {
+  position: relative;
+}
+
+.ep-attach-picker-wrap .ip {
+  left: 0;
+  right: auto;
+  width: min(300px, 92vw);
+}
+
+.ep-content .ep-attach-block,
+.nd__body--html .ep-attach-block {
+  margin: 1rem 0;
+  max-width: 100%;
+}
+
+.ep-content .ep-attach-block__link,
+.nd__body--html .ep-attach-block__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--canvas);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  transition:
+    border-color 0.15s var(--ease),
+    background 0.15s var(--ease),
+    box-shadow 0.15s var(--ease);
+  box-sizing: border-box;
+}
+
+.ep-content .ep-attach-block__link:hover,
+.nd__body--html .ep-attach-block__link:hover {
+  border-color: var(--brand);
+  background: rgba(18, 79, 166, 0.04);
+  box-shadow: 0 2px 10px rgba(18, 79, 166, 0.08);
+}
+
+.ep-content .ep-attach-block__icon,
+.nd__body--html .ep-attach-block__icon {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  background: rgba(18, 79, 166, 0.1);
+  position: relative;
+}
+
+.ep-content .ep-attach-block__icon::before,
+.nd__body--html .ep-attach-block__icon::before {
+  content: '';
+  position: absolute;
+  inset: 0.45rem 0.55rem 0.55rem 0.45rem;
+  border: 2px solid var(--brand);
+  border-radius: 3px 6px 3px 3px;
+  box-sizing: border-box;
+}
+
+.ep-content .ep-attach-block__name,
+.nd__body--html .ep-attach-block__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ep-content .ep-attach-block__hint,
+.nd__body--html .ep-attach-block__hint {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.ep-content .ProseMirror-selectednode.ep-attach-block,
+.ep-content .ep-attach-block.ProseMirror-selectednode {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 10px;
+}

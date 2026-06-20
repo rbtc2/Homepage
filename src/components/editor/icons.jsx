@@ -180,6 +180,17 @@ const icons = {
       <path d="M8 8l8 8M16 8l-8 8" stroke="#dc2626" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   ),
+  attachment: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M14 6.5v9.25a4.25 4.25 0 11-8.5 0V7.25a2.75 2.75 0 115.5 0v7.5a1.25 1.25 0 11-2.5 0V8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
 };
 
 export default icons;
