@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BoardSearchForm from '@/components/board/BoardSearchForm';
 import BoardMeta from '@/components/board/BoardMeta';
-import WrNewsGrid from '@/components/wr-news/WrNewsGrid';
+import WrNewsList from '@/components/wr-news/WrNewsList';
 import { getWrNewsPage, searchWrNewsPage } from '@/lib/wr-news';
 import { calcTotalPages } from '@/lib/paginate';
 
@@ -47,8 +47,8 @@ export default async function WrNewsPage({ searchParams }) {
           </div>
         </div>
 
-        <div className="gallery-board wr-news-board">
-          <div className="gallery-board__inner">
+        <div className="wr-news-board">
+          <div className="wr-news-board__inner">
             <div className="notice-board__toolbar">
               <BoardMeta
                 basePath={BASE}
@@ -59,7 +59,7 @@ export default async function WrNewsPage({ searchParams }) {
               />
               <BoardSearchForm basePath={BASE} ariaLabel="WR뉴스 검색" defaultValue={query} />
             </div>
-            <WrNewsGrid
+            <WrNewsList
               items={items}
               page={page}
               totalPages={totalPages}
