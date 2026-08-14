@@ -58,7 +58,7 @@ export default async function WrNewsDetailPage({ params }) {
             </span>
           </nav>
 
-          <article className="gd">
+          <article className="gd gd--wr-news">
             <header className="gd__hd">
               <h1 className="gd__title">{post.title}</h1>
               <div className="gd__byline">
@@ -78,38 +78,43 @@ export default async function WrNewsDetailPage({ params }) {
             {canRead ? (
               <>
                 {post.coverImage ? (
-                  <Image
-                    src={post.coverImage}
-                    alt={post.title}
-                    width={1600}
-                    height={1200}
-                    className="gd__cover"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 1180px"
-                    style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-                  />
+                  <figure className="gd__cover-wrap">
+                    <div className="gd__cover-frame">
+                      <Image
+                        src={post.coverImage}
+                        alt={post.title}
+                        fill
+                        className="gd__cover"
+                        priority
+                        sizes="(max-width: 768px) calc(100vw - 3rem), 720px"
+                        style={{ objectFit: 'contain' }}
+                      />
+                    </div>
+                  </figure>
                 ) : (
-                  <div className="gd__cover-placeholder" aria-hidden="true">
-                    <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-                      <rect
-                        x="4"
-                        y="8"
-                        width="32"
-                        height="25"
-                        rx="2.5"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      />
-                      <circle cx="14" cy="17" r="3.5" stroke="currentColor" strokeWidth="1.8" />
-                      <path
-                        d="M4 27l9-8 6 5 5-4 12 10"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
+                  <figure className="gd__cover-wrap">
+                    <div className="gd__cover-frame gd__cover-placeholder" aria-hidden="true">
+                      <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
+                        <rect
+                          x="4"
+                          y="8"
+                          width="32"
+                          height="25"
+                          rx="2.5"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                        />
+                        <circle cx="14" cy="17" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+                        <path
+                          d="M4 27l9-8 6 5 5-4 12 10"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </figure>
                 )}
                 <SafeHtml html={post.content} className="nd__body nd__body--html" />
               </>
