@@ -4,7 +4,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
-import { getDisclosureById, getPrevNext } from '@/lib/disclosures';
+import SecretPostGate from '@/components/board/SecretPostGate';
+import { getDisclosureById, getDisclosureSecretAuth, getPrevNext } from '@/lib/disclosures';
+import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export const revalidate = 3600;
 
@@ -19,6 +21,15 @@ export default async function DisclosureDetailPage({ params }) {
   const { id } = await params;
   const disclosure = await getDisclosureById(id);
   if (!disclosure) notFound();
+
+  const secretAuth = await getDisclosureSecretAuth(id);
+  const board = SECRET_BOARD_CONFIG.disclosures;
+  const canRead = await canReadSecretPost({
+    isSecret: secretAuth.isSecret,
+    secretPasswordHash: secretAuth.secretPasswordHash,
+    cookiePrefix: board.cookiePrefix,
+    id,
+  });
 
   const { prev, next } = await getPrevNext(id);
 
@@ -65,7 +76,11 @@ export default async function DisclosureDetailPage({ params }) {
               </div>
             </header>
 
-            <SafeHtml html={disclosure.content} className="nd__body nd__body--html" />
+            {canRead ? (
+              <SafeHtml html={disclosure.content} className="nd__body nd__body--html" />
+            ) : (
+              <SecretPostGate board="disclosures" id={id} />
+            )}
           </article>
 
           <nav className="nd-sibling" aria-label="이전·다음 글">
@@ -125,4 +140,3 @@ export default async function DisclosureDetailPage({ params }) {
     </>
   );
 }
-

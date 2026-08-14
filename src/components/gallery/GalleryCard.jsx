@@ -14,7 +14,7 @@ export default function GalleryCard({ post, basePath, index = 0 }) {
   return (
     <Link href={href} className="gallery-card">
       <div className="gallery-card__img-wrap">
-        {post.coverImage ? (
+        {post.coverImage && !post.isSecret ? (
           <Image
             src={post.coverImage}
             alt={post.title}
@@ -36,7 +36,10 @@ export default function GalleryCard({ post, basePath, index = 0 }) {
       </div>
 
       <div className="gallery-card__overlay">
-        <h2 className="gallery-card__title">{post.title}</h2>
+        <h2 className="gallery-card__title">
+          {post.isSecret ? '🔒 ' : ''}
+          {post.title}
+        </h2>
         <div className="gallery-card__meta">
           <span>{post.author}</span>
           <span className="gallery-card__meta-dot" aria-hidden="true" />

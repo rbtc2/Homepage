@@ -83,7 +83,10 @@ export default function GalleryClient({ initialPosts }) {
                   )}
                 </td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">{post.title}</span>
+                  <span className="an-table__notice-title">
+                    {post.isSecret ? '🔒 ' : ''}
+                    {post.title}
+                  </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{post.createdAt}</td>
                 <td className="an-table__td an-table__td--views">{post.views.toLocaleString()}</td>

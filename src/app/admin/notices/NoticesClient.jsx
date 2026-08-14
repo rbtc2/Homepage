@@ -120,7 +120,10 @@ export default function NoticesClient({ initialNotices }) {
                   </button>
                 </td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">{notice.title}</span>
+                  <span className="an-table__notice-title">
+                    {notice.isSecret ? '🔒 ' : ''}
+                    {notice.title}
+                  </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{notice.createdAt}</td>
                 <td className="an-table__td an-table__td--views">{notice.views.toLocaleString()}</td>

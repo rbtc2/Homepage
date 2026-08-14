@@ -5,6 +5,10 @@ import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
 import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 import { actionOk, actionFail } from '@/lib/admin-action-result';
+import {
+  resolveSecretFieldsForCreate,
+  resolveSecretFieldsForUpdate,
+} from '@/lib/secret-post';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -25,8 +29,13 @@ export async function createPress({
   content,
   createdAt,
   isFeatured,
+  isSecret,
+  secretPassword,
 }) {
   try {
+    const secret = resolveSecretFieldsForCreate({ isSecret, secretPassword });
+    if (secret.error) return secret.error;
+
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
       .from('press_coverage')
@@ -42,6 +51,7 @@ export async function createPress({
         created_at: createdAt ?? today(),
         is_featured: Boolean(isFeatured),
         views: 0,
+        ...secret.fields,
       });
 
     if (error) return actionFail(error.message);
@@ -64,10 +74,17 @@ export async function updatePress(
     content,
     createdAt,
     isFeatured,
+    isSecret,
+    secretPassword,
   }
 ) {
   try {
-    const idEq = rowIdForEq(id);
+    const secret = await resolveSecretFieldsForUpdate('press_coverage', id, {
+      isSecret,
+      secretPassword,
+    });
+    if (secret.error) return secret.error;
+
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
       .from('press_coverage')
@@ -81,8 +98,9 @@ export async function updatePress(
         content: contentStored,
         created_at: createdAt ?? today(),
         is_featured: Boolean(isFeatured),
+        ...secret.fields,
       })
-      .eq('id', idEq);
+      .eq('id', rowIdForEq(id));
 
     if (error) return actionFail(error.message);
     revalidatePressPaths(id);
@@ -95,10 +113,7 @@ export async function updatePress(
 export async function deletePress(id) {
   try {
     const idEq = rowIdForEq(id);
-    const { error } = await getSupabaseAdmin()
-      .from('press_coverage')
-      .delete()
-      .eq('id', idEq);
+    const { error } = await getSupabaseAdmin().from('press_coverage').delete().eq('id', idEq);
 
     if (error) return actionFail(error.message);
     revalidatePressPaths(id);

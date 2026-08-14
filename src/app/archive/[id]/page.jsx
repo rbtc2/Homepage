@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
+import SecretPostGate from '@/components/board/SecretPostGate';
 import { getArchiveById, getArchiveSecretAuth, getPrevNext } from '@/lib/archive';
-import SecretArchiveGate from './SecretArchiveGate';
+import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export const revalidate = 3600;
 
@@ -23,12 +23,13 @@ export default async function ArchiveDetailPage({ params }) {
   if (!archive) notFound();
   const secretAuth = await getArchiveSecretAuth(id);
   const isKioskProjectPost = String(id) === '1';
-  const cookieStore = await cookies();
-  const unlockedByCookie =
-    secretAuth.isSecret &&
-    Boolean(secretAuth.secretPasswordHash) &&
-    cookieStore.get(`archive-secret-${id}`)?.value === secretAuth.secretPasswordHash;
-  const canRead = !secretAuth.isSecret || unlockedByCookie;
+  const board = SECRET_BOARD_CONFIG.archive;
+  const canRead = await canReadSecretPost({
+    isSecret: secretAuth.isSecret,
+    secretPasswordHash: secretAuth.secretPasswordHash,
+    cookiePrefix: board.cookiePrefix,
+    id,
+  });
 
   const { prev, next } = await getPrevNext(id);
 
@@ -78,9 +79,9 @@ export default async function ArchiveDetailPage({ params }) {
             {canRead ? (
               <SafeHtml html={archive.content} className="nd__body nd__body--html" />
             ) : (
-              <SecretArchiveGate id={id} />
+              <SecretPostGate board="archive" id={id} />
             )}
-            {canRead && isKioskProjectPost && (
+            {canRead && isKioskProjectPost ? (
               <section className="nd-cta" aria-label="프로젝트 참여 안내">
                 <h2 className="nd-cta__title">배리어프리 키오스크 공익 데이터 프로젝트</h2>
                 <p className="nd-cta__desc">
@@ -98,7 +99,7 @@ export default async function ArchiveDetailPage({ params }) {
                   </Link>
                 </div>
               </section>
-            )}
+            ) : null}
           </article>
 
           <nav className="nd-sibling" aria-label="이전·다음 글">
@@ -158,4 +159,3 @@ export default async function ArchiveDetailPage({ params }) {
     </>
   );
 }
-

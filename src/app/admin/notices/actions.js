@@ -5,6 +5,10 @@ import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
 import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 import { actionOk, actionFail } from '@/lib/admin-action-result';
+import {
+  resolveSecretFieldsForCreate,
+  resolveSecretFieldsForUpdate,
+} from '@/lib/secret-post';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -16,8 +20,18 @@ function revalidateNoticePaths(id) {
   safeRevalidatePath('/');
 }
 
-export async function createNotice({ title, content, isPinned, createdAt }) {
+export async function createNotice({
+  title,
+  content,
+  isPinned,
+  createdAt,
+  isSecret,
+  secretPassword,
+}) {
   try {
+    const secret = resolveSecretFieldsForCreate({ isSecret, secretPassword });
+    if (secret.error) return secret.error;
+
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
       .from('notices')
@@ -28,6 +42,7 @@ export async function createNotice({ title, content, isPinned, createdAt }) {
         created_at: createdAt ?? today(),
         is_pinned: Boolean(isPinned),
         views: 0,
+        ...secret.fields,
       });
 
     if (error) return actionFail(error.message);
@@ -39,9 +54,17 @@ export async function createNotice({ title, content, isPinned, createdAt }) {
   }
 }
 
-export async function updateNotice(id, { title, content, isPinned, createdAt }) {
+export async function updateNotice(
+  id,
+  { title, content, isPinned, createdAt, isSecret, secretPassword }
+) {
   try {
-    const idEq = rowIdForEq(id);
+    const secret = await resolveSecretFieldsForUpdate('notices', id, {
+      isSecret,
+      secretPassword,
+    });
+    if (secret.error) return secret.error;
+
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
       .from('notices')
@@ -50,8 +73,9 @@ export async function updateNotice(id, { title, content, isPinned, createdAt }) 
         content: contentStored,
         is_pinned: Boolean(isPinned),
         created_at: createdAt ?? today(),
+        ...secret.fields,
       })
-      .eq('id', idEq);
+      .eq('id', rowIdForEq(id));
 
     if (error) return actionFail(error.message);
 
@@ -65,10 +89,7 @@ export async function updateNotice(id, { title, content, isPinned, createdAt }) 
 export async function deleteNotice(id) {
   try {
     const idEq = rowIdForEq(id);
-    const { error } = await getSupabaseAdmin()
-      .from('notices')
-      .delete()
-      .eq('id', idEq);
+    const { error } = await getSupabaseAdmin().from('notices').delete().eq('id', idEq);
 
     if (error) return actionFail(error.message);
 

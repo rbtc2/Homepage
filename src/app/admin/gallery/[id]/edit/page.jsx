@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { getGalleryById } from '@/lib/gallery';
+import { getGalleryById, getGallerySecretAuth } from '@/lib/gallery';
+import { withSecretEditMeta } from '@/lib/secret-post';
 import GalleryEditorPage from '../../EditorPage';
 
 export const metadata = { title: '갤러리 게시물 수정 | 관리자' };
@@ -9,6 +10,7 @@ export default async function AdminGalleryEditPage({ params }) {
   const { id } = await params;
   const post = await getGalleryById(id);
   if (!post) notFound();
+  const secretAuth = await getGallerySecretAuth(id);
 
-  return <GalleryEditorPage post={post} />;
+  return <GalleryEditorPage post={withSecretEditMeta(post, secretAuth)} />;
 }

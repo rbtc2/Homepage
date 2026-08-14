@@ -4,8 +4,10 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
+import SecretPostGate from '@/components/board/SecretPostGate';
 import { isEmptyPostHtml } from '@/lib/is-empty-post-html';
-import { getPressById, getPrevNextPress } from '@/lib/press-coverage';
+import { getPressById, getPrevNextPress, getPressSecretAuth } from '@/lib/press-coverage';
+import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export const revalidate = 3600;
 
@@ -20,6 +22,15 @@ export default async function PressDetailPage({ params }) {
   const { id } = await params;
   const row = await getPressById(id);
   if (!row) notFound();
+
+  const secretAuth = await getPressSecretAuth(id);
+  const board = SECRET_BOARD_CONFIG.press_coverage;
+  const canRead = await canReadSecretPost({
+    isSecret: secretAuth.isSecret,
+    secretPasswordHash: secretAuth.secretPasswordHash,
+    cookiePrefix: board.cookiePrefix,
+    id,
+  });
 
   const { prev, next } = await getPrevNextPress(id);
   const hasBody = !isEmptyPostHtml(row.content);
@@ -50,56 +61,62 @@ export default async function PressDetailPage({ params }) {
 
           <article className="nd pd">
             <header className="nd__hd pd__hd">
-              {row.isFeatured && <span className="pd__badge">대표 보도</span>}
+              {row.isFeatured ? <span className="pd__badge">대표 보도</span> : null}
               <h1 className="nd__title">{row.title}</h1>
-              <div className="pd__source-card">
-                <dl className="pd__dl">
-                  <div className="pd__dl-row">
-                    <dt>언론사</dt>
-                    <dd>{row.sourceName}</dd>
+              {canRead ? (
+                <div className="pd__source-card">
+                  <dl className="pd__dl">
+                    <div className="pd__dl-row">
+                      <dt>언론사</dt>
+                      <dd>{row.sourceName}</dd>
+                    </div>
+                    <div className="pd__dl-row">
+                      <dt>게재일</dt>
+                      <dd>
+                        <time dateTime={row.publishedAt}>{row.publishedAt}</time>
+                      </dd>
+                    </div>
+                    <div className="pd__dl-row">
+                      <dt>등록일</dt>
+                      <dd>
+                        <time dateTime={row.createdAt}>{row.createdAt}</time>
+                      </dd>
+                    </div>
+                    <div className="pd__dl-row">
+                      <dt>조회</dt>
+                      <dd>{row.views.toLocaleString()}</dd>
+                    </div>
+                  </dl>
+                  <div className="pd__cta">
+                    <a
+                      href={row.articleUrl}
+                      className="pd__btn-primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      원문 기사 보기
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </a>
+                    <p className="pd__cta-note">외부 사이트로 이동합니다.</p>
                   </div>
-                  <div className="pd__dl-row">
-                    <dt>게재일</dt>
-                    <dd>
-                      <time dateTime={row.publishedAt}>{row.publishedAt}</time>
-                    </dd>
-                  </div>
-                  <div className="pd__dl-row">
-                    <dt>등록일</dt>
-                    <dd>
-                      <time dateTime={row.createdAt}>{row.createdAt}</time>
-                    </dd>
-                  </div>
-                  <div className="pd__dl-row">
-                    <dt>조회</dt>
-                    <dd>{row.views.toLocaleString()}</dd>
-                  </div>
-                </dl>
-                <div className="pd__cta">
-                  <a
-                    href={row.articleUrl}
-                    className="pd__btn-primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    원문 기사 보기
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path
-                        d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </a>
-                  <p className="pd__cta-note">외부 사이트로 이동합니다.</p>
                 </div>
-              </div>
+              ) : null}
             </header>
 
-            {hasBody && (
-              <SafeHtml html={row.content} className="nd__body nd__body--html pd__body" />
+            {canRead ? (
+              hasBody ? (
+                <SafeHtml html={row.content} className="nd__body nd__body--html pd__body" />
+              ) : null
+            ) : (
+              <SecretPostGate board="press_coverage" id={id} />
             )}
           </article>
 

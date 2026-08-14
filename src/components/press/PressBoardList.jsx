@@ -56,11 +56,16 @@ export default function PressBoardList({ rows, basePath, isSearching, query, emp
                 </p>
                 <h2 className="press-card__title">
                   <Link href={`${basePath}/${item.id}`} className="press-card__title-link">
+                    {item.isSecret ? '🔒 ' : ''}
                     {isSearching ? <HighlightedText text={item.title} query={query} /> : item.title}
                   </Link>
                 </h2>
                 <p className="press-card__excerpt">
-                  {isSearching ? <HighlightedText text={excerpt} query={query} /> : excerpt}
+                  {item.isSecret
+                    ? '비밀 게시글입니다. 비밀번호 입력 후 내용을 확인할 수 있습니다.'
+                    : isSearching
+                      ? <HighlightedText text={excerpt} query={query} />
+                      : excerpt}
                 </p>
               </div>
             </article>

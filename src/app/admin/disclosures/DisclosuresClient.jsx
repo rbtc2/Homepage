@@ -66,7 +66,10 @@ export default function DisclosuresClient({ initialDisclosures }) {
               <tr key={disclosure.id} className="an-table__row">
                 <td className="an-table__td an-table__td--num">{sorted.length - idx}</td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">{disclosure.title}</span>
+                  <span className="an-table__notice-title">
+                    {disclosure.isSecret ? '🔒 ' : ''}
+                    {disclosure.title}
+                  </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{disclosure.createdAt}</td>
                 <td className="an-table__td an-table__td--views">{Number(disclosure.views).toLocaleString()}</td>

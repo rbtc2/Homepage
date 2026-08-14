@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { getArchiveById } from '@/lib/archive';
+import { getArchiveById, getArchiveSecretAuth } from '@/lib/archive';
+import { withSecretEditMeta } from '@/lib/secret-post';
 import EditorPage from '../../EditorPage';
 
 export async function generateMetadata({ params }) {
@@ -13,6 +14,6 @@ export default async function EditArchivePage({ params }) {
   const { id } = await params;
   const archive = await getArchiveById(id);
   if (!archive) notFound();
-  return <EditorPage archive={archive} />;
+  const secretAuth = await getArchiveSecretAuth(id);
+  return <EditorPage archive={withSecretEditMeta(archive, secretAuth)} />;
 }
-

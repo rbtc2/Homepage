@@ -5,6 +5,10 @@ import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
 import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
 import { actionOk, actionFail } from '@/lib/admin-action-result';
+import {
+  resolveSecretFieldsForCreate,
+  resolveSecretFieldsForUpdate,
+} from '@/lib/secret-post';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -16,8 +20,11 @@ function revalidateDisclosurePaths(id) {
   safeRevalidatePath('/');
 }
 
-export async function createDisclosure({ title, content, createdAt }) {
+export async function createDisclosure({ title, content, createdAt, isSecret, secretPassword }) {
   try {
+    const secret = resolveSecretFieldsForCreate({ isSecret, secretPassword });
+    if (secret.error) return secret.error;
+
     const contentStored = await preparePostContentForStorage(content);
     const { data, error } = await getSupabaseAdmin()
       .from('disclosures')
@@ -27,6 +34,7 @@ export async function createDisclosure({ title, content, createdAt }) {
         author: '관리자',
         created_at: createdAt ?? today(),
         views: 0,
+        ...secret.fields,
       })
       .select('id')
       .single();
@@ -39,9 +47,17 @@ export async function createDisclosure({ title, content, createdAt }) {
   }
 }
 
-export async function updateDisclosure(id, { title, content, createdAt }) {
+export async function updateDisclosure(
+  id,
+  { title, content, createdAt, isSecret, secretPassword }
+) {
   try {
-    const idEq = rowIdForEq(id);
+    const secret = await resolveSecretFieldsForUpdate('disclosures', id, {
+      isSecret,
+      secretPassword,
+    });
+    if (secret.error) return secret.error;
+
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
       .from('disclosures')
@@ -49,8 +65,9 @@ export async function updateDisclosure(id, { title, content, createdAt }) {
         title: title.trim(),
         content: contentStored,
         created_at: createdAt ?? today(),
+        ...secret.fields,
       })
-      .eq('id', idEq);
+      .eq('id', rowIdForEq(id));
 
     if (error) return actionFail(error.message);
     revalidateDisclosurePaths(id);

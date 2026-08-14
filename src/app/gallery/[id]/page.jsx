@@ -5,7 +5,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
-import { getGalleryById, getGalleryPrevNext } from '@/lib/gallery';
+import SecretPostGate from '@/components/board/SecretPostGate';
+import { getGalleryById, getGalleryPrevNext, getGallerySecretAuth } from '@/lib/gallery';
+import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export const revalidate = 3600;
 
@@ -21,6 +23,15 @@ export default async function GalleryDetailPage({ params }) {
   const post = await getGalleryById(id);
   if (!post) notFound();
 
+  const secretAuth = await getGallerySecretAuth(id);
+  const board = SECRET_BOARD_CONFIG.gallery;
+  const canRead = await canReadSecretPost({
+    isSecret: secretAuth.isSecret,
+    secretPasswordHash: secretAuth.secretPasswordHash,
+    cookiePrefix: board.cookiePrefix,
+    id,
+  });
+
   const { prev, next } = await getGalleryPrevNext(id);
 
   return (
@@ -29,37 +40,25 @@ export default async function GalleryDetailPage({ params }) {
       <Header />
       <main role="main">
         <div className="gd-wrap">
-
           <nav className="gd-crumb" aria-label="위치">
-            <Link href="/" className="gd-crumb__link">홈</Link>
-            <span className="gd-crumb__sep" aria-hidden="true">/</span>
-            <Link href="/gallery" className="gd-crumb__link">포토갤러리</Link>
-            <span className="gd-crumb__sep" aria-hidden="true">/</span>
-            <span className="gd-crumb__current" aria-current="page">상세</span>
+            <Link href="/" className="gd-crumb__link">
+              홈
+            </Link>
+            <span className="gd-crumb__sep" aria-hidden="true">
+              /
+            </span>
+            <Link href="/gallery" className="gd-crumb__link">
+              포토갤러리
+            </Link>
+            <span className="gd-crumb__sep" aria-hidden="true">
+              /
+            </span>
+            <span className="gd-crumb__current" aria-current="page">
+              상세
+            </span>
           </nav>
 
           <article className="gd">
-            {post.coverImage ? (
-              <Image
-                src={post.coverImage}
-                alt={post.title}
-                width={1600}
-                height={1200}
-                className="gd__cover"
-                priority
-                sizes="(max-width: 768px) 100vw, 1180px"
-                style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-              />
-            ) : (
-              <div className="gd__cover-placeholder" aria-hidden="true">
-                <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-                  <rect x="4" y="8" width="32" height="25" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
-                  <circle cx="14" cy="17" r="3.5" stroke="currentColor" strokeWidth="1.8" />
-                  <path d="M4 27l9-8 6 5 5-4 12 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            )}
-
             <header className="gd__hd">
               <h1 className="gd__title">{post.title}</h1>
               <div className="gd__byline">
@@ -78,7 +77,47 @@ export default async function GalleryDetailPage({ params }) {
               </div>
             </header>
 
-            <SafeHtml html={post.content} className="nd__body nd__body--html" />
+            {canRead ? (
+              <>
+                {post.coverImage ? (
+                  <Image
+                    src={post.coverImage}
+                    alt={post.title}
+                    width={1600}
+                    height={1200}
+                    className="gd__cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 1180px"
+                    style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                  />
+                ) : (
+                  <div className="gd__cover-placeholder" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
+                      <rect
+                        x="4"
+                        y="8"
+                        width="32"
+                        height="25"
+                        rx="2.5"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+                      <circle cx="14" cy="17" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+                      <path
+                        d="M4 27l9-8 6 5 5-4 12 10"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
+                <SafeHtml html={post.content} className="nd__body nd__body--html" />
+              </>
+            ) : (
+              <SecretPostGate board="gallery" id={id} />
+            )}
           </article>
 
           <nav className="gd-sibling" aria-label="이전·다음 글">
@@ -86,7 +125,13 @@ export default async function GalleryDetailPage({ params }) {
               <Link href={`/gallery/${next.id}`} className="gd-sibling__item">
                 <span className="gd-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                    <path d="M2 8L6 4L10 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M2 8L6 4L10 8"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                   다음 글
                 </span>
@@ -97,7 +142,13 @@ export default async function GalleryDetailPage({ params }) {
               <Link href={`/gallery/${prev.id}`} className="gd-sibling__item">
                 <span className="gd-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                    <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M2 4L6 8L10 4"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                   이전 글
                 </span>
@@ -109,12 +160,17 @@ export default async function GalleryDetailPage({ params }) {
           <div className="gd-foot">
             <Link href="/gallery" className="gd-foot__back">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M8.5 3L5 7L8.5 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M8.5 3L5 7L8.5 11"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
               목록으로
             </Link>
           </div>
-
         </div>
       </main>
       <Footer />

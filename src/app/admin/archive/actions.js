@@ -4,8 +4,11 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
 import { safeRevalidatePath } from '@/lib/safe-revalidate-path';
-import { hashSecretPassword } from '@/lib/secret-password';
 import { actionOk, actionFail } from '@/lib/admin-action-result';
+import {
+  resolveSecretFieldsForCreate,
+  resolveSecretFieldsForUpdate,
+} from '@/lib/secret-post';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -19,11 +22,8 @@ function revalidateArchivePaths(id) {
 
 export async function createArchive({ title, content, createdAt, isSecret, secretPassword }) {
   try {
-    const secretEnabled = Boolean(isSecret);
-    const normalizedPassword = String(secretPassword ?? '').trim();
-    if (secretEnabled && !normalizedPassword) {
-      return actionFail('비밀글 비밀번호를 입력해 주세요.');
-    }
+    const secret = resolveSecretFieldsForCreate({ isSecret, secretPassword });
+    if (secret.error) return secret.error;
 
     const contentStored = await preparePostContentForStorage(content);
     const { data, error } = await getSupabaseAdmin()
@@ -34,8 +34,7 @@ export async function createArchive({ title, content, createdAt, isSecret, secre
         author: '관리자',
         created_at: createdAt ?? today(),
         views: 0,
-        is_secret: secretEnabled,
-        secret_password_hash: secretEnabled ? hashSecretPassword(normalizedPassword) : null,
+        ...secret.fields,
       })
       .select('id')
       .single();
@@ -51,27 +50,11 @@ export async function createArchive({ title, content, createdAt, isSecret, secre
 
 export async function updateArchive(id, { title, content, createdAt, isSecret, secretPassword }) {
   try {
-    const idEq = rowIdForEq(id);
-    const secretEnabled = Boolean(isSecret);
-    const normalizedPassword = String(secretPassword ?? '').trim();
-
-    let nextSecretHash = null;
-    if (secretEnabled) {
-      if (normalizedPassword) {
-        nextSecretHash = hashSecretPassword(normalizedPassword);
-      } else {
-        const { data: current, error: currentError } = await getSupabaseAdmin()
-          .from('archive')
-          .select('secret_password_hash')
-          .eq('id', idEq)
-          .single();
-        if (currentError) return actionFail(currentError.message);
-        if (!current?.secret_password_hash) {
-          return actionFail('비밀글 비밀번호를 입력해 주세요.');
-        }
-        nextSecretHash = current.secret_password_hash;
-      }
-    }
+    const secret = await resolveSecretFieldsForUpdate('archive', id, {
+      isSecret,
+      secretPassword,
+    });
+    if (secret.error) return secret.error;
 
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
@@ -80,10 +63,9 @@ export async function updateArchive(id, { title, content, createdAt, isSecret, s
         title: title.trim(),
         content: contentStored,
         created_at: createdAt ?? today(),
-        is_secret: secretEnabled,
-        secret_password_hash: nextSecretHash,
+        ...secret.fields,
       })
-      .eq('id', idEq);
+      .eq('id', rowIdForEq(id));
 
     if (error) return actionFail(error.message);
     revalidateArchivePaths(id);
@@ -96,10 +78,7 @@ export async function updateArchive(id, { title, content, createdAt, isSecret, s
 export async function deleteArchive(id) {
   try {
     const idEq = rowIdForEq(id);
-    const { error } = await getSupabaseAdmin()
-      .from('archive')
-      .delete()
-      .eq('id', idEq);
+    const { error } = await getSupabaseAdmin().from('archive').delete().eq('id', idEq);
 
     if (error) return actionFail(error.message);
     revalidateArchivePaths(id);

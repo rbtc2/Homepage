@@ -1,13 +1,21 @@
 import { createPostLib } from './db';
+import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 
 const lib = createPostLib('notices', {
-  normalizeExtra: (row) => ({ isPinned: row.is_pinned }),
+  normalizeExtra: (row) => ({
+    isPinned: row.is_pinned,
+    ...normalizeSecretExtra(row),
+  }),
 });
 
 export const getNotices = lib.getAll;
 export const searchNotices = lib.search;
 export const getNoticeById = lib.getById;
 export const getPrevNext = lib.getPrevNext;
+
+export async function getNoticeSecretAuth(id) {
+  return getBoardSecretAuth('notices', id);
+}
 
 /** 고정 글만 전부 가져옵니다 (보통 소수이므로 LIMIT 없음). */
 export const getPinnedNotices = () =>

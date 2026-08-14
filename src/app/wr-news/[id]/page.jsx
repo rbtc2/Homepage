@@ -5,7 +5,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
-import { getWrNewsById, getWrNewsPrevNext } from '@/lib/wr-news';
+import SecretPostGate from '@/components/board/SecretPostGate';
+import { getWrNewsById, getWrNewsPrevNext, getWrNewsSecretAuth } from '@/lib/wr-news';
+import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export const revalidate = 3600;
 
@@ -20,6 +22,15 @@ export default async function WrNewsDetailPage({ params }) {
   const { id } = await params;
   const post = await getWrNewsById(id);
   if (!post) notFound();
+
+  const secretAuth = await getWrNewsSecretAuth(id);
+  const board = SECRET_BOARD_CONFIG.wr_news;
+  const canRead = await canReadSecretPost({
+    isSecret: secretAuth.isSecret,
+    secretPasswordHash: secretAuth.secretPasswordHash,
+    cookiePrefix: board.cookiePrefix,
+    id,
+  });
 
   const { prev, next } = await getWrNewsPrevNext(id);
 
@@ -48,33 +59,6 @@ export default async function WrNewsDetailPage({ params }) {
           </nav>
 
           <article className="gd">
-            {post.coverImage ? (
-              <Image
-                src={post.coverImage}
-                alt={post.title}
-                width={1600}
-                height={1200}
-                className="gd__cover"
-                priority
-                sizes="(max-width: 768px) 100vw, 1180px"
-                style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-              />
-            ) : (
-              <div className="gd__cover-placeholder" aria-hidden="true">
-                <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-                  <rect x="4" y="8" width="32" height="25" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
-                  <circle cx="14" cy="17" r="3.5" stroke="currentColor" strokeWidth="1.8" />
-                  <path
-                    d="M4 27l9-8 6 5 5-4 12 10"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            )}
-
             <header className="gd__hd">
               <h1 className="gd__title">{post.title}</h1>
               <div className="gd__byline">
@@ -91,7 +75,47 @@ export default async function WrNewsDetailPage({ params }) {
               </div>
             </header>
 
-            <SafeHtml html={post.content} className="nd__body nd__body--html" />
+            {canRead ? (
+              <>
+                {post.coverImage ? (
+                  <Image
+                    src={post.coverImage}
+                    alt={post.title}
+                    width={1600}
+                    height={1200}
+                    className="gd__cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 1180px"
+                    style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                  />
+                ) : (
+                  <div className="gd__cover-placeholder" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
+                      <rect
+                        x="4"
+                        y="8"
+                        width="32"
+                        height="25"
+                        rx="2.5"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+                      <circle cx="14" cy="17" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+                      <path
+                        d="M4 27l9-8 6 5 5-4 12 10"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
+                <SafeHtml html={post.content} className="nd__body nd__body--html" />
+              </>
+            ) : (
+              <SecretPostGate board="wr_news" id={id} />
+            )}
           </article>
 
           <nav className="gd-sibling" aria-label="이전·다음 글">

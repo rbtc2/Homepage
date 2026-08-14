@@ -117,7 +117,10 @@ export default function PressClient({ initialItems }) {
                   </button>
                 </td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">{row.title}</span>
+                  <span className="an-table__notice-title">
+                    {row.isSecret ? '🔒 ' : ''}
+                    {row.title}
+                  </span>
                 </td>
                 <td className="an-table__td">{row.sourceName}</td>
                 <td className="an-table__td an-table__td--date">{row.publishedAt}</td>

@@ -4,7 +4,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
-import { getNoticeById, getPrevNext } from '@/lib/notices';
+import SecretPostGate from '@/components/board/SecretPostGate';
+import { getNoticeById, getNoticeSecretAuth, getPrevNext } from '@/lib/notices';
+import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export const revalidate = 3600;
 
@@ -20,6 +22,15 @@ export default async function NoticeDetailPage({ params }) {
   const notice = await getNoticeById(id);
   if (!notice) notFound();
 
+  const secretAuth = await getNoticeSecretAuth(id);
+  const board = SECRET_BOARD_CONFIG.notices;
+  const canRead = await canReadSecretPost({
+    isSecret: secretAuth.isSecret,
+    secretPasswordHash: secretAuth.secretPasswordHash,
+    cookiePrefix: board.cookiePrefix,
+    id,
+  });
+
   const { prev, next } = await getPrevNext(id);
 
   return (
@@ -28,20 +39,27 @@ export default async function NoticeDetailPage({ params }) {
       <Header />
       <main role="main">
         <div className="nd-wrap">
-
           <nav className="nd-crumb" aria-label="위치">
-            <Link href="/" className="nd-crumb__link">홈</Link>
-            <span className="nd-crumb__sep" aria-hidden="true">/</span>
-            <Link href="/notices" className="nd-crumb__link">공지사항</Link>
-            <span className="nd-crumb__sep" aria-hidden="true">/</span>
-            <span className="nd-crumb__current" aria-current="page">상세</span>
+            <Link href="/" className="nd-crumb__link">
+              홈
+            </Link>
+            <span className="nd-crumb__sep" aria-hidden="true">
+              /
+            </span>
+            <Link href="/notices" className="nd-crumb__link">
+              공지사항
+            </Link>
+            <span className="nd-crumb__sep" aria-hidden="true">
+              /
+            </span>
+            <span className="nd-crumb__current" aria-current="page">
+              상세
+            </span>
           </nav>
 
           <article className="nd">
             <header className="nd__hd">
-              {notice.isPinned && (
-                <span className="nd__pin-badge">공지</span>
-              )}
+              {notice.isPinned ? <span className="nd__pin-badge">공지</span> : null}
               <h1 className="nd__title">{notice.title}</h1>
               <div className="nd__byline">
                 <span className="nd__byline-item">
@@ -59,7 +77,11 @@ export default async function NoticeDetailPage({ params }) {
               </div>
             </header>
 
-            <SafeHtml html={notice.content} className="nd__body nd__body--html" />
+            {canRead ? (
+              <SafeHtml html={notice.content} className="nd__body nd__body--html" />
+            ) : (
+              <SecretPostGate board="notices" id={id} />
+            )}
           </article>
 
           <nav className="nd-sibling" aria-label="이전·다음 글">
@@ -67,7 +89,13 @@ export default async function NoticeDetailPage({ params }) {
               <Link href={`/notices/${next.id}`} className="nd-sibling__item">
                 <span className="nd-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                    <path d="M2 8L6 4L10 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path
+                      d="M2 8L6 4L10 8"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                   다음 글
                 </span>
@@ -78,7 +106,13 @@ export default async function NoticeDetailPage({ params }) {
               <Link href={`/notices/${prev.id}`} className="nd-sibling__item">
                 <span className="nd-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                    <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path
+                      d="M2 4L6 8L10 4"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                   이전 글
                 </span>
@@ -90,12 +124,17 @@ export default async function NoticeDetailPage({ params }) {
           <div className="nd-foot">
             <Link href="/notices" className="nd-foot__back">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M8.5 3L5 7L8.5 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                <path
+                  d="M8.5 3L5 7L8.5 11"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
               목록으로
             </Link>
           </div>
-
         </div>
       </main>
       <Footer />

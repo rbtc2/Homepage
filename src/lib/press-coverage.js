@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { ITEMS_PER_PAGE } from './paginate';
+import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 
 function normalize(row) {
   if (!row) return null;
@@ -18,7 +19,12 @@ function normalize(row) {
     createdAt: row.created_at,
     views: Number.isFinite(viewsNum) ? viewsNum : 0,
     isFeatured: Boolean(row.is_featured),
+    ...normalizeSecretExtra(row),
   };
+}
+
+export async function getPressSecretAuth(id) {
+  return getBoardSecretAuth('press_coverage', id);
 }
 
 function escapeLike(str) {

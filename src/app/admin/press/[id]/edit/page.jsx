@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import EditorPage from '../../EditorPage';
-import { getPressById } from '@/lib/press-coverage';
+import { getPressById, getPressSecretAuth } from '@/lib/press-coverage';
+import { withSecretEditMeta } from '@/lib/secret-post';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,7 @@ export default async function EditPressPage({ params }) {
   const { id } = await params;
   const post = await getPressById(id);
   if (!post) notFound();
+  const secretAuth = await getPressSecretAuth(id);
 
-  return <EditorPage post={post} />;
+  return <EditorPage post={withSecretEditMeta(post, secretAuth)} />;
 }

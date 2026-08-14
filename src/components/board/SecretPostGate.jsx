@@ -2,9 +2,13 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { verifyArchiveSecretPassword } from './actions';
+import { verifyBoardSecretPassword } from '@/lib/verify-board-secret';
 
-export default function SecretArchiveGate({ id }) {
+/**
+ * 비밀글 비밀번호 입력 게이트 (게시판 공통)
+ * @param {{ board: string, id: string | number }} props
+ */
+export default function SecretPostGate({ board, id }) {
   const router = useRouter();
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -16,7 +20,7 @@ export default function SecretArchiveGate({ id }) {
 
     startTransition(async () => {
       try {
-        const result = await verifyArchiveSecretPassword({ id, password });
+        const result = await verifyBoardSecretPassword({ board, id, password });
         if (!result.ok) {
           setErrorMessage(result.error ?? '비밀번호 확인에 실패했습니다.');
           return;
@@ -53,7 +57,7 @@ export default function SecretArchiveGate({ id }) {
         </button>
       </form>
       <p className="nd-secret__hint">작성자가 설정한 비밀번호로만 열람할 수 있습니다.</p>
-      {errorMessage && <p className="nd-secret__error">{errorMessage}</p>}
+      {errorMessage ? <p className="nd-secret__error">{errorMessage}</p> : null}
     </section>
   );
 }

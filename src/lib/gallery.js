@@ -1,13 +1,21 @@
 import { supabase } from './supabase';
 import { createPostLib } from './db';
+import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 
 const lib = createPostLib('gallery', {
-  normalizeExtra: (row) => ({ coverImage: row.cover_image ?? null }),
+  normalizeExtra: (row) => ({
+    coverImage: row.cover_image ?? null,
+    ...normalizeSecretExtra(row),
+  }),
 });
 
 export const getGalleryPosts = lib.getAll;
-export const getGalleryById  = lib.getById;
+export const getGalleryById = lib.getById;
 export const getGalleryPrevNext = lib.getPrevNext;
+
+export async function getGallerySecretAuth(id) {
+  return getBoardSecretAuth('gallery', id);
+}
 
 const GALLERY_PER_PAGE = 12;
 
