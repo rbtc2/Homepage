@@ -29,7 +29,6 @@ const SETTINGS_BASE = '/admin/settings';
 const SETTINGS_SUBPAGE_LABELS = {
   '/admin/settings/site': '사이트 기본 정보',
   '/admin/settings/history': '연혁',
-  '/admin/settings/home': '홈페이지 노출',
   '/admin/settings/account': '관리자 계정',
 };
 

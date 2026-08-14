@@ -18,11 +18,6 @@ const HUB_LINKS = [
     title: '연혁',
     desc: '단체 소개 연혁 페이지 항목',
   },
-  {
-    href: '/admin/settings/home',
-    title: '홈페이지 노출',
-    desc: '메인 카피, 공지 띠 문구',
-  },
 ];
 
 export default function AdminSettingsHubPage() {
