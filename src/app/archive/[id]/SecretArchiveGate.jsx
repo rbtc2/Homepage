@@ -16,10 +16,14 @@ export default function SecretArchiveGate({ id }) {
 
     startTransition(async () => {
       try {
-        await verifyArchiveSecretPassword({ id, password });
+        const result = await verifyArchiveSecretPassword({ id, password });
+        if (!result.ok) {
+          setErrorMessage(result.error ?? '비밀번호 확인에 실패했습니다.');
+          return;
+        }
         router.refresh();
-      } catch (error) {
-        setErrorMessage(error?.message ?? '비밀번호 확인에 실패했습니다.');
+      } catch {
+        setErrorMessage('비밀번호 확인에 실패했습니다.');
       }
     });
   };
