@@ -100,11 +100,3 @@ export async function sanitizePostHtmlAsync(html) {
     return raw.trim();
   }
 }
-
-/** @deprecated 클라이언트·동기 경로용 — 가능하면 sanitizePostHtmlAsync 사용 */
-export function sanitizePostHtml(html) {
-  if (html == null) return '';
-  const raw = String(html);
-  if (!raw.trim()) return '';
-  return raw.trim();
-}

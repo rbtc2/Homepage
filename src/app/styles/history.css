@@ -5,18 +5,6 @@
    - Same design language as directions / about / people
    ─────────────────────────────────────────────────────────────── */
 
-@keyframes hy-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.38; }
-}
-
-.hy-skel {
-  background: #cfd6e0;
-  border-radius: 2px;
-  animation: hy-pulse 2s ease-in-out infinite;
-  display: block;
-}
-
 /* ── 전체 래퍼 ─────────────────────────────────────────────── */
 .hy-wrap {
   max-width: var(--max-w);
@@ -115,22 +103,12 @@
   font-variant-numeric: tabular-nums;
 }
 
-.hy-row__month--skel {
-  height: 0.8125rem;
-  width: 2rem;
-  margin-top: 0.1rem;
-}
-
 /* 내용 */
 .hy-row__content {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   min-width: 0;
-}
-
-.hy-row__line {
-  height: 0.9375rem;
 }
 
 .hy-row__title {

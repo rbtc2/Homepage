@@ -9,7 +9,6 @@ const lib = createPostLib('notices', {
 });
 
 export const getNotices = lib.getAll;
-export const searchNotices = lib.search;
 export const getNoticeById = lib.getById;
 export const getPrevNext = lib.getPrevNext;
 
