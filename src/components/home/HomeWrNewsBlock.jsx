@@ -49,7 +49,7 @@ export default async function HomeWrNewsBlock() {
     <section className="hmwr" aria-labelledby="hmwr-heading">
       <div className="hmwr__inner">
         <header className="hmwr__head">
-          <h2 id="hmwr-heading" className="hmwr__title">
+          <h2 id="hmwr-heading" className="hmwr__eyebrow">
             WR뉴스
           </h2>
           <hr className="hmwr__rule" />
@@ -67,10 +67,7 @@ export default async function HomeWrNewsBlock() {
         ) : (
           <div className={multi ? 'hmwr__grid' : 'hmwr__grid hmwr__grid--one'}>
             {primary ? (
-              <Link
-                href={`${LIST_PATH}/${primary.id}`}
-                className="hmwr__hero"
-              >
+              <Link href={`${LIST_PATH}/${primary.id}`} className="hmwr__hero">
                 <span className="hmwr__hero-frame">
                   {primary.coverImage ? (
                     <Image
@@ -85,25 +82,24 @@ export default async function HomeWrNewsBlock() {
                   ) : (
                     <span className="hmwr__hero-fallback" aria-hidden="true" />
                   )}
-                  <span className="hmwr__hero-shade" aria-hidden="true" />
-                  <span className="hmwr__hero-panel">
-                    <span className="hmwr__hero-name">{primary.title}</span>
-                    {toPlainSnippet(primary.content, 140) ? (
-                      <span className="hmwr__hero-snip">
-                        {toPlainSnippet(primary.content, 140)}
-                      </span>
-                    ) : null}
-                    <span className="hmwr__hero-byline">
-                      <span>{primary.author}</span>
-                      {formatYmd(primary.createdAt) ? (
-                        <>
-                          <span className="hmwr__dot" aria-hidden="true" />
-                          <time dateTime={primary.createdAt}>
-                            {formatYmd(primary.createdAt)}
-                          </time>
-                        </>
-                      ) : null}
+                </span>
+                <span className="hmwr__hero-body">
+                  <span className="hmwr__hero-name">{primary.title}</span>
+                  {toPlainSnippet(primary.content, 120) ? (
+                    <span className="hmwr__hero-snip">
+                      {toPlainSnippet(primary.content, 120)}
                     </span>
+                  ) : null}
+                  <span className="hmwr__hero-byline">
+                    <span>{primary.author}</span>
+                    {formatYmd(primary.createdAt) ? (
+                      <>
+                        <span className="hmwr__dot" aria-hidden="true" />
+                        <time dateTime={primary.createdAt}>
+                          {formatYmd(primary.createdAt)}
+                        </time>
+                      </>
+                    ) : null}
                   </span>
                 </span>
               </Link>
@@ -113,10 +109,7 @@ export default async function HomeWrNewsBlock() {
               <ul className="hmwr__subs" role="list">
                 {secondary.map((row) => (
                   <li key={row.id} className="hmwr__sub-item">
-                    <Link
-                      href={`${LIST_PATH}/${row.id}`}
-                      className="hmwr__sub"
-                    >
+                    <Link href={`${LIST_PATH}/${row.id}`} className="hmwr__sub">
                       <span className="hmwr__sub-pic">
                         {row.coverImage ? (
                           <Image
@@ -124,28 +117,17 @@ export default async function HomeWrNewsBlock() {
                             src={row.coverImage}
                             alt=""
                             fill
-                            sizes="(max-width: 768px) 72px, 34vw"
+                            sizes="(max-width: 768px) 72px, 96px"
                             style={{ objectFit: 'cover' }}
                           />
                         ) : (
-                          <span
-                            className="hmwr__sub-fallback"
-                            aria-hidden="true"
-                          />
+                          <span className="hmwr__sub-fallback" aria-hidden="true" />
                         )}
                       </span>
                       <span className="hmwr__sub-text">
                         <span className="hmwr__sub-name">{row.title}</span>
-                        {toPlainSnippet(row.content, 90) ? (
-                          <span className="hmwr__sub-snip">
-                            {toPlainSnippet(row.content, 90)}
-                          </span>
-                        ) : null}
                         {formatYmd(row.createdAt) ? (
-                          <time
-                            className="hmwr__sub-when"
-                            dateTime={row.createdAt}
-                          >
+                          <time className="hmwr__sub-when" dateTime={row.createdAt}>
                             {formatYmd(row.createdAt)}
                           </time>
                         ) : null}
