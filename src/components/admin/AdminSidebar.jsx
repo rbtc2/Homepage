@@ -80,18 +80,6 @@ const NAV_ITEMS = [
     ),
   },
   {
-    href: '/admin/history',
-    label: '연혁',
-    icon: (
-      <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M8 4v16" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-        <circle cx="8" cy="7" r="2.2" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="8" cy="17" r="2.2" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M12 7h8M12 17h8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
     href: '/admin/press',
     label: '언론보도',
     icon: (

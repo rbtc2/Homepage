@@ -15,7 +15,6 @@ const SECTION_LABELS = {
   '/admin/disclosures': '공시자료 관리',
   '/admin/popups':      '팝업 관리',
   '/admin/gallery':     '포토갤러리 관리',
-  '/admin/history':     '연혁 관리',
   '/admin/press':       '언론보도 관리',
   '/admin/wr-news':     'WR뉴스 관리',
 };
@@ -29,6 +28,7 @@ const SETTINGS_BASE = '/admin/settings';
 
 const SETTINGS_SUBPAGE_LABELS = {
   '/admin/settings/site': '사이트 기본 정보',
+  '/admin/settings/history': '연혁',
   '/admin/settings/home': '홈페이지 노출',
   '/admin/settings/account': '관리자 계정',
 };

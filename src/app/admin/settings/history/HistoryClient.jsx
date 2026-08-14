@@ -89,11 +89,21 @@ export default function HistoryClient({ initialEvents }) {
   };
 
   return (
-    <div className="an">
+    <>
       <div className="an__bar">
-        <div className="an__bar-left">
-          <h1 className="an__title">연혁 관리</h1>
-          <p className="an__sub">사이트 연혁 페이지에 보이는 항목을 추가·수정·삭제합니다.</p>
+        <div className="an-stats" style={{ marginBottom: 0 }}>
+          <div className="an-stat">
+            <span className="an-stat__num">{events.length}</span>
+            <span className="an-stat__label">전체 항목</span>
+          </div>
+          <div className="an-stat">
+            <span className="an-stat__num">{yearCount}</span>
+            <span className="an-stat__label">연도</span>
+          </div>
+          <div className="an-stat">
+            <span className="an-stat__num">{thisMonthCount}</span>
+            <span className="an-stat__label">이번 달</span>
+          </div>
         </div>
         <button type="button" className="an-btn an-btn--primary" onClick={openCreate}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -101,21 +111,6 @@ export default function HistoryClient({ initialEvents }) {
           </svg>
           연혁 추가
         </button>
-      </div>
-
-      <div className="an-stats">
-        <div className="an-stat">
-          <span className="an-stat__num">{events.length}</span>
-          <span className="an-stat__label">전체 항목</span>
-        </div>
-        <div className="an-stat">
-          <span className="an-stat__num">{yearCount}</span>
-          <span className="an-stat__label">연도</span>
-        </div>
-        <div className="an-stat">
-          <span className="an-stat__num">{thisMonthCount}</span>
-          <span className="an-stat__label">이번 달</span>
-        </div>
       </div>
 
       <div className="an-table-wrap">
@@ -199,6 +194,6 @@ export default function HistoryClient({ initialEvents }) {
         onConfirm={handleDelete}
         deleting={deleting}
       />
-    </div>
+    </>
   );
 }

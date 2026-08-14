@@ -10,7 +10,7 @@ const DETAIL_MAX = 1000;
 
 function revalidateHistoryPaths() {
   safeRevalidatePath('/history');
-  safeRevalidatePath('/admin/history');
+  safeRevalidatePath('/admin/settings/history');
 }
 
 function normalizePayload(data) {
