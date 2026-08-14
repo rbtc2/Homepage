@@ -16,7 +16,10 @@ export const metadata = {
 const HISTORY_BY_YEAR = [
   {
     year: '2026',
-    events: [{ month: '3', title: '창립총회 개회' }],
+    events: [
+      { month: '7', title: '이주여성 문화 콘텐츠 강사 양성과정 1기 입과' },
+      { month: '3', title: '창립총회 개회' },
+    ],
   },
 ];
 
