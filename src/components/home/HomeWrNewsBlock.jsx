@@ -124,7 +124,7 @@ export default async function HomeWrNewsBlock() {
                             src={row.coverImage}
                             alt=""
                             fill
-                            sizes="(max-width: 768px) 100vw, 34vw"
+                            sizes="(max-width: 768px) 72px, 34vw"
                             style={{ objectFit: 'cover' }}
                           />
                         ) : (

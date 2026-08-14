@@ -351,22 +351,99 @@
   }
 }
 
+/* A안: 모바일 — 히어로 1개 + 가로 썸네일 리스트 */
 @media (max-width: 768px) {
+  .hmwr__inner {
+    padding-bottom: clamp(1.75rem, 5vw, 2.25rem);
+  }
+
+  .hmwr__head {
+    margin-bottom: 1rem;
+  }
+
   .hmwr__grid {
     grid-template-columns: 1fr;
     min-height: 0;
+    gap: 0.75rem;
+  }
+
+  .hmwr__hero {
+    height: auto;
+    border-radius: 12px;
   }
 
   .hmwr__hero-frame {
-    min-height: clamp(240px, 62vw, 360px);
+    min-height: 0;
+    aspect-ratio: 16 / 10;
   }
 
   .hmwr__grid--one .hmwr__hero-frame {
-    min-height: clamp(260px, 68vw, 400px);
+    min-height: 0;
+    aspect-ratio: 16 / 10;
   }
 
-  .hmwr__hero,
+  .hmwr__hero-panel {
+    padding: 1rem 1.1rem 1.15rem;
+  }
+
+  .hmwr__hero-name {
+    font-size: 1.05rem;
+  }
+
+  .hmwr__hero-snip {
+    -webkit-line-clamp: 2;
+    margin-top: 0.4rem;
+    font-size: 0.8125rem;
+  }
+
+  .hmwr__hero-byline {
+    margin-top: 0.5rem;
+  }
+
+  .hmwr__subs {
+    gap: 0.5rem;
+  }
+
+  .hmwr__sub-item {
+    flex: 0 0 auto;
+  }
+
   .hmwr__sub {
-    border-radius: 13px;
+    flex-direction: row;
+    align-items: stretch;
+    border-radius: 10px;
+    min-height: 4.5rem;
+  }
+
+  .hmwr__sub:hover {
+    transform: none;
+  }
+
+  .hmwr__sub-pic {
+    width: 4.5rem;
+    aspect-ratio: 1 / 1;
+    align-self: stretch;
+    height: auto;
+  }
+
+  .hmwr__sub-text {
+    padding: 0.65rem 0.8rem;
+    justify-content: center;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .hmwr__sub-name {
+    font-size: 0.875rem;
+    -webkit-line-clamp: 2;
+  }
+
+  /* 가로 리스트는 제목·날짜만 — 스니펫 숨김 */
+  .hmwr__sub-snip {
+    display: none;
+  }
+
+  .hmwr__sub-when {
+    margin-top: 0;
   }
 }
