@@ -43,11 +43,12 @@ export default async function GalleryDetailPage({ params }) {
               <Image
                 src={post.coverImage}
                 alt={post.title}
-                width={1180}
-                height={590}
+                width={1600}
+                height={1200}
                 className="gd__cover"
                 priority
-                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 768px) 100vw, 1180px"
+                style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
               />
             ) : (
               <div className="gd__cover-placeholder" aria-hidden="true">

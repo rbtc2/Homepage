@@ -22,7 +22,7 @@ export default function GalleryCard({ post, basePath, index = 0 }) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="gallery-card__img"
             priority={index < 3}
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'contain' }}
           />
         ) : (
           <div className="gallery-card__placeholder" aria-hidden="true">

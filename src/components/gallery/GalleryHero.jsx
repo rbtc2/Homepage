@@ -33,7 +33,7 @@ export default function GalleryHero({ items, basePath = '/gallery' }) {
                   }
                   className="gallery-hero__img"
                   priority={i === 0}
-                  style={{ objectFit: 'cover' }}
+                  style={{ objectFit: 'contain' }}
                 />
               ) : (
                 <div className="gallery-hero__placeholder" aria-hidden="true">

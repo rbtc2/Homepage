@@ -49,7 +49,8 @@
 .gallery-hero__img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   transition: transform 0.45s var(--ease);
   display: block;
 }
@@ -200,8 +201,9 @@
   gap: 0.75rem;
 }
 
-/* Image wrapper — default 4:3 */
+/* Image wrapper — default 4:3 (이미지는 contain으로 원본 비율 유지) */
 .gallery-card__img-wrap {
+  position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--canvas);
@@ -248,7 +250,8 @@
 .gallery-card__img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   display: block;
   transition: transform 0.4s var(--ease);
 }
@@ -427,17 +430,21 @@
   overflow: hidden;
 }
 
-/* Cover image */
+/* Cover image — 원본 비율 유지 (모바일/데스크톱 동일, 가운데 크롭 없음) */
 .gd__cover {
-  width: 100%;
-  aspect-ratio: 16 / 7;
-  object-fit: cover;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+  aspect-ratio: auto !important;
+  object-fit: contain;
+  object-position: center;
   display: block;
+  background: var(--canvas);
 }
 
 .gd__cover-placeholder {
   width: 100%;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 16 / 9;
   display: flex;
   align-items: center;
   justify-content: center;

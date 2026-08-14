@@ -16,6 +16,15 @@
   border-radius: 6px;
 }
 
+/* 모바일: 에디터에서 지정한 px 너비도 화면 너비에 맞춰 비율 유지 */
+@media (max-width: 640px) {
+  .nd__body--html .ep-img-block__img {
+    width: 100% !important;
+    max-width: 100%;
+    height: auto !important;
+  }
+}
+
 .ep-content .ep-img-block--left .ep-img-block__img,
 .nd__body--html .ep-img-block--left .ep-img-block__img {
   margin-right: auto;
