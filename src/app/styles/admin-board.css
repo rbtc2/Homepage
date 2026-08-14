@@ -275,6 +275,16 @@
   color: var(--ink);
 }
 
+.an-table__sub {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--muted);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .an-pin-badge {
   display: inline-flex;
   align-items: center;

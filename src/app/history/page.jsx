@@ -1,29 +1,26 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { getHistoryEvents, groupHistoryByYear } from '@/lib/history';
 
 export const metadata = {
   title: '연혁 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
 };
 
-/**
- * @typedef {Object} HistoryEvent
- * @property {string} month 월 숫자 (표시는 한 자리, 예: '3')
- * @property {string} title 한 줄 제목
- * @property {string} [detail] 선택: 부가 설명 (여러 줄일 때 사용)
- */
+export const revalidate = 60;
 
-/** @type {Array<{ year: string, events: HistoryEvent[] }>} 같은 연도 안에서는 최신(월 큰 순)이 위 */
-const HISTORY_BY_YEAR = [
-  {
-    year: '2026',
-    events: [
-      { month: '7', title: '이주여성 문화 콘텐츠 강사 양성과정 1기 입과' },
-      { month: '3', title: '창립총회 개회' },
-    ],
-  },
+const FALLBACK_EVENTS = [
+  { id: 'fallback-7', year: 2026, month: 7, title: '이주여성 문화 콘텐츠 강사 양성과정 1기 입과', detail: '' },
+  { id: 'fallback-3', year: 2026, month: 3, title: '창립총회 개회', detail: '' },
 ];
 
-export default function HistoryPage() {
+export default async function HistoryPage() {
+  let grouped = [];
+  try {
+    grouped = groupHistoryByYear(await getHistoryEvents());
+  } catch {
+    grouped = groupHistoryByYear(FALLBACK_EVENTS);
+  }
+
   return (
     <>
       <Header />
@@ -37,29 +34,36 @@ export default function HistoryPage() {
         </div>
 
         <div className="hy-wrap">
-          {HISTORY_BY_YEAR.map(({ year, events }) => (
-            <div key={year} className="hy-block">
-
-              <div className="hy-year" aria-hidden="true">
-                <p className="hy-year__num">{year}</p>
-              </div>
-
-              <ul className="hy-events" aria-label={`${year}년 연혁`}>
-                {events.map((ev, i) => (
-                  <li key={`${year}-${ev.month}-${i}`} className="hy-row">
-                    <span className="hy-row__month" aria-label={`${ev.month}월`}>
-                      {ev.month}
-                    </span>
-                    <div className="hy-row__content">
-                      <p className="hy-row__title">{ev.title}</p>
-                      {ev.detail ? <p className="hy-row__detail">{ev.detail}</p> : null}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
+          {grouped.length === 0 ? (
+            <div className="hy-empty">
+              <p className="hy-empty__title">등록된 연혁이 없습니다.</p>
+              <p className="hy-empty__desc">곧 단체의 발자취를 이곳에 기록합니다.</p>
             </div>
-          ))}
+          ) : (
+            grouped.map(({ year, events }) => (
+              <div key={year} className="hy-block">
+
+                <div className="hy-year" aria-hidden="true">
+                  <p className="hy-year__num">{year}</p>
+                </div>
+
+                <ul className="hy-events" aria-label={`${year}년 연혁`}>
+                  {events.map((ev) => (
+                    <li key={ev.id} className="hy-row">
+                      <span className="hy-row__month" aria-label={`${ev.month}월`}>
+                        {ev.month}
+                      </span>
+                      <div className="hy-row__content">
+                        <p className="hy-row__title">{ev.title}</p>
+                        {ev.detail ? <p className="hy-row__detail">{ev.detail}</p> : null}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+
+              </div>
+            ))
+          )}
         </div>
 
       </main>

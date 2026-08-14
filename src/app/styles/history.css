@@ -26,6 +26,26 @@
   flex-direction: column;
 }
 
+.hy-empty {
+  padding: 4.5rem 1rem;
+  text-align: center;
+}
+
+.hy-empty__title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.hy-empty__desc {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
 /* ── 연도 블록 ─────────────────────────────────────────────── */
 .hy-block {
   display: grid;

@@ -15,6 +15,7 @@ const SECTION_LABELS = {
   '/admin/disclosures': '공시자료 관리',
   '/admin/popups':      '팝업 관리',
   '/admin/gallery':     '포토갤러리 관리',
+  '/admin/history':     '연혁 관리',
   '/admin/press':       '언론보도 관리',
   '/admin/wr-news':     'WR뉴스 관리',
 };
