@@ -38,95 +38,71 @@ export default async function WrNewsDetailPage({ params }) {
     <>
       <ViewTracker table="wr_news" id={id} />
       <Header />
-      <main role="main">
-        <div className="gd-wrap">
-          <nav className="gd-crumb" aria-label="위치">
-            <Link href="/" className="gd-crumb__link">
+      <main role="main" className="wna-page">
+        <div className="wna-wrap">
+          <nav className="wna-crumb" aria-label="위치">
+            <Link href="/" className="wna-crumb__link">
               홈
             </Link>
-            <span className="gd-crumb__sep" aria-hidden="true">
+            <span className="wna-crumb__sep" aria-hidden="true">
               /
             </span>
-            <Link href="/wr-news" className="gd-crumb__link">
+            <Link href="/wr-news" className="wna-crumb__link">
               WR뉴스
             </Link>
-            <span className="gd-crumb__sep" aria-hidden="true">
+            <span className="wna-crumb__sep" aria-hidden="true">
               /
             </span>
-            <span className="gd-crumb__current" aria-current="page">
+            <span className="wna-crumb__current" aria-current="page">
               상세
             </span>
           </nav>
 
-          <article className="gd gd--wr-news">
-            <header className="gd__hd">
-              <h1 className="gd__title">{post.title}</h1>
-              <div className="gd__byline">
-                <span className="gd__byline-item">
-                  <span className="gd__byline-label">작성자</span>
+          <article className="wna">
+            <header className="wna__hd">
+              <p className="wna__eyebrow">WR뉴스</p>
+              <h1 className="wna__title">{post.title}</h1>
+              <div className="wna__byline">
+                <span className="wna__byline-item">
+                  <span className="wna__byline-label">작성자</span>
                   {post.author}
                 </span>
-                <span className="gd__byline-dot" aria-hidden="true" />
-                <time className="gd__byline-item" dateTime={post.createdAt}>
+                <span className="wna__byline-dot" aria-hidden="true" />
+                <time className="wna__byline-item" dateTime={post.createdAt}>
                   {post.createdAt}
                 </time>
-                <span className="gd__byline-dot" aria-hidden="true" />
-                <span className="gd__byline-item">조회&nbsp;{post.views.toLocaleString()}</span>
+                <span className="wna__byline-dot" aria-hidden="true" />
+                <span className="wna__byline-item">조회&nbsp;{post.views.toLocaleString()}</span>
               </div>
             </header>
 
             {canRead ? (
               <>
                 {post.coverImage ? (
-                  <figure className="gd__cover-wrap">
-                    <div className="gd__cover-frame">
-                      <Image
-                        src={post.coverImage}
-                        alt={post.title}
-                        fill
-                        className="gd__cover"
-                        priority
-                        sizes="(max-width: 768px) calc(100vw - 3rem), 720px"
-                        style={{ objectFit: 'contain' }}
-                      />
-                    </div>
+                  <figure className="wna__cover">
+                    <Image
+                      src={post.coverImage}
+                      alt={post.title}
+                      width={1600}
+                      height={1200}
+                      className="wna__cover-img"
+                      priority
+                      sizes="(max-width: 768px) 100vw, 720px"
+                      style={{ width: '100%', height: 'auto' }}
+                    />
                   </figure>
-                ) : (
-                  <figure className="gd__cover-wrap">
-                    <div className="gd__cover-frame gd__cover-placeholder" aria-hidden="true">
-                      <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-                        <rect
-                          x="4"
-                          y="8"
-                          width="32"
-                          height="25"
-                          rx="2.5"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                        />
-                        <circle cx="14" cy="17" r="3.5" stroke="currentColor" strokeWidth="1.8" />
-                        <path
-                          d="M4 27l9-8 6 5 5-4 12 10"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                  </figure>
-                )}
-                <SafeHtml html={post.content} className="nd__body nd__body--html" />
+                ) : null}
+                <SafeHtml html={post.content} className="wna__body nd__body--html" />
               </>
             ) : (
               <SecretPostGate board="wr_news" id={id} />
             )}
           </article>
 
-          <nav className="gd-sibling" aria-label="이전·다음 글">
+          <nav className="wna-sibling" aria-label="이전·다음 글">
             {next && (
-              <Link href={`/wr-news/${next.id}`} className="gd-sibling__item">
-                <span className="gd-sibling__dir">
+              <Link href={`/wr-news/${next.id}`} className="wna-sibling__item">
+                <span className="wna-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path
                       d="M2 8L6 4L10 8"
@@ -138,12 +114,12 @@ export default async function WrNewsDetailPage({ params }) {
                   </svg>
                   다음 글
                 </span>
-                <span className="gd-sibling__title">{next.title}</span>
+                <span className="wna-sibling__title">{next.title}</span>
               </Link>
             )}
             {prev && (
-              <Link href={`/wr-news/${prev.id}`} className="gd-sibling__item">
-                <span className="gd-sibling__dir">
+              <Link href={`/wr-news/${prev.id}`} className="wna-sibling__item">
+                <span className="wna-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path
                       d="M2 4L6 8L10 4"
@@ -155,13 +131,13 @@ export default async function WrNewsDetailPage({ params }) {
                   </svg>
                   이전 글
                 </span>
-                <span className="gd-sibling__title">{prev.title}</span>
+                <span className="wna-sibling__title">{prev.title}</span>
               </Link>
             )}
           </nav>
 
-          <div className="gd-foot">
-            <Link href="/wr-news" className="gd-foot__back">
+          <div className="wna-foot">
+            <Link href="/wr-news" className="wna-foot__back">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path
                   d="M8.5 3L5 7L8.5 11"
