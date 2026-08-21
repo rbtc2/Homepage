@@ -12,6 +12,8 @@ const VISION_ITEMS = [
     description: 'Everyday life where difference becomes possibility',
   },
   {
+    id: 'vision-agency',
+    index: '02',
     title: 'Self-Determination',
     description: 'A society where everyone is the author of their own life',
   },

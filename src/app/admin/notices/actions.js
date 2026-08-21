@@ -16,8 +16,13 @@ function today() {
 
 function revalidateNoticePaths(id) {
   safeRevalidatePath('/notices');
-  if (id != null && id !== '') safeRevalidatePath(`/notices/${id}`);
+  safeRevalidatePath('/en/notices');
+  if (id != null && id !== '') {
+    safeRevalidatePath(`/notices/${id}`);
+    safeRevalidatePath(`/en/notices/${id}`);
+  }
   safeRevalidatePath('/');
+  safeRevalidatePath('/en');
 }
 
 export async function createNotice({
@@ -79,6 +84,49 @@ export async function updateNotice(
 
     if (error) return actionFail(error.message);
 
+    revalidateNoticePaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
+}
+
+export async function updateNoticeEnglish(id, { title, content }) {
+  try {
+    const titleEn = String(title ?? '').trim();
+    if (!titleEn) return actionFail('영문 제목을 입력해 주세요.');
+    const contentStored = await preparePostContentForStorage(content);
+    if (!contentStored || contentStored === '<p></p>') {
+      return actionFail('영문 본문을 입력해 주세요.');
+    }
+
+    const { error } = await getSupabaseAdmin()
+      .from('notices')
+      .update({
+        title_en: titleEn,
+        content_en: contentStored,
+      })
+      .eq('id', rowIdForEq(id));
+
+    if (error) return actionFail(error.message);
+    revalidateNoticePaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
+}
+
+export async function clearNoticeEnglish(id) {
+  try {
+    const { error } = await getSupabaseAdmin()
+      .from('notices')
+      .update({
+        title_en: '',
+        content_en: '',
+      })
+      .eq('id', rowIdForEq(id));
+
+    if (error) return actionFail(error.message);
     revalidateNoticePaths(id);
     return actionOk();
   } catch (e) {

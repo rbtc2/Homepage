@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getNotices } from '@/lib/notices';
+import { getNotices, localizeNotices } from '@/lib/notices';
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
@@ -16,7 +16,7 @@ function ArrowIcon() {
 }
 
 export default async function NoticeStrip({ locale = 'ko' }) {
-  const allNotices = await getNotices();
+  const allNotices = localizeNotices(await getNotices(), locale);
   const pinnedNotices = allNotices
     .filter((n) => n.isPinned)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { assertActionOk } from '@/lib/assert-action-ok';
-import { deleteNotice, togglePin } from './actions';
+import { deleteNotice, togglePin, clearNoticeEnglish } from './actions';
 import { comparePostIdsDesc } from '@/lib/compare-post-ids';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
@@ -13,10 +13,39 @@ export default function NoticesClient({ initialNotices }) {
   const router = useRouter();
   const [notices,    setNotices]    = useState(initialNotices);
   const [togglingId, setTogglingId] = useState(null);
+  const [clearingId, setClearingId] = useState(null);
 
   const { deleteTarget, setDeleteTarget, deleting, handleDelete } = useDelete(deleteNotice);
 
   useEffect(() => { setNotices(initialNotices); }, [initialNotices]);
+
+  async function handleClearEnglish(notice) {
+    const ok = window.confirm(
+      `「${notice.title}」의 영문 제목·본문을 삭제할까요?\n한국어 글은 그대로 두고, 영문 사이트에는 한국어가 다시 보입니다.`
+    );
+    if (!ok) return;
+
+    setClearingId(notice.id);
+    try {
+      assertActionOk(await clearNoticeEnglish(notice.id));
+      setNotices((curr) =>
+        curr.map((row) =>
+          row.id === notice.id
+            ? { ...row, hasEnglish: false, titleEn: '', contentEn: '' }
+            : row
+        )
+      );
+      router.refresh();
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : '영문 삭제에 실패했습니다. 다시 시도해 주세요.';
+      alert(msg);
+    } finally {
+      setClearingId(null);
+    }
+  }
 
   const handleTogglePin = async (notice) => {
     setTogglingId(notice.id);
@@ -82,7 +111,7 @@ export default function NoticesClient({ initialNotices }) {
         </div>
       </div>
 
-      <div className="an-table-wrap">
+      <div className="an-table-wrap an-table-wrap--notices">
         <table className="an-table">
           <thead>
             <tr>
@@ -120,15 +149,70 @@ export default function NoticesClient({ initialNotices }) {
                   </button>
                 </td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">
-                    {notice.isSecret ? '🔒 ' : ''}
-                    {notice.title}
+                  <span className="an-table__title-row">
+                    <span className="an-table__notice-title">
+                      {notice.isSecret ? '🔒 ' : ''}
+                      {notice.title}
+                    </span>
+                    {notice.hasEnglish ? (
+                      <span className="an-en-badge-wrap">
+                        <Link
+                          href={`/admin/notices/${notice.id}/en`}
+                          className="an-en-badge"
+                          title="영문 수정"
+                        >
+                          EN
+                        </Link>
+                        <button
+                          type="button"
+                          className="an-en-badge-clear"
+                          aria-label="영문 삭제"
+                          title="영문 삭제"
+                          disabled={clearingId === notice.id}
+                          onClick={() => handleClearEnglish(notice)}
+                        >
+                          {clearingId === notice.id ? '…' : '×'}
+                        </button>
+                      </span>
+                    ) : (
+                      <Link
+                        href={`/admin/notices/${notice.id}/en`}
+                        className="an-en-badge an-en-badge--add"
+                        title="영문 작성"
+                      >
+                        +EN
+                      </Link>
+                    )}
                   </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{notice.createdAt}</td>
                 <td className="an-table__td an-table__td--views">{notice.views.toLocaleString()}</td>
                 <td className="an-table__td an-table__td--actions">
                   <div className="an-actions">
+                    <Link
+                      href={`/notices/${notice.id}`}
+                      className="an-btn an-btn--sm an-btn--ghost an-btn--icon"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="새 탭에서 보기"
+                      title="보기"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <path
+                          d="M8 2h4v4M12 2L6.5 7.5"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11 8.2V11a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1h2.8"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </Link>
                     <Link href={`/admin/notices/${notice.id}/edit`} className="an-btn an-btn--sm an-btn--ghost">수정</Link>
                     <button className="an-btn an-btn--sm an-btn--danger-ghost" onClick={() => setDeleteTarget(notice)}>삭제</button>
                   </div>
