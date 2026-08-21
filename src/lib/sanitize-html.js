@@ -1,6 +1,4 @@
-import { isEmptyPostHtml } from './is-empty-post-html';
-
-export { isEmptyPostHtml };
+import sanitizeHtmlLib from 'sanitize-html';
 
 /** TipTap(에디터) 출력 + 저장 시 허용할 태그 */
 const ALLOWED_TAGS = [
@@ -10,7 +8,7 @@ const ALLOWED_TAGS = [
   'a', 'img', 'div', 'span',
   'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
   'blockquote', 'pre', 'code', 'hr', 'sub', 'sup',
-  'mark', 'iframe',
+  'mark',
 ];
 
 const ALLOWED_ATTR = [
@@ -23,8 +21,7 @@ const ALLOWED_ATTR = [
   'data-color',
   'data-text-align', 'data-vertical-align', 'data-row-height',
   'data-border-top', 'data-border-right', 'data-border-bottom', 'data-border-left',
-  'data-indent', 'data-youtube-id',
-  'allow', 'allowfullscreen', 'referrerpolicy', 'loading', 'frameborder',
+  'data-indent',
   'style',
   'aria-hidden',
 ];
@@ -49,25 +46,13 @@ const ALLOWED_STYLE_PROPS = new Set([
   '--ep-img-mr',
 ]);
 
-const YOUTUBE_EMBED_SRC =
-  /^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{11}$/;
-
 const FONT_SIZE_DECL = /^font-size:\s*(\d+(?:\.\d+)?)px$/i;
-
-const SANITIZE_CONFIG = {
-  ALLOWED_TAGS,
-  ALLOWED_ATTR,
-  ALLOWED_URI_REGEXP:
-    /^(?:(?:https?|mailto|tel):|\/(?!\/)|#|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-  ADD_ATTR: ['target', 'allowfullscreen'],
-};
-
-let domPurifyPromise = null;
-let styleHookRegistered = false;
 
 function isAllowedStyleDecl(decl) {
   const prop = decl.split(':')[0]?.trim().toLowerCase();
   if (!prop || !ALLOWED_STYLE_PROPS.has(prop)) return false;
+  const lower = decl.toLowerCase();
+  if (lower.includes('expression(') || lower.includes('javascript:')) return false;
   if (prop === 'font-size') {
     const match = decl.match(FONT_SIZE_DECL);
     if (!match) return false;
@@ -77,66 +62,51 @@ function isAllowedStyleDecl(decl) {
   return true;
 }
 
-function registerStyleHook(DOMPurify) {
-  if (styleHookRegistered) return;
-  styleHookRegistered = true;
-
-  DOMPurify.addHook('uponSanitizeAttribute', (_node, data) => {
-    if (data.attrName !== 'style' || !data.attrValue) return;
-
-    const filtered = data.attrValue
-      .split(';')
-      .map((s) => s.trim())
-      .filter(Boolean)
-      .filter(isAllowedStyleDecl)
-      .join('; ');
-
-    data.attrValue = filtered;
-  });
-
-  DOMPurify.addHook('uponSanitizeElement', (node, data) => {
-    if (String(data.tagName || '').toLowerCase() !== 'iframe') return;
-    const src = node.getAttribute?.('src') || '';
-    if (!YOUTUBE_EMBED_SRC.test(src)) {
-      node.parentNode?.removeChild(node);
-    }
-  });
+function filterInlineStyle(value) {
+  if (!value) return '';
+  return String(value)
+    .split(';')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .filter(isAllowedStyleDecl)
+    .join('; ');
 }
 
-const SANITIZE_FAIL_MESSAGE =
-  '본문을 안전하게 정제하지 못했습니다. 잠시 후 다시 저장해 주세요.';
-
-async function getDOMPurify() {
-  if (!domPurifyPromise) {
-    domPurifyPromise = import('isomorphic-dompurify').then((mod) => {
-      const DOMPurify = mod.default ?? mod;
-      registerStyleHook(DOMPurify);
-      return DOMPurify;
-    });
-  }
-  try {
-    return await domPurifyPromise;
-  } catch (e) {
-    domPurifyPromise = null;
-    throw e;
-  }
+function resolveSanitizeHtml() {
+  if (typeof sanitizeHtmlLib === 'function') return sanitizeHtmlLib;
+  if (typeof sanitizeHtmlLib?.default === 'function') return sanitizeHtmlLib.default;
+  throw new Error('sanitize-html export is not a function');
 }
+
+const SANITIZE_OPTIONS = {
+  allowedTags: ALLOWED_TAGS,
+  allowedAttributes: { '*': ALLOWED_ATTR },
+  allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+  allowedSchemesByTag: {
+    img: ['http', 'https'],
+    a: ['http', 'https', 'mailto', 'tel'],
+  },
+  allowProtocolRelative: false,
+  transformTags: {
+    '*': (tagName, attribs) => {
+      const next = { ...attribs };
+      if (next.style) {
+        const style = filterInlineStyle(next.style);
+        if (style) next.style = style;
+        else delete next.style;
+      }
+      return { tagName, attribs: next };
+    },
+  },
+};
 
 /**
  * 게시물 본문 HTML을 XSS 없이 안전하게 정제합니다.
- * DOMPurify는 최초 호출 시에만 로드합니다 (Server Action·서버리스 호환).
- * 정제에 실패하면 원본을 반환하지 않고 throw 합니다 (저장 거부).
+ * htmlparser2 기반이라 Server Action에서 jsdom/window가 필요 없습니다.
  */
-export async function sanitizePostHtmlAsync(html) {
+export function sanitizePostHtml(html) {
   if (html == null) return '';
   const raw = String(html);
   if (!raw.trim()) return '';
-
-  try {
-    const DOMPurify = await getDOMPurify();
-    return DOMPurify.sanitize(raw, SANITIZE_CONFIG).trim();
-  } catch (e) {
-    console.error('[sanitizePostHtmlAsync]', e);
-    throw new Error(SANITIZE_FAIL_MESSAGE);
-  }
+  return resolveSanitizeHtml()(raw, SANITIZE_OPTIONS).trim();
 }
