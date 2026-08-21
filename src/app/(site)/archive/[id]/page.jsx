@@ -23,8 +23,7 @@ export default async function ArchiveDetailPage({ params }) {
   const isKioskProjectPost = String(id) === '1';
   const board = SECRET_BOARD_CONFIG.archive;
   const canRead = await canReadSecretPost({
-    isSecret: secretAuth.isSecret,
-    secretPasswordHash: secretAuth.secretPasswordHash,
+    ...secretAuth,
     cookiePrefix: board.cookiePrefix,
     id,
   });

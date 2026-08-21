@@ -3,14 +3,46 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { deleteWrNewsPost } from './actions';
+import { useRouter } from 'next/navigation';
+import { deleteWrNewsPost, clearWrNewsEnglish } from './actions';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
+import { assertActionOk } from '@/lib/assert-action-ok';
 
 export default function WrNewsClient({ initialPosts }) {
+  const router = useRouter();
   const [posts, setPosts] = useState(initialPosts);
+  const [clearingId, setClearingId] = useState(null);
 
   const { deleteTarget, setDeleteTarget, deleting, handleDelete } = useDelete(deleteWrNewsPost);
+
+  async function handleClearEnglish(post) {
+    const ok = window.confirm(
+      `「${post.title}」의 영문 제목·본문을 삭제할까요?\n한국어 글은 그대로 두고, 영문 사이트에는 한국어가 다시 보입니다.`
+    );
+    if (!ok) return;
+
+    setClearingId(post.id);
+    try {
+      assertActionOk(await clearWrNewsEnglish(post.id));
+      setPosts((curr) =>
+        curr.map((row) =>
+          row.id === post.id
+            ? { ...row, hasEnglish: false, titleEn: '', contentEn: '' }
+            : row
+        )
+      );
+      router.refresh();
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : '영문 삭제에 실패했습니다. 다시 시도해 주세요.';
+      alert(msg);
+    } finally {
+      setClearingId(null);
+    }
+  }
 
   useEffect(() => {
     setPosts(initialPosts);
@@ -119,8 +151,20 @@ export default function WrNewsClient({ initialPosts }) {
                       {post.title}
                     </span>
                     {post.hasEnglish ? (
-                      <span className="an-en-badge" title="영문 제목·본문이 있습니다">
-                        EN
+                      <span className="an-en-badge-wrap">
+                        <span className="an-en-badge" title="영문 제목·본문이 있습니다">
+                          EN
+                        </span>
+                        <button
+                          type="button"
+                          className="an-en-badge-clear"
+                          aria-label="영문 삭제"
+                          title="영문 삭제"
+                          disabled={clearingId === post.id}
+                          onClick={() => handleClearEnglish(post)}
+                        >
+                          {clearingId === post.id ? '…' : '×'}
+                        </button>
                       </span>
                     ) : null}
                   </span>

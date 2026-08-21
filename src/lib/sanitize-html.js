@@ -103,6 +103,9 @@ function registerStyleHook(DOMPurify) {
   });
 }
 
+const SANITIZE_FAIL_MESSAGE =
+  '본문을 안전하게 정제하지 못했습니다. 잠시 후 다시 저장해 주세요.';
+
 async function getDOMPurify() {
   if (!domPurifyPromise) {
     domPurifyPromise = import('isomorphic-dompurify').then((mod) => {
@@ -111,12 +114,18 @@ async function getDOMPurify() {
       return DOMPurify;
     });
   }
-  return domPurifyPromise;
+  try {
+    return await domPurifyPromise;
+  } catch (e) {
+    domPurifyPromise = null;
+    throw e;
+  }
 }
 
 /**
  * 게시물 본문 HTML을 XSS 없이 안전하게 정제합니다.
  * DOMPurify는 최초 호출 시에만 로드합니다 (Server Action·서버리스 호환).
+ * 정제에 실패하면 원본을 반환하지 않고 throw 합니다 (저장 거부).
  */
 export async function sanitizePostHtmlAsync(html) {
   if (html == null) return '';
@@ -128,6 +137,6 @@ export async function sanitizePostHtmlAsync(html) {
     return DOMPurify.sanitize(raw, SANITIZE_CONFIG).trim();
   } catch (e) {
     console.error('[sanitizePostHtmlAsync]', e);
-    return raw.trim();
+    throw new Error(SANITIZE_FAIL_MESSAGE);
   }
 }

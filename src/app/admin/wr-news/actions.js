@@ -114,6 +114,24 @@ export async function updateWrNewsEnglish(id, { title, content }) {
   }
 }
 
+export async function clearWrNewsEnglish(id) {
+  try {
+    const { error } = await getSupabaseAdmin()
+      .from('wr_news')
+      .update({
+        title_en: '',
+        content_en: '',
+      })
+      .eq('id', rowIdForEq(id));
+
+    if (error) return actionFail(error.message);
+    revalidateWrNewsPaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
+}
+
 export async function deleteWrNewsPost(id) {
   try {
     const idEq = rowIdForEq(id);

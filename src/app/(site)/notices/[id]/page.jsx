@@ -23,8 +23,7 @@ export default async function NoticeDetailPage({ params }) {
   const secretAuth = await getNoticeSecretAuth(id);
   const board = SECRET_BOARD_CONFIG.notices;
   const canRead = await canReadSecretPost({
-    isSecret: secretAuth.isSecret,
-    secretPasswordHash: secretAuth.secretPasswordHash,
+    ...secretAuth,
     cookiePrefix: board.cookiePrefix,
     id,
   });

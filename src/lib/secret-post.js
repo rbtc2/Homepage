@@ -31,8 +31,12 @@ export function normalizeSecretExtra(row) {
   };
 }
 
+function unavailableSecretAuth() {
+  return { isSecret: true, secretPasswordHash: null, lookupFailed: true };
+}
+
 export async function getBoardSecretAuth(table, id) {
-  if (id == null || id === '') return { isSecret: false, secretPasswordHash: null };
+  if (id == null || id === '') return unavailableSecretAuth();
   const idEq = typeof id === 'number' ? id : String(id).trim();
   const { data, error } = await getSupabaseAdmin()
     .from(table)
@@ -40,16 +44,27 @@ export async function getBoardSecretAuth(table, id) {
     .eq('id', idEq)
     .single();
 
-  if (error || !data) return { isSecret: false, secretPasswordHash: null };
+  if (error || !data) {
+    console.error('[getBoardSecretAuth]', table, id, error?.message ?? error);
+    return unavailableSecretAuth();
+  }
   return {
     isSecret: Boolean(data.is_secret),
     secretPasswordHash: data.secret_password_hash || null,
+    lookupFailed: false,
   };
 }
 
 /** 관리자 편집 시 hasSecretPassword를 admin 조회로 보정 (anon은 해시 컬럼 REVOKE) */
 export function withSecretEditMeta(post, secretAuth) {
   if (!post) return post;
+  if (secretAuth?.lookupFailed) {
+    return {
+      ...post,
+      isSecret: Boolean(post.isSecret),
+      hasSecretPassword: Boolean(post.hasSecretPassword),
+    };
+  }
   return {
     ...post,
     isSecret: Boolean(secretAuth?.isSecret ?? post.isSecret),
@@ -61,9 +76,16 @@ export function secretCookieName(cookiePrefix, id) {
   return `${cookiePrefix}-${id}`;
 }
 
-export async function canReadSecretPost({ isSecret, secretPasswordHash, cookiePrefix, id }) {
+export async function canReadSecretPost({
+  isSecret,
+  secretPasswordHash,
+  cookiePrefix,
+  id,
+  lookupFailed,
+}) {
+  if (lookupFailed) return false;
   if (!isSecret) return true;
-  if (!secretPasswordHash) return true;
+  if (!secretPasswordHash) return false;
   const cookieStore = await cookies();
   return cookieStore.get(secretCookieName(cookiePrefix, id))?.value === secretPasswordHash;
 }

@@ -25,8 +25,7 @@ export default async function WrNewsDetailView({ id, locale = 'ko' }) {
   const secretAuth = await getWrNewsSecretAuth(id);
   const board = SECRET_BOARD_CONFIG.wr_news;
   const canRead = await canReadSecretPost({
-    isSecret: secretAuth.isSecret,
-    secretPasswordHash: secretAuth.secretPasswordHash,
+    ...secretAuth,
     cookiePrefix: board.cookiePrefix,
     id,
   });

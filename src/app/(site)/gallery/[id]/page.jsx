@@ -24,8 +24,7 @@ export default async function GalleryDetailPage({ params }) {
   const secretAuth = await getGallerySecretAuth(id);
   const board = SECRET_BOARD_CONFIG.gallery;
   const canRead = await canReadSecretPost({
-    isSecret: secretAuth.isSecret,
-    secretPasswordHash: secretAuth.secretPasswordHash,
+    ...secretAuth,
     cookiePrefix: board.cookiePrefix,
     id,
   });

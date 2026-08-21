@@ -23,8 +23,7 @@ export default async function DisclosureDetailPage({ params }) {
   const secretAuth = await getDisclosureSecretAuth(id);
   const board = SECRET_BOARD_CONFIG.disclosures;
   const canRead = await canReadSecretPost({
-    isSecret: secretAuth.isSecret,
-    secretPasswordHash: secretAuth.secretPasswordHash,
+    ...secretAuth,
     cookiePrefix: board.cookiePrefix,
     id,
   });

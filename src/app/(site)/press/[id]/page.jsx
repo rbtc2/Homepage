@@ -24,8 +24,7 @@ export default async function PressDetailPage({ params }) {
   const secretAuth = await getPressSecretAuth(id);
   const board = SECRET_BOARD_CONFIG.press_coverage;
   const canRead = await canReadSecretPost({
-    isSecret: secretAuth.isSecret,
-    secretPasswordHash: secretAuth.secretPasswordHash,
+    ...secretAuth,
     cookiePrefix: board.cookiePrefix,
     id,
   });
