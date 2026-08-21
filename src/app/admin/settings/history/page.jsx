@@ -17,7 +17,7 @@ export default async function AdminSettingsHistoryPage() {
       <header className="adm-main__hd">
         <h1 className="adm-main__title">연혁</h1>
         <p className="adm-main__sub">
-          단체 소개 연혁 페이지에 보이는 항목을 추가·수정·삭제합니다. 저장 즉시 반영됩니다.
+          단체 소개 연혁 페이지에 보이는 항목을 추가·수정·삭제합니다. 영문은 각 항목의 EN으로 작성합니다. 저장 즉시 반영됩니다.
         </p>
       </header>
 

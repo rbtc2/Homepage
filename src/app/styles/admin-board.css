@@ -364,7 +364,9 @@ a.an-en-badge--add:hover {
 .an-table-wrap--notices .an-table__th--actions,
 .an-table-wrap--notices .an-table__td--actions,
 .an-table-wrap--gallery .an-table__th--actions,
-.an-table-wrap--gallery .an-table__td--actions {
+.an-table-wrap--gallery .an-table__td--actions,
+.an-table-wrap--history .an-table__th--actions,
+.an-table-wrap--history .an-table__td--actions {
   width: 11.5rem;
   min-width: 11.5rem;
 }

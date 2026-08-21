@@ -1,12 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { assertActionOk } from '@/lib/assert-action-ok';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import HistoryFormModal from './HistoryFormModal';
-import { createHistoryEvent, updateHistoryEvent, deleteHistoryEvent } from './actions';
+import {
+  createHistoryEvent,
+  updateHistoryEvent,
+  deleteHistoryEvent,
+  clearHistoryEnglish,
+} from './actions';
 
 function currentYearMonth() {
   const now = new Date();
@@ -34,12 +40,41 @@ export default function HistoryClient({ initialEvents }) {
   const [editTarget, setEditTarget] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [clearingId, setClearingId] = useState(null);
 
   const { deleteTarget, setDeleteTarget, deleting, handleDelete } = useDelete(deleteHistoryEvent);
 
   useEffect(() => {
     setEvents(initialEvents);
   }, [initialEvents]);
+
+  async function handleClearEnglish(ev) {
+    const ok = window.confirm(
+      `「${ev.title}」의 영문 내용·부가 설명을 삭제할까요?\n한국어 항목은 그대로 두고, 영문 사이트에는 한국어가 다시 보입니다.`
+    );
+    if (!ok) return;
+
+    setClearingId(ev.id);
+    try {
+      assertActionOk(await clearHistoryEnglish(ev.id));
+      setEvents((curr) =>
+        curr.map((row) =>
+          row.id === ev.id
+            ? { ...row, hasEnglish: false, titleEn: '', detailEn: '' }
+            : row
+        )
+      );
+      router.refresh();
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : '영문 삭제에 실패했습니다. 다시 시도해 주세요.';
+      alert(msg);
+    } finally {
+      setClearingId(null);
+    }
+  }
 
   const yearCount = new Set(events.map((ev) => ev.year)).size;
   const now = new Date();
@@ -113,7 +148,7 @@ export default function HistoryClient({ initialEvents }) {
         </button>
       </div>
 
-      <div className="an-table-wrap">
+      <div className="an-table-wrap an-table-wrap--history">
         <table className="an-table">
           <thead>
             <tr>
@@ -135,11 +170,66 @@ export default function HistoryClient({ initialEvents }) {
                   {ev.month}월
                 </td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">{ev.title}</span>
+                  <span className="an-table__title-row">
+                    <span className="an-table__notice-title">{ev.title}</span>
+                    {ev.hasEnglish ? (
+                      <span className="an-en-badge-wrap">
+                        <Link
+                          href={`/admin/settings/history/${ev.id}/en`}
+                          className="an-en-badge"
+                          title="영문 수정"
+                        >
+                          EN
+                        </Link>
+                        <button
+                          type="button"
+                          className="an-en-badge-clear"
+                          aria-label="영문 삭제"
+                          title="영문 삭제"
+                          disabled={clearingId === ev.id}
+                          onClick={() => handleClearEnglish(ev)}
+                        >
+                          {clearingId === ev.id ? '…' : '×'}
+                        </button>
+                      </span>
+                    ) : (
+                      <Link
+                        href={`/admin/settings/history/${ev.id}/en`}
+                        className="an-en-badge an-en-badge--add"
+                        title="영문 작성"
+                      >
+                        +EN
+                      </Link>
+                    )}
+                  </span>
                   {ev.detail ? <p className="an-table__sub">{ev.detail}</p> : null}
                 </td>
                 <td className="an-table__td an-table__td--actions">
                   <div className="an-actions">
+                    <Link
+                      href="/history"
+                      className="an-btn an-btn--sm an-btn--ghost an-btn--icon"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="새 탭에서 보기"
+                      title="보기"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <path
+                          d="M8 2h4v4M12 2L6.5 7.5"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11 8.2V11a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1h2.8"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </Link>
                     <button
                       type="button"
                       className="an-btn an-btn--sm an-btn--ghost"

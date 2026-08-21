@@ -10,7 +10,9 @@ const DETAIL_MAX = 1000;
 
 function revalidateHistoryPaths() {
   safeRevalidatePath('/history');
+  safeRevalidatePath('/en/history');
   safeRevalidatePath('/admin/settings/history');
+  safeRevalidatePath('/en');
 }
 
 function normalizePayload(data) {
@@ -57,6 +59,52 @@ export async function updateHistoryEvent(id, data) {
     const { error } = await getSupabaseAdmin()
       .from('history_events')
       .update(payload)
+      .eq('id', rowIdForEq(id));
+
+    if (error) return actionFail(error.message);
+    revalidateHistoryPaths();
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
+}
+
+export async function updateHistoryEnglish(id, data) {
+  try {
+    const titleEn = String(data.title ?? '').trim();
+    const detailEn = String(data.detail ?? '').trim();
+    if (!titleEn) throw new Error('영문 내용을 입력해 주세요.');
+    if (titleEn.length > TITLE_MAX) {
+      throw new Error(`영문 내용은 ${TITLE_MAX}자 이내로 입력해 주세요.`);
+    }
+    if (detailEn.length > DETAIL_MAX) {
+      throw new Error(`영문 부가 설명은 ${DETAIL_MAX}자 이내로 입력해 주세요.`);
+    }
+
+    const { error } = await getSupabaseAdmin()
+      .from('history_events')
+      .update({
+        title_en: titleEn,
+        detail_en: detailEn,
+      })
+      .eq('id', rowIdForEq(id));
+
+    if (error) return actionFail(error.message);
+    revalidateHistoryPaths();
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
+}
+
+export async function clearHistoryEnglish(id) {
+  try {
+    const { error } = await getSupabaseAdmin()
+      .from('history_events')
+      .update({
+        title_en: '',
+        detail_en: '',
+      })
       .eq('id', rowIdForEq(id));
 
     if (error) return actionFail(error.message);

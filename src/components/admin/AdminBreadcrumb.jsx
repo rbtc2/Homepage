@@ -59,8 +59,13 @@ export default function AdminBreadcrumb() {
   }
 
   if (pathname.startsWith(`${SETTINGS_BASE}/`)) {
-    const subLabel = SETTINGS_SUBPAGE_LABELS[pathname];
-    if (!subLabel) return null;
+    const settingsKey = Object.keys(SETTINGS_SUBPAGE_LABELS).find(
+      (key) => pathname === key || pathname.startsWith(`${key}/`)
+    );
+    if (!settingsKey) return null;
+    const subLabel = SETTINGS_SUBPAGE_LABELS[settingsKey];
+    const isEn = pathname.endsWith('/en');
+
     return (
       <nav className="adm-breadcrumb" aria-label="경로">
         <div className="adm-breadcrumb__inner">
@@ -68,7 +73,15 @@ export default function AdminBreadcrumb() {
           <span className="adm-breadcrumb__sep" aria-hidden="true">/</span>
           <Link href={SETTINGS_BASE} className="adm-breadcrumb__item">사이트 설정</Link>
           <span className="adm-breadcrumb__sep" aria-hidden="true">/</span>
-          <span className="adm-breadcrumb__current">{subLabel}</span>
+          {isEn ? (
+            <>
+              <Link href={settingsKey} className="adm-breadcrumb__item">{subLabel}</Link>
+              <span className="adm-breadcrumb__sep" aria-hidden="true">/</span>
+              <span className="adm-breadcrumb__current">영문 버전</span>
+            </>
+          ) : (
+            <span className="adm-breadcrumb__current">{subLabel}</span>
+          )}
         </div>
       </nav>
     );
