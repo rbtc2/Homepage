@@ -2,12 +2,17 @@ import { supabase } from './supabase';
 
 const ITEMS_PER_PAGE = 10;
 
+const SEARCH_FIELD_RE = /^[a-z_]+$/;
+
 /**
  * 게시판 테이블 공통 CRUD 유틸 팩토리.
  * @param {string} tableName - Supabase 테이블 이름
- * @param {{ normalizeExtra?: (row: object) => object }} options
+ * @param {{ normalizeExtra?: (row: object) => object, searchFields?: string[] }} options
  */
-export function createPostLib(tableName, { normalizeExtra } = {}) {
+export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) {
+  const orSearchFields = (searchFields ?? ['title', 'content']).filter((field) =>
+    SEARCH_FIELD_RE.test(field)
+  );
   function normalize(row) {
     if (!row) return null;
     const viewsNum = Number(row.views);
@@ -83,12 +88,23 @@ export function createPostLib(tableName, { normalizeExtra } = {}) {
     const from = (page - 1) * itemsPerPage;
     const to = from + itemsPerPage - 1;
     const q = escapeLike(query.trim());
-    const { data, error, count } = await supabase
-      .from(tableName)
-      .select('*', { count: 'exact' })
-      .or(`title.ilike.%${q}%,content.ilike.%${q}%`)
-      .order('id', { ascending: false })
-      .range(from, to);
+    const runSearch = (fields) => {
+      const orExpr = fields.map((field) => `${field}.ilike.%${q}%`).join(',');
+      return supabase
+        .from(tableName)
+        .select('*', { count: 'exact' })
+        .or(orExpr)
+        .order('id', { ascending: false })
+        .range(from, to);
+    };
+
+    let { data, error, count } = await runSearch(orSearchFields);
+    if (error && orSearchFields.some((field) => field.endsWith('_en'))) {
+      const retry = await runSearch(orSearchFields.filter((field) => field === 'title' || field === 'content'));
+      data = retry.data;
+      error = retry.error;
+      count = retry.count;
+    }
     if (error) throw new Error(error.message);
     const totalCount = count == null ? 0 : Number(count);
     return { items: (data ?? []).map(normalize), totalCount };

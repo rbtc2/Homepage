@@ -60,6 +60,10 @@ import { getClipboardImageFiles, insertDroppedImages } from './insert-editor-ima
  * @param {boolean}  showPinToggle    - 공지 고정 체크박스 표시 여부
  * @param {boolean}  showSecretToggle - 비밀글 토글 및 비밀번호 입력 표시 여부
  * @param {boolean}  showCoverImage   - 커버 이미지 URL 입력 표시 여부 (갤러리용)
+ * @param {boolean}  [showMetaDate=true] - 작성일 입력 표시 여부
+ * @param {string}   [titlePlaceholder]
+ * @param {string}   [saveLabel]      - 저장 버튼 문구 (없으면 신규/수정 기본값)
+ * @param {import('react').ReactNode} [notice] - 제목 위 안내
  * @param {'wr-news'|'gallery'} [coverUploadFolder] - 설정 시 Storage에서 파일 업로드 가능
  * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage?, isSecret?, secretPassword? }) => void
  */
@@ -72,6 +76,10 @@ export default function RichEditor({
   showPinToggle = false,
   showSecretToggle = false,
   showCoverImage = false,
+  showMetaDate = true,
+  titlePlaceholder = '제목을 입력하세요',
+  saveLabel,
+  notice,
   coverUploadFolder,
   onSave,
 }) {
@@ -425,7 +433,9 @@ export default function RichEditor({
   ]);
 
   const pageTitle = isEdit ? editTitle : newTitle;
-  const primaryLabel = isEdit ? '수정 완료' : '게시하기';
+  const primaryLabel = saveLabel ?? (isEdit ? '수정 완료' : '게시하기');
+  const showDrafts = Boolean(contentType);
+  const showMetaRow = showPinToggle || showSecretToggle || showMetaDate;
 
   return (
     <EditorPageFrame
@@ -434,8 +444,8 @@ export default function RichEditor({
       saving={saving}
       onSave={handleSave}
       primaryLabel={primaryLabel}
-      onDraftSave={handleDraftSave}
-      onDraftLoadOpen={() => setDraftModalOpen(true)}
+      onDraftSave={showDrafts ? handleDraftSave : undefined}
+      onDraftLoadOpen={showDrafts ? () => setDraftModalOpen(true) : undefined}
       draftSaving={draftSaving}
       draftHint={draftHint}
       footer={
@@ -448,15 +458,20 @@ export default function RichEditor({
         ) : null
       }
     >
-      <div className="ep__meta-row">
-        {showPinToggle && (
-          <EditorCheckboxField checked={isPinned} onChange={setIsPinned} label="공지로 고정" />
-        )}
-        {showSecretToggle && (
-          <EditorCheckboxField checked={isSecret} onChange={setIsSecret} label="비밀 게시글" />
-        )}
-        <EditorMetaDate label="작성일" value={createdAt} onChange={setCreatedAt} />
-      </div>
+      {showMetaRow ? (
+        <div className="ep__meta-row">
+          {showPinToggle ? (
+            <EditorCheckboxField checked={isPinned} onChange={setIsPinned} label="공지로 고정" />
+          ) : null}
+          {showSecretToggle ? (
+            <EditorCheckboxField checked={isSecret} onChange={setIsSecret} label="비밀 게시글" />
+          ) : null}
+          {showMetaDate ? (
+            <EditorMetaDate label="작성일" value={createdAt} onChange={setCreatedAt} />
+          ) : null}
+        </div>
+      ) : null}
+      {notice ? <div className="ep__notice">{notice}</div> : null}
 
       {showSecretToggle && isSecret && (
         <input
@@ -475,7 +490,7 @@ export default function RichEditor({
         className="ep__title-input"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="제목을 입력하세요"
+        placeholder={titlePlaceholder}
         maxLength={100}
       />
 
@@ -627,7 +642,7 @@ export default function RichEditor({
       <ImageToolbar editor={editor} />
 
       <DraftLoadModal
-        open={draftModalOpen}
+        open={showDrafts && draftModalOpen}
         contentType={contentType}
         onClose={() => setDraftModalOpen(false)}
         onLoad={handleDraftLoad}

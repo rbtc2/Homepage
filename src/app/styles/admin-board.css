@@ -275,6 +275,39 @@
   color: var(--ink);
 }
 
+.an-table__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.an-table__title-row .an-table__notice-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.an-en-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.an-table-wrap--wr-news .an-table__th--actions,
+.an-table-wrap--wr-news .an-table__td--actions {
+  width: 16.5rem;
+  min-width: 16.5rem;
+}
+
 .an-table__sub {
   margin: 0.2rem 0 0;
   font-size: 0.75rem;

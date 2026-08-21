@@ -22,6 +22,7 @@ const SECTION_LABELS = {
 const SUB_LABELS = {
   '/new':  '새 게시물',
   '/edit': '게시물 수정',
+  '/en':   '영문 버전',
 };
 
 const SETTINGS_BASE = '/admin/settings';

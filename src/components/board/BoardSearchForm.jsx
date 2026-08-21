@@ -1,4 +1,13 @@
-export default function BoardSearchForm({ basePath, ariaLabel, defaultValue }) {
+export default function BoardSearchForm({
+  basePath,
+  ariaLabel,
+  defaultValue,
+  locale = 'ko',
+  placeholder,
+  submitLabel,
+}) {
+  const ph = placeholder ?? (locale === 'en' ? 'Search titles or content' : '제목 또는 내용으로 검색');
+  const submit = submitLabel ?? (locale === 'en' ? 'Search' : '검색');
   return (
     <form
       method="get"
@@ -20,12 +29,12 @@ export default function BoardSearchForm({ basePath, ariaLabel, defaultValue }) {
           type="search"
           name="q"
           className="notice-search__input"
-          placeholder="제목 또는 내용으로 검색"
+          placeholder={ph}
           defaultValue={defaultValue}
           autoComplete="off"
         />
       </div>
-      <button type="submit" className="notice-search__btn">검색</button>
+      <button type="submit" className="notice-search__btn">{submit}</button>
     </form>
   );
 }

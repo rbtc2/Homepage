@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getWrNewsPage } from '@/lib/wr-news';
+import { getWrNewsPage, localizeWrNewsPosts } from '@/lib/wr-news';
 
 const LIST_PATH_KO = '/wr-news';
 const LIST_PATH_EN = '/en/wr-news';
@@ -41,7 +41,8 @@ function Chevron() {
 }
 
 export default async function HomeWrNewsBlock({ locale = 'ko' }) {
-  const { items } = await getWrNewsPage({ page: 1, itemsPerPage: 3 });
+  const { items: rawItems } = await getWrNewsPage({ page: 1, itemsPerPage: 3 });
+  const items = localizeWrNewsPosts(rawItems, locale);
   const primary = items[0];
   const secondary = items.slice(1, 3);
   const multi = secondary.length > 0;

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import BoardPagination from '@/components/board/BoardPagination';
+import { wrNewsUi } from '@/lib/wr-news-ui';
 
 function toPlainSnippet(html, max) {
   if (!html || typeof html !== 'string') return '';
@@ -33,7 +34,10 @@ export default function WrNewsList({
   basePath = '/wr-news',
   query = '',
   isSearching = false,
+  locale = 'ko',
 }) {
+  const ui = wrNewsUi(locale);
+
   if (items.length === 0) {
     return (
       <div className="wnl-empty">
@@ -50,15 +54,13 @@ export default function WrNewsList({
             />
           </svg>
         </div>
-        <p className="wnl-empty__title">
-          {isSearching ? '검색 결과가 없습니다' : '등록된 게시물이 없습니다'}
-        </p>
+        <p className="wnl-empty__title">{isSearching ? ui.emptySearch : ui.emptyTitle}</p>
         {isSearching ? (
           <p className="wnl-empty__desc">
             <Link href={basePath} className="wnl-empty__link">
-              전체 목록
+              {ui.emptyBack}
             </Link>
-            으로 돌아가 보세요.
+            {ui.emptyBackSuffix}
           </p>
         ) : null}
       </div>
@@ -67,7 +69,7 @@ export default function WrNewsList({
 
   return (
     <>
-      <ul className="wnl" aria-label="WR뉴스 목록">
+      <ul className="wnl" aria-label={ui.listAria}>
         {items.map((post, i) => {
           const snippet = toPlainSnippet(post.content, 160);
           const date = formatYmd(post.createdAt);
@@ -120,7 +122,7 @@ export default function WrNewsList({
                         <span className="wnl__meta-dot" aria-hidden="true">
                           ·
                         </span>
-                        <span>조회 {post.views.toLocaleString()}</span>
+                        <span>{ui.views(post.views)}</span>
                       </>
                     ) : null}
                   </span>
@@ -130,7 +132,13 @@ export default function WrNewsList({
           );
         })}
       </ul>
-      <BoardPagination page={page} totalPages={totalPages} basePath={basePath} query={query} />
+      <BoardPagination
+        locale={locale}
+        page={page}
+        totalPages={totalPages}
+        basePath={basePath}
+        query={query}
+      />
     </>
   );
 }

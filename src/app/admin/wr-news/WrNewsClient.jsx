@@ -45,7 +45,7 @@ export default function WrNewsClient({ initialPosts }) {
         </div>
       </div>
 
-      <div className="an-table-wrap">
+      <div className="an-table-wrap an-table-wrap--wr-news">
         <table className="an-table">
           <thead>
             <tr>
@@ -113,9 +113,16 @@ export default function WrNewsClient({ initialPosts }) {
                   )}
                 </td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">
-                    {post.isSecret ? '🔒 ' : ''}
-                    {post.title}
+                  <span className="an-table__title-row">
+                    <span className="an-table__notice-title">
+                      {post.isSecret ? '🔒 ' : ''}
+                      {post.title}
+                    </span>
+                    {post.hasEnglish ? (
+                      <span className="an-en-badge" title="영문 제목·본문이 있습니다">
+                        EN
+                      </span>
+                    ) : null}
                   </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{post.createdAt}</td>
@@ -132,6 +139,12 @@ export default function WrNewsClient({ initialPosts }) {
                     </Link>
                     <Link href={`/admin/wr-news/${post.id}/edit`} className="an-btn an-btn--sm an-btn--ghost">
                       수정
+                    </Link>
+                    <Link
+                      href={`/admin/wr-news/${post.id}/en`}
+                      className="an-btn an-btn--sm an-btn--ghost"
+                    >
+                      {post.hasEnglish ? '영문 수정' : '영문'}
                     </Link>
                     <button
                       type="button"
