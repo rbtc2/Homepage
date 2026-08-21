@@ -1,7 +1,7 @@
 export const metadata = {
   title: 'Greeting',
   description:
-    'Walk with WORLD RIGHTS on a journey that connects dignity and builds independence for tomorrow.',
+    'Join WORLD RIGHTS in connecting people through dignity and building pathways to self-reliance for tomorrow.',
 };
 
 export default function EnGreetingPage() {
@@ -26,23 +26,24 @@ export default function EnGreetingPage() {
 
             <div className="gt-prose__lead-wrap">
               <p className="gt-prose__lead">
-                Walk with WORLD RIGHTS on a journey that connects dignity and builds
-                independence for tomorrow.
+                Join WORLD RIGHTS in connecting people through dignity and building
+                pathways to self-reliance for tomorrow.
               </p>
             </div>
 
             <div className="gt-prose__body">
               <p>
-                The diversity of our society continues to deepen, yet exclusion and
-                discrimination still remain. WORLD RIGHTS provides professional
-                independent-living support and human-rights advocacy so that every
-                social minority can stand as a full member of our community.
+                Our society is becoming increasingly diverse, yet exclusion and
+                discrimination remain a reality for many. WORLD RIGHTS develops
+                professional programs that strengthen self-reliance and carries out
+                human rights advocacy so that every member of a social minority can
+                stand as an active and empowered member of our shared community.
               </p>
               <p>
-                We will prove, through transparent and sincere work, that the
-                intercultural values WORLD RIGHTS proposes can become a new standard
-                for our society. We will keep walking toward a world where universal
-                human rights are common sense.
+                Through transparent and sincere action, we will work to make the value
+                of interculturalism that WORLD RIGHTS stands for a new standard in our
+                society. We will continue moving forward toward a world where
+                universal human rights are simply common sense.
               </p>
             </div>
 
