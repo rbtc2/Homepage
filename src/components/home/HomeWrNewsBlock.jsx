@@ -2,7 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getWrNewsPage } from '@/lib/wr-news';
 
-const LIST_PATH = '/wr-news';
+const LIST_PATH_KO = '/wr-news';
+const LIST_PATH_EN = '/en/wr-news';
 
 function toPlainSnippet(html, max) {
   if (!html || typeof html !== 'string') return '';
@@ -39,35 +40,37 @@ function Chevron() {
   );
 }
 
-export default async function HomeWrNewsBlock() {
+export default async function HomeWrNewsBlock({ locale = 'ko' }) {
   const { items } = await getWrNewsPage({ page: 1, itemsPerPage: 3 });
   const primary = items[0];
   const secondary = items.slice(1, 3);
   const multi = secondary.length > 0;
+  const isEn = locale === 'en';
+  const listPath = isEn ? LIST_PATH_EN : LIST_PATH_KO;
 
   return (
     <section className="hmwr" aria-labelledby="hmwr-heading">
       <div className="hmwr__inner">
         <header className="hmwr__head">
           <h2 id="hmwr-heading" className="hmwr__eyebrow">
-            WR뉴스
+            {isEn ? 'WR News' : 'WR뉴스'}
           </h2>
           <hr className="hmwr__rule" />
-          <Link href={LIST_PATH} className="hmwr__all">
-            전체보기
+          <Link href={listPath} className="hmwr__all">
+            {isEn ? 'View all' : '전체보기'}
             <Chevron />
           </Link>
         </header>
 
         {items.length === 0 ? (
           <p className="hmwr__zero">
-            등록된 글이 없습니다.{' '}
-            <Link href={LIST_PATH}>WR뉴스 목록</Link>
+            {isEn ? 'No posts yet. ' : '등록된 글이 없습니다. '}
+            <Link href={listPath}>{isEn ? 'WR News list' : 'WR뉴스 목록'}</Link>
           </p>
         ) : (
           <div className={multi ? 'hmwr__grid' : 'hmwr__grid hmwr__grid--one'}>
             {primary ? (
-              <Link href={`${LIST_PATH}/${primary.id}`} className="hmwr__hero">
+              <Link href={`${listPath}/${primary.id}`} className="hmwr__hero">
                 <span className="hmwr__hero-frame">
                   {primary.coverImage ? (
                     <Image
@@ -109,7 +112,7 @@ export default async function HomeWrNewsBlock() {
               <ul className="hmwr__subs" role="list">
                 {secondary.map((row) => (
                   <li key={row.id} className="hmwr__sub-item">
-                    <Link href={`${LIST_PATH}/${row.id}`} className="hmwr__sub">
+                    <Link href={`${listPath}/${row.id}`} className="hmwr__sub">
                       <span className="hmwr__sub-pic">
                         {row.coverImage ? (
                           <Image

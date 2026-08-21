@@ -2,13 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import LoginModal from '@/components/LoginModal';
+import {
+  HEADER_UI,
+  NAV_ITEMS,
+  homeHref,
+  hrefForNavItem,
+  toEnPath,
+  toKoPath,
+} from '@/lib/i18n';
 
-export default function Header() {
+export default function Header({ locale = 'ko' }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const pathname = usePathname();
   const router = useRouter();
+  const ui = HEADER_UI[locale] ?? HEADER_UI.ko;
+  const langHref = locale === 'en' ? toKoPath(pathname) : toEnPath(pathname);
 
   useEffect(() => {
     fetch('/api/auth/check')
@@ -27,7 +38,7 @@ export default function Header() {
     <>
     <header className="header" role="banner">
       <div className="header__inner">
-        <Link href="/" className="header__brand" aria-label="홈으로 이동">
+        <Link href={homeHref(locale)} className="header__brand" aria-label={ui.homeAria}>
           <img
             className="header__logo"
             src="/images/ci-logo.svg"
@@ -38,59 +49,46 @@ export default function Header() {
           />
         </Link>
 
-        <nav className="header__nav" aria-label="주 메뉴">
+        <nav className="header__nav" aria-label={ui.navAria}>
           <ul className="header__nav-grid">
-            <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">단체 소개</a>
-              <div className="header__mega-col" role="group" aria-label="단체 소개 하위 메뉴">
-                <ul className="header__mega-list">
-                  <li><Link href="/about" className="header__mega-link">소개</Link></li>
-                  <li><Link href="/greeting" className="header__mega-link">인사말</Link></li>
-                  <li><Link href="/history" className="header__mega-link">연혁</Link></li>
-                  <li><Link href="/people" className="header__mega-link">함께하는 사람들</Link></li>
-                  <li><Link href="/directions" className="header__mega-link">오시는 길</Link></li>
-                </ul>
-              </div>
-            </li>
-            <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">단체 사업</a>
-              <div className="header__mega-col" role="group" aria-label="단체 사업 하위 메뉴">
-                <ul className="header__mega-list">
-                  <li><a href="#" className="header__mega-link">상호연대</a></li>
-                  <li><a href="#" className="header__mega-link">자립지원</a></li>
-                  <li><a href="#" className="header__mega-link">권리옹호</a></li>
-                </ul>
-              </div>
-            </li>
-            <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">단체 활동</a>
-              <div className="header__mega-col" role="group" aria-label="단체 활동 하위 메뉴">
-                <ul className="header__mega-list">
-                  <li><Link href="/wr-news" className="header__mega-link">WR뉴스</Link></li>
-                  <li><Link href="/press" className="header__mega-link">언론보도</Link></li>
-                </ul>
-              </div>
-            </li>
-            <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">단체 후원</a>
-              <div className="header__mega-col" role="group" aria-label="단체 후원 하위 메뉴">
-                <ul className="header__mega-list">
-                  <li><Link href="/member" className="header__mega-link">회원가입</Link></li>
-                  <li><Link href="/dues" className="header__mega-link">회비납부</Link></li>
-                </ul>
-              </div>
-            </li>
-            <li className="header__nav-cell">
-              <a href="#" className="header__nav-item">커뮤니티</a>
-              <div className="header__mega-col" role="group" aria-label="커뮤니티 하위 메뉴">
-                <ul className="header__mega-list">
-                  <li><Link href="/notices" className="header__mega-link">공지사항</Link></li>
-                  <li><Link href="/disclosures" className="header__mega-link">공시자료</Link></li>
-                  <li><Link href="/archive" className="header__mega-link">자료실</Link></li>
-                  <li><Link href="/gallery" className="header__mega-link">포토갤러리</Link></li>
-                </ul>
-              </div>
-            </li>
+            {NAV_ITEMS.map((section) => {
+              const sectionLabel = section.label[locale];
+              return (
+                <li key={section.id} className="header__nav-cell">
+                  <a href="#" className="header__nav-item">
+                    {sectionLabel}
+                  </a>
+                  <div
+                    className="header__mega-col"
+                    role="group"
+                    aria-label={`${sectionLabel} ${ui.submenuSuffix}`}
+                  >
+                    <ul className="header__mega-list">
+                      {section.children.map((item) => {
+                        const href = hrefForNavItem(item, locale);
+                        const label = item.label[locale];
+                        if (href === '#') {
+                          return (
+                            <li key={`${section.id}-${item.label.ko}`}>
+                              <a href="#" className="header__mega-link">
+                                {label}
+                              </a>
+                            </li>
+                          );
+                        }
+                        return (
+                          <li key={href}>
+                            <Link href={href} className="header__mega-link">
+                              {label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -115,13 +113,13 @@ export default function Header() {
                   <rect x="3" y="14" width="7" height="7" rx="1" />
                   <rect x="14" y="14" width="7" height="7" rx="1" />
                 </svg>
-                <span className="header__action-text">관리자 페이지</span>
+                <span className="header__action-text">{ui.admin}</span>
               </Link>
               <button
                 type="button"
                 className="header__action"
                 onClick={handleLogout}
-                aria-label="로그아웃"
+                aria-label={ui.logoutAria}
               >
                 <svg
                   className="header__glyph"
@@ -139,7 +137,7 @@ export default function Header() {
                   <polyline points="16 17 21 12 16 7" />
                   <line x1="21" y1="12" x2="9" y2="12" />
                 </svg>
-                <span className="header__action-text">로그아웃</span>
+                <span className="header__action-text">{ui.logout}</span>
               </button>
             </>
           ) : (
@@ -151,7 +149,7 @@ export default function Header() {
               aria-haspopup="dialog"
               aria-controls="login-dialog"
               aria-expanded={isLoginOpen ? 'true' : 'false'}
-              aria-label="로그인 창 열기"
+              aria-label={ui.loginAria}
             >
               <svg
                 className="header__glyph"
@@ -169,17 +167,17 @@ export default function Header() {
                 <polyline points="10 17 15 12 10 7" />
                 <line x1="15" y1="12" x2="3" y2="12" />
               </svg>
-              <span className="header__action-text">로그인</span>
+              <span className="header__action-text">{ui.login}</span>
             </button>
           )}
-          <button
-            type="button"
-            className="header__lang-pill is-skeleton"
-            aria-label="영문 사이트 (준비 중)"
-            aria-disabled="true"
+          <Link
+            href={langHref}
+            className="header__lang-pill"
+            aria-label={ui.langAria}
+            hrefLang={locale === 'en' ? 'ko' : 'en'}
           >
-            <span className="header__lang-pill-text">ENG</span>
-          </button>
+            <span className="header__lang-pill-text">{ui.langLabel}</span>
+          </Link>
         </div>
       </div>
     </header>

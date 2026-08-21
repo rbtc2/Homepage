@@ -190,6 +190,7 @@
   background: transparent;
   color: var(--muted);
   font: inherit;
+  text-decoration: none;
   cursor: pointer;
   transition: border-color 0.18s var(--ease), color 0.18s var(--ease);
 }

@@ -15,7 +15,7 @@ function ArrowIcon() {
   );
 }
 
-export default async function NoticeStrip() {
+export default async function NoticeStrip({ locale = 'ko' }) {
   const allNotices = await getNotices();
   const pinnedNotices = allNotices
     .filter((n) => n.isPinned)
@@ -24,16 +24,19 @@ export default async function NoticeStrip() {
 
   if (pinnedNotices.length === 0) return null;
 
+  const listPath = locale === 'en' ? '/en/notices' : '/notices';
+  const isEn = locale === 'en';
+
   return (
-    <section className="ns" aria-label="주요 공지사항">
+    <section className="ns" aria-label={isEn ? 'Notices' : '주요 공지사항'}>
       <div className="ns__inner">
 
         {/* 헤더: eyebrow + rule + 전체보기 */}
         <div className="ns__head">
-          <p className="ns__eyebrow">공지사항</p>
+          <p className="ns__eyebrow">{isEn ? 'Notices' : '공지사항'}</p>
           <hr className="ns__rule" />
-          <Link href="/notices" className="ns__more" aria-label="공지사항 전체보기">
-            전체보기
+          <Link href={listPath} className="ns__more" aria-label={isEn ? 'View all notices' : '공지사항 전체보기'}>
+            {isEn ? 'View all' : '전체보기'}
             <ArrowIcon />
           </Link>
         </div>
@@ -42,11 +45,11 @@ export default async function NoticeStrip() {
         <ul className="ns__list" role="list">
           {pinnedNotices.map((notice) => (
             <li key={notice.id} className="ns__item">
-              <Link href={`/notices/${notice.id}`} className="ns__link">
+              <Link href={`${listPath}/${notice.id}`} className="ns__link">
                 <time className="ns__date" dateTime={notice.createdAt}>
                   {formatDate(notice.createdAt)}
                 </time>
-                <span className="ns__badge" aria-label="고정 공지">Notice</span>
+                <span className="ns__badge" aria-label={isEn ? 'Pinned notice' : '고정 공지'}>Notice</span>
                 <span className="ns__title">{notice.title}</span>
                 <span className="ns__arrow" aria-hidden="true">
                   <ArrowIcon />

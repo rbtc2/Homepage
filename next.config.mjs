@@ -15,6 +15,16 @@ const nextConfig = {
         destination: '/member',
         permanent: true,
       },
+      {
+        source: '/en/signup',
+        destination: '/en/member',
+        permanent: true,
+      },
+      {
+        source: '/en/directions',
+        destination: '/en/contact',
+        permanent: true,
+      },
     ];
   },
   images: {

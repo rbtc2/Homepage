@@ -1,0 +1,26 @@
+.en-soon {
+  background: rgba(18, 79, 166, 0.06);
+  border-bottom: 1px solid var(--line);
+}
+
+.en-soon__inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0.85rem var(--pad-x);
+}
+
+.en-soon__kicker {
+  margin: 0 0 0.2rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.en-soon__text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.45;
+}

@@ -21,6 +21,7 @@
 
 @import './styles/base.css';
 @import './styles/header.css';
+@import './styles/en.css';
 @import './styles/hero.css';
 @import './styles/page-header.css';
 @import './styles/about.css';
