@@ -68,6 +68,31 @@ const icons = {
       <path d="M4 6h16M10 10h10M4 14h16M10 18h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   ),
+  valignTop: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 5h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M8 9h8M8 13h8M8 17h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  valignMiddle: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 12h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M8 6h8M8 18h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  valignBottom: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 19h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M8 7h8M8 11h8M8 15h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  headerRow: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M3 9h18M9 9v12M15 9v12" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M3 3h18v6H3z" fill="currentColor" opacity="0.28"/>
+    </svg>
+  ),
   hr: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M4 12h16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>

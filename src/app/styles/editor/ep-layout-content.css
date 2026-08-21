@@ -250,6 +250,12 @@
   background: var(--canvas);
 }
 
+.ep-tbl-toolbar__unit-text {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
 /* ── 에디터 본문 영역 ───────────────────────────────────────── */
 .ep-editor-wrap {
   min-height: 500px;

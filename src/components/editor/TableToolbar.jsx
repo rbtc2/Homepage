@@ -7,15 +7,25 @@ import CellColorPicker from './CellColorPicker';
 import CellBorderPicker from './CellBorderPicker';
 import {
   formatTableWidth,
+  isTablePresetActive,
   MAX_TABLE_PERCENT,
   MAX_TABLE_PX,
   MIN_TABLE_PERCENT,
   MIN_TABLE_PX,
   normalizeAlign,
   parseTableWidth,
+  TABLE_PRESETS,
 } from './CustomTable';
+import {
+  currentRowIsHeader,
+  getActiveCellAttrs,
+  normalizeTextAlign,
+  normalizeVerticalAlign,
+  setSelectedCellAttr,
+} from './table-cell-attrs';
+import { MAX_ROW_HEIGHT, MIN_ROW_HEIGHT, parseRowHeight } from './CustomTableRow';
 
-const WIDTH_PRESETS = [50, 75, 100];
+const TABLE_PRESET_KEYS = ['narrow', 'medium', 'full'];
 
 function getEditorContentWidth(editor) {
   const el = editor?.view?.dom;
@@ -46,12 +56,19 @@ export default function TableToolbar({ editor }) {
   const [widthDraft, setWidthDraft] = useState('100');
   const [widthUnit, setWidthUnit] = useState('%');
   const [editingWidth, setEditingWidth] = useState(false);
+  const [heightDraft, setHeightDraft] = useState('');
+  const [editingHeight, setEditingHeight] = useState(false);
 
   const inTable = Boolean(editor?.isActive('table'));
   const tableAttrs = inTable ? editor.getAttributes('table') : {};
   const formattedWidth = formatTableWidth(tableAttrs.width);
   const align = normalizeAlign(tableAttrs.align);
   const parsed = parseTableWidth(formattedWidth);
+  const cellAttrs = inTable ? getActiveCellAttrs(editor) : {};
+  const cellTextAlign = normalizeTextAlign(cellAttrs.textAlign) ?? 'left';
+  const cellVerticalAlign = normalizeVerticalAlign(cellAttrs.verticalAlign);
+  const rowHeight = inTable ? parseRowHeight(editor.getAttributes('tableRow').height) : null;
+  const headerRowOn = inTable ? currentRowIsHeader(editor) : false;
 
   useEffect(() => {
     if (editingWidth) return;
@@ -59,7 +76,12 @@ export default function TableToolbar({ editor }) {
     setWidthUnit(parsed.unit);
   }, [editingWidth, parsed.amount, parsed.unit]);
 
-  if (!editor || (!inTable && !editingWidth)) return null;
+  useEffect(() => {
+    if (editingHeight) return;
+    setHeightDraft(rowHeight != null ? String(rowHeight) : '');
+  }, [editingHeight, rowHeight]);
+
+  if (!editor || (!inTable && !editingWidth && !editingHeight)) return null;
 
   const applyWidth = (next) => {
     editor.chain().focus().setTableWidth(next).run();
@@ -75,6 +97,21 @@ export default function TableToolbar({ editor }) {
     applyWidth(`${amount}${widthUnit}`);
   };
 
+  const applyHeightDraft = () => {
+    const raw = String(heightDraft).trim();
+    if (!raw) {
+      editor.chain().focus().setTableRowHeight(null).run();
+      return;
+    }
+    const next = parseRowHeight(raw);
+    if (next == null) {
+      setHeightDraft(rowHeight != null ? String(rowHeight) : '');
+      return;
+    }
+    editor.chain().focus().setTableRowHeight(next).run();
+    setHeightDraft(String(next));
+  };
+
   const toggleUnit = () => {
     const nextUnit = widthUnit === '%' ? 'px' : '%';
     const amount = Number.parseInt(String(widthDraft), 10);
@@ -86,7 +123,7 @@ export default function TableToolbar({ editor }) {
     setWidthUnit(converted.unit);
   };
 
-  const handleInputKeyDown = (e) => {
+  const handleWidthKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       applyWidthDraft();
@@ -100,6 +137,19 @@ export default function TableToolbar({ editor }) {
     }
   };
 
+  const handleHeightKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      applyHeightDraft();
+      e.currentTarget.blur();
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setHeightDraft(rowHeight != null ? String(rowHeight) : '');
+      e.currentTarget.blur();
+    }
+  };
+
   const min = widthUnit === '%' ? MIN_TABLE_PERCENT : MIN_TABLE_PX;
   const max = widthUnit === '%' ? MAX_TABLE_PERCENT : MAX_TABLE_PX;
 
@@ -107,14 +157,14 @@ export default function TableToolbar({ editor }) {
     <>
       <Divider />
       <div className="ep-toolbar__group">
-        {WIDTH_PRESETS.map((pct) => (
+        {TABLE_PRESET_KEYS.map((key) => (
           <ToolbarBtn
-            key={pct}
-            title={`표 너비 ${pct}%`}
-            active={parsed.unit === '%' && parsed.amount === pct}
-            onClick={() => applyWidth(`${pct}%`)}
+            key={key}
+            title={`${TABLE_PRESETS[key].label} (${TABLE_PRESETS[key].width})`}
+            active={isTablePresetActive(tableAttrs.width, tableAttrs.align, key)}
+            onClick={() => editor.chain().focus().setTablePreset(key).run()}
           >
-            <span className="ep-toolbar__label">{pct}%</span>
+            <span className="ep-toolbar__label">{TABLE_PRESETS[key].label}</span>
           </ToolbarBtn>
         ))}
         <label className="ep-tbl-toolbar__field">
@@ -136,7 +186,7 @@ export default function TableToolbar({ editor }) {
               applyWidthDraft();
               setEditingWidth(false);
             }}
-            onKeyDown={handleInputKeyDown}
+            onKeyDown={handleWidthKeyDown}
             aria-label={`표 너비 (${widthUnit})`}
             title="Enter로 적용"
           />
@@ -174,6 +224,89 @@ export default function TableToolbar({ editor }) {
           onClick={() => editor.chain().focus().setTableAlign('right').run()}
         >
           {icons.alignRight}
+        </ToolbarBtn>
+      </div>
+      <Divider />
+      <div className="ep-toolbar__group">
+        <ToolbarBtn
+          title="셀 왼쪽 정렬"
+          active={cellTextAlign === 'left'}
+          onClick={() => setSelectedCellAttr(editor, 'textAlign', 'left')}
+        >
+          {icons.alignLeft}
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="셀 가운데 정렬"
+          active={cellTextAlign === 'center'}
+          onClick={() => setSelectedCellAttr(editor, 'textAlign', 'center')}
+        >
+          {icons.alignCenter}
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="셀 오른쪽 정렬"
+          active={cellTextAlign === 'right'}
+          onClick={() => setSelectedCellAttr(editor, 'textAlign', 'right')}
+        >
+          {icons.alignRight}
+        </ToolbarBtn>
+      </div>
+      <Divider />
+      <div className="ep-toolbar__group">
+        <ToolbarBtn
+          title="셀 위쪽 정렬"
+          active={cellVerticalAlign === 'top'}
+          onClick={() => setSelectedCellAttr(editor, 'verticalAlign', 'top')}
+        >
+          {icons.valignTop}
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="셀 세로 가운데 정렬"
+          active={cellVerticalAlign === 'middle'}
+          onClick={() => setSelectedCellAttr(editor, 'verticalAlign', 'middle')}
+        >
+          {icons.valignMiddle}
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="셀 아래쪽 정렬"
+          active={cellVerticalAlign === 'bottom'}
+          onClick={() => setSelectedCellAttr(editor, 'verticalAlign', 'bottom')}
+        >
+          {icons.valignBottom}
+        </ToolbarBtn>
+      </div>
+      <Divider />
+      <div className="ep-toolbar__group">
+        <label className="ep-tbl-toolbar__field">
+          <span className="ep-tbl-toolbar__field-label">행 높이</span>
+          <input
+            type="number"
+            className="ep-tbl-toolbar__input"
+            min={MIN_ROW_HEIGHT}
+            max={MAX_ROW_HEIGHT}
+            step={1}
+            value={heightDraft}
+            placeholder="자동"
+            onFocus={() => {
+              setEditingHeight(true);
+              setHeightDraft(rowHeight != null ? String(rowHeight) : '');
+            }}
+            onChange={(e) => setHeightDraft(e.target.value)}
+            onBlur={() => {
+              applyHeightDraft();
+              setEditingHeight(false);
+            }}
+            onKeyDown={handleHeightKeyDown}
+            aria-label="행 높이 px"
+            title="비우면 자동 · Enter로 적용"
+          />
+          <span className="ep-tbl-toolbar__unit-text">px</span>
+        </label>
+        <ToolbarBtn
+          title="헤더 행 켜기/끄기"
+          active={headerRowOn}
+          onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+        >
+          {icons.headerRow}
         </ToolbarBtn>
       </div>
       <Divider />

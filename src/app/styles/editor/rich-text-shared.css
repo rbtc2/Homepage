@@ -88,6 +88,76 @@
   white-space: nowrap;
 }
 
+.ep-content table td[data-text-align="left"],
+.ep-content table th[data-text-align="left"],
+.nd__body--html table td[data-text-align="left"],
+.nd__body--html table th[data-text-align="left"] {
+  text-align: left;
+}
+
+.ep-content table td[data-text-align="center"],
+.ep-content table th[data-text-align="center"],
+.nd__body--html table td[data-text-align="center"],
+.nd__body--html table th[data-text-align="center"] {
+  text-align: center;
+}
+
+.ep-content table td[data-text-align="right"],
+.ep-content table th[data-text-align="right"],
+.nd__body--html table td[data-text-align="right"],
+.nd__body--html table th[data-text-align="right"] {
+  text-align: right;
+}
+
+.ep-content table td[data-text-align="center"] p,
+.ep-content table th[data-text-align="center"] p,
+.nd__body--html table td[data-text-align="center"] p,
+.nd__body--html table th[data-text-align="center"] p {
+  text-align: center;
+}
+
+.ep-content table td[data-text-align="right"] p,
+.ep-content table th[data-text-align="right"] p,
+.nd__body--html table td[data-text-align="right"] p,
+.nd__body--html table th[data-text-align="right"] p {
+  text-align: right;
+}
+
+.ep-content table td[data-text-align="left"] p,
+.ep-content table th[data-text-align="left"] p,
+.nd__body--html table td[data-text-align="left"] p,
+.nd__body--html table th[data-text-align="left"] p {
+  text-align: left;
+}
+
+.ep-content table td[data-vertical-align="top"],
+.ep-content table th[data-vertical-align="top"],
+.nd__body--html table td[data-vertical-align="top"],
+.nd__body--html table th[data-vertical-align="top"] {
+  vertical-align: top;
+}
+
+.ep-content table td[data-vertical-align="middle"],
+.ep-content table th[data-vertical-align="middle"],
+.nd__body--html table td[data-vertical-align="middle"],
+.nd__body--html table th[data-vertical-align="middle"] {
+  vertical-align: middle;
+}
+
+.ep-content table td[data-vertical-align="bottom"],
+.ep-content table th[data-vertical-align="bottom"],
+.nd__body--html table td[data-vertical-align="bottom"],
+.nd__body--html table th[data-vertical-align="bottom"] {
+  vertical-align: bottom;
+}
+
+.ep-content table tr[data-row-height] > td,
+.ep-content table tr[data-row-height] > th,
+.nd__body--html table tr[data-row-height] > td,
+.nd__body--html table tr[data-row-height] > th {
+  height: inherit;
+}
+
 /* 에디터 전용: 선택된 셀 강조 */
 .ep-content table .selectedCell::after {
   content: '';

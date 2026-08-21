@@ -46,6 +46,19 @@ export function formatTableWidth(value) {
   return `${amount}${unit}`;
 }
 
+/** 한 번에 너비+정렬을 적용하는 표 프리셋 */
+export const TABLE_PRESETS = {
+  narrow: { width: '40%', align: 'center', label: '좁은 표' },
+  medium: { width: '70%', align: 'center', label: '중간 표' },
+  full: { width: '100%', align: 'left', label: '전체 너비' },
+};
+
+export function isTablePresetActive(width, align, key) {
+  const preset = TABLE_PRESETS[key];
+  if (!preset) return false;
+  return formatTableWidth(width) === preset.width && normalizeAlign(align) === preset.align;
+}
+
 function readWidthFromElement(el) {
   const data = el.getAttribute('data-width');
   if (data) return formatTableWidth(data);
@@ -124,6 +137,16 @@ export const CustomTable = Table.extend({
         (align) =>
         ({ commands }) =>
           commands.updateAttributes(this.name, { align: normalizeAlign(align) }),
+      setTablePreset:
+        (key) =>
+        ({ commands }) => {
+          const preset = TABLE_PRESETS[key];
+          if (!preset) return false;
+          return commands.updateAttributes(this.name, {
+            width: formatTableWidth(preset.width),
+            align: normalizeAlign(preset.align),
+          });
+        },
     };
   },
 });

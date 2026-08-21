@@ -20,6 +20,7 @@ const ALLOWED_ATTR = [
   'data-file-name',
   'data-cell-bgcolor',
   'data-color',
+  'data-text-align', 'data-vertical-align', 'data-row-height',
   'data-border-top', 'data-border-right', 'data-border-bottom', 'data-border-left',
   'style',
   'aria-hidden',
@@ -39,6 +40,7 @@ const ALLOWED_STYLE_PROPS = new Set([
   'min-width',
   'margin-left',
   'margin-right',
+  'vertical-align',
   '--ep-img-ml',
   '--ep-img-mr',
 ]);

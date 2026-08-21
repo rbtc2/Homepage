@@ -195,18 +195,18 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
         <>
           <Sep />
 
-          <Section>표 너비</Section>
+          <Section>표 프리셋</Section>
           <Item
-            label="너비 50%"
-            onClick={() => run(() => editor.chain().focus().setTableWidth('50%').run())}
+            label="좁은 표 (40%)"
+            onClick={() => run(() => editor.chain().focus().setTablePreset('narrow').run())}
           />
           <Item
-            label="너비 75%"
-            onClick={() => run(() => editor.chain().focus().setTableWidth('75%').run())}
+            label="중간 표 (70%)"
+            onClick={() => run(() => editor.chain().focus().setTablePreset('medium').run())}
           />
           <Item
-            label="너비 100%"
-            onClick={() => run(() => editor.chain().focus().setTableWidth('100%').run())}
+            label="전체 너비"
+            onClick={() => run(() => editor.chain().focus().setTablePreset('full').run())}
           />
 
           <Sep />
@@ -221,7 +221,25 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
 
           <Sep />
 
+          <Section>셀 정렬</Section>
+          <Item icon={icons.alignLeft} label="셀 왼쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().setCellAttribute('textAlign', 'left').run())} />
+          <Item icon={icons.alignCenter} label="셀 가운데 정렬"
+            onClick={() => run(() => editor.chain().focus().setCellAttribute('textAlign', 'center').run())} />
+          <Item icon={icons.alignRight} label="셀 오른쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().setCellAttribute('textAlign', 'right').run())} />
+          <Item icon={icons.valignTop} label="셀 위쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().setCellAttribute('verticalAlign', 'top').run())} />
+          <Item icon={icons.valignMiddle} label="셀 세로 가운데"
+            onClick={() => run(() => editor.chain().focus().setCellAttribute('verticalAlign', 'middle').run())} />
+          <Item icon={icons.valignBottom} label="셀 아래쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().setCellAttribute('verticalAlign', 'bottom').run())} />
+
+          <Sep />
+
           <Section>행</Section>
+          <Item icon={icons.headerRow} label="헤더 행 켜기/끄기"
+            onClick={() => run(() => editor.chain().focus().toggleHeaderRow().run())} />
           <Item icon={icons.rowBefore} label="위에 행 삽입"
             onClick={() => run(() => editor.chain().focus().addRowBefore().run())} />
           <Item icon={icons.rowAfter}  label="아래에 행 삽입"
