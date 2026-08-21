@@ -8,7 +8,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
-import { Table, TableRow } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table';
+import { CustomTable } from './CustomTable';
 import { CustomTableCell } from './CustomTableCell';
 import { CustomTableHeader } from './CustomTableHeader';
 import { TextStyle } from '@tiptap/extension-text-style';
@@ -99,7 +100,7 @@ export default function RichEditor({
       }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({ placeholder: '본문을 입력하세요...' }),
-      Table.configure({ resizable: true }),
+      CustomTable.configure({ resizable: true }),
       TableRow,
       CustomTableHeader,
       CustomTableCell,

@@ -42,7 +42,7 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
   const style = typeof window !== 'undefined'
     ? {
         left: Math.max(8, Math.min(pos.x, window.innerWidth  - 220)) + 'px',
-        top:  Math.max(8, Math.min(pos.y, window.innerHeight - 460)) + 'px',
+        top:  Math.max(8, Math.min(pos.y, window.innerHeight - 620)) + 'px',
       }
     : { left: pos.x + 'px', top: pos.y + 'px' };
 
@@ -193,6 +193,32 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
       {/* ── 표 (셀 안에 있을 때만) ── */}
       {inTable && !linkInput && (
         <>
+          <Sep />
+
+          <Section>표 너비</Section>
+          <Item
+            label="너비 50%"
+            onClick={() => run(() => editor.chain().focus().setTableWidth('50%').run())}
+          />
+          <Item
+            label="너비 75%"
+            onClick={() => run(() => editor.chain().focus().setTableWidth('75%').run())}
+          />
+          <Item
+            label="너비 100%"
+            onClick={() => run(() => editor.chain().focus().setTableWidth('100%').run())}
+          />
+
+          <Sep />
+
+          <Section>표 정렬</Section>
+          <Item icon={icons.alignLeft} label="표 왼쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().setTableAlign('left').run())} />
+          <Item icon={icons.alignCenter} label="표 가운데 정렬"
+            onClick={() => run(() => editor.chain().focus().setTableAlign('center').run())} />
+          <Item icon={icons.alignRight} label="표 오른쪽 정렬"
+            onClick={() => run(() => editor.chain().focus().setTableAlign('right').run())} />
+
           <Sep />
 
           <Section>행</Section>

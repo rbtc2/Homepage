@@ -27,12 +27,40 @@
 .nd__body--html table {
   border-collapse: collapse;
   width: 100%;
-  margin: 1.25em 0;
+  max-width: 100%;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  margin-left: 0;
+  margin-right: 0;
   table-layout: auto;
   font-size: 0.9375rem;
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid var(--line);
+}
+
+.ep-content table[data-align="left"],
+.nd__body--html table[data-align="left"] {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.ep-content table[data-align="center"],
+.nd__body--html table[data-align="center"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ep-content table[data-align="right"],
+.nd__body--html table[data-align="right"] {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* 지정 너비가 콘텐츠보다 우선하도록 (100%는 기존 auto 레이아웃 유지) */
+.ep-content table[data-width]:not([data-width="100%"]),
+.nd__body--html table[data-width]:not([data-width="100%"]) {
+  table-layout: fixed;
 }
 
 .ep-content table td,
@@ -86,7 +114,14 @@
 /* 에디터 전용: 표 선택 커서 */
 .ep-content .tableWrapper {
   overflow-x: auto;
+  max-width: 100%;
   cursor: default;
+}
+
+.ep-content .tableWrapper--center,
+.ep-content .tableWrapper--right,
+.ep-content .tableWrapper--left {
+  width: 100%;
 }
 
 .ep-content .resize-cursor {

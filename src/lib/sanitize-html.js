@@ -8,14 +8,14 @@ const ALLOWED_TAGS = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
   'ul', 'ol', 'li',
   'a', 'img', 'div', 'span',
-  'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+  'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
   'blockquote', 'pre', 'code', 'hr', 'sub', 'sup',
   'mark',
 ];
 
 const ALLOWED_ATTR = [
   'href', 'target', 'rel', 'title', 'alt', 'src', 'width', 'height',
-  'class', 'colspan', 'rowspan', 'align', 'download',
+  'class', 'colspan', 'rowspan', 'colwidth', 'align', 'download',
   'data-align', 'data-width', 'data-margin-left', 'data-margin-right',
   'data-file-name',
   'data-cell-bgcolor',
@@ -36,6 +36,9 @@ const ALLOWED_STYLE_PROPS = new Set([
   'width',
   'height',
   'max-width',
+  'min-width',
+  'margin-left',
+  'margin-right',
   '--ep-img-ml',
   '--ep-img-mr',
 ]);

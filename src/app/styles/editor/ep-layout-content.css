@@ -195,6 +195,61 @@
   font-size: 0.875rem;
 }
 
+.ep-tbl-toolbar__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-left: 0.25rem;
+}
+
+.ep-tbl-toolbar__field-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ep-tbl-toolbar__input {
+  width: 3.25rem;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--ink);
+  background: var(--surface);
+  -moz-appearance: textfield;
+}
+
+.ep-tbl-toolbar__input::-webkit-outer-spin-button,
+.ep-tbl-toolbar__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ep-tbl-toolbar__input:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.ep-tbl-toolbar__unit {
+  min-width: 1.75rem;
+  height: 1.6rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ep-tbl-toolbar__unit:hover {
+  color: var(--ink);
+  background: var(--canvas);
+}
+
 /* ── 에디터 본문 영역 ───────────────────────────────────────── */
 .ep-editor-wrap {
   min-height: 500px;

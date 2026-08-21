@@ -11,6 +11,8 @@
   padding: 0.3rem;
   min-width: 196px;
   max-width: 224px;
+  max-height: min(36rem, calc(100vh - 16px));
+  overflow-y: auto;
   user-select: none;
   animation: ecmIn 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
