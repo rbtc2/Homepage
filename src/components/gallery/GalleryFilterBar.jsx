@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { galleryUi } from '@/lib/gallery-ui';
 
 /**
  * 연도 필터 칩 바
@@ -8,17 +9,25 @@ import Link from 'next/link';
  * @param {number} totalCount    - 현재 조건의 전체 게시물 수
  * @param {string} basePath
  */
-export default function GalleryFilterBar({ years, currentYear, totalCount, basePath = '/gallery' }) {
+export default function GalleryFilterBar({
+  years,
+  currentYear,
+  totalCount,
+  basePath = '/gallery',
+  locale = 'ko',
+}) {
+  const ui = galleryUi(locale);
+
   return (
     <div className="gallery-filter">
-      <div className="gallery-filter__chips" role="list" aria-label="연도별 필터">
+      <div className="gallery-filter__chips" role="list" aria-label={ui.filterAria}>
         <Link
           href={basePath}
           className={`gallery-filter__chip${!currentYear ? ' gallery-filter__chip--active' : ''}`}
           aria-current={!currentYear ? 'true' : undefined}
           role="listitem"
         >
-          전체
+          {ui.all}
         </Link>
 
         {years.map((year) => (
@@ -35,10 +44,21 @@ export default function GalleryFilterBar({ years, currentYear, totalCount, baseP
       </div>
 
       <p className="gallery-filter__count">
-        {currentYear
-          ? <><strong>{currentYear}년</strong> · 전체 <strong>{totalCount}</strong>건</>
-          : <>전체 <strong>{totalCount}</strong>건</>
-        }
+        {currentYear ? (
+          <>
+            <strong>{currentYear}{ui.yearSuffix}</strong>
+            {' · '}
+            {ui.countPrefix ? `${ui.countPrefix} ` : null}
+            <strong>{totalCount}</strong>
+            {ui.countSuffix}
+          </>
+        ) : (
+          <>
+            {ui.countPrefix ? `${ui.countPrefix} ` : null}
+            <strong>{totalCount}</strong>
+            {ui.countSuffix}
+          </>
+        )}
       </p>
     </div>
   );

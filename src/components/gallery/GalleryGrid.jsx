@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import GalleryCard from './GalleryCard';
+import { galleryUi } from '@/lib/gallery-ui';
 
 function buildGalleryHref(basePath, page, year) {
   const params = new URLSearchParams();
@@ -9,16 +10,17 @@ function buildGalleryHref(basePath, page, year) {
   return qs ? `${basePath}?${qs}` : basePath;
 }
 
-function GalleryPagination({ page, totalPages, basePath, year }) {
+function GalleryPagination({ page, totalPages, basePath, year, locale = 'ko' }) {
   if (totalPages <= 1) return null;
+  const ui = galleryUi(locale);
 
   return (
-    <nav className="pagination" aria-label="갤러리 페이지 탐색">
+    <nav className="pagination" aria-label={ui.paginationAria}>
       {page > 1 && (
         <Link
           href={buildGalleryHref(basePath, page - 1, year)}
           className="pagination__btn"
-          aria-label="이전 페이지"
+          aria-label={ui.prevPage}
         >
           &lsaquo;
         </Link>
@@ -37,7 +39,7 @@ function GalleryPagination({ page, totalPages, basePath, year }) {
         <Link
           href={buildGalleryHref(basePath, page + 1, year)}
           className="pagination__btn"
-          aria-label="다음 페이지"
+          aria-label={ui.nextPage}
         >
           &rsaquo;
         </Link>
@@ -63,7 +65,10 @@ export default function GalleryGrid({
   totalPages,
   currentYear,
   basePath = '/gallery',
+  locale = 'ko',
 }) {
+  const ui = galleryUi(locale);
+
   if (items.length === 0) {
     return (
       <div className="gallery-empty">
@@ -75,17 +80,17 @@ export default function GalleryGrid({
           </svg>
         </div>
         <p className="gallery-empty__title">
-          {currentYear ? `${currentYear}년 게시물이 없습니다` : '등록된 게시물이 없습니다'}
+          {currentYear ? ui.emptyYear(currentYear) : ui.emptyNone}
         </p>
         <p className="gallery-empty__desc">
-          {currentYear && (
+          {currentYear ? (
             <>
               <Link href={basePath} style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
-                전체 목록
+                {ui.emptyBack}
               </Link>
-              에서 다른 연도를 확인해 보세요.
+              {ui.emptyBackSuffix}
             </>
-          )}
+          ) : null}
         </p>
       </div>
     );
@@ -93,7 +98,7 @@ export default function GalleryGrid({
 
   return (
     <>
-      <div className="gallery-grid" aria-label="갤러리 목록">
+      <div className="gallery-grid" aria-label={ui.listAria}>
         {items.map((post, i) => (
           <GalleryCard
             key={post.id}
@@ -105,6 +110,7 @@ export default function GalleryGrid({
       </div>
 
       <GalleryPagination
+        locale={locale}
         page={page}
         totalPages={totalPages}
         basePath={basePath}

@@ -16,8 +16,13 @@ function today() {
 
 function revalidateGalleryPaths(id) {
   safeRevalidatePath('/gallery');
-  if (id != null && id !== '') safeRevalidatePath(`/gallery/${id}`);
+  safeRevalidatePath('/en/gallery');
+  if (id != null && id !== '') {
+    safeRevalidatePath(`/gallery/${id}`);
+    safeRevalidatePath(`/en/gallery/${id}`);
+  }
   safeRevalidatePath('/');
+  safeRevalidatePath('/en');
 }
 
 export async function createGalleryPost({
@@ -73,6 +78,49 @@ export async function updateGalleryPost(
         created_at: createdAt ?? today(),
         cover_image: coverImage ?? null,
         ...secret.fields,
+      })
+      .eq('id', rowIdForEq(id));
+
+    if (error) return actionFail(error.message);
+    revalidateGalleryPaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
+}
+
+export async function updateGalleryEnglish(id, { title, content }) {
+  try {
+    const titleEn = String(title ?? '').trim();
+    if (!titleEn) return actionFail('영문 제목을 입력해 주세요.');
+    const contentStored = await preparePostContentForStorage(content);
+    if (!contentStored || contentStored === '<p></p>') {
+      return actionFail('영문 본문을 입력해 주세요.');
+    }
+
+    const { error } = await getSupabaseAdmin()
+      .from('gallery')
+      .update({
+        title_en: titleEn,
+        content_en: contentStored,
+      })
+      .eq('id', rowIdForEq(id));
+
+    if (error) return actionFail(error.message);
+    revalidateGalleryPaths(id);
+    return actionOk();
+  } catch (e) {
+    return actionFail(e);
+  }
+}
+
+export async function clearGalleryEnglish(id) {
+  try {
+    const { error } = await getSupabaseAdmin()
+      .from('gallery')
+      .update({
+        title_en: '',
+        content_en: '',
       })
       .eq('id', rowIdForEq(id));
 

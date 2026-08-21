@@ -4,17 +4,47 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { deleteGalleryPost } from './actions';
+import { deleteGalleryPost, clearGalleryEnglish } from './actions';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
+import { assertActionOk } from '@/lib/assert-action-ok';
 
 export default function GalleryClient({ initialPosts }) {
   const router = useRouter();
   const [posts, setPosts] = useState(initialPosts);
+  const [clearingId, setClearingId] = useState(null);
 
   const { deleteTarget, setDeleteTarget, deleting, handleDelete } = useDelete(deleteGalleryPost);
 
   useEffect(() => { setPosts(initialPosts); }, [initialPosts]);
+
+  async function handleClearEnglish(post) {
+    const ok = window.confirm(
+      `「${post.title}」의 영문 제목·본문을 삭제할까요?\n한국어 글은 그대로 두고, 영문 사이트에는 한국어가 다시 보입니다.`
+    );
+    if (!ok) return;
+
+    setClearingId(post.id);
+    try {
+      assertActionOk(await clearGalleryEnglish(post.id));
+      setPosts((curr) =>
+        curr.map((row) =>
+          row.id === post.id
+            ? { ...row, hasEnglish: false, titleEn: '', contentEn: '' }
+            : row
+        )
+      );
+      router.refresh();
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : '영문 삭제에 실패했습니다. 다시 시도해 주세요.';
+      alert(msg);
+    } finally {
+      setClearingId(null);
+    }
+  }
 
   const thisMonth = new Date().toISOString().slice(0, 7);
   const thisMonthCount = posts.filter((p) => p.createdAt?.startsWith(thisMonth)).length;
@@ -45,7 +75,7 @@ export default function GalleryClient({ initialPosts }) {
         </div>
       </div>
 
-      <div className="an-table-wrap">
+      <div className="an-table-wrap an-table-wrap--gallery">
         <table className="an-table">
           <thead>
             <tr>
@@ -83,16 +113,70 @@ export default function GalleryClient({ initialPosts }) {
                   )}
                 </td>
                 <td className="an-table__td an-table__td--title">
-                  <span className="an-table__notice-title">
-                    {post.isSecret ? '🔒 ' : ''}
-                    {post.title}
+                  <span className="an-table__title-row">
+                    <span className="an-table__notice-title">
+                      {post.isSecret ? '🔒 ' : ''}
+                      {post.title}
+                    </span>
+                    {post.hasEnglish ? (
+                      <span className="an-en-badge-wrap">
+                        <Link
+                          href={`/admin/gallery/${post.id}/en`}
+                          className="an-en-badge"
+                          title="영문 수정"
+                        >
+                          EN
+                        </Link>
+                        <button
+                          type="button"
+                          className="an-en-badge-clear"
+                          aria-label="영문 삭제"
+                          title="영문 삭제"
+                          disabled={clearingId === post.id}
+                          onClick={() => handleClearEnglish(post)}
+                        >
+                          {clearingId === post.id ? '…' : '×'}
+                        </button>
+                      </span>
+                    ) : (
+                      <Link
+                        href={`/admin/gallery/${post.id}/en`}
+                        className="an-en-badge an-en-badge--add"
+                        title="영문 작성"
+                      >
+                        +EN
+                      </Link>
+                    )}
                   </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{post.createdAt}</td>
                 <td className="an-table__td an-table__td--views">{post.views.toLocaleString()}</td>
                 <td className="an-table__td an-table__td--actions">
                   <div className="an-actions">
-                    <Link href={`/gallery/${post.id}`} className="an-btn an-btn--sm an-btn--ghost" target="_blank" rel="noopener noreferrer">보기</Link>
+                    <Link
+                      href={`/gallery/${post.id}`}
+                      className="an-btn an-btn--sm an-btn--ghost an-btn--icon"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="새 탭에서 보기"
+                      title="보기"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <path
+                          d="M8 2h4v4M12 2L6.5 7.5"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11 8.2V11a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1h2.8"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </Link>
                     <Link href={`/admin/gallery/${post.id}/edit`} className="an-btn an-btn--sm an-btn--ghost">수정</Link>
                     <button className="an-btn an-btn--sm an-btn--danger-ghost" onClick={() => setDeleteTarget(post)}>삭제</button>
                   </div>

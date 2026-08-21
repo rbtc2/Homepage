@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { galleryUi } from '@/lib/gallery-ui';
 
 /**
  * 갤러리 히어로 섹션 — 최신 1~3개 게시물을 큰 이미지로 노출
@@ -7,11 +8,12 @@ import Image from 'next/image';
  * @param {object[]} items   - 최신 갤러리 게시물 배열 (최대 3)
  * @param {string}   basePath
  */
-export default function GalleryHero({ items, basePath = '/gallery' }) {
+export default function GalleryHero({ items, basePath = '/gallery', locale = 'ko' }) {
+  const ui = galleryUi(locale);
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="gallery-hero" aria-label="주요 갤러리">
+    <section className="gallery-hero" aria-label={ui.heroAria}>
       <div className="gallery-hero__inner">
         <div className="gallery-hero__grid">
           {items.map((post, i) => (
