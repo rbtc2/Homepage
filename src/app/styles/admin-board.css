@@ -167,6 +167,12 @@
   font-weight: 500;
 }
 
+.an-btn--icon {
+  width: 1.85rem;
+  min-width: 1.85rem;
+  padding: 0.3rem 0;
+}
+
 /* ── 테이블 ──────────────────────────────────────────────────── */
 .an-table-wrap {
   background: var(--surface);
@@ -306,6 +312,27 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   line-height: 1.2;
+  text-decoration: none;
+}
+
+a.an-en-badge:hover {
+  background: #0e3d8a;
+  color: #fff;
+}
+
+.an-en-badge--add {
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  letter-spacing: 0.02em;
+}
+
+a.an-en-badge--add:hover {
+  background: rgba(18, 79, 166, 0.06);
+  border-color: var(--brand);
+  color: var(--brand);
 }
 
 .an-en-badge-clear {
@@ -334,8 +361,8 @@
 
 .an-table-wrap--wr-news .an-table__th--actions,
 .an-table-wrap--wr-news .an-table__td--actions {
-  width: 16.5rem;
-  min-width: 16.5rem;
+  width: 11.5rem;
+  min-width: 11.5rem;
 }
 
 .an-table__sub {

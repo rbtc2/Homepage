@@ -152,9 +152,13 @@ export default function WrNewsClient({ initialPosts }) {
                     </span>
                     {post.hasEnglish ? (
                       <span className="an-en-badge-wrap">
-                        <span className="an-en-badge" title="영문 제목·본문이 있습니다">
+                        <Link
+                          href={`/admin/wr-news/${post.id}/en`}
+                          className="an-en-badge"
+                          title="영문 수정"
+                        >
                           EN
-                        </span>
+                        </Link>
                         <button
                           type="button"
                           className="an-en-badge-clear"
@@ -166,7 +170,15 @@ export default function WrNewsClient({ initialPosts }) {
                           {clearingId === post.id ? '…' : '×'}
                         </button>
                       </span>
-                    ) : null}
+                    ) : (
+                      <Link
+                        href={`/admin/wr-news/${post.id}/en`}
+                        className="an-en-badge an-en-badge--add"
+                        title="영문 작성"
+                      >
+                        +EN
+                      </Link>
+                    )}
                   </span>
                 </td>
                 <td className="an-table__td an-table__td--date">{post.createdAt}</td>
@@ -175,20 +187,30 @@ export default function WrNewsClient({ initialPosts }) {
                   <div className="an-actions">
                     <Link
                       href={`/wr-news/${post.id}`}
-                      className="an-btn an-btn--sm an-btn--ghost"
+                      className="an-btn an-btn--sm an-btn--ghost an-btn--icon"
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="새 탭에서 보기"
+                      title="보기"
                     >
-                      보기
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <path
+                          d="M8 2h4v4M12 2L6.5 7.5"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11 8.2V11a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1h2.8"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
                     </Link>
                     <Link href={`/admin/wr-news/${post.id}/edit`} className="an-btn an-btn--sm an-btn--ghost">
                       수정
-                    </Link>
-                    <Link
-                      href={`/admin/wr-news/${post.id}/en`}
-                      className="an-btn an-btn--sm an-btn--ghost"
-                    >
-                      {post.hasEnglish ? '영문 수정' : '영문'}
                     </Link>
                     <button
                       type="button"
