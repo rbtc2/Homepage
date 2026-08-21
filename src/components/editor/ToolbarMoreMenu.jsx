@@ -21,7 +21,13 @@ function Item({ icon, label, active, onClick }) {
   );
 }
 
-export default function ToolbarMoreMenu({ editor }) {
+export default function ToolbarMoreMenu({
+  editor,
+  onFind,
+  onReplace,
+  onPreview,
+  onShortcuts,
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -102,6 +108,42 @@ export default function ToolbarMoreMenu({ editor }) {
             icon={icons.hr}
             label="구분선"
             onClick={() => run(() => editor.chain().focus().setHorizontalRule().run())}
+          />
+          <hr className="ecm__sep" />
+          <p className="ecm__section">편집</p>
+          <Item
+            icon={icons.clearFormat}
+            label="서식 지우기"
+            onClick={() =>
+              run(() => {
+                editor.chain().focus().unsetAllMarks().unsetHighlight().unsetColor().unsetFontSize().unsetTextAlign().run();
+              })
+            }
+          />
+          <Item
+            icon={icons.unlink}
+            label="링크 해제"
+            onClick={() => run(() => editor.chain().focus().unsetLink().run())}
+          />
+          <Item
+            icon={icons.find}
+            label="찾기"
+            onClick={() => run(() => onFind?.())}
+          />
+          <Item
+            icon={icons.find}
+            label="찾기/바꾸기"
+            onClick={() => run(() => onReplace?.())}
+          />
+          <Item
+            icon={icons.preview}
+            label="게시 미리보기"
+            onClick={() => run(() => onPreview?.())}
+          />
+          <Item
+            icon={icons.shortcut}
+            label="단축키 안내"
+            onClick={() => run(() => onShortcuts?.())}
           />
         </div>
       ) : null}

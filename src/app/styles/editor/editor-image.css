@@ -57,6 +57,12 @@
   width: 100%;
 }
 
+.ep-content .ep-img-node-view__stack {
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
 .ep-content .ep-img-node-view__frame {
   position: relative;
   display: inline-block;

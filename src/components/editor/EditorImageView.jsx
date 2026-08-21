@@ -59,8 +59,13 @@ export default function EditorImageView({ node, updateAttributes, selected }) {
 
   const wrapStyle = {
     display: 'flex',
+    flexDirection: 'column',
     width: '100%',
-    justifyContent: ALIGN_JUSTIFY[align] ?? 'center',
+    alignItems: ALIGN_JUSTIFY[align] === 'flex-start'
+      ? 'flex-start'
+      : ALIGN_JUSTIFY[align] === 'flex-end'
+        ? 'flex-end'
+        : 'center',
     paddingLeft: `${marginLeft}px`,
     paddingRight: `${marginRight}px`,
     ['--ep-img-ml']: `${marginLeft}px`,
@@ -76,8 +81,10 @@ export default function EditorImageView({ node, updateAttributes, selected }) {
       data-align={align}
       data-margin-left={String(marginLeft)}
       data-margin-right={String(marginRight)}
+      data-caption={node.attrs.caption || undefined}
       style={wrapStyle}
     >
+      <div className="ep-img-node-view__stack">
       <div className="ep-img-node-view__frame">
         <img
           ref={imgRef}
@@ -99,6 +106,10 @@ export default function EditorImageView({ node, updateAttributes, selected }) {
             <span className="ep-img-resize-handle__dots" aria-hidden="true" />
           </button>
         ) : null}
+      </div>
+      {node.attrs.caption ? (
+        <span className="ep-img-block__caption">{node.attrs.caption}</span>
+      ) : null}
       </div>
     </NodeViewWrapper>
   );

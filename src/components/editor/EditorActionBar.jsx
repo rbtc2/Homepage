@@ -28,6 +28,7 @@ function BackChevron() {
  * @param {() => void} [props.onDraftSave] - 임시저장 (없으면 버튼 숨김)
  * @param {() => void} [props.onDraftLoadOpen] - 임시저장 불러오기 모달 열기
  * @param {boolean} [props.draftSaving]
+ * @param {string} [props.draftHint]
  */
 export default function EditorActionBar({
   backHref,
@@ -38,6 +39,7 @@ export default function EditorActionBar({
   onDraftSave,
   onDraftLoadOpen,
   draftSaving = false,
+  draftHint = '',
 }) {
   return (
     <div className="ep__actionbar">
@@ -48,6 +50,7 @@ export default function EditorActionBar({
         </Link>
         <span className="ep__actionbar-title">{pageTitle}</span>
         <div className="ep__actionbar-btns">
+          {draftHint ? <span className="ep__actionbar-hint">{draftHint}</span> : null}
           <Link href={backHref} className="an-btn an-btn--secondary an-btn--sm">
             취소
           </Link>

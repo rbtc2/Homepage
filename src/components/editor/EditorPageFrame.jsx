@@ -17,6 +17,7 @@ import EditorActionBar from './EditorActionBar';
  * @param {() => void} [props.onDraftSave]
  * @param {() => void} [props.onDraftLoadOpen]
  * @param {boolean} [props.draftSaving]
+ * @param {string} [props.draftHint]
  */
 export default function EditorPageFrame({
   backHref,
@@ -30,6 +31,7 @@ export default function EditorPageFrame({
   onDraftSave,
   onDraftLoadOpen,
   draftSaving,
+  draftHint,
 }) {
   const paperClass = paperClassName ? `ep__paper ${paperClassName}` : 'ep__paper';
 
@@ -44,6 +46,7 @@ export default function EditorPageFrame({
         onDraftSave={onDraftSave}
         onDraftLoadOpen={onDraftLoadOpen}
         draftSaving={draftSaving}
+        draftHint={draftHint}
       />
       <main className="ep__main">
         <div className={paperClass}>{children}</div>

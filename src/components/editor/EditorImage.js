@@ -44,12 +44,21 @@ function normalizeAlign(value) {
   return ALIGNMENTS.has(value) ? value : 'center';
 }
 
+function readCaption(wrap) {
+  if (!wrap) return '';
+  const data = wrap.getAttribute('data-caption');
+  if (data) return data;
+  const el = wrap.querySelector?.('.ep-img-block__caption');
+  return el?.textContent ?? '';
+}
+
 function readWrapAttrs(wrap) {
   if (!wrap) return {};
   return {
     align: normalizeAlign(wrap.getAttribute('data-align')),
     marginLeft: clampMargin(wrap.getAttribute('data-margin-left')),
     marginRight: clampMargin(wrap.getAttribute('data-margin-right')),
+    caption: readCaption(wrap),
   };
 }
 
@@ -172,6 +181,17 @@ export const EditorImage = Image.extend({
         },
         renderHTML: (attrs) => ({ 'data-margin-right': String(clampMargin(attrs.marginRight)) }),
       },
+      caption: {
+        default: '',
+        parseHTML: (el) => {
+          const wrap = el.closest?.('.ep-img-block') ?? (el.classList?.contains('ep-img-block') ? el : null);
+          return readCaption(wrap);
+        },
+        renderHTML: (attrs) => {
+          const caption = String(attrs.caption ?? '').trim();
+          return caption ? { 'data-caption': caption } : {};
+        },
+      },
       width: {
         default: null,
         parseHTML: (el) => {
@@ -189,6 +209,21 @@ export const EditorImage = Image.extend({
 
   parseHTML() {
     return [
+      {
+        tag: 'div.ep-img-block',
+        priority: 70,
+        getAttrs: (el) => {
+          const img = el.querySelector('img');
+          if (!img) return false;
+          return {
+            src: img.getAttribute('src'),
+            alt: img.getAttribute('alt') ?? '',
+            title: img.getAttribute('title'),
+            width: readImageWidth(img),
+            ...readWrapAttrs(el),
+          };
+        },
+      },
       {
         tag: 'div.ep-img-block img',
         priority: 60,
@@ -210,6 +245,7 @@ export const EditorImage = Image.extend({
           src: node.getAttribute('src'),
           alt: node.getAttribute('alt') ?? '',
           title: node.getAttribute('title'),
+          caption: '',
           width: readImageWidth(node),
           align: 'center',
           marginLeft: 0,
@@ -224,6 +260,7 @@ export const EditorImage = Image.extend({
     const marginLeft = clampMargin(node.attrs.marginLeft);
     const marginRight = clampMargin(node.attrs.marginRight);
     const width = clampWidth(node.attrs.width);
+    const caption = String(node.attrs.caption ?? '').trim();
 
     const imgAttrs = {
       src: node.attrs.src,
@@ -238,17 +275,21 @@ export const EditorImage = Image.extend({
       imgAttrs.style = `width:${width}px;height:auto`;
     }
 
-    return [
-      'div',
-      {
-        class: `ep-img-block ep-img-block--${align}`,
-        'data-align': align,
-        'data-margin-left': String(marginLeft),
-        'data-margin-right': String(marginRight),
-        style: `--ep-img-ml:${marginLeft}px;--ep-img-mr:${marginRight}px`,
-      },
-      ['img', imgAttrs],
-    ];
+    const wrapAttrs = {
+      class: `ep-img-block ep-img-block--${align}`,
+      'data-align': align,
+      'data-margin-left': String(marginLeft),
+      'data-margin-right': String(marginRight),
+      style: `--ep-img-ml:${marginLeft}px;--ep-img-mr:${marginRight}px`,
+    };
+    if (caption) wrapAttrs['data-caption'] = caption;
+
+    const children = [['img', imgAttrs]];
+    if (caption) {
+      children.push(['span', { class: 'ep-img-block__caption' }, caption]);
+    }
+
+    return ['div', wrapAttrs, ...children];
   },
 
   addNodeView() {
@@ -308,6 +349,7 @@ export const EditorImage = Image.extend({
               marginLeft: 0,
               marginRight: 0,
               alt: '',
+              caption: '',
               ...attrs,
             },
           }),

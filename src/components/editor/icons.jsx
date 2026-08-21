@@ -68,6 +68,11 @@ const icons = {
       <path d="M4 6h16M10 10h10M4 14h16M10 18h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   ),
+  alignJustify: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
   valignTop: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M4 5h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -274,6 +279,34 @@ const icons = {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  ),
+  specialChar: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M7 8h.01M12 8h.01M17 8h.01M7 12h.01M12 12h.01M17 12h.01M7 16h.01M12 16h.01M17 16h.01" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"/>
+    </svg>
+  ),
+  clearFormat: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 7h11M9 7l-2 12M14 7l-2 12M6 13h8M16 5l5 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  find: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8"/>
+      <path d="M16 16l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    </svg>
+  ),
+  preview: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" strokeWidth="1.7"/>
+      <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.7"/>
+    </svg>
+  ),
+  shortcut: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M7 10h2M11 10h2M15 10h2M9 14h6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
     </svg>
   ),
 };

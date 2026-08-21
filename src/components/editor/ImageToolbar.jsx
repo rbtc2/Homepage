@@ -48,6 +48,8 @@ export default function ImageToolbar({ editor }) {
   const [widthDraft, setWidthDraft] = useState('');
   const [marginLeftDraft, setMarginLeftDraft] = useState(0);
   const [marginRightDraft, setMarginRightDraft] = useState(0);
+  const [altDraft, setAltDraft] = useState('');
+  const [captionDraft, setCaptionDraft] = useState('');
   /** align만 바뀔 때 툴바 active 표시 갱신용 */
   const [, bumpToolbar] = useState(0);
 
@@ -79,6 +81,8 @@ export default function ImageToolbar({ editor }) {
     setWidthDraft(w != null ? String(w) : '');
     setMarginLeftDraft(clampMargin(attrs.marginLeft));
     setMarginRightDraft(clampMargin(attrs.marginRight));
+    setAltDraft(attrs.alt ?? '');
+    setCaptionDraft(attrs.caption ?? '');
     refreshWidth();
   }, [editor, refreshWidth]);
 
@@ -357,6 +361,30 @@ export default function ImageToolbar({ editor }) {
         <ToolbarBtn title="이미지 삭제" onClick={handleDelete}>
           {icons.deleteImage}
         </ToolbarBtn>
+      </div>
+      <div className="ep-img-bubble__meta">
+        <input
+          type="text"
+          className="ep-img-toolbar__text"
+          value={altDraft}
+          placeholder="대체 텍스트 (alt)"
+          aria-label="이미지 대체 텍스트"
+          onFocus={syncDraftsFromNode}
+          onChange={(e) => setAltDraft(e.target.value)}
+          onBlur={() => patchAtSaved({ alt: altDraft })}
+          onKeyDown={(e) => handleInputKeyDown(e, () => patchAtSaved({ alt: altDraft }))}
+        />
+        <input
+          type="text"
+          className="ep-img-toolbar__text"
+          value={captionDraft}
+          placeholder="캡션 (선택)"
+          aria-label="이미지 캡션"
+          onFocus={syncDraftsFromNode}
+          onChange={(e) => setCaptionDraft(e.target.value)}
+          onBlur={() => patchAtSaved({ caption: captionDraft })}
+          onKeyDown={(e) => handleInputKeyDown(e, () => patchAtSaved({ caption: captionDraft }))}
+        />
       </div>
     </BubbleMenu>
   );

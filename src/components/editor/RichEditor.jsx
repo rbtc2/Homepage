@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEditor, EditorContent } from '@tiptap/react';
 import { NodeSelection } from '@tiptap/pm/state';
@@ -41,7 +41,13 @@ import EditorCheckboxField from './EditorCheckboxField';
 import EditorMetaDate from './EditorMetaDate';
 import EditorCoverUrlField from './EditorCoverUrlField';
 import DraftLoadModal from './DraftLoadModal';
+import SpecialCharacterPicker from './SpecialCharacterPicker';
+import FindReplaceBar from './FindReplaceBar';
+import EditorPreviewModal from './EditorPreviewModal';
+import ShortcutHelpModal from './ShortcutHelpModal';
 import { deleteAdminDraft, getAdminDraft, saveAdminDraft } from '@/app/admin/drafts/actions';
+import { cleanPastedHtml } from '@/lib/clean-pasted-html';
+import { getClipboardImageFiles, insertDroppedImages } from './insert-editor-image-file';
 
 /**
  * 공통 리치 텍스트 에디터 페이지
@@ -86,6 +92,26 @@ export default function RichEditor({
   const [draftModalOpen, setDraftModalOpen] = useState(false);
   const [tablePickerOpen, setTablePickerOpen] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
+  const [findOpen, setFindOpen] = useState(false);
+  const [replaceMode, setReplaceMode] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [shortcutOpen, setShortcutOpen] = useState(false);
+  const [draftHint, setDraftHint] = useState('');
+  const [charCount, setCharCount] = useState(0);
+  const findCtl = useRef({ openFind() {}, openReplace() {} });
+  const autoSaveLock = useRef(false);
+  const skipAutoSave = useRef(true);
+
+  findCtl.current = {
+    openFind: () => {
+      setReplaceMode(false);
+      setFindOpen(true);
+    },
+    openReplace: () => {
+      setReplaceMode(true);
+      setFindOpen(true);
+    },
+  };
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -107,7 +133,10 @@ export default function RichEditor({
         autolink: true,
         HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' },
       }),
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right', 'justify'],
+      }),
       Placeholder.configure({ placeholder: '본문을 입력하세요...' }),
       CustomTable.configure({ resizable: true }),
       CustomTableRow,
@@ -120,7 +149,29 @@ export default function RichEditor({
     ],
     content: post?.content ?? '',
     editorProps: {
-      attributes: { class: 'ep-content', spellCheck: 'false' },
+      attributes: { class: 'ep-content', spellCheck: 'true' },
+      transformPastedHTML: (html) => cleanPastedHtml(html),
+      handleDrop: (view, event, _slice, moved) => {
+        if (moved) return false;
+        const files = getClipboardImageFiles(event.dataTransfer);
+        if (files.length === 0) return false;
+        event.preventDefault();
+        const pos = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos;
+        void insertDroppedImages(view, files, pos);
+        return true;
+      },
+      handlePaste: (view, event) => {
+        const files = getClipboardImageFiles(event.clipboardData);
+        if (files.length === 0) return false;
+        const html = event.clipboardData?.getData('text/html') ?? '';
+        const text = event.clipboardData?.getData('text/plain') ?? '';
+        if (html && /<(p|h1|h2|h3|table|ul|ol|div)/i.test(html) && text.trim()) {
+          return false;
+        }
+        event.preventDefault();
+        void insertDroppedImages(view, files);
+        return true;
+      },
       handleDOMEvents: {
         contextmenu: (_view, event) => {
           event.preventDefault();
@@ -129,6 +180,17 @@ export default function RichEditor({
         },
       },
       handleKeyDown: (view, event) => {
+        const mod = event.ctrlKey || event.metaKey;
+        if (mod && event.key.toLowerCase() === 'f') {
+          event.preventDefault();
+          findCtl.current.openFind();
+          return true;
+        }
+        if (mod && event.key.toLowerCase() === 'h') {
+          event.preventDefault();
+          findCtl.current.openReplace();
+          return true;
+        }
         if (document.activeElement?.closest('.ep-img-bubble')) {
           return true;
         }
@@ -209,23 +271,46 @@ export default function RichEditor({
     [editor]
   );
 
-  const handleDraftSave = useCallback(async () => {
-    setDraftSaving(true);
-    try {
-      const saved = await saveAdminDraft({
-        id: draftId,
-        contentType,
-        sourcePostId: post?.id ?? null,
-        payload: buildDraftPayload(),
-      });
-      setDraftId(saved.id);
-      alert('임시저장되었습니다.');
-    } catch {
-      alert('임시저장에 실패했습니다. 다시 시도해 주세요.');
-    } finally {
-      setDraftSaving(false);
-    }
-  }, [draftId, contentType, post?.id, buildDraftPayload]);
+  const persistDraft = useCallback(
+    async ({ silent = false } = {}) => {
+      const html = editor?.getHTML() ?? '';
+      const emptyBody = !html || html === '<p></p>';
+      if (silent && !title.trim() && emptyBody) return null;
+
+      if (silent) {
+        if (autoSaveLock.current) return null;
+        autoSaveLock.current = true;
+      } else {
+        setDraftSaving(true);
+      }
+      try {
+        const saved = await saveAdminDraft({
+          id: draftId,
+          contentType,
+          sourcePostId: post?.id ?? null,
+          payload: buildDraftPayload(),
+        });
+        setDraftId(saved.id);
+        const time = new Date().toLocaleTimeString('ko-KR', {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+        setDraftHint(silent ? `자동 저장 ${time}` : `임시저장 ${time}`);
+        if (!silent) alert('임시저장되었습니다.');
+        return saved;
+      } catch {
+        if (silent) setDraftHint('자동 저장 실패');
+        else alert('임시저장에 실패했습니다. 다시 시도해 주세요.');
+        return null;
+      } finally {
+        if (silent) autoSaveLock.current = false;
+        else setDraftSaving(false);
+      }
+    },
+    [draftId, contentType, post?.id, buildDraftPayload, editor, title]
+  );
+
+  const handleDraftSave = useCallback(() => persistDraft({ silent: false }), [persistDraft]);
 
   const handleDraftLoad = useCallback(
     async (loadDraftId) => {
@@ -244,6 +329,40 @@ export default function RichEditor({
     },
     [contentType, applyDraftPayload]
   );
+
+  useEffect(() => {
+    if (!editor) return undefined;
+    const updateCount = () => setCharCount(editor.getText().length);
+    updateCount();
+    editor.on('update', updateCount);
+    return () => editor.off('update', updateCount);
+  }, [editor]);
+
+  useEffect(() => {
+    skipAutoSave.current = true;
+    const ready = setTimeout(() => {
+      skipAutoSave.current = false;
+    }, 2500);
+    return () => clearTimeout(ready);
+  }, [editor]);
+
+  useEffect(() => {
+    if (!editor || !contentType) return undefined;
+    let timer;
+    const schedule = () => {
+      if (skipAutoSave.current) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        void persistDraft({ silent: true });
+      }, 8000);
+    };
+    editor.on('update', schedule);
+    schedule();
+    return () => {
+      editor.off('update', schedule);
+      clearTimeout(timer);
+    };
+  }, [editor, contentType, persistDraft, title]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) {
@@ -318,6 +437,7 @@ export default function RichEditor({
       onDraftSave={handleDraftSave}
       onDraftLoadOpen={() => setDraftModalOpen(true)}
       draftSaving={draftSaving}
+      draftHint={draftHint}
       footer={
         contextMenu ? (
           <EditorContextMenu
@@ -447,12 +567,20 @@ export default function RichEditor({
           <ToolbarBtn title="오른쪽 정렬" active={editor?.isActive({ textAlign: 'right' })} onClick={() => editor?.chain().focus().setTextAlign('right').run()}>
             {icons.alignRight}
           </ToolbarBtn>
+          <ToolbarBtn title="양쪽 정렬" active={editor?.isActive({ textAlign: 'justify' })} onClick={() => editor?.chain().focus().setTextAlign('justify').run()}>
+            {icons.alignJustify}
+          </ToolbarBtn>
         </div>
 
         <Divider />
 
         <div className="ep-toolbar__group">
           <LinkPicker editor={editor} />
+          {editor?.isActive('link') ? (
+            <ToolbarBtn title="링크 해제" onClick={() => editor.chain().focus().unsetLink().run()}>
+              {icons.unlink}
+            </ToolbarBtn>
+          ) : null}
           <ImagePicker editor={editor} />
           <div className="ep-tbl-wrap">
             <ToolbarBtn title="표 삽입" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
@@ -470,18 +598,32 @@ export default function RichEditor({
           </div>
           <YoutubePicker editor={editor} />
           <AttachmentPicker editor={editor} />
+          <SpecialCharacterPicker editor={editor} />
         </div>
 
         <Divider />
 
         <div className="ep-toolbar__group">
-          <ToolbarMoreMenu editor={editor} />
+          <ToolbarMoreMenu
+            editor={editor}
+            onFind={() => findCtl.current.openFind()}
+            onReplace={() => findCtl.current.openReplace()}
+            onPreview={() => setPreviewOpen(true)}
+            onShortcuts={() => setShortcutOpen(true)}
+          />
         </div>
         </div>
         <TableToolbar editor={editor} />
       </div>
 
+      <FindReplaceBar
+        editor={editor}
+        open={findOpen}
+        replaceMode={replaceMode}
+        onClose={() => setFindOpen(false)}
+      />
       <EditorContent editor={editor} className="ep-editor-wrap" />
+      <p className="ep-editor-status">글자 수 {charCount.toLocaleString('ko-KR')}</p>
       <ImageToolbar editor={editor} />
 
       <DraftLoadModal
@@ -490,6 +632,13 @@ export default function RichEditor({
         onClose={() => setDraftModalOpen(false)}
         onLoad={handleDraftLoad}
       />
+      <EditorPreviewModal
+        open={previewOpen}
+        title={title}
+        html={editor?.getHTML() ?? ''}
+        onClose={() => setPreviewOpen(false)}
+      />
+      <ShortcutHelpModal open={shortcutOpen} onClose={() => setShortcutOpen(false)} />
     </EditorPageFrame>
   );
 }

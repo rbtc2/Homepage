@@ -17,6 +17,7 @@ const ALLOWED_ATTR = [
   'href', 'target', 'rel', 'title', 'alt', 'src', 'width', 'height',
   'class', 'colspan', 'rowspan', 'colwidth', 'align', 'download',
   'data-align', 'data-width', 'data-margin-left', 'data-margin-right',
+  'data-caption',
   'data-file-name',
   'data-cell-bgcolor',
   'data-color',
