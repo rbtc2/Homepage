@@ -8,7 +8,7 @@ const ALLOWED_TAGS = [
   'a', 'img', 'div', 'span',
   'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
   'blockquote', 'pre', 'code', 'hr', 'sub', 'sup',
-  'mark',
+  'mark', 'iframe',
 ];
 
 const ALLOWED_ATTR = [
@@ -22,6 +22,8 @@ const ALLOWED_ATTR = [
   'data-text-align', 'data-vertical-align', 'data-row-height',
   'data-border-top', 'data-border-right', 'data-border-bottom', 'data-border-left',
   'data-indent',
+  'data-youtube-id',
+  'allow', 'allowfullscreen', 'referrerpolicy', 'loading', 'frameborder',
   'style',
   'aria-hidden',
 ];
@@ -85,8 +87,16 @@ const SANITIZE_OPTIONS = {
   allowedSchemesByTag: {
     img: ['http', 'https'],
     a: ['http', 'https', 'mailto', 'tel'],
+    iframe: ['https'],
   },
+  allowedIframeHostnames: [
+    'www.youtube.com',
+    'youtube.com',
+    'www.youtube-nocookie.com',
+    'youtube-nocookie.com',
+  ],
   allowProtocolRelative: false,
+  exclusiveFilter: (frame) => frame.tag === 'iframe' && !frame.attribs?.src,
   transformTags: {
     '*': (tagName, attribs) => {
       const next = { ...attribs };
