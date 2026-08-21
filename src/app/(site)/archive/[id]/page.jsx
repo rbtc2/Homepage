@@ -20,7 +20,6 @@ export default async function ArchiveDetailPage({ params }) {
   const archive = await getArchiveById(id);
   if (!archive) notFound();
   const secretAuth = await getArchiveSecretAuth(id);
-  const isKioskProjectPost = String(id) === '1';
   const board = SECRET_BOARD_CONFIG.archive;
   const canRead = await canReadSecretPost({
     ...secretAuth,
@@ -77,25 +76,6 @@ export default async function ArchiveDetailPage({ params }) {
             ) : (
               <SecretPostGate board="archive" id={id} />
             )}
-            {canRead && isKioskProjectPost ? (
-              <section className="nd-cta" aria-label="프로젝트 참여 안내">
-                <h2 className="nd-cta__title">배리어프리 키오스크 공익 데이터 프로젝트</h2>
-                <p className="nd-cta__desc">
-                  지역별 접근성 정보를 지도 기반으로 확인하고 프로젝트 참여 안내를 받을 수 있습니다.
-                </p>
-                <div className="nd-cta__actions">
-                  <Link href="/projects/barrier-free-kiosk" className="nd-cta__btn nd-cta__btn--primary">
-                    배리어프리 키오스크 지도 보기
-                  </Link>
-                  <Link
-                    href={`mailto:official@worldrights.or.kr?subject=${encodeURIComponent('배리어프리 키오스크 프로젝트 문의')}`}
-                    className="nd-cta__btn nd-cta__btn--ghost"
-                  >
-                    프로젝트 문의하기
-                  </Link>
-                </div>
-              </section>
-            ) : null}
           </article>
 
           <nav className="nd-sibling" aria-label="이전·다음 글">
