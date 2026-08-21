@@ -12,21 +12,26 @@ import { CustomTable } from './CustomTable';
 import { CustomTableRow } from './CustomTableRow';
 import { CustomTableCell } from './CustomTableCell';
 import { CustomTableHeader } from './CustomTableHeader';
-import { TextStyle } from '@tiptap/extension-text-style';
+import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import { EditorImage } from './EditorImage';
 import { EditorAttachment } from './EditorAttachment';
+import { EditorYoutube } from './EditorYoutube';
+import { Indent } from './Indent';
+import { Subscript, Superscript } from './SubSup';
 
 import icons from './icons';
 import { ToolbarBtn, Divider } from './ToolbarBtn';
 import TableGridPicker from './TableGridPicker';
 import ColorPicker from './ColorPicker';
 import HighlightPicker from './HighlightPicker';
+import FontSizePicker from './FontSizePicker';
 import LinkPicker from './LinkPicker';
 import ImagePicker from './ImagePicker';
 import AttachmentPicker from './AttachmentPicker';
+import YoutubePicker from './YoutubePicker';
 import ImageToolbar from './ImageToolbar';
 import TableToolbar from './TableToolbar';
 import EditorContextMenu from './EditorContextMenu';
@@ -91,8 +96,11 @@ export default function RichEditor({
       }),
       Underline,
       TextStyle,
+      FontSize,
       Color,
       Highlight.configure({ multicolor: true }),
+      Subscript,
+      Superscript,
       TiptapLink.configure({
         openOnClick: false,
         autolink: true,
@@ -104,8 +112,10 @@ export default function RichEditor({
       CustomTableRow,
       CustomTableHeader,
       CustomTableCell,
+      Indent,
       EditorImage,
       EditorAttachment,
+      EditorYoutube,
     ],
     content: post?.content ?? '',
     editorProps: {
@@ -404,6 +414,13 @@ export default function RichEditor({
           <ToolbarBtn title="취소선" active={editor?.isActive('strike')} onClick={() => editor?.chain().focus().toggleStrike().run()}>
             {icons.strike}
           </ToolbarBtn>
+          <ToolbarBtn title="아래 첨자" active={editor?.isActive('subscript')} onClick={() => editor?.chain().focus().toggleSubscript().run()}>
+            {icons.subscript}
+          </ToolbarBtn>
+          <ToolbarBtn title="위 첨자" active={editor?.isActive('superscript')} onClick={() => editor?.chain().focus().toggleSuperscript().run()}>
+            {icons.superscript}
+          </ToolbarBtn>
+          <FontSizePicker editor={editor} />
           <ColorPicker editor={editor} />
           <HighlightPicker editor={editor} />
         </div>
@@ -419,6 +436,15 @@ export default function RichEditor({
           </ToolbarBtn>
           <ToolbarBtn title="인용구" active={editor?.isActive('blockquote')} onClick={() => editor?.chain().focus().toggleBlockquote().run()}>
             {icons.blockquote}
+          </ToolbarBtn>
+          <ToolbarBtn title="코드 블록" active={editor?.isActive('codeBlock')} onClick={() => editor?.chain().focus().toggleCodeBlock().run()}>
+            {icons.codeBlock}
+          </ToolbarBtn>
+          <ToolbarBtn title="들여쓰기 (Tab)" onClick={() => editor?.chain().focus().indent().run()}>
+            {icons.indent}
+          </ToolbarBtn>
+          <ToolbarBtn title="내어쓰기 (Shift+Tab)" onClick={() => editor?.chain().focus().outdent().run()}>
+            {icons.outdent}
           </ToolbarBtn>
         </div>
 
@@ -460,6 +486,12 @@ export default function RichEditor({
 
         <div className="ep-toolbar__group">
           <AttachmentPicker editor={editor} />
+        </div>
+
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <YoutubePicker editor={editor} />
         </div>
 
         <Divider />

@@ -1,0 +1,51 @@
+/* ── 글자 크기 드롭다운 (ep-fs-*) ─────────────────────────── */
+.ep-fs-wrap {
+  position: relative;
+}
+
+.ep-fs-btn {
+  min-width: 2.6rem;
+}
+
+.ep-fs-btn__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ep-fs {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 130;
+  min-width: 5.5rem;
+  padding: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(12, 20, 36, 0.13), 0 2px 8px rgba(12, 20, 36, 0.06);
+  animation: dpIn 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ep-fs__item {
+  display: block;
+  width: 100%;
+  padding: 0.35rem 0.65rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ep-fs__item:hover {
+  background: var(--canvas);
+}
+
+.ep-fs__item--on {
+  background: rgba(18, 79, 166, 0.08);
+  color: var(--brand);
+  font-weight: 700;
+}

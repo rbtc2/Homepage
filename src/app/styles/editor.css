@@ -5,6 +5,7 @@
 @import './editor/ep-meta-date.css';
 @import './editor/datepicker.css';
 @import './editor/color-picker.css';
+@import './editor/font-size-picker.css';
 @import './editor/table-grid-picker.css';
 @import './editor/cell-border-picker.css';
 @import './editor/link-picker.css';

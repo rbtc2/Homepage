@@ -77,6 +77,7 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
 
   const inTable    = editor.isActive('table');
   const onImage    = editor.isActive('editorImage');
+  const onYoutube  = editor.isActive('editorYoutube');
   const onLink     = editor.isActive('link');
   const hasSelect  = !editor.state.selection.empty;
   const linkHref   = editor.getAttributes('link').href ?? '';
@@ -127,6 +128,10 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
             onClick={() => run(() => editor.chain().focus().toggleUnderline().run())} />
           <Item icon={icons.strike}    label="취소선"
             onClick={() => run(() => editor.chain().focus().toggleStrike().run())} />
+          <Item icon={icons.subscript} label="아래 첨자"
+            onClick={() => run(() => editor.chain().focus().toggleSubscript().run())} />
+          <Item icon={icons.superscript} label="위 첨자"
+            onClick={() => run(() => editor.chain().focus().toggleSuperscript().run())} />
           <Sep />
         </>
       )}
@@ -143,6 +148,28 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
             onClick={() => run(() => editor.chain().focus().updateEditorImage({ align: 'right' }).run())} />
           <Item icon={icons.deleteImage} label="이미지 삭제" danger
             onClick={() => run(() => editor.chain().focus().deleteSelection().run())} />
+          <Sep />
+        </>
+      )}
+
+      {onYoutube && !linkInput && (
+        <>
+          <Section>동영상</Section>
+          <Item icon={icons.deleteImage} label="영상 삭제" danger
+            onClick={() => run(() => editor.chain().focus().deleteSelection().run())} />
+          <Sep />
+        </>
+      )}
+
+      {!inTable && !onImage && !onYoutube && !linkInput && (
+        <>
+          <Section>문단</Section>
+          <Item icon={icons.indent} label="들여쓰기" shortcut="Tab"
+            onClick={() => run(() => editor.chain().focus().indent().run())} />
+          <Item icon={icons.outdent} label="내어쓰기" shortcut="Shift+Tab"
+            onClick={() => run(() => editor.chain().focus().outdent().run())} />
+          <Item icon={icons.codeBlock} label="코드 블록"
+            onClick={() => run(() => editor.chain().focus().toggleCodeBlock().run())} />
           <Sep />
         </>
       )}

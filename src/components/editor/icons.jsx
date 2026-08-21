@@ -205,6 +205,41 @@ const icons = {
       <path d="M8 8l8 8M16 8l-8 8" stroke="#dc2626" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   ),
+  subscript: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 5l7 9M12 5L5 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M15 17h6v1.2c0 .9-.7 1.6-1.6 1.6H18c-.8 0-1.4.6-1.4 1.4 0 .8.6 1.4 1.4 1.4H21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  superscript: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 8l7 9M12 8L5 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M15 4h6v1.2c0 .9-.7 1.6-1.6 1.6H18c-.8 0-1.4.6-1.4 1.4 0 .8.6 1.4 1.4 1.4H21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  indent: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 6h16M12 12h8M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M4 9.5L8 12l-4 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  outdent: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 6h16M12 12h8M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M8 9.5L4 12l4 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  codeBlock: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M8 8l-4 4 4 4M16 8l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  youtube: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="3" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M10 9.5v5l5-2.5-5-2.5z" fill="currentColor"/>
+    </svg>
+  ),
   attachment: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path

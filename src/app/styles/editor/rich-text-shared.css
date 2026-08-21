@@ -197,3 +197,87 @@
 .ep-content .resize-cursor {
   cursor: col-resize;
 }
+
+/* ── 들여쓰기 ─────────────────────────────────────────────── */
+.ep-content [data-indent="1"],
+.nd__body--html [data-indent="1"] { margin-left: 1.5em; }
+.ep-content [data-indent="2"],
+.nd__body--html [data-indent="2"] { margin-left: 3em; }
+.ep-content [data-indent="3"],
+.nd__body--html [data-indent="3"] { margin-left: 4.5em; }
+.ep-content [data-indent="4"],
+.nd__body--html [data-indent="4"] { margin-left: 6em; }
+.ep-content [data-indent="5"],
+.nd__body--html [data-indent="5"] { margin-left: 7.5em; }
+.ep-content [data-indent="6"],
+.nd__body--html [data-indent="6"] { margin-left: 9em; }
+.ep-content [data-indent="7"],
+.nd__body--html [data-indent="7"] { margin-left: 10.5em; }
+.ep-content [data-indent="8"],
+.nd__body--html [data-indent="8"] { margin-left: 12em; }
+
+/* ── 위/아래 첨자 ─────────────────────────────────────────── */
+.ep-content sub,
+.nd__body--html sub {
+  font-size: 0.75em;
+  vertical-align: sub;
+}
+
+.ep-content sup,
+.nd__body--html sup {
+  font-size: 0.75em;
+  vertical-align: super;
+}
+
+/* ── 코드 ─────────────────────────────────────────────────── */
+.ep-content code,
+.nd__body--html code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.9em;
+  background: var(--canvas);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.ep-content pre,
+.nd__body--html pre {
+  margin: 1em 0;
+  padding: 0.85em 1em;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.ep-content pre code,
+.nd__body--html pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ── 유튜브 임베드 ────────────────────────────────────────── */
+.ep-yt-block {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 1.25em auto;
+  aspect-ratio: 16 / 9;
+  background: #0f172a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ep-yt-block--empty {
+  display: none;
+}
+
+.ep-yt-block__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

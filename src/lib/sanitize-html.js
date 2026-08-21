@@ -10,7 +10,7 @@ const ALLOWED_TAGS = [
   'a', 'img', 'div', 'span',
   'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
   'blockquote', 'pre', 'code', 'hr', 'sub', 'sup',
-  'mark',
+  'mark', 'iframe',
 ];
 
 const ALLOWED_ATTR = [
@@ -22,6 +22,8 @@ const ALLOWED_ATTR = [
   'data-color',
   'data-text-align', 'data-vertical-align', 'data-row-height',
   'data-border-top', 'data-border-right', 'data-border-bottom', 'data-border-left',
+  'data-indent', 'data-youtube-id',
+  'allow', 'allowfullscreen', 'referrerpolicy', 'loading', 'frameborder',
   'style',
   'aria-hidden',
 ];
@@ -41,20 +43,38 @@ const ALLOWED_STYLE_PROPS = new Set([
   'margin-left',
   'margin-right',
   'vertical-align',
+  'font-size',
   '--ep-img-ml',
   '--ep-img-mr',
 ]);
+
+const YOUTUBE_EMBED_SRC =
+  /^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{11}$/;
+
+const FONT_SIZE_DECL = /^font-size:\s*(\d+(?:\.\d+)?)px$/i;
 
 const SANITIZE_CONFIG = {
   ALLOWED_TAGS,
   ALLOWED_ATTR,
   ALLOWED_URI_REGEXP:
     /^(?:(?:https?|mailto|tel):|\/(?!\/)|#|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-  ADD_ATTR: ['target'],
+  ADD_ATTR: ['target', 'allowfullscreen'],
 };
 
 let domPurifyPromise = null;
 let styleHookRegistered = false;
+
+function isAllowedStyleDecl(decl) {
+  const prop = decl.split(':')[0]?.trim().toLowerCase();
+  if (!prop || !ALLOWED_STYLE_PROPS.has(prop)) return false;
+  if (prop === 'font-size') {
+    const match = decl.match(FONT_SIZE_DECL);
+    if (!match) return false;
+    const size = Number(match[1]);
+    return size >= 10 && size <= 72;
+  }
+  return true;
+}
 
 function registerStyleHook(DOMPurify) {
   if (styleHookRegistered) return;
@@ -67,13 +87,18 @@ function registerStyleHook(DOMPurify) {
       .split(';')
       .map((s) => s.trim())
       .filter(Boolean)
-      .filter((decl) => {
-        const prop = decl.split(':')[0]?.trim().toLowerCase();
-        return prop && ALLOWED_STYLE_PROPS.has(prop);
-      })
+      .filter(isAllowedStyleDecl)
       .join('; ');
 
     data.attrValue = filtered;
+  });
+
+  DOMPurify.addHook('uponSanitizeElement', (node, data) => {
+    if (String(data.tagName || '').toLowerCase() !== 'iframe') return;
+    const src = node.getAttribute?.('src') || '';
+    if (!YOUTUBE_EMBED_SRC.test(src)) {
+      node.parentNode?.removeChild(node);
+    }
   });
 }
 
