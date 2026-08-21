@@ -207,14 +207,39 @@ const icons = {
   ),
   subscript: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M5 5l7 9M12 5L5 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M15 17h6v1.2c0 .9-.7 1.6-1.6 1.6H18c-.8 0-1.4.6-1.4 1.4 0 .8.6 1.4 1.4 1.4H21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M4 6l6.5 9M10.5 6L4 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <text x="13" y="20" fontSize="9" fontWeight="800" fill="currentColor">2</text>
     </svg>
   ),
   superscript: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M5 8l7 9M12 8L5 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M15 4h6v1.2c0 .9-.7 1.6-1.6 1.6H18c-.8 0-1.4.6-1.4 1.4 0 .8.6 1.4 1.4 1.4H21" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M4 9l6.5 9M10.5 9L4 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <text x="13" y="9" fontSize="9" fontWeight="800" fill="currentColor">2</text>
+    </svg>
+  ),
+  more: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="6" cy="12" r="1.6" fill="currentColor"/>
+      <circle cx="12" cy="12" r="1.6" fill="currentColor"/>
+      <circle cx="18" cy="12" r="1.6" fill="currentColor"/>
+    </svg>
+  ),
+  tableAlignLeft: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="5" width="12" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M3 10h12M7 5v14" stroke="currentColor" strokeWidth="1.3"/>
+    </svg>
+  ),
+  tableAlignCenter: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="6" y="5" width="12" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M6 10h12M10 5v14" stroke="currentColor" strokeWidth="1.3"/>
+    </svg>
+  ),
+  tableAlignRight: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="9" y="5" width="12" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.7"/>
+      <path d="M9 10h12M13 5v14" stroke="currentColor" strokeWidth="1.3"/>
     </svg>
   ),
   indent: (

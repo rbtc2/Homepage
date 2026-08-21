@@ -49,8 +49,7 @@ function convertWidth(amount, fromUnit, toUnit, editor) {
 }
 
 /**
- * 표(Table) 활성 시에만 렌더링되는 툴바 확장 영역.
- * RichEditor 툴바 끝에 조건부로 마운트됩니다.
+ * 표 선택 시에만 메인 툴바 아래에 붙는 표 전용 도구 줄.
  */
 export default function TableToolbar({ editor }) {
   const [widthDraft, setWidthDraft] = useState('100');
@@ -154,8 +153,7 @@ export default function TableToolbar({ editor }) {
   const max = widthUnit === '%' ? MAX_TABLE_PERCENT : MAX_TABLE_PX;
 
   return (
-    <>
-      <Divider />
+    <div className="ep-tbl-bar" role="toolbar" aria-label="표 서식">
       <div className="ep-toolbar__group">
         {TABLE_PRESET_KEYS.map((key) => (
           <ToolbarBtn
@@ -203,31 +201,33 @@ export default function TableToolbar({ editor }) {
         </label>
       </div>
       <Divider />
-      <div className="ep-toolbar__group">
+      <div className="ep-tbl-toolbar__cluster">
+        <span className="ep-tbl-toolbar__caption">표</span>
         <ToolbarBtn
           title="표 왼쪽 정렬"
           active={align === 'left'}
           onClick={() => editor.chain().focus().setTableAlign('left').run()}
         >
-          {icons.alignLeft}
+          {icons.tableAlignLeft}
         </ToolbarBtn>
         <ToolbarBtn
           title="표 가운데 정렬"
           active={align === 'center'}
           onClick={() => editor.chain().focus().setTableAlign('center').run()}
         >
-          {icons.alignCenter}
+          {icons.tableAlignCenter}
         </ToolbarBtn>
         <ToolbarBtn
           title="표 오른쪽 정렬"
           active={align === 'right'}
           onClick={() => editor.chain().focus().setTableAlign('right').run()}
         >
-          {icons.alignRight}
+          {icons.tableAlignRight}
         </ToolbarBtn>
       </div>
       <Divider />
-      <div className="ep-toolbar__group">
+      <div className="ep-tbl-toolbar__cluster">
+        <span className="ep-tbl-toolbar__caption">셀</span>
         <ToolbarBtn
           title="셀 왼쪽 정렬"
           active={cellTextAlign === 'left'}
@@ -249,9 +249,6 @@ export default function TableToolbar({ editor }) {
         >
           {icons.alignRight}
         </ToolbarBtn>
-      </div>
-      <Divider />
-      <div className="ep-toolbar__group">
         <ToolbarBtn
           title="셀 위쪽 정렬"
           active={cellVerticalAlign === 'top'}
@@ -325,16 +322,10 @@ export default function TableToolbar({ editor }) {
       <div className="ep-toolbar__group">
         <ToolbarBtn title="셀 병합" disabled={!editor.can().mergeCells()} onClick={() => editor.chain().focus().mergeCells().run()}>{icons.mergeCells}</ToolbarBtn>
         <ToolbarBtn title="셀 분리" disabled={!editor.can().splitCell()}  onClick={() => editor.chain().focus().splitCell().run()}>{icons.splitCell}</ToolbarBtn>
-      </div>
-      <Divider />
-      <div className="ep-toolbar__group">
         <ToolbarBtn title="표 삭제" onClick={() => editor.chain().focus().deleteTable().run()}>{icons.deleteTable}</ToolbarBtn>
-      </div>
-      <Divider />
-      <div className="ep-toolbar__group">
         <CellColorPicker editor={editor} />
         <CellBorderPicker editor={editor} />
       </div>
-    </>
+    </div>
   );
 }

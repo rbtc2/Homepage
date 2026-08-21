@@ -32,6 +32,7 @@ import LinkPicker from './LinkPicker';
 import ImagePicker from './ImagePicker';
 import AttachmentPicker from './AttachmentPicker';
 import YoutubePicker from './YoutubePicker';
+import ToolbarMoreMenu from './ToolbarMoreMenu';
 import ImageToolbar from './ImageToolbar';
 import TableToolbar from './TableToolbar';
 import EditorContextMenu from './EditorContextMenu';
@@ -368,7 +369,8 @@ export default function RichEditor({
         />
       )}
 
-      <div className="ep-toolbar" role="toolbar" aria-label="텍스트 서식">
+      <div className="ep-toolbar-stack">
+        <div className="ep-toolbar" role="toolbar" aria-label="텍스트 서식">
         <div className="ep-toolbar__group">
           <ToolbarBtn title="실행 취소 (Ctrl+Z)" disabled={!editor?.can().undo()} onClick={() => editor?.chain().focus().undo().run()}>
             {icons.undo}
@@ -402,6 +404,7 @@ export default function RichEditor({
         <Divider />
 
         <div className="ep-toolbar__group">
+          <FontSizePicker editor={editor} />
           <ToolbarBtn title="굵게 (Ctrl+B)" active={editor?.isActive('bold')} onClick={() => editor?.chain().focus().toggleBold().run()}>
             {icons.bold}
           </ToolbarBtn>
@@ -411,16 +414,6 @@ export default function RichEditor({
           <ToolbarBtn title="밑줄 (Ctrl+U)" active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>
             {icons.underline}
           </ToolbarBtn>
-          <ToolbarBtn title="취소선" active={editor?.isActive('strike')} onClick={() => editor?.chain().focus().toggleStrike().run()}>
-            {icons.strike}
-          </ToolbarBtn>
-          <ToolbarBtn title="아래 첨자" active={editor?.isActive('subscript')} onClick={() => editor?.chain().focus().toggleSubscript().run()}>
-            {icons.subscript}
-          </ToolbarBtn>
-          <ToolbarBtn title="위 첨자" active={editor?.isActive('superscript')} onClick={() => editor?.chain().focus().toggleSuperscript().run()}>
-            {icons.superscript}
-          </ToolbarBtn>
-          <FontSizePicker editor={editor} />
           <ColorPicker editor={editor} />
           <HighlightPicker editor={editor} />
         </div>
@@ -433,12 +426,6 @@ export default function RichEditor({
           </ToolbarBtn>
           <ToolbarBtn title="번호 매기기 목록" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
             {icons.orderedList}
-          </ToolbarBtn>
-          <ToolbarBtn title="인용구" active={editor?.isActive('blockquote')} onClick={() => editor?.chain().focus().toggleBlockquote().run()}>
-            {icons.blockquote}
-          </ToolbarBtn>
-          <ToolbarBtn title="코드 블록" active={editor?.isActive('codeBlock')} onClick={() => editor?.chain().focus().toggleCodeBlock().run()}>
-            {icons.codeBlock}
           </ToolbarBtn>
           <ToolbarBtn title="들여쓰기 (Tab)" onClick={() => editor?.chain().focus().indent().run()}>
             {icons.indent}
@@ -465,38 +452,8 @@ export default function RichEditor({
         <Divider />
 
         <div className="ep-toolbar__group">
-          <ToolbarBtn title="구분선" onClick={() => editor?.chain().focus().setHorizontalRule().run()}>
-            {icons.hr}
-          </ToolbarBtn>
-        </div>
-
-        <Divider />
-
-        <div className="ep-toolbar__group">
           <LinkPicker editor={editor} />
-        </div>
-
-        <Divider />
-
-        <div className="ep-toolbar__group">
           <ImagePicker editor={editor} />
-        </div>
-
-        <Divider />
-
-        <div className="ep-toolbar__group">
-          <AttachmentPicker editor={editor} />
-        </div>
-
-        <Divider />
-
-        <div className="ep-toolbar__group">
-          <YoutubePicker editor={editor} />
-        </div>
-
-        <Divider />
-
-        <div className="ep-toolbar__group">
           <div className="ep-tbl-wrap">
             <ToolbarBtn title="표 삽입" active={tablePickerOpen} onClick={() => setTablePickerOpen((o) => !o)}>
               {icons.table}
@@ -511,8 +468,16 @@ export default function RichEditor({
               />
             )}
           </div>
+          <YoutubePicker editor={editor} />
+          <AttachmentPicker editor={editor} />
         </div>
 
+        <Divider />
+
+        <div className="ep-toolbar__group">
+          <ToolbarMoreMenu editor={editor} />
+        </div>
+        </div>
         <TableToolbar editor={editor} />
       </div>
 

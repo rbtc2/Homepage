@@ -13,9 +13,12 @@
     padding: 1.25rem 1.25rem 2rem;
   }
 
+  .ep-toolbar-stack {
+    top: 3rem;
+  }
+
   .ep-toolbar {
     padding: 0.375rem 0.75rem;
-    top: 3rem;
   }
 
   .ep__actionbar-title {

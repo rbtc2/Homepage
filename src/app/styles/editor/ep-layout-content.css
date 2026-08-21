@@ -118,6 +118,13 @@
 }
 
 /* ── 툴바 ───────────────────────────────────────────────────── */
+.ep-toolbar-stack {
+  position: sticky;
+  top: 3.4rem;
+  z-index: 10;
+  background: #fafbfc;
+}
+
 .ep-toolbar {
   display: flex;
   align-items: center;
@@ -126,9 +133,6 @@
   padding: 0.5rem 1rem;
   border-bottom: none;
   background: #fafbfc;
-  position: sticky;
-  top: 3.4rem;
-  z-index: 10;
 }
 
 .ep-toolbar__group {
@@ -193,6 +197,49 @@
 
 .ep-toolbar__label--h1 {
   font-size: 0.875rem;
+}
+
+.ep-more-wrap {
+  position: relative;
+}
+
+.ep-more {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 130;
+  min-width: 11.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(12, 20, 36, 0.13), 0 2px 8px rgba(12, 20, 36, 0.06);
+  padding: 0.3rem;
+  animation: dpIn 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ep-tbl-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.125rem;
+  padding: 0.35rem 1rem 0.5rem;
+  border-top: 1px solid var(--line);
+  background: #f4f6f8;
+}
+
+.ep-tbl-toolbar__cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.ep-tbl-toolbar__caption {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 0 0.35rem 0 0.15rem;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
 }
 
 .ep-tbl-toolbar__field {

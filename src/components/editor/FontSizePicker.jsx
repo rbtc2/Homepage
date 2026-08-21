@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 export const FONT_SIZE_PRESETS = [
-  { value: null, label: '본문' },
+  { value: null, label: '기본' },
   { value: '12px', label: '12' },
   { value: '14px', label: '14' },
   { value: '16px', label: '16' },
@@ -27,7 +27,7 @@ export default function FontSizePicker({ editor }) {
   const current = normalizeSize(editor?.getAttributes('textStyle')?.fontSize);
   const currentLabel =
     FONT_SIZE_PRESETS.find((item) => item.value === current)?.label ??
-    (current ? current.replace('px', '') : '본문');
+    (current ? current.replace('px', '') : '기본');
 
   useEffect(() => {
     const handler = (e) => {

@@ -239,11 +239,11 @@ export default function EditorContextMenu({ editor, pos, onClose }) {
           <Sep />
 
           <Section>표 정렬</Section>
-          <Item icon={icons.alignLeft} label="표 왼쪽 정렬"
+          <Item icon={icons.tableAlignLeft} label="표 왼쪽 정렬"
             onClick={() => run(() => editor.chain().focus().setTableAlign('left').run())} />
-          <Item icon={icons.alignCenter} label="표 가운데 정렬"
+          <Item icon={icons.tableAlignCenter} label="표 가운데 정렬"
             onClick={() => run(() => editor.chain().focus().setTableAlign('center').run())} />
-          <Item icon={icons.alignRight} label="표 오른쪽 정렬"
+          <Item icon={icons.tableAlignRight} label="표 오른쪽 정렬"
             onClick={() => run(() => editor.chain().focus().setTableAlign('right').run())} />
 
           <Sep />
