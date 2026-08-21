@@ -1,7 +1,6 @@
 import HeroBanner from '@/components/HeroBanner';
 import NoticeStrip from '@/components/NoticeStrip';
 import HomeWrNewsBlock from '@/components/home/HomeWrNewsBlock';
-import EnComingSoonBanner from '@/components/en/EnComingSoonBanner';
 
 export const revalidate = 60;
 
@@ -14,7 +13,6 @@ export const metadata = {
 export default function EnHomePage() {
   return (
     <>
-      <EnComingSoonBanner />
       <HeroBanner />
       <NoticeStrip locale="en" />
       <main className="main main--flush" role="main">

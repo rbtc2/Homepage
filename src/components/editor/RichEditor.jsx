@@ -525,13 +525,25 @@ export default function RichEditor({
           >
             <span className="ep-toolbar__label">본문</span>
           </ToolbarBtn>
-          <ToolbarBtn title="제목 1" active={editor?.isActive('heading', { level: 1 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}>
+          <ToolbarBtn
+            title="제목 1"
+            active={editor?.isActive('heading', { level: 1 })}
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+          >
             <span className="ep-toolbar__label ep-toolbar__label--h1">H1</span>
           </ToolbarBtn>
-          <ToolbarBtn title="제목 2" active={editor?.isActive('heading', { level: 2 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>
+          <ToolbarBtn
+            title="제목 2"
+            active={editor?.isActive('heading', { level: 2 })}
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+          >
             <span className="ep-toolbar__label">H2</span>
           </ToolbarBtn>
-          <ToolbarBtn title="제목 3" active={editor?.isActive('heading', { level: 3 })} onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>
+          <ToolbarBtn
+            title="제목 3"
+            active={editor?.isActive('heading', { level: 3 })}
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+          >
             <span className="ep-toolbar__label">H3</span>
           </ToolbarBtn>
         </div>
@@ -540,13 +552,25 @@ export default function RichEditor({
 
         <div className="ep-toolbar__group">
           <FontSizePicker editor={editor} />
-          <ToolbarBtn title="굵게 (Ctrl+B)" active={editor?.isActive('bold')} onClick={() => editor?.chain().focus().toggleBold().run()}>
+          <ToolbarBtn
+            title="굵게 (Ctrl+B)"
+            active={editor?.isActive('bold')}
+            onClick={() => editor?.chain().focus().toggleBold().run()}
+          >
             {icons.bold}
           </ToolbarBtn>
-          <ToolbarBtn title="기울임 (Ctrl+I)" active={editor?.isActive('italic')} onClick={() => editor?.chain().focus().toggleItalic().run()}>
+          <ToolbarBtn
+            title="기울임 (Ctrl+I)"
+            active={editor?.isActive('italic')}
+            onClick={() => editor?.chain().focus().toggleItalic().run()}
+          >
             {icons.italic}
           </ToolbarBtn>
-          <ToolbarBtn title="밑줄 (Ctrl+U)" active={editor?.isActive('underline')} onClick={() => editor?.chain().focus().toggleUnderline().run()}>
+          <ToolbarBtn
+            title="밑줄 (Ctrl+U)"
+            active={editor?.isActive('underline')}
+            onClick={() => editor?.chain().focus().toggleUnderline().run()}
+          >
             {icons.underline}
           </ToolbarBtn>
           <ColorPicker editor={editor} />
@@ -556,10 +580,18 @@ export default function RichEditor({
         <Divider />
 
         <div className="ep-toolbar__group">
-          <ToolbarBtn title="글머리 기호 목록" active={editor?.isActive('bulletList')} onClick={() => editor?.chain().focus().toggleBulletList().run()}>
+          <ToolbarBtn
+            title="글머리 기호 목록"
+            active={editor?.isActive('bulletList')}
+            onClick={() => editor?.chain().focus().toggleBulletList().run()}
+          >
             {icons.bulletList}
           </ToolbarBtn>
-          <ToolbarBtn title="번호 매기기 목록" active={editor?.isActive('orderedList')} onClick={() => editor?.chain().focus().toggleOrderedList().run()}>
+          <ToolbarBtn
+            title="번호 매기기 목록"
+            active={editor?.isActive('orderedList')}
+            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+          >
             {icons.orderedList}
           </ToolbarBtn>
           <ToolbarBtn title="들여쓰기 (Tab)" onClick={() => editor?.chain().focus().indent().run()}>
@@ -573,16 +605,32 @@ export default function RichEditor({
         <Divider />
 
         <div className="ep-toolbar__group">
-          <ToolbarBtn title="왼쪽 정렬" active={editor?.isActive({ textAlign: 'left' })} onClick={() => editor?.chain().focus().setTextAlign('left').run()}>
+          <ToolbarBtn
+            title="왼쪽 정렬"
+            active={editor?.isActive({ textAlign: 'left' })}
+            onClick={() => editor?.chain().focus().setTextAlign('left').run()}
+          >
             {icons.alignLeft}
           </ToolbarBtn>
-          <ToolbarBtn title="가운데 정렬" active={editor?.isActive({ textAlign: 'center' })} onClick={() => editor?.chain().focus().setTextAlign('center').run()}>
+          <ToolbarBtn
+            title="가운데 정렬"
+            active={editor?.isActive({ textAlign: 'center' })}
+            onClick={() => editor?.chain().focus().setTextAlign('center').run()}
+          >
             {icons.alignCenter}
           </ToolbarBtn>
-          <ToolbarBtn title="오른쪽 정렬" active={editor?.isActive({ textAlign: 'right' })} onClick={() => editor?.chain().focus().setTextAlign('right').run()}>
+          <ToolbarBtn
+            title="오른쪽 정렬"
+            active={editor?.isActive({ textAlign: 'right' })}
+            onClick={() => editor?.chain().focus().setTextAlign('right').run()}
+          >
             {icons.alignRight}
           </ToolbarBtn>
-          <ToolbarBtn title="양쪽 정렬" active={editor?.isActive({ textAlign: 'justify' })} onClick={() => editor?.chain().focus().setTextAlign('justify').run()}>
+          <ToolbarBtn
+            title="양쪽 정렬"
+            active={editor?.isActive({ textAlign: 'justify' })}
+            onClick={() => editor?.chain().focus().setTextAlign('justify').run()}
+          >
             {icons.alignJustify}
           </ToolbarBtn>
         </div>

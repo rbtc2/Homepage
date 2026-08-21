@@ -320,8 +320,20 @@ export default function TableToolbar({ editor }) {
       </div>
       <Divider />
       <div className="ep-toolbar__group">
-        <ToolbarBtn title="셀 병합" disabled={!editor.can().mergeCells()} onClick={() => editor.chain().focus().mergeCells().run()}>{icons.mergeCells}</ToolbarBtn>
-        <ToolbarBtn title="셀 분리" disabled={!editor.can().splitCell()}  onClick={() => editor.chain().focus().splitCell().run()}>{icons.splitCell}</ToolbarBtn>
+        <ToolbarBtn
+          title="셀 병합"
+          disabled={!editor.can().mergeCells()}
+          onClick={() => editor.chain().focus().mergeCells().run()}
+        >
+          {icons.mergeCells}
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="셀 분리"
+          disabled={!editor.can().splitCell()}
+          onClick={() => editor.chain().focus().splitCell().run()}
+        >
+          {icons.splitCell}
+        </ToolbarBtn>
         <ToolbarBtn title="표 삭제" onClick={() => editor.chain().focus().deleteTable().run()}>{icons.deleteTable}</ToolbarBtn>
         <CellColorPicker editor={editor} />
         <CellBorderPicker editor={editor} />

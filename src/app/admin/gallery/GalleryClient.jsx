@@ -9,6 +9,28 @@ import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { assertActionOk } from '@/lib/assert-action-ok';
 
+const THUMB_FRAME_STYLE = {
+  width: '2.5rem',
+  height: '1.75rem',
+  borderRadius: '2px',
+  overflow: 'hidden',
+  background: 'var(--canvas)',
+  flexShrink: 0,
+  position: 'relative',
+};
+
+const THUMB_EMPTY_STYLE = {
+  width: '2.5rem',
+  height: '1.75rem',
+  borderRadius: '2px',
+  background: 'var(--canvas)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--line)',
+  flexShrink: 0,
+};
+
 export default function GalleryClient({ initialPosts }) {
   const router = useRouter();
   const [posts, setPosts] = useState(initialPosts);
@@ -93,7 +115,7 @@ export default function GalleryClient({ initialPosts }) {
                 <td className="an-table__td an-table__td--num">{posts.length - idx}</td>
                 <td className="an-table__td" style={{ padding: '0.5rem 0.75rem' }}>
                   {post.coverImage ? (
-                    <div style={{ width: '2.5rem', height: '1.75rem', borderRadius: '2px', overflow: 'hidden', background: 'var(--canvas)', flexShrink: 0, position: 'relative' }}>
+                    <div style={THUMB_FRAME_STYLE}>
                       <Image
                         src={post.coverImage}
                         alt=""
@@ -103,7 +125,7 @@ export default function GalleryClient({ initialPosts }) {
                       />
                     </div>
                   ) : (
-                    <div style={{ width: '2.5rem', height: '1.75rem', borderRadius: '2px', background: 'var(--canvas)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--line)', flexShrink: 0 }}>
+                    <div style={THUMB_EMPTY_STYLE}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
                         <circle cx="8.5" cy="10.5" r="1.5" stroke="currentColor" strokeWidth="1.5" />

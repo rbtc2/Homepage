@@ -88,7 +88,7 @@ export default async function ArchiveDetailPage({ params }) {
                     배리어프리 키오스크 지도 보기
                   </Link>
                   <Link
-                    href="mailto:official@worldrights.or.kr?subject=%EB%B0%B0%EB%A6%AC%EC%96%B4%ED%94%84%EB%A6%AC%20%ED%82%A4%EC%98%A4%EC%8A%A4%ED%81%AC%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EB%AC%B8%EC%9D%98"
+                    href={`mailto:official@worldrights.or.kr?subject=${encodeURIComponent('배리어프리 키오스크 프로젝트 문의')}`}
                     className="nd-cta__btn nd-cta__btn--ghost"
                   >
                     프로젝트 문의하기
