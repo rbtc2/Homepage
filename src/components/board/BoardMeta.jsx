@@ -26,9 +26,9 @@ const COPY = {
     ),
     clear: 'Clear',
     clearAria: 'Clear search',
-    all: (count) => (
+    all: (count, unit = 'posts') => (
       <>
-        <strong>{count}</strong> posts
+        <strong>{count}</strong> {unit}
       </>
     ),
   },
@@ -41,6 +41,7 @@ export default function BoardMeta({
   searchCount,
   allCount,
   locale = 'ko',
+  enAllUnit = 'posts',
 }) {
   const ui = COPY[locale] ?? COPY.ko;
 
@@ -59,7 +60,7 @@ export default function BoardMeta({
           </Link>
         </span>
       ) : (
-        <span className="notice-board__count">{ui.all(allCount)}</span>
+        <span className="notice-board__count">{ui.all(allCount, locale === 'en' ? enAllUnit : undefined)}</span>
       )}
     </div>
   );

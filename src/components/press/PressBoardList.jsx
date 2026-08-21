@@ -1,10 +1,16 @@
 import Link from 'next/link';
 import HighlightedText from '@/components/board/HighlightedText';
+import { pressUi } from '@/lib/press-ui';
 
-/**
- * 언론보도 카드형 목록 (외부 기사 메타 중심)
- */
-export default function PressBoardList({ rows, basePath, isSearching, query, emptyText }) {
+export default function PressBoardList({
+  rows,
+  basePath,
+  isSearching,
+  query,
+  locale = 'ko',
+}) {
+  const ui = pressUi(locale);
+
   if (rows.length === 0) {
     return (
       <div className="press-empty">
@@ -17,19 +23,19 @@ export default function PressBoardList({ rows, basePath, isSearching, query, emp
         </span>
         {isSearching ? (
           <>
-            <p className="press-empty__title">검색 결과가 없습니다</p>
+            <p className="press-empty__title">{ui.emptySearchTitle}</p>
             <p className="press-empty__desc">
-              &ldquo;{query}&rdquo;에 해당하는 {emptyText} 찾지 못했습니다.
+              {ui.emptySearchLead(query)}
               <br />
-              다른 검색어를 입력하거나{' '}
+              {ui.emptySearchHint}{' '}
               <Link href={basePath} className="press-empty__link">
-                전체 목록
+                {ui.emptySearchBack}
               </Link>
-              을 확인하세요.
+              {ui.emptySearchBackSuffix}
             </p>
           </>
         ) : (
-          <p className="press-empty__title">등록된 언론보도가 없습니다</p>
+          <p className="press-empty__title">{ui.emptyNone}</p>
         )}
       </div>
     );
@@ -38,20 +44,20 @@ export default function PressBoardList({ rows, basePath, isSearching, query, emp
   return (
     <ul className="press-grid" role="list">
       {rows.map((item) => {
-        const featured = item.isFeatured && !isSearching;
-        const excerpt = item.summary?.trim() || '요약이 없습니다. 상세에서 원문을 확인하세요.';
+        const featured = Boolean(item.isFeatured) && !isSearching;
+        const excerpt = item.summary?.trim() || ui.excerptFallback;
         return (
           <li key={item.id}>
             <article className={`press-card${featured ? ' press-card--featured' : ''}`}>
               <div className="press-card__main">
                 <p className="press-card__meta">
-                  {featured && <span className="press-card__badge">대표</span>}
+                  {featured ? <span className="press-card__badge">{ui.featured}</span> : null}
                   <span className="press-card__source">{item.sourceName}</span>
                   <span className="press-card__sep" aria-hidden="true">
                     ·
                   </span>
                   <time className="press-card__date" dateTime={item.publishedAt}>
-                    게재 {item.publishedAt}
+                    {ui.published(item.publishedAt)}
                   </time>
                 </p>
                 <h2 className="press-card__title">
@@ -62,7 +68,7 @@ export default function PressBoardList({ rows, basePath, isSearching, query, emp
                 </h2>
                 <p className="press-card__excerpt">
                   {item.isSecret
-                    ? '비밀 게시글입니다. 비밀번호 입력 후 내용을 확인할 수 있습니다.'
+                    ? ui.secretExcerpt
                     : isSearching
                       ? <HighlightedText text={excerpt} query={query} />
                       : excerpt}

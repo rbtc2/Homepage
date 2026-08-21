@@ -3,6 +3,7 @@ import BoardMeta from '@/components/board/BoardMeta';
 import BoardPagination from '@/components/board/BoardPagination';
 import PressBoardList from '@/components/press/PressBoardList';
 import { getFeaturedPress, getPressPage, searchPressPage } from '@/lib/press-coverage';
+import { pressUi } from '@/lib/press-ui';
 import { addRowNums, calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '언론보도 | 국제인권연대 월드라이츠(WORLD RIGHTS)' };
@@ -14,6 +15,7 @@ export default async function PressPage({ searchParams }) {
   const { page: pageParam, q: rawQuery } = await searchParams;
   const query = rawQuery?.trim() ?? '';
   const page = Math.max(1, Number(pageParam) || 1);
+  const ui = pressUi('ko');
 
   const isSearching = query.length > 0;
 
@@ -43,38 +45,40 @@ export default async function PressPage({ searchParams }) {
   }
 
   return (
-    <>
-      <main role="main">
-        {/* 페이지 헤더 */}
-        <div className="page-header">
-          <div className="page-header__inner">
-            <p className="page-header__label">단체 활동</p>
-            <h1 className="page-header__title">언론보도</h1>
-          </div>
+    <main role="main">
+      <div className="page-header">
+        <div className="page-header__inner">
+          <p className="page-header__label">{ui.sectionLabel}</p>
+          <h1 className="page-header__title">{ui.title}</h1>
         </div>
-        <div className="notice-board press-board">
-          <div className="notice-board__inner">
-            <div className="notice-board__toolbar">
-              <BoardMeta
-                basePath={BASE}
-                isSearching={isSearching}
-                query={query}
-                searchCount={totalCount}
-                allCount={allCount}
-              />
-              <BoardSearchForm basePath={BASE} ariaLabel="언론보도 검색" defaultValue={query} />
-            </div>
-            <PressBoardList
-              rows={rows}
+      </div>
+      <div className="notice-board press-board">
+        <div className="notice-board__inner">
+          <div className="notice-board__toolbar">
+            <BoardMeta
               basePath={BASE}
               isSearching={isSearching}
               query={query}
-              emptyText="언론보도를"
+              searchCount={totalCount}
+              allCount={allCount}
             />
-            <BoardPagination page={page} totalPages={totalPages} basePath={BASE} query={query} />
+            <BoardSearchForm
+              basePath={BASE}
+              ariaLabel={ui.searchAria}
+              placeholder={ui.searchPlaceholder}
+              submitLabel={ui.searchSubmit}
+              defaultValue={query}
+            />
           </div>
+          <PressBoardList
+            rows={rows}
+            basePath={BASE}
+            isSearching={isSearching}
+            query={query}
+          />
+          <BoardPagination page={page} totalPages={totalPages} basePath={BASE} query={query} />
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

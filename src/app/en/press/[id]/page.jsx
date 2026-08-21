@@ -1,13 +1,16 @@
-import EnPendingPage from '@/components/en/EnPendingPage';
-import SourcePage from '@/app/(site)/press/[id]/page';
+import PressDetailView from '@/components/press/PressDetailView';
+import { getPressById } from '@/lib/press-coverage';
 
 export const revalidate = 3600;
-export { generateMetadata } from '@/app/(site)/press/[id]/page';
 
-export default async function Page(props) {
-  return (
-    <EnPendingPage>
-      <SourcePage {...props} />
-    </EnPendingPage>
-  );
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const row = await getPressById(id);
+  if (!row) return { title: 'Press | WORLD RIGHTS' };
+  return { title: `${row.title} | Press | WORLD RIGHTS` };
+}
+
+export default async function EnPressDetailPage({ params }) {
+  const { id } = await params;
+  return <PressDetailView id={id} locale="en" />;
 }
