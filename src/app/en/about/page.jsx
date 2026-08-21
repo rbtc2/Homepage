@@ -1,7 +1,7 @@
 export const metadata = {
   title: 'About',
   description:
-    'WORLD RIGHTS goes first to places the language of rights has not yet reached.',
+    'World Rights goes first where the language of rights has yet to reach.',
 };
 
 const VISION_ITEMS = [
@@ -36,7 +36,7 @@ const CORE_VALUES = [
     id: 'agency',
     index: '02',
     title: 'Agency',
-    description: 'Every person has the power to write their own life.',
+    description: 'Everyone has the power to shape their own life.',
   },
   {
     id: 'inclusion',
@@ -47,8 +47,8 @@ const CORE_VALUES = [
   {
     id: 'pioneer',
     index: '04',
-    title: 'Pioneer',
-    description: 'We go first to places rights have not yet reached.',
+    title: 'Pioneering',
+    description: 'We go first where rights have yet to reach.',
   },
 ];
 
@@ -72,8 +72,8 @@ export default function EnAboutPage() {
             <hr className="ab-section__rule" />
           </div>
           <p className="ab-mission-lead">
-            WORLD RIGHTS goes first to{' '}
-            <span className="ab-mission-lead__emph">places the language of rights has not yet reached</span>.
+            World Rights goes first{' '}
+            <span className="ab-mission-lead__emph">where the language of rights has yet to reach</span>.
           </p>
         </section>
 
@@ -144,12 +144,14 @@ export default function EnAboutPage() {
             <div className="ab-ci-b__story">
               <h3 className="ab-ci-b__heading">Logo</h3>
               <p className="ab-ci-b__p">
-                We visualized the W and R of World Rights as one unbroken, flowing wave.
+                The WORLD RIGHTS logo brings the W and R together in a single, flowing
+                form inspired by the movement of a wave.
               </p>
               <p className="ab-ci-b__p">
-                The letters stay connected without a break — a sign that WORLD RIGHTS work
-                will travel like a ripple to places the language of rights has not yet
-                reached, and help bring positive change.
+                The seamless connection between the two letters represents our commitment
+                to carrying the language of rights to places it has yet to reach. Like
+                ripples spreading outward, the work of WORLD RIGHTS seeks to create
+                positive change that extends across communities and beyond.
               </p>
             </div>
 
@@ -177,12 +179,13 @@ export default function EnAboutPage() {
                   />
                   <div className="ab-ci-b__color-body">
                     <p className="ab-ci-b__color-name">
-                      Vivid Blue <span className="ab-ci-b__hex">#0071ce</span>
+                      Vivid Blue <span className="ab-ci-b__hex">#0071CE</span>
                     </p>
                     <p className="ab-ci-b__color-desc">
-                      Dignity and hope for the people we work with, and the energy of the
-                      change WORLD RIGHTS seeks. The clear, vivid color expresses sincere
-                      work toward a better world.
+                      Vivid Blue represents the dignity and hope of the people at the heart
+                      of our work, as well as the dynamic change WORLD RIGHTS strives to
+                      create. Its clear, vibrant tone reflects our sincere commitment to
+                      building a better world.
                     </p>
                   </div>
                 </li>
@@ -194,11 +197,12 @@ export default function EnAboutPage() {
                   />
                   <div className="ab-ci-b__color-body">
                     <p className="ab-ci-b__color-name">
-                      Deep Navy <span className="ab-ci-b__hex">#001c65</span>
+                      Deep Navy <span className="ab-ci-b__hex">#001C65</span>
                     </p>
                     <p className="ab-ci-b__color-desc">
-                      Steady conviction, expertise, and trust in the organization. The deep
-                      tone stands for WORLD RIGHTS’ consistent will to uphold human rights.
+                      Deep Navy represents unwavering conviction, professionalism, and
+                      trust. Its deep, grounded tone symbolizes WORLD RIGHTS’
+                      steadfast commitment to upholding the values of human rights.
                     </p>
                   </div>
                 </li>
