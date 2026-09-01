@@ -47,6 +47,7 @@ import EditorPreviewModal from './EditorPreviewModal';
 import ShortcutHelpModal from './ShortcutHelpModal';
 import { deleteAdminDraft, getAdminDraft, saveAdminDraft } from '@/app/admin/drafts/actions';
 import { cleanPastedHtml } from '@/lib/clean-pasted-html';
+import { coverWidthToInput } from '@/lib/cover-image-width';
 import { getClipboardImageFiles, insertDroppedImages } from './insert-editor-image-file';
 
 /**
@@ -60,12 +61,13 @@ import { getClipboardImageFiles, insertDroppedImages } from './insert-editor-ima
  * @param {boolean}  showPinToggle    - 공지 고정 체크박스 표시 여부
  * @param {boolean}  showSecretToggle - 비밀글 토글 및 비밀번호 입력 표시 여부
  * @param {boolean}  showCoverImage   - 커버 이미지 URL 입력 표시 여부 (갤러리용)
+ * @param {boolean}  [showCoverWidth=false] - 커버 본문 표시 너비(px) 입력 (WR뉴스)
  * @param {boolean}  [showMetaDate=true] - 작성일 입력 표시 여부
  * @param {string}   [titlePlaceholder]
  * @param {string}   [saveLabel]      - 저장 버튼 문구 (없으면 신규/수정 기본값)
  * @param {import('react').ReactNode} [notice] - 제목 위 안내
  * @param {'wr-news'|'gallery'} [coverUploadFolder] - 설정 시 Storage에서 파일 업로드 가능
- * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage?, isSecret?, secretPassword? }) => void
+ * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage?, coverWidth?, isSecret?, secretPassword? }) => void
  */
 export default function RichEditor({
   post,
@@ -76,6 +78,7 @@ export default function RichEditor({
   showPinToggle = false,
   showSecretToggle = false,
   showCoverImage = false,
+  showCoverWidth = false,
   showMetaDate = true,
   titlePlaceholder = '제목을 입력하세요',
   saveLabel,
@@ -91,6 +94,7 @@ export default function RichEditor({
   const [isSecret, setIsSecret] = useState(post?.isSecret ?? false);
   const [secretPassword, setSecretPassword] = useState('');
   const [coverImage, setCoverImage] = useState(post?.coverImage ?? '');
+  const [coverWidth, setCoverWidth] = useState(() => coverWidthToInput(post?.coverWidth));
   const [createdAt, setCreatedAt] = useState(
     post?.createdAt ?? new Date().toISOString().slice(0, 10)
   );
@@ -262,8 +266,9 @@ export default function RichEditor({
       isPinned,
       isSecret,
       coverImage: coverImage.trim() || null,
+      coverWidth: coverWidthToInput(coverWidth),
     };
-  }, [title, createdAt, isPinned, isSecret, coverImage, editor]);
+  }, [title, createdAt, isPinned, isSecret, coverImage, coverWidth, editor]);
 
   const applyDraftPayload = useCallback(
     (payload) => {
@@ -272,6 +277,7 @@ export default function RichEditor({
       setIsPinned(Boolean(payload?.isPinned));
       setIsSecret(Boolean(payload?.isSecret));
       setCoverImage(payload?.coverImage ?? '');
+      setCoverWidth(coverWidthToInput(payload?.coverWidth));
       setSecretPassword('');
       const html = payload?.content ?? '';
       editor?.commands.setContent(html || '<p></p>');
@@ -394,6 +400,7 @@ export default function RichEditor({
         createdAt,
         isPinned,
         coverImage: coverImage.trim() || null,
+        coverWidth: showCoverWidth ? coverWidthToInput(coverWidth) : undefined,
         isSecret,
         secretPassword,
       });
@@ -423,6 +430,8 @@ export default function RichEditor({
     isSecret,
     secretPassword,
     coverImage,
+    coverWidth,
+    showCoverWidth,
     showSecretToggle,
     post?.hasSecretPassword,
     onSave,
@@ -501,6 +510,9 @@ export default function RichEditor({
           onChange={setCoverImage}
           placeholder="https://example.com/image.jpg"
           uploadFolder={coverUploadFolder}
+          showWidthControl={showCoverWidth}
+          widthPx={coverWidth}
+          onWidthPxChange={setCoverWidth}
         />
       )}
 
@@ -699,6 +711,8 @@ export default function RichEditor({
         open={previewOpen}
         title={title}
         html={editor?.getHTML() ?? ''}
+        coverImage={showCoverImage ? coverImage.trim() : ''}
+        coverWidth={showCoverWidth ? coverWidth : ''}
         onClose={() => setPreviewOpen(false)}
       />
       <ShortcutHelpModal open={shortcutOpen} onClose={() => setShortcutOpen(false)} />

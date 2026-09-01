@@ -1,3 +1,4 @@
+import { parseCoverWidthPx } from './cover-image-width';
 import { createPostLib } from './db';
 import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 import { supabase } from './supabase';
@@ -13,6 +14,7 @@ const lib = createPostLib('wr_news', {
     const contentEn = row.content_en ?? '';
     return {
       coverImage: row.cover_image ?? null,
+      coverWidth: parseCoverWidthPx(row.cover_width),
       titleEn,
       contentEn,
       hasEnglish: hasEnglishFields(titleEn, contentEn),

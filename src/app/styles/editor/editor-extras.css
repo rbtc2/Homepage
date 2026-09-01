@@ -178,6 +178,27 @@
   letter-spacing: -0.02em;
 }
 
+.ep-preview__cover {
+  margin: 0 0 1.25rem;
+  line-height: 0;
+}
+
+.ep-preview__cover--sized {
+  display: flex;
+  justify-content: center;
+}
+
+.ep-preview__cover-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.ep-preview__cover--sized .ep-preview__cover-img {
+  width: min(var(--ep-preview-cover-w), 100%);
+}
+
 .ep-shortcut {
   width: 100%;
   border-collapse: collapse;

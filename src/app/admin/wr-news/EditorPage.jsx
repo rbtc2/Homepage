@@ -10,6 +10,7 @@ export default function WrNewsEditorPage({ post }) {
     content,
     createdAt,
     coverImage,
+    coverWidth,
     isSecret,
     secretPassword,
   }) => {
@@ -18,6 +19,7 @@ export default function WrNewsEditorPage({ post }) {
           title,
           content,
           coverImage,
+          coverWidth,
           createdAt,
           isSecret,
           secretPassword,
@@ -26,6 +28,7 @@ export default function WrNewsEditorPage({ post }) {
           title,
           content,
           coverImage,
+          coverWidth,
           createdAt,
           isSecret,
           secretPassword,
@@ -41,6 +44,7 @@ export default function WrNewsEditorPage({ post }) {
       editTitle="WR뉴스 게시물 수정"
       newTitle="새 WR뉴스 게시물 작성"
       showCoverImage
+      showCoverWidth
       showSecretToggle
       coverUploadFolder="wr-news"
       onSave={handleSave}

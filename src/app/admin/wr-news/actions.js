@@ -1,5 +1,6 @@
 'use server';
 
+import { parseCoverWidthPx } from '@/lib/cover-image-width';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
@@ -29,6 +30,7 @@ export async function createWrNewsPost({
   title,
   content,
   coverImage,
+  coverWidth,
   createdAt,
   isSecret,
   secretPassword,
@@ -46,6 +48,7 @@ export async function createWrNewsPost({
         author: '관리자',
         created_at: createdAt ?? today(),
         cover_image: coverImage ?? null,
+        cover_width: parseCoverWidthPx(coverWidth),
         views: 0,
         ...secret.fields,
       });
@@ -60,7 +63,7 @@ export async function createWrNewsPost({
 
 export async function updateWrNewsPost(
   id,
-  { title, content, coverImage, createdAt, isSecret, secretPassword }
+  { title, content, coverImage, coverWidth, createdAt, isSecret, secretPassword }
 ) {
   try {
     const secret = await resolveSecretFieldsForUpdate('wr_news', id, {
@@ -77,6 +80,7 @@ export async function updateWrNewsPost(
         content: contentStored,
         created_at: createdAt ?? today(),
         cover_image: coverImage ?? null,
+        cover_width: parseCoverWidthPx(coverWidth),
         ...secret.fields,
       })
       .eq('id', rowIdForEq(id));

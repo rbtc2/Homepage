@@ -2,6 +2,11 @@
 
 import { useCallback, useRef, useState } from 'react';
 import ImageUploadOptimizePanel from './ImageUploadOptimizePanel';
+import {
+  COVER_WIDTH_MAX,
+  COVER_WIDTH_MIN,
+  parseCoverWidthPx,
+} from '@/lib/cover-image-width';
 
 /**
  * 커버/썸네일 URL 입력 (`ep-cover` 레이아웃). 미리보기는 선택.
@@ -15,6 +20,9 @@ import ImageUploadOptimizePanel from './ImageUploadOptimizePanel';
  * @param {string} [props.wrapperClassName]
  * @param {boolean} [props.showPreview=true]
  * @param {'wr-news'|'gallery'} [props.uploadFolder]
+ * @param {boolean} [props.showWidthControl]
+ * @param {string} [props.widthPx]
+ * @param {(next: string) => void} [props.onWidthPxChange]
  */
 export default function EditorCoverUrlField({
   label,
@@ -24,6 +32,9 @@ export default function EditorCoverUrlField({
   wrapperClassName = '',
   showPreview = true,
   uploadFolder,
+  showWidthControl = false,
+  widthPx = '',
+  onWidthPxChange,
 }) {
   const fileInputRef = useRef(null);
   const [pendingFile, setPendingFile] = useState(null);
@@ -51,6 +62,17 @@ export default function EditorCoverUrlField({
     },
     [onChange]
   );
+
+  const applyWidthDraft = useCallback(() => {
+    if (!onWidthPxChange) return;
+    const raw = String(widthPx ?? '').trim();
+    if (!raw) {
+      onWidthPxChange('');
+      return;
+    }
+    const next = parseCoverWidthPx(raw);
+    onWidthPxChange(next == null ? '' : String(next));
+  }, [onWidthPxChange, widthPx]);
 
   return (
     <div className={rootClass}>
@@ -129,6 +151,37 @@ export default function EditorCoverUrlField({
           </div>
         ) : null}
       </div>
+
+      {showWidthControl ? (
+        <label className="ep-cover__width">
+          <span className="ep-cover__width-label">본문 너비</span>
+          <input
+            type="number"
+            className="ep-cover__width-input"
+            min={COVER_WIDTH_MIN}
+            max={COVER_WIDTH_MAX}
+            step={1}
+            inputMode="numeric"
+            placeholder="비우면 전체"
+            value={widthPx}
+            onChange={(e) => onWidthPxChange?.(e.target.value)}
+            onBlur={applyWidthDraft}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                applyWidthDraft();
+                e.currentTarget.blur();
+              }
+            }}
+            aria-label="썸네일 본문 너비 px (비율 유지)"
+            title="게시물 본문에 표시될 가로 크기입니다. Enter로 적용 · 비우면 전체 너비"
+          />
+          <span className="ep-cover__width-unit">px</span>
+          <span className="ep-cover__width-hint">
+            본문 삽입 이미지와 같이 가로 px로 조절합니다. 비우면 전체 너비.
+          </span>
+        </label>
+      ) : null}
     </div>
   );
 }

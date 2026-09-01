@@ -11,6 +11,7 @@ import {
   localizeWrNewsPost,
 } from '@/lib/wr-news';
 import { wrNewsUi } from '@/lib/wr-news-ui';
+import { parseCoverWidthPx } from '@/lib/cover-image-width';
 import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export default async function WrNewsDetailView({ id, locale = 'ko' }) {
@@ -31,6 +32,8 @@ export default async function WrNewsDetailView({ id, locale = 'ko' }) {
   });
 
   const { prev, next } = await getWrNewsPrevNext(id, locale);
+  const coverWidth = parseCoverWidthPx(post.coverWidth);
+  const coverSized = coverWidth != null;
 
   return (
     <>
@@ -76,15 +79,22 @@ export default async function WrNewsDetailView({ id, locale = 'ko' }) {
             {canRead ? (
               <>
                 {post.coverImage ? (
-                  <figure className="wna__cover">
+                  <figure
+                    className={coverSized ? 'wna__cover wna__cover--sized' : 'wna__cover'}
+                    style={coverSized ? { '--wna-cover-w': `${coverWidth}px` } : undefined}
+                  >
                     <Image
                       src={post.coverImage}
                       alt={post.title}
-                      width={1600}
-                      height={1200}
+                      width={coverSized ? coverWidth : 1600}
+                      height={coverSized ? Math.round(coverWidth * 0.75) : 1200}
                       className="wna__cover-img"
                       priority
-                      sizes="(max-width: 768px) 100vw, 720px"
+                      sizes={
+                        coverSized
+                          ? `(max-width: ${coverWidth}px) 100vw, ${coverWidth}px`
+                          : '(max-width: 768px) 100vw, 720px'
+                      }
                       style={{ width: '100%', height: 'auto' }}
                     />
                   </figure>
