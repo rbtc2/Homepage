@@ -5,6 +5,7 @@ import { getWrNewsPage, localizeWrNewsPosts } from '@/lib/wr-news';
 const LIST_PATH_KO = '/wr-news';
 const LIST_PATH_EN = '/en/wr-news';
 const HOME_ITEMS = 4;
+const HERO_SNIPPET_MAX = 280;
 
 function toPlainSnippet(html, max) {
   if (!html || typeof html !== 'string') return '';
@@ -49,6 +50,7 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
   const multi = secondary.length > 0;
   const isEn = locale === 'en';
   const listPath = isEn ? LIST_PATH_EN : LIST_PATH_KO;
+  const primarySnip = primary ? toPlainSnippet(primary.content, HERO_SNIPPET_MAX) : '';
 
   return (
     <section className="hmwr" aria-labelledby="hmwr-heading">
@@ -90,9 +92,9 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
                 </span>
                 <span className="hmwr__hero-body">
                   <span className="hmwr__hero-name">{primary.title}</span>
-                  {toPlainSnippet(primary.content, 120) ? (
+                  {primarySnip ? (
                     <span className="hmwr__hero-snip">
-                      {toPlainSnippet(primary.content, 120)}
+                      {primarySnip}
                     </span>
                   ) : null}
                   <span className="hmwr__hero-byline">
