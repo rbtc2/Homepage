@@ -80,7 +80,7 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
                       src={primary.coverImage}
                       alt=""
                       fill
-                      sizes="(max-width: 768px) 100vw, 640px"
+                      sizes="(max-width: 768px) 100vw, 590px"
                       priority
                       style={{ objectFit: 'cover' }}
                     />

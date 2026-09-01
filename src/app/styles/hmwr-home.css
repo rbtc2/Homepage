@@ -91,16 +91,16 @@
   gap: 0;
 }
 
-/* ── Hero: 이미지 + 텍스트(이미지 밖) ── */
+/* ── Hero: PC는 사진 왼쪽 + 글 오른쪽 ── */
 .hmwr__hero {
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: center;
   text-decoration: none;
   color: inherit;
   min-width: 0;
   width: 100%;
-  max-width: 40rem;
 }
 
 .hmwr__hero:focus-visible {
@@ -136,13 +136,14 @@
 .hmwr__hero-body {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  justify-content: center;
+  gap: 0.5rem;
   min-width: 0;
 }
 
 .hmwr__hero-name {
   display: block;
-  font-size: clamp(1.125rem, 2vw, 1.3125rem);
+  font-size: clamp(1.125rem, 2.2vw, 1.5rem);
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: -0.03em;
@@ -162,7 +163,7 @@
   letter-spacing: -0.01em;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   overflow: hidden;
 }
 
@@ -303,8 +304,8 @@
   }
 
   .hmwr__hero {
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.75rem;
-    max-width: none;
   }
 
   .hmwr__hero-frame {
