@@ -111,7 +111,8 @@
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  /* 전폭 16:9는 ~660px로 과함. 높이만 제한하고 cover로 크롭 */
+  height: clamp(12rem, 22vw, 17.5rem);
   overflow: hidden;
   border-radius: 2px;
   background: var(--canvas);
@@ -305,6 +306,7 @@
   }
 
   .hmwr__hero-frame {
+    height: auto;
     aspect-ratio: 16 / 10;
   }
 
