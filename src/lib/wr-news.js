@@ -1,4 +1,4 @@
-import { parseCoverWidthPx } from './cover-image-width';
+import { parseCoverWidthPx, parseStoredCoverImage } from './cover-image-width';
 import { createPostLib } from './db';
 import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 import { supabase } from './supabase';
@@ -12,9 +12,10 @@ const lib = createPostLib('wr_news', {
   normalizeExtra: (row) => {
     const titleEn = row.title_en ?? '';
     const contentEn = row.content_en ?? '';
+    const storedCover = parseStoredCoverImage(row.cover_image);
     return {
-      coverImage: row.cover_image ?? null,
-      coverWidth: parseCoverWidthPx(row.cover_width),
+      coverImage: storedCover.url,
+      coverWidth: parseCoverWidthPx(row.cover_width) ?? storedCover.width,
       titleEn,
       contentEn,
       hasEnglish: hasEnglishFields(titleEn, contentEn),

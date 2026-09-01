@@ -1,6 +1,6 @@
 'use server';
 
-import { parseCoverWidthPx } from '@/lib/cover-image-width';
+import { serializeStoredCoverImage } from '@/lib/cover-image-width';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { preparePostContentForStorage } from '@/lib/post-content';
 import { rowIdForEq } from '@/lib/row-id-for-eq';
@@ -47,8 +47,7 @@ export async function createWrNewsPost({
         content: contentStored,
         author: '관리자',
         created_at: createdAt ?? today(),
-        cover_image: coverImage ?? null,
-        cover_width: parseCoverWidthPx(coverWidth),
+        cover_image: serializeStoredCoverImage(coverImage, coverWidth),
         views: 0,
         ...secret.fields,
       });
@@ -79,8 +78,7 @@ export async function updateWrNewsPost(
         title: title.trim(),
         content: contentStored,
         created_at: createdAt ?? today(),
-        cover_image: coverImage ?? null,
-        cover_width: parseCoverWidthPx(coverWidth),
+        cover_image: serializeStoredCoverImage(coverImage, coverWidth),
         ...secret.fields,
       })
       .eq('id', rowIdForEq(id));
