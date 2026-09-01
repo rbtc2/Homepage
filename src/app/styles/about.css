@@ -104,6 +104,10 @@
   font-weight: 700;
 }
 
+.ab-mission-lead + .ab-ci-b__p {
+  margin-top: clamp(1.25rem, 3vw, 1.75rem);
+}
+
 /* ── 비전: 핵심가치와 동일 .ab-values + .ab-value-card 패턴 사용 ── */
 
 /* ── 핵심가치 (2026 에디토리얼: 캔버스 위 타이포만, 박스·그림자 없음) ─ */
