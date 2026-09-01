@@ -16,9 +16,7 @@ export const NAV_ITEMS = [
     id: 'work',
     label: { ko: '단체 사업', en: 'What we do' },
     children: [
-      { href: '#', label: { ko: '상호연대', en: 'Solidarity' } },
-      { href: '#', label: { ko: '자립지원', en: 'Independent living' } },
-      { href: '#', label: { ko: '권리옹호', en: 'Advocacy' } },
+      { href: '/projects', label: { ko: '진행사업', en: 'Ongoing projects' } },
     ],
   },
   {
