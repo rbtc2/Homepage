@@ -1,7 +1,7 @@
 export const metadata = {
   title: 'Greeting',
   description:
-    'Join WORLD RIGHTS in connecting people through dignity and building pathways to self-reliance for tomorrow.',
+    'WORLD RIGHTS stands with those working toward a society where identity does not limit possibility.',
 };
 
 export default function EnGreetingPage() {
@@ -26,24 +26,35 @@ export default function EnGreetingPage() {
 
             <div className="gt-prose__lead-wrap">
               <p className="gt-prose__lead">
-                Join WORLD RIGHTS in connecting people through dignity and building
-                pathways to self-reliance for tomorrow.
+                WORLD RIGHTS stands with those working toward a society where
+                identity does not limit possibility.
               </p>
             </div>
 
             <div className="gt-prose__body">
               <p>
-                Our society is becoming increasingly diverse, yet exclusion and
-                discrimination remain a reality for many. WORLD RIGHTS develops
-                professional programs that strengthen self-reliance and carries out
-                human rights advocacy so that every member of a social minority can
-                stand as an active and empowered member of our shared community.
+                Our society is becoming increasingly diverse, yet some people are
+                still expected to live within roles defined for them and choices
+                limited by their identity. Rather than asking what social minorities
+                lack, WORLD RIGHTS begins by asking why the experiences, knowledge,
+                and potential they already possess are not given the opportunities
+                they deserve in our society.
               </p>
               <p>
-                Through transparent and sincere action, we will work to make the value
-                of interculturalism that WORLD RIGHTS stands for a new standard in our
-                society. We will continue moving forward toward a world where
-                universal human rights are simply common sense.
+                We create small but meaningful opportunities for people to
+                participate in society through their own experiences and knowledge,
+                and to shape new roles and choices for themselves. We are taking
+                our first steps alongside migrant women, and we will continue to
+                broaden the scope of our work by connecting and building solidarity
+                with diverse social minority communities.
+              </p>
+              <p>
+                We envision a society where no one’s possibilities are limited by
+                their identity, and where different lives and experiences are valued
+                equally. Toward a society where universal human rights are not
+                treated as special demands, but simply as common sense, WORLD RIGHTS
+                will continue to create small, concrete changes—steadily and with
+                purpose.
               </p>
             </div>
 
