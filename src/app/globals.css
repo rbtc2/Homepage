@@ -7,7 +7,6 @@
      page-header   — 내부 페이지 상단 헤더 바
      about         — 소개 페이지 (미션/비전/핵심가치/CI)
      greeting      — 인사말 (에디토리얼 본문)
-     projects      — 진행사업 (준비 중 플레이스홀더)
      login-modal   — 로그인 모달
      footer        — 푸터
      board         — 게시판 목록·검색·테이블·상세·페이지네이션
@@ -27,7 +26,6 @@
 @import './styles/page-header.css';
 @import './styles/about.css';
 @import './styles/greeting.css';
-@import './styles/projects.css';
 @import './styles/login-modal.css';
 @import './styles/footer.css';
 @import './styles/board.css';
