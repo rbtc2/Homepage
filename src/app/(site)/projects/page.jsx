@@ -1,6 +1,8 @@
+import ProjectsComingSoon from '@/components/projects/ProjectsComingSoon';
+
 export const metadata = {
   title: '진행사업 | 국제인권연대 월드라이츠(WORLD RIGHTS)',
-  description: '월드라이츠가 현재 진행하고 있는 사업을 소개합니다.',
+  description: '월드라이츠 진행사업 소개 페이지는 개발 예정입니다.',
 };
 
 export default function ProjectsPage() {
@@ -15,20 +17,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      <article className="gt-wrap" aria-labelledby="projects-heading">
-        <div className="gt-prose">
-          <header className="gt-section-head">
-            <p className="gt-section-head__eyebrow">Projects</p>
-            <hr className="gt-section-head__rule" />
-          </header>
-
-          <div className="gt-prose__lead-wrap">
-            <p className="gt-prose__lead">
-              월드라이츠가 현재 진행하고 있는 사업을 소개합니다.
-            </p>
-          </div>
-        </div>
-      </article>
+      <ProjectsComingSoon locale="ko" />
     </main>
   );
 }
