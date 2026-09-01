@@ -81,15 +81,14 @@
 }
 
 .hmwr__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: clamp(1.25rem, 3vw, 2rem);
-  align-items: start;
   min-height: 0;
 }
 
 .hmwr__grid--one {
-  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
 }
 
 /* ── Hero: 이미지 + 텍스트(이미지 밖) ── */
@@ -112,14 +111,10 @@
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 2px;
   background: var(--canvas);
-}
-
-.hmwr__grid--one .hmwr__hero-frame {
-  aspect-ratio: 16 / 9;
 }
 
 .hmwr__hero-img {
@@ -145,7 +140,7 @@
 
 .hmwr__hero-name {
   display: block;
-  font-size: clamp(1.0625rem, 2.2vw, 1.375rem);
+  font-size: clamp(1.125rem, 2.4vw, 1.5rem);
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: -0.03em;
@@ -185,34 +180,36 @@
   margin: 0 0.35rem;
 }
 
-/* ── Subs: 간격 위주 리스트 (항목 사이만 구분) ── */
+/* ── Subs: PC는 히어로 아래 3열 스트립 ── */
 .hmwr__subs {
   list-style: none;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+  padding: clamp(1.25rem, 3vw, 1.75rem) 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+  border-top: 1px solid var(--line);
 }
 
-.hmwr__sub-item + .hmwr__sub-item {
-  border-top: 1px solid var(--line);
+.hmwr__subs--n1 {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 22rem;
+}
+
+.hmwr__subs--n2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .hmwr__sub {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.875rem;
-  padding: 0.875rem 0;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 0;
   text-decoration: none;
   color: inherit;
   background: transparent;
   min-width: 0;
-  transition: background 0.18s var(--ease);
-}
-
-.hmwr__sub:hover {
-  background: rgba(18, 79, 166, 0.04);
 }
 
 .hmwr__sub:focus-visible {
@@ -223,12 +220,21 @@
 
 .hmwr__sub-pic {
   position: relative;
-  width: 4.5rem;
-  aspect-ratio: 1 / 1;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
   flex-shrink: 0;
   overflow: hidden;
   border-radius: 2px;
   background: var(--canvas);
+}
+
+.hmwr__sub-img {
+  transition: opacity 0.25s var(--ease);
+}
+
+.hmwr__sub:hover .hmwr__sub-img {
+  opacity: 0.92;
 }
 
 .hmwr__sub-fallback {
@@ -242,8 +248,6 @@
   flex-direction: column;
   gap: 0.3rem;
   min-width: 0;
-  flex: 1;
-  padding-right: 0.25rem;
 }
 
 .hmwr__sub-name {
@@ -275,14 +279,14 @@
 @media (prefers-reduced-motion: reduce) {
   .hmwr__hero-img,
   .hmwr__hero-name,
-  .hmwr__sub,
+  .hmwr__sub-img,
   .hmwr__sub-name,
   .hmwr__all {
     transition: none;
   }
 }
 
-/* 모바일: 히어로 + 가로 리스트 (A안 유지, 플랫 톤) */
+/* 모바일: 히어로 + 가로 리스트 */
 @media (max-width: 768px) {
   .hmwr__inner {
     padding-bottom: 1.75rem;
@@ -293,7 +297,6 @@
   }
 
   .hmwr__grid {
-    grid-template-columns: 1fr;
     gap: 1.25rem;
   }
 
@@ -302,10 +305,6 @@
   }
 
   .hmwr__hero-frame {
-    aspect-ratio: 16 / 10;
-  }
-
-  .hmwr__grid--one .hmwr__hero-frame {
     aspect-ratio: 16 / 10;
   }
 
@@ -318,17 +317,34 @@
     font-size: 0.8125rem;
   }
 
+  .hmwr__subs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-top: 0.25rem;
+    border-top: none;
+    max-width: none;
+  }
+
+  .hmwr__sub-item + .hmwr__sub-item {
+    border-top: 1px solid var(--line);
+  }
+
   .hmwr__sub {
+    flex-direction: row;
+    align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 0;
   }
 
-  .hmwr__sub:hover {
-    background: transparent;
-  }
-
   .hmwr__sub-pic {
     width: 4rem;
+    aspect-ratio: 1 / 1;
+  }
+
+  .hmwr__sub-text {
+    flex: 1;
+    padding-right: 0.25rem;
   }
 
   .hmwr__sub-name {

@@ -4,6 +4,7 @@ import { getWrNewsPage, localizeWrNewsPosts } from '@/lib/wr-news';
 
 const LIST_PATH_KO = '/wr-news';
 const LIST_PATH_EN = '/en/wr-news';
+const HOME_ITEMS = 4;
 
 function toPlainSnippet(html, max) {
   if (!html || typeof html !== 'string') return '';
@@ -41,10 +42,10 @@ function Chevron() {
 }
 
 export default async function HomeWrNewsBlock({ locale = 'ko' }) {
-  const { items: rawItems } = await getWrNewsPage({ page: 1, itemsPerPage: 3 });
+  const { items: rawItems } = await getWrNewsPage({ page: 1, itemsPerPage: HOME_ITEMS });
   const items = localizeWrNewsPosts(rawItems, locale);
   const primary = items[0];
-  const secondary = items.slice(1, 3);
+  const secondary = items.slice(1, HOME_ITEMS);
   const multi = secondary.length > 0;
   const isEn = locale === 'en';
   const listPath = isEn ? LIST_PATH_EN : LIST_PATH_KO;
@@ -79,7 +80,7 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
                       src={primary.coverImage}
                       alt=""
                       fill
-                      sizes="(max-width: 768px) 100vw, 65vw"
+                      sizes="(max-width: 768px) 100vw, 1180px"
                       priority
                       style={{ objectFit: 'cover' }}
                     />
@@ -110,7 +111,7 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
             ) : null}
 
             {multi ? (
-              <ul className="hmwr__subs" role="list">
+              <ul className={`hmwr__subs hmwr__subs--n${secondary.length}`} role="list">
                 {secondary.map((row) => (
                   <li key={row.id} className="hmwr__sub-item">
                     <Link href={`${listPath}/${row.id}`} className="hmwr__sub">
@@ -121,7 +122,7 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
                             src={row.coverImage}
                             alt=""
                             fill
-                            sizes="(max-width: 768px) 72px, 96px"
+                            sizes="(max-width: 768px) 72px, 33vw"
                             style={{ objectFit: 'cover' }}
                           />
                         ) : (
