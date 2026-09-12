@@ -86,6 +86,20 @@ export default function AboutPage() {
             </p>
           </section>
 
+          {/* ── 슬로건 ── */}
+          <section className="ab-section" aria-labelledby="slogan-heading">
+            <div className="ab-section__header">
+              <p className="ab-section__eyebrow">Slogan</p>
+              <h2 id="slogan-heading" className="ab-section__title">
+                슬로건
+              </h2>
+              <hr className="ab-section__rule" />
+            </div>
+            <p className="ab-slogan" lang="en" translate="no">
+              Beyond Labels
+            </p>
+          </section>
+
           {/* ── 비전 ── */}
           <section className="ab-section" aria-labelledby="vision-heading">
             <div className="ab-section__header">

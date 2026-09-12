@@ -108,6 +108,16 @@
   margin-top: clamp(1.25rem, 3vw, 1.75rem);
 }
 
+/* ── 슬로건 워드마크 ───────────────────────────────────────── */
+.ab-slogan {
+  margin: 0;
+  font-size: clamp(2rem, 5.5vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+  color: #001c65;
+}
+
 /* ── 비전: 핵심가치와 동일 .ab-values + .ab-value-card 패턴 사용 ── */
 
 /* ── 핵심가치 (2026 에디토리얼: 캔버스 위 타이포만, 박스·그림자 없음) ─ */

@@ -77,6 +77,19 @@ export default function EnAboutPage() {
           </p>
         </section>
 
+        <section className="ab-section" aria-labelledby="slogan-heading">
+          <div className="ab-section__header">
+            <p className="ab-section__eyebrow">Slogan</p>
+            <h2 id="slogan-heading" className="ab-section__title">
+              Slogan
+            </h2>
+            <hr className="ab-section__rule" />
+          </div>
+          <p className="ab-slogan" lang="en" translate="no">
+            Beyond Labels
+          </p>
+        </section>
+
         <section className="ab-section" aria-labelledby="vision-heading">
           <div className="ab-section__header">
             <p className="ab-section__eyebrow">Vision</p>
