@@ -111,10 +111,10 @@
 /* ── 슬로건 워드마크 ───────────────────────────────────────── */
 .ab-slogan {
   margin: 0;
-  font-size: clamp(2rem, 5.5vw, 3.25rem);
+  font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
   font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 1.12;
+  letter-spacing: -0.025em;
+  line-height: 1.72;
   color: #001c65;
 }
 
