@@ -4,7 +4,7 @@ const COPY = {
     eyebrow: 'Projects',
     title: '준비 중',
     lead: '개발 예정입니다.',
-    body: '진행사업 소개 페이지를 준비하고 있습니다. 단체의 활동이 쌓이는 대로 이곳에 하나씩 담아두겠습니다.',
+    body: '진행사업 소개 페이지를 준비하고 있습니다.',
     closing: '조금만 기다려 주세요.',
   },
   en: {
@@ -12,7 +12,7 @@ const COPY = {
     eyebrow: 'Projects',
     title: 'Coming soon',
     lead: 'This page is under development.',
-    body: 'We are preparing this page to share the programs WORLD RIGHTS is carrying out. Stories will appear here as the work takes shape.',
+    body: 'We are preparing this page to share the programs WORLD RIGHTS is carrying out.',
     closing: 'Thank you for waiting with us.',
   },
 };
