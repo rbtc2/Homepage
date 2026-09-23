@@ -17,6 +17,7 @@ const ALLOWED_ATTR = [
   'data-align', 'data-width', 'data-margin-left', 'data-margin-right',
   'data-caption',
   'data-file-name',
+  'data-label',
   'data-cell-bgcolor',
   'data-color',
   'data-text-align', 'data-vertical-align', 'data-row-height',

@@ -1,0 +1,294 @@
+/* ── 본문 CTA 버튼 블록 (.ep-cta-block) ─────────────────────── */
+
+.ep-cta-picker-wrap {
+  position: relative;
+}
+
+.ctp {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 130;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(12, 20, 36, 0.13), 0 2px 8px rgba(12, 20, 36, 0.06);
+  padding: 0.75rem;
+  width: 300px;
+  animation: dpIn 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ctp__label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.ctp__meta {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--line);
+}
+
+.ctp__align {
+  display: inline-flex;
+  gap: 0.2rem;
+  margin-bottom: 0.65rem;
+  padding: 0.2rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--canvas);
+}
+
+.ctp__align-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 26px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.ctp__align-btn:hover {
+  color: var(--ink);
+  background: rgba(18, 79, 166, 0.06);
+}
+
+.ctp__align-btn--on {
+  color: var(--brand);
+  background: rgba(18, 79, 166, 0.1);
+}
+
+.ctp__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ctp__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--canvas);
+}
+
+.ctp__row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ctp__row-num {
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+.ctp__row-remove {
+  border: none;
+  background: transparent;
+  color: #dc2626;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ctp__row-remove:hover {
+  text-decoration: underline;
+}
+
+.ctp__input {
+  width: 100%;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.8375rem;
+  color: var(--ink);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+.ctp__input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(18, 79, 166, 0.12);
+}
+
+.ctp__input::placeholder {
+  color: #b0bac9;
+}
+
+.ctp__add {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.4rem;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--brand);
+  cursor: pointer;
+}
+
+.ctp__add:hover {
+  background: rgba(18, 79, 166, 0.05);
+  border-color: var(--brand);
+}
+
+.ctp__hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+}
+
+.ctp__hint--err {
+  color: var(--danger, #c53030);
+}
+
+.ctp__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.65rem;
+}
+
+.ctp__btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.85rem;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ctp__btn--apply {
+  background: var(--brand);
+  border: 1px solid var(--brand);
+  color: #fff;
+}
+
+.ctp__btn--apply:hover {
+  background: var(--brand-mid);
+  border-color: var(--brand-mid);
+}
+
+/* 에디터 · 공개 상세 공통 렌더 */
+.ep-content .ep-cta-block,
+.nd__body--html .ep-cta-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1.25em 0;
+  padding: 0.15rem 0;
+}
+
+.ep-content .ep-cta-block[data-align='left'],
+.nd__body--html .ep-cta-block[data-align='left'] {
+  justify-content: flex-start;
+}
+
+.ep-content .ep-cta-block[data-align='center'],
+.nd__body--html .ep-cta-block[data-align='center'] {
+  justify-content: center;
+}
+
+.ep-content .ep-cta-block[data-align='right'],
+.nd__body--html .ep-cta-block[data-align='right'] {
+  justify-content: flex-end;
+}
+
+.ep-content a.ep-cta-block__btn,
+.nd__body--html a.ep-cta-block__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 7.5rem;
+  padding: 0.7rem 1.35rem;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  background: var(--brand);
+  border-radius: 10px;
+  border: 1px solid var(--brand);
+  transition: filter 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.ep-content a.ep-cta-block__btn:hover,
+.nd__body--html a.ep-cta-block__btn:hover {
+  color: #fff;
+  text-decoration: none;
+  filter: brightness(1.06);
+  opacity: 1;
+  box-shadow: 0 2px 10px rgba(18, 79, 166, 0.28);
+}
+
+.ep-content a.ep-cta-block__btn:focus-visible,
+.nd__body--html a.ep-cta-block__btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* 2번째·3번째 버튼은 아웃라인 스타일로 구분 */
+.ep-content a.ep-cta-block__btn:nth-child(n + 2),
+.nd__body--html a.ep-cta-block__btn:nth-child(n + 2) {
+  background: var(--surface, #fff);
+  color: var(--brand);
+}
+
+.ep-content a.ep-cta-block__btn:nth-child(n + 2):hover,
+.nd__body--html a.ep-cta-block__btn:nth-child(n + 2):hover {
+  color: var(--brand);
+  background: rgba(18, 79, 166, 0.06);
+  filter: none;
+}
+
+.ep-content .ProseMirror-selectednode.ep-cta-block,
+.ep-content .ep-cta-block.ProseMirror-selectednode {
+  outline: 2px solid var(--brand);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+  .ep-content .ep-cta-block,
+  .nd__body--html .ep-cta-block {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ep-content a.ep-cta-block__btn,
+  .nd__body--html a.ep-cta-block__btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

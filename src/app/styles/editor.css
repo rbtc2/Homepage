@@ -13,6 +13,7 @@
 @import './editor/editor-extras.css';
 @import './editor/editor-attachment.css';
 @import './editor/rich-text-shared.css';
+@import './editor/editor-cta-buttons.css';
 @import './editor/responsive-ep.css';
 @import './editor/responsive-admin-notices.css';
 @import './editor/context-menu.css';

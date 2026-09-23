@@ -18,6 +18,7 @@ import Highlight from '@tiptap/extension-highlight';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import { EditorImage } from './EditorImage';
 import { EditorAttachment } from './EditorAttachment';
+import { EditorCtaButtons } from './EditorCtaButtons';
 import { EditorYoutube } from './EditorYoutube';
 import { Indent } from './Indent';
 import { Subscript, Superscript } from './SubSup';
@@ -31,6 +32,7 @@ import FontSizePicker from './FontSizePicker';
 import LinkPicker from './LinkPicker';
 import ImagePicker from './ImagePicker';
 import AttachmentPicker from './AttachmentPicker';
+import CtaButtonPicker from './CtaButtonPicker';
 import YoutubePicker from './YoutubePicker';
 import ToolbarMoreMenu from './ToolbarMoreMenu';
 import ImageToolbar from './ImageToolbar';
@@ -157,6 +159,7 @@ export default function RichEditor({
       Indent,
       EditorImage,
       EditorAttachment,
+      EditorCtaButtons,
       EditorYoutube,
     ],
     content: post?.content ?? '',
@@ -673,6 +676,7 @@ export default function RichEditor({
           </div>
           <YoutubePicker editor={editor} />
           <AttachmentPicker editor={editor} />
+          <CtaButtonPicker editor={editor} />
           <SpecialCharacterPicker editor={editor} />
         </div>
 

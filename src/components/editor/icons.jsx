@@ -281,6 +281,12 @@ const icons = {
       />
     </svg>
   ),
+  ctaButton: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="7" width="18" height="10" rx="3" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M8 12h8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+  ),
   specialChar: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M7 8h.01M12 8h.01M17 8h.01M7 12h.01M12 12h.01M17 12h.01M7 16h.01M12 16h.01M17 16h.01" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"/>
