@@ -188,9 +188,36 @@ export default function RichEditor({
         return true;
       },
       handleDOMEvents: {
-        contextmenu: (_view, event) => {
+        contextmenu: (view, event) => {
           event.preventDefault();
-          setContextMenu({ x: event.clientX, y: event.clientY });
+          const target = event.target;
+          /** @type {{ x: number, y: number, ctaButtonIndex?: number }} */
+          const menu = { x: event.clientX, y: event.clientY };
+
+          if (target instanceof Element) {
+            const cta = target.closest('.ep-cta-block');
+            if (cta && view.dom.contains(cta)) {
+              try {
+                const nodePos = view.posAtDOM(cta, 0);
+                const node = view.state.doc.nodeAt(nodePos);
+                if (node?.type.name === 'editorCtaButtons') {
+                  view.dispatch(
+                    view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos))
+                  );
+                  const btn = target.closest('a.ep-cta-block__btn');
+                  if (btn) {
+                    const buttons = [...cta.querySelectorAll('a.ep-cta-block__btn')];
+                    const idx = buttons.indexOf(btn);
+                    if (idx >= 0) menu.ctaButtonIndex = idx;
+                  }
+                }
+              } catch {
+                /* ignore DOM→pos mapping failures */
+              }
+            }
+          }
+
+          setContextMenu(menu);
           return true;
         },
       },
@@ -244,6 +271,24 @@ export default function RichEditor({
           return true;
         }
         if (!(target instanceof Element)) return false;
+
+        const cta = target.closest('.ep-cta-block');
+        if (cta && view.dom.contains(cta)) {
+          event.preventDefault();
+          try {
+            const nodePos = view.posAtDOM(cta, 0);
+            const node = view.state.doc.nodeAt(nodePos);
+            if (node?.type.name === 'editorCtaButtons') {
+              view.dispatch(
+                view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos))
+              );
+              return true;
+            }
+          } catch {
+            return true;
+          }
+        }
+
         const block = target.closest('.ep-img-block');
         if (!block || !view.dom.contains(block)) return false;
         try {
@@ -465,6 +510,7 @@ export default function RichEditor({
           <EditorContextMenu
             editor={editor}
             pos={contextMenu}
+            ctaButtonIndex={contextMenu.ctaButtonIndex}
             onClose={() => setContextMenu(null)}
           />
         ) : null
