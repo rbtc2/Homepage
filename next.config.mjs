@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 커버 이미지 업로드(FormData) — 기본 1MB를 넘기면 Server Action이 본문 파싱 단계에서 실패할 수 있음
+  // sharp 네이티브 바인딩은 번들하지 않음
+  serverExternalPackages: ['sharp'],
+  // 원본 최적화(최대 15MB) + 업로드 FormData — 기본 1MB면 본문 파싱 단계에서 실패
   experimental: {
     serverActions: {
-      bodySizeLimit: '6mb',
+      bodySizeLimit: '16mb',
     },
   },
   async redirects() {

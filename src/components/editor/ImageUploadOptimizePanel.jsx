@@ -52,6 +52,7 @@ export default function ImageUploadOptimizePanel({
         resultBytes: result.resultBytes,
         percent: formatReductionPercent(result.originalBytes, result.resultBytes),
         isOriginal: result.skipped,
+        format: result.format,
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : '최적화에 실패했습니다.';
@@ -136,6 +137,11 @@ export default function ImageUploadOptimizePanel({
         <p className="iop__result iop__result--ok">
           {formatFileSize(optimizeInfo.originalBytes)} → {formatFileSize(optimizeInfo.resultBytes)}{' '}
           <strong>(약 {optimizeInfo.percent}% 감소)</strong>
+          {optimizeInfo.format === 'avif' ? (
+            <span className="iop__result-fmt"> · AVIF 고효율 인코딩</span>
+          ) : optimizeInfo.format === 'webp' ? (
+            <span className="iop__result-fmt"> · WebP 인코딩</span>
+          ) : null}
         </p>
       ) : null}
 

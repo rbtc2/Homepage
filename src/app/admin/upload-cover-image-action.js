@@ -7,11 +7,18 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 const BUCKET = 'covers';
 const MAX_BYTES = 5 * 1024 * 1024;
-const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
+const ALLOWED_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/avif',
+  'image/gif',
+]);
 const MIME_TO_EXT = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
   'image/webp': 'webp',
+  'image/avif': 'avif',
   'image/gif': 'gif',
 };
 const ALLOWED_FOLDERS = new Set(['wr-news', 'gallery', 'editor-content', 'popups']);
@@ -39,7 +46,7 @@ export async function uploadEditorCoverImage(formData) {
     }
 
     if (!ALLOWED_TYPES.has(file.type)) {
-      return { ok: false, message: 'JPG, PNG, WebP, GIF 이미지만 업로드할 수 있습니다.' };
+      return { ok: false, message: 'JPG, PNG, WebP, AVIF, GIF 이미지만 업로드할 수 있습니다.' };
     }
 
     if (file.size > MAX_BYTES) {
