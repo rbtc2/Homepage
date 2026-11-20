@@ -1,6 +1,8 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
+import { useImageFileDrop } from '@/hooks/useImageFileDrop';
+import { ACCEPTED_IMAGE_ACCEPT_ATTR } from '@/lib/image-file-accept';
 import ImageUploadOptimizePanel from './ImageUploadOptimizePanel';
 import {
   COVER_WIDTH_MAX,
@@ -46,13 +48,30 @@ export default function EditorCoverUrlField({
     fileInputRef.current?.click();
   }, []);
 
-  const handleFileChange = useCallback((e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file || !uploadFolder) return;
-    setUploadHint(null);
-    setPendingFile(file);
-  }, [uploadFolder]);
+  const acceptImageFile = useCallback(
+    (file) => {
+      if (!uploadFolder) return;
+      setUploadHint(null);
+      setPendingFile(file);
+    },
+    [uploadFolder]
+  );
+
+  const handleFileChange = useCallback(
+    (e) => {
+      const file = e.target.files?.[0];
+      e.target.value = '';
+      if (!file) return;
+      acceptImageFile(file);
+    },
+    [acceptImageFile]
+  );
+
+  const { isDragging, dropZoneProps } = useImageFileDrop({
+    disabled: !uploadFolder || Boolean(pendingFile),
+    onFile: acceptImageFile,
+    onInvalid: () => setUploadHint('JPG, PNG, WebP, GIF 이미지만 올릴 수 있습니다.'),
+  });
 
   const handleUploadSuccess = useCallback(
     (url) => {
@@ -79,12 +98,16 @@ export default function EditorCoverUrlField({
       <span className="ep-cover__label">{label}</span>
 
       {uploadFolder ? (
-        <div className="ep-cover__upload-row" aria-live="polite">
+        <div
+          className={`ep-cover__upload-row${isDragging ? ' ep-cover__upload-row--dragging' : ''}`}
+          aria-live="polite"
+          {...(!pendingFile ? dropZoneProps : {})}
+        >
           <input
             ref={fileInputRef}
             type="file"
             className="ep-cover__file-input"
-            accept="image/jpeg,image/png,image/webp,image/gif"
+            accept={ACCEPTED_IMAGE_ACCEPT_ATTR}
             onChange={handleFileChange}
             disabled={Boolean(pendingFile)}
             tabIndex={-1}
@@ -92,7 +115,7 @@ export default function EditorCoverUrlField({
           {!pendingFile ? (
             <>
               <button type="button" className="ep-cover__upload-btn" onClick={handlePickFile}>
-                이미지 파일 선택
+                {isDragging ? '여기에 놓기' : '파일 선택 또는 끌어다 놓기'}
               </button>
               <span className="ep-cover__upload-meta">최대 5MB · JPG, PNG, WebP, GIF</span>
             </>

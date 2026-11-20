@@ -1,15 +1,13 @@
+import { getAcceptedImageFiles } from '@/lib/image-file-accept';
 import { isOptimizableImage, optimizeImageFile } from '@/lib/optimize-image-client';
 import { uploadEditorImageFile } from '@/lib/upload-editor-image-client';
-
-const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 
 /**
  * @param {DataTransfer | null | undefined} data
  * @returns {File[]}
  */
 export function getClipboardImageFiles(data) {
-  if (!data) return [];
-  return [...data.files].filter((file) => IMAGE_TYPES.has(file.type));
+  return getAcceptedImageFiles(data);
 }
 
 /**

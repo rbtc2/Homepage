@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useImageFileDrop } from '@/hooks/useImageFileDrop';
+import { ACCEPTED_IMAGE_ACCEPT_ATTR } from '@/lib/image-file-accept';
 import ImageUploadOptimizePanel from './ImageUploadOptimizePanel';
 import icons from './icons';
 
@@ -68,13 +70,26 @@ export default function ImagePicker({ editor }) {
     return () => document.removeEventListener('keydown', handler);
   }, [pendingFile]);
 
-  const handleFileChange = useCallback((e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
+  const acceptImageFile = useCallback((file) => {
     setHint(null);
     setPendingFile(file);
   }, []);
+
+  const handleFileChange = useCallback(
+    (e) => {
+      const file = e.target.files?.[0];
+      e.target.value = '';
+      if (!file) return;
+      acceptImageFile(file);
+    },
+    [acceptImageFile]
+  );
+
+  const { isDragging, dropZoneProps } = useImageFileDrop({
+    disabled: Boolean(pendingFile) || !open,
+    onFile: acceptImageFile,
+    onInvalid: () => setHint('JPG, PNG, WebP, GIF 이미지만 올릴 수 있습니다.'),
+  });
 
   const applyUrl = useCallback(() => {
     const src = normalizeImageUrl(url);
@@ -82,7 +97,12 @@ export default function ImagePicker({ editor }) {
     insertImage(src);
   }, [url, insertImage]);
 
-  const dialogClass = pendingFile ? 'ip ip--wide' : 'ip';
+  const dialogClass = [
+    pendingFile ? 'ip ip--wide' : 'ip',
+    isDragging ? 'ip--dragging' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className="ep-img-picker-wrap" ref={wrapRef}>
@@ -101,7 +121,12 @@ export default function ImagePicker({ editor }) {
       </button>
 
       {open && (
-        <div className={dialogClass} role="dialog" aria-label="이미지 삽입">
+        <div
+          className={dialogClass}
+          role="dialog"
+          aria-label="이미지 삽입"
+          {...(pendingFile ? {} : dropZoneProps)}
+        >
           {pendingFile ? (
             <>
               <p className="ip__label">이미지 최적화</p>
@@ -121,19 +146,19 @@ export default function ImagePicker({ editor }) {
                 ref={fileRef}
                 type="file"
                 className="ip__file-input"
-                accept="image/jpeg,image/png,image/webp,image/gif"
+                accept={ACCEPTED_IMAGE_ACCEPT_ATTR}
                 onChange={handleFileChange}
                 tabIndex={-1}
               />
               <button
                 type="button"
-                className="ip__upload-btn"
+                className={`ip__upload-btn${isDragging ? ' ip__upload-btn--dragging' : ''}`}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   fileRef.current?.click();
                 }}
               >
-                파일에서 선택
+                {isDragging ? '여기에 놓기' : '파일 선택 또는 끌어다 놓기'}
               </button>
               <p className="ip__meta">최대 5MB · JPG, PNG, WebP, GIF</p>
 

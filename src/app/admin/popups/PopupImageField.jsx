@@ -2,19 +2,34 @@
 
 import { useRef, useState, useCallback } from 'react';
 import ImageUploadOptimizePanel from '@/components/editor/ImageUploadOptimizePanel';
+import { useImageFileDrop } from '@/hooks/useImageFileDrop';
+import { ACCEPTED_IMAGE_ACCEPT_ATTR } from '@/lib/image-file-accept';
 
 export default function PopupImageField({ imageUrl, onImageUrlChange }) {
   const fileRef = useRef(null);
   const [pendingFile, setPendingFile] = useState(null);
   const [hint, setHint] = useState(null);
 
-  const handleFile = useCallback((e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
+  const acceptImageFile = useCallback((file) => {
     setHint(null);
     setPendingFile(file);
   }, []);
+
+  const handleFile = useCallback(
+    (e) => {
+      const file = e.target.files?.[0];
+      e.target.value = '';
+      if (!file) return;
+      acceptImageFile(file);
+    },
+    [acceptImageFile]
+  );
+
+  const { isDragging, dropZoneProps } = useImageFileDrop({
+    disabled: Boolean(pendingFile),
+    onFile: acceptImageFile,
+    onInvalid: () => setHint('JPG, PNG, WebP, GIF 이미지만 올릴 수 있습니다.'),
+  });
 
   const handleUploadSuccess = useCallback(
     (url) => {
@@ -35,20 +50,23 @@ export default function PopupImageField({ imageUrl, onImageUrlChange }) {
         ref={fileRef}
         type="file"
         className="an-popup-img__file"
-        accept="image/jpeg,image/png,image/webp,image/gif"
+        accept={ACCEPTED_IMAGE_ACCEPT_ATTR}
         onChange={handleFile}
         disabled={Boolean(pendingFile)}
         tabIndex={-1}
       />
 
       {!pendingFile ? (
-        <div className="an-popup-img__actions">
+        <div
+          className={`an-popup-img__actions${isDragging ? ' an-popup-img__actions--dragging' : ''}`}
+          {...dropZoneProps}
+        >
           <button
             type="button"
             className="an-btn an-btn--secondary an-btn--sm"
             onClick={() => fileRef.current?.click()}
           >
-            이미지 파일 선택
+            {isDragging ? '여기에 놓기' : '파일 선택 또는 끌어다 놓기'}
           </button>
           <span className="an-popup-img__meta">최대 5MB · JPG, PNG, WebP, GIF</span>
         </div>

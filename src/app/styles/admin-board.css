@@ -1090,6 +1090,15 @@ a.an-en-badge--add:hover {
   align-items: center;
   gap: 0.5rem 0.75rem;
   margin-bottom: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border: 1px dashed transparent;
+  border-radius: 8px;
+  transition: border-color 0.12s var(--ease), background 0.12s var(--ease);
+}
+
+.an-popup-img__actions--dragging {
+  border-color: var(--brand);
+  background: rgba(18, 79, 166, 0.06);
 }
 
 .an-popup-img__optimize {
