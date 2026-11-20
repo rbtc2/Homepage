@@ -86,7 +86,7 @@ export async function getWrNewsSecretAuth(id) {
   return getBoardSecretAuth('wr_news', id);
 }
 
-const WR_NEWS_PER_PAGE = 12;
+const WR_NEWS_PER_PAGE = 8;
 
 export const getWrNewsPage = ({ page = 1, itemsPerPage = WR_NEWS_PER_PAGE } = {}) =>
   lib.getPage({ page, itemsPerPage });

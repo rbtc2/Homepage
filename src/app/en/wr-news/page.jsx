@@ -17,7 +17,7 @@ export const metadata = {
 export const revalidate = 60;
 
 const BASE = '/en/wr-news';
-const PER_PAGE = 12;
+const PER_PAGE = 8;
 const LOCALE = 'en';
 
 export default async function EnWrNewsPage({ searchParams }) {

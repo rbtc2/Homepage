@@ -12,7 +12,7 @@ export const metadata = {
 export const revalidate = 60;
 
 const BASE = '/wr-news';
-const PER_PAGE = 12;
+const PER_PAGE = 8;
 
 export default async function WrNewsPage({ searchParams }) {
   const { page: pageParam, q: rawQuery } = await searchParams;
