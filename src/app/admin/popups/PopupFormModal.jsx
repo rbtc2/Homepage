@@ -91,7 +91,6 @@ export default function PopupFormModal({
                     onChange={() => onDisplayModeChange('immediate')}
                   />
                   <span className="an-popup-mode__title">즉시 노출</span>
-                  <span className="an-popup-mode__desc">저장 후 켜기·끄기로 바로 제어합니다.</span>
                 </label>
                 <label className={`an-popup-mode__option${!isImmediate ? ' an-popup-mode__option--on' : ''}`}>
                   <input
@@ -103,7 +102,6 @@ export default function PopupFormModal({
                     onChange={() => onDisplayModeChange('scheduled')}
                   />
                   <span className="an-popup-mode__title">기간 예약</span>
-                  <span className="an-popup-mode__desc">KST 기준 시작·종료 시각에 맞춰 자동 노출합니다.</span>
                 </label>
               </div>
             </fieldset>
