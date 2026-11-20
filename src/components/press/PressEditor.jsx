@@ -136,21 +136,23 @@ export default function PressEditor({ post, backHref, editTitle, newTitle, onSav
       <div className="ep__meta-row press-ep__meta-row">
         <EditorCheckboxField checked={isFeatured} onChange={setIsFeatured} label="목록 상단 대표 노출" />
         <EditorCheckboxField checked={isSecret} onChange={setIsSecret} label="비밀 게시글" />
+        {isSecret ? (
+          <label className="ep__secret-password">
+            <span className="ep__secret-password-label">열람 비밀번호</span>
+            <input
+              type="password"
+              className="ep__secret-password-input"
+              value={secretPassword}
+              onChange={(e) => setSecretPassword(e.target.value)}
+              placeholder={isEdit ? '변경 시에만 입력' : '비밀번호 입력'}
+              autoComplete="new-password"
+              maxLength={100}
+            />
+          </label>
+        ) : null}
         <EditorMetaDate label="기사 게재일" value={publishedAt} onChange={setPublishedAt} />
         <EditorMetaDate label="사이트 등록일" value={createdAt} onChange={setCreatedAt} />
       </div>
-
-      {isSecret ? (
-        <input
-          type="password"
-          className="ep__title-input"
-          value={secretPassword}
-          onChange={(e) => setSecretPassword(e.target.value)}
-          placeholder={isEdit ? '비밀번호 변경 시에만 입력하세요' : '열람 비밀번호를 입력하세요'}
-          autoComplete="new-password"
-          maxLength={100}
-        />
-      ) : null}
 
       <p className="press-ep__hint">
         외부에 게재된 기사를 소개합니다. <strong>원문 URL</strong>과 <strong>게재일</strong>을 정확히 입력해 주세요.

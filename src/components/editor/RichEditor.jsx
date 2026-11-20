@@ -550,24 +550,26 @@ export default function RichEditor({
           {showSecretToggle ? (
             <EditorCheckboxField checked={isSecret} onChange={setIsSecret} label="비밀 게시글" />
           ) : null}
+          {showSecretToggle && isSecret ? (
+            <label className="ep__secret-password">
+              <span className="ep__secret-password-label">열람 비밀번호</span>
+              <input
+                type="password"
+                className="ep__secret-password-input"
+                value={secretPassword}
+                onChange={(e) => setSecretPassword(e.target.value)}
+                placeholder={isEdit ? '변경 시에만 입력' : '비밀번호 입력'}
+                autoComplete="new-password"
+                maxLength={100}
+              />
+            </label>
+          ) : null}
           {showMetaDate ? (
             <EditorMetaDate label="작성일" value={createdAt} onChange={setCreatedAt} />
           ) : null}
         </div>
       ) : null}
       {notice ? <div className="ep__notice">{notice}</div> : null}
-
-      {showSecretToggle && isSecret && (
-        <input
-          type="password"
-          className="ep__title-input"
-          value={secretPassword}
-          onChange={(e) => setSecretPassword(e.target.value)}
-          placeholder={isEdit ? '비밀번호 변경 시에만 입력하세요' : '열람 비밀번호를 입력하세요'}
-          autoComplete="new-password"
-          maxLength={100}
-        />
-      )}
 
       <input
         type="text"
