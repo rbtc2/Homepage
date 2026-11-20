@@ -65,11 +65,12 @@ import { getClipboardImageFiles, insertDroppedImages } from './insert-editor-ima
  * @param {boolean}  showCoverImage   - 커버 이미지 URL 입력 표시 여부 (갤러리용)
  * @param {boolean}  [showCoverWidth=false] - 커버 본문 표시 너비(px) 입력 (WR뉴스)
  * @param {boolean}  [showMetaDate=true] - 작성일 입력 표시 여부
+ * @param {{ id: string, name: string }[] | null} [categoryOptions] - 있으면 분류 선택
  * @param {string}   [titlePlaceholder]
  * @param {string}   [saveLabel]      - 저장 버튼 문구 (없으면 신규/수정 기본값)
  * @param {import('react').ReactNode} [notice] - 제목 위 안내
  * @param {'wr-news'|'gallery'} [coverUploadFolder] - 설정 시 Storage에서 파일 업로드 가능
- * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage?, coverWidth?, isSecret?, secretPassword? }) => void
+ * @param {function} onSave           - async ({ title, content, createdAt, isPinned?, coverImage?, coverWidth?, isSecret?, secretPassword?, categoryId? }) => void
  */
 export default function RichEditor({
   post,
@@ -82,6 +83,7 @@ export default function RichEditor({
   showCoverImage = false,
   showCoverWidth = false,
   showMetaDate = true,
+  categoryOptions = null,
   titlePlaceholder = '제목을 입력하세요',
   saveLabel,
   notice,
@@ -100,6 +102,11 @@ export default function RichEditor({
   const [createdAt, setCreatedAt] = useState(
     post?.createdAt ?? new Date().toISOString().slice(0, 10)
   );
+  const [categoryId, setCategoryId] = useState(() => {
+    const id = post?.categoryId ? String(post.categoryId) : '';
+    if (!id || !categoryOptions?.some((category) => category.id === id)) return '';
+    return id;
+  });
   const [saving, setSaving] = useState(false);
   const [draftId, setDraftId] = useState(null);
   const [draftSaving, setDraftSaving] = useState(false);
@@ -451,6 +458,7 @@ export default function RichEditor({
         coverWidth: showCoverWidth ? coverWidthToInput(coverWidth) : undefined,
         isSecret,
         secretPassword,
+        ...(categoryOptions?.length ? { categoryId: categoryId || null } : {}),
       });
       if (draftId) {
         try {
@@ -482,6 +490,8 @@ export default function RichEditor({
     showCoverWidth,
     showSecretToggle,
     post?.hasSecretPassword,
+    categoryOptions,
+    categoryId,
     onSave,
     backHref,
     router,
@@ -492,7 +502,8 @@ export default function RichEditor({
   const pageTitle = isEdit ? editTitle : newTitle;
   const primaryLabel = saveLabel ?? (isEdit ? '수정 완료' : '게시하기');
   const showDrafts = Boolean(contentType);
-  const showMetaRow = showPinToggle || showSecretToggle || showMetaDate;
+  const showCategory = Boolean(categoryOptions?.length);
+  const showMetaRow = showPinToggle || showSecretToggle || showMetaDate || showCategory;
 
   return (
     <EditorPageFrame
@@ -518,6 +529,21 @@ export default function RichEditor({
     >
       {showMetaRow ? (
         <div className="ep__meta-row">
+          {showCategory ? (
+            <label className="ep__category">
+              <span className="ep__category-label">분류</span>
+              <select
+                className="ep__category-select"
+                value={categoryId}
+                onChange={(event) => setCategoryId(event.target.value)}
+              >
+                <option value="">분류 없음</option>
+                {categoryOptions.map((category) => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+              </select>
+            </label>
+          ) : null}
           {showPinToggle ? (
             <EditorCheckboxField checked={isPinned} onChange={setIsPinned} label="공지로 고정" />
           ) : null}

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getArchiveById, getArchiveSecretAuth } from '@/lib/archive';
+import { getArchiveCategoryState } from '@/lib/archive-categories';
 import { withSecretEditMeta } from '@/lib/secret-post';
 import EditorPage from '../../EditorPage';
 
@@ -12,8 +13,16 @@ export async function generateMetadata({ params }) {
 
 export default async function EditArchivePage({ params }) {
   const { id } = await params;
-  const archive = await getArchiveById(id);
+  const [archive, categoryState] = await Promise.all([
+    getArchiveById(id),
+    getArchiveCategoryState(),
+  ]);
   if (!archive) notFound();
   const secretAuth = await getArchiveSecretAuth(id);
-  return <EditorPage archive={withSecretEditMeta(archive, secretAuth)} />;
+  return (
+    <EditorPage
+      archive={withSecretEditMeta(archive, secretAuth)}
+      categoryState={categoryState}
+    />
+  );
 }

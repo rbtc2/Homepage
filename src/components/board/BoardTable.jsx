@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import HighlightedText from './HighlightedText';
+import CategoryMark from './CategoryMark';
 
 const TABLE_UI = {
   ko: {
@@ -50,6 +51,7 @@ const TABLE_UI = {
  * @param {string}   query       - 검색어
  * @param {string}   emptyText   - 검색 결과 없을 때 표시할 게시물 종류 (예: '공지사항을' / 'notices')
  * @param {'ko'|'en'} [locale]
+ * @param {Record<string, string> | null} [categoryLabels] - 게시물 id별 말머리
  */
 export default function BoardTable({
   rows,
@@ -58,6 +60,7 @@ export default function BoardTable({
   query,
   emptyText,
   locale = 'ko',
+  categoryLabels = null,
 }) {
   const ui = TABLE_UI[locale] ?? TABLE_UI.ko;
 
@@ -111,6 +114,7 @@ export default function BoardTable({
                 <td className="notice-table__td notice-table__td--title">
                   <Link href={`${basePath}/${post.id}`} className="notice-table__link">
                     {post.isSecret ? '🔒 ' : ''}
+                    <CategoryMark label={categoryLabels?.[post.categoryId]} />
                     {isSearching
                       ? <HighlightedText text={post.title} query={query} />
                       : post.title}

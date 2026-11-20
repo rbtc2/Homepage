@@ -83,6 +83,7 @@
 .ep__meta-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
   padding: 1rem 1.75rem;
   border-bottom: 1px solid var(--line);
@@ -111,6 +112,32 @@
   margin-left: auto;
   font-size: 0.8125rem;
   color: var(--muted);
+}
+
+.ep__category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.ep__category-select {
+  max-width: 14rem;
+  padding: 0.35rem 1.7rem 0.35rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238898aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.45rem center;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  appearance: none;
 }
 
 /* ── 제목 입력 ──────────────────────────────────────────────── */

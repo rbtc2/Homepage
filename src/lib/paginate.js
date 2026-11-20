@@ -24,9 +24,15 @@ export function calcTotalPages(totalCount, itemsPerPage = ITEMS_PER_PAGE) {
  * @param {string} basePath - 예: '/notices'
  * @param {number} page
  * @param {string} query
+ * @param {Record<string, string | number | null | undefined>} [extra]
  */
-export function buildBoardHref(basePath, page, query) {
+export function buildBoardHref(basePath, page, query, extra) {
   const params = new URLSearchParams();
+  if (extra) {
+    for (const [key, value] of Object.entries(extra)) {
+      if (value != null && String(value) !== '') params.set(key, String(value));
+    }
+  }
   if (query) params.set('q', query);
   if (page > 1) params.set('page', String(page));
   const qs = params.toString();

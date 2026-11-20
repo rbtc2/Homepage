@@ -308,6 +308,60 @@
   border-radius: 2px;
 }
 
+.board-cat {
+  margin-right: 0.35em;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.board-filter {
+  margin-bottom: 1rem;
+}
+
+.board-filter__chips {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.board-filter__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35em 0.9em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color 0.15s var(--ease),
+    background 0.15s var(--ease),
+    color 0.15s var(--ease);
+}
+
+.board-filter__chip:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.board-filter__chip--active {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+  pointer-events: none;
+}
+
+.board-filter__chip:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 /* ── Notice badge ─────────────────────────────────────────── */
 .notice-badge {
   display: inline-flex;

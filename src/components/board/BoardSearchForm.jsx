@@ -5,6 +5,7 @@ export default function BoardSearchForm({
   locale = 'ko',
   placeholder,
   submitLabel,
+  hiddenFields,
 }) {
   const ph = placeholder ?? (locale === 'en' ? 'Search titles or content' : '제목 또는 내용으로 검색');
   const submit = submitLabel ?? (locale === 'en' ? 'Search' : '검색');
@@ -16,6 +17,11 @@ export default function BoardSearchForm({
       role="search"
       aria-label={ariaLabel}
     >
+      {hiddenFields
+        ? Object.entries(hiddenFields).map(([name, value]) => (
+          value ? <input key={name} type="hidden" name={name} value={value} /> : null
+        ))
+        : null}
       <div className="notice-search__field">
         <svg
           className="notice-search__icon"

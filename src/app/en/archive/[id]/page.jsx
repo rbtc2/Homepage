@@ -7,7 +7,7 @@ export { generateMetadata } from '@/app/(site)/archive/[id]/page';
 export default async function Page(props) {
   return (
     <EnPendingPage>
-      <SourcePage {...props} />
+      <SourcePage {...props} locale="en" />
     </EnPendingPage>
   );
 }

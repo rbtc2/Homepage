@@ -80,22 +80,24 @@ export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) 
 
   /**
    * DB 레벨 검색 + 페이지네이션.
-   * @param {{ query: string, page?: number, itemsPerPage?: number }} options
+   * @param {{ query: string, page?: number, itemsPerPage?: number, applyFilter?: (q: object) => object }} options
    * @returns {{ items: object[], totalCount: number }}
    */
-  async function searchPage({ query, page = 1, itemsPerPage = ITEMS_PER_PAGE }) {
-    if (!query || !query.trim()) return getPage({ page, itemsPerPage });
+  async function searchPage({ query, page = 1, itemsPerPage = ITEMS_PER_PAGE, applyFilter } = {}) {
+    if (!query || !query.trim()) return getPage({ page, itemsPerPage, applyFilter });
     const from = (page - 1) * itemsPerPage;
     const to = from + itemsPerPage - 1;
     const q = escapeLike(query.trim());
     const runSearch = (fields) => {
       const orExpr = fields.map((field) => `${field}.ilike.%${q}%`).join(',');
-      return supabase
+      let request = supabase
         .from(tableName)
         .select('*', { count: 'exact' })
         .or(orExpr)
         .order('id', { ascending: false })
         .range(from, to);
+      if (applyFilter) request = applyFilter(request);
+      return request;
     };
 
     let { data, error, count } = await runSearch(orSearchFields);

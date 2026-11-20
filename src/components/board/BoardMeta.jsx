@@ -42,6 +42,8 @@ export default function BoardMeta({
   allCount,
   locale = 'ko',
   enAllUnit = 'posts',
+  clearHref,
+  idleCount = null,
 }) {
   const ui = COPY[locale] ?? COPY.ko;
 
@@ -52,7 +54,7 @@ export default function BoardMeta({
           <span className="notice-board__query-tag">
             {ui.results(query, searchCount)}
           </span>
-          <Link href={basePath} className="notice-board__clear" aria-label={ui.clearAria}>
+          <Link href={clearHref ?? basePath} className="notice-board__clear" aria-label={ui.clearAria}>
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
               <path d="M1.5 1.5L8.5 8.5M8.5 1.5L1.5 8.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
             </svg>
@@ -60,7 +62,7 @@ export default function BoardMeta({
           </Link>
         </span>
       ) : (
-        <span className="notice-board__count">{ui.all(allCount, locale === 'en' ? enAllUnit : undefined)}</span>
+        <span className="notice-board__count">{idleCount ?? ui.all(allCount, locale === 'en' ? enAllUnit : undefined)}</span>
       )}
     </div>
   );

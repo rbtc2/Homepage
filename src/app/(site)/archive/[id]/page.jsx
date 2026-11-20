@@ -3,7 +3,10 @@ import { notFound } from 'next/navigation';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
 import SecretPostGate from '@/components/board/SecretPostGate';
+import CategoryMark from '@/components/board/CategoryMark';
 import { getArchiveById, getArchiveSecretAuth, getPrevNext } from '@/lib/archive';
+import { archivePublicPath, getArchiveCategoryState, visibleCategoryLabel } from '@/lib/archive-categories';
+import { homeHref } from '@/lib/i18n';
 import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export const revalidate = 3600;
@@ -15,10 +18,15 @@ export async function generateMetadata({ params }) {
   return { title: `${archive.title} | 국제인권연대 월드라이츠(WORLD RIGHTS)` };
 }
 
-export default async function ArchiveDetailPage({ params }) {
+export default async function ArchiveDetailPage({ params, locale = 'ko' }) {
   const { id } = await params;
-  const archive = await getArchiveById(id);
+  const basePath = archivePublicPath(locale);
+  const [archive, categoryState] = await Promise.all([
+    getArchiveById(id),
+    getArchiveCategoryState(),
+  ]);
   if (!archive) notFound();
+  const categoryText = visibleCategoryLabel(categoryState, archive.categoryId, locale);
   const secretAuth = await getArchiveSecretAuth(id);
   const board = SECRET_BOARD_CONFIG.archive;
   const canRead = await canReadSecretPost({
@@ -35,13 +43,13 @@ export default async function ArchiveDetailPage({ params }) {
       <main role="main">
         <div className="nd-wrap">
           <nav className="nd-crumb" aria-label="위치">
-            <Link href="/" className="nd-crumb__link">
+            <Link href={homeHref(locale)} className="nd-crumb__link">
               홈
             </Link>
             <span className="nd-crumb__sep" aria-hidden="true">
               /
             </span>
-            <Link href="/archive" className="nd-crumb__link">
+            <Link href={basePath} className="nd-crumb__link">
               자료실
             </Link>
             <span className="nd-crumb__sep" aria-hidden="true">
@@ -54,7 +62,10 @@ export default async function ArchiveDetailPage({ params }) {
 
           <article className="nd">
             <header className="nd__hd">
-              <h1 className="nd__title">{archive.title}</h1>
+              <h1 className="nd__title">
+                <CategoryMark label={categoryText} />
+                {archive.title}
+              </h1>
               <div className="nd__byline">
                 <span className="nd__byline-item">
                   <span className="nd__byline-label">작성자</span>
@@ -80,7 +91,7 @@ export default async function ArchiveDetailPage({ params }) {
 
           <nav className="nd-sibling" aria-label="이전·다음 글">
             {next && (
-              <Link href={`/archive/${next.id}`} className="nd-sibling__item">
+              <Link href={`${basePath}/${next.id}`} className="nd-sibling__item">
                 <span className="nd-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path
@@ -97,7 +108,7 @@ export default async function ArchiveDetailPage({ params }) {
               </Link>
             )}
             {prev && (
-              <Link href={`/archive/${prev.id}`} className="nd-sibling__item">
+              <Link href={`${basePath}/${prev.id}`} className="nd-sibling__item">
                 <span className="nd-sibling__dir">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path
@@ -116,7 +127,7 @@ export default async function ArchiveDetailPage({ params }) {
           </nav>
 
           <div className="nd-foot">
-            <Link href="/archive" className="nd-foot__back">
+            <Link href={basePath} className="nd-foot__back">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path
                   d="M8.5 3L5 7L8.5 11"

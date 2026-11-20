@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { buildBoardHref } from '@/lib/paginate';
 
-export default function BoardPagination({ page, totalPages, basePath, query, locale = 'ko' }) {
+export default function BoardPagination({ page, totalPages, basePath, query, locale = 'ko', extra }) {
   if (totalPages <= 1) return null;
 
   const aria = locale === 'en' ? 'Pagination' : '페이지 탐색';
@@ -12,7 +12,7 @@ export default function BoardPagination({ page, totalPages, basePath, query, loc
     <nav className="pagination" aria-label={aria}>
       {page > 1 && (
         <Link
-          href={buildBoardHref(basePath, page - 1, query)}
+          href={buildBoardHref(basePath, page - 1, query, extra)}
           className="pagination__btn"
           aria-label={prevLabel}
         >
@@ -24,7 +24,7 @@ export default function BoardPagination({ page, totalPages, basePath, query, loc
       {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
         <Link
           key={p}
-          href={buildBoardHref(basePath, p, query)}
+          href={buildBoardHref(basePath, p, query, extra)}
           className={`pagination__btn${p === page ? ' pagination__btn--active' : ''}`}
           aria-current={p === page ? 'page' : undefined}
         >
@@ -33,7 +33,7 @@ export default function BoardPagination({ page, totalPages, basePath, query, loc
       ))}
       {page < totalPages && (
         <Link
-          href={buildBoardHref(basePath, page + 1, query)}
+          href={buildBoardHref(basePath, page + 1, query, extra)}
           className="pagination__btn"
           aria-label={nextLabel}
         >
