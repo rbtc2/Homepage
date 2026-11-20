@@ -5,6 +5,8 @@ import { getWrNewsPage, localizeWrNewsPosts } from '@/lib/wr-news';
 const LIST_PATH_KO = '/wr-news';
 const LIST_PATH_EN = '/en/wr-news';
 const HOME_ITEMS = 4;
+/** 비밀글 제외 후에도 HOME_ITEMS를 채우기 위해 여유분 조회 */
+const FETCH_POOL = HOME_ITEMS * 5;
 const HERO_SNIPPET_MAX = 280;
 
 function toPlainSnippet(html, max) {
@@ -43,13 +45,23 @@ function Chevron() {
 }
 
 export default async function HomeWrNewsBlock({ locale = 'ko' }) {
-  const { items: rawItems } = await getWrNewsPage({ page: 1, itemsPerPage: HOME_ITEMS });
-  const items = localizeWrNewsPosts(rawItems, locale);
+  const isEn = locale === 'en';
+  const listPath = isEn ? LIST_PATH_EN : LIST_PATH_KO;
+
+  let items = [];
+  try {
+    const { items: rawItems } = await getWrNewsPage({ page: 1, itemsPerPage: FETCH_POOL });
+    items = localizeWrNewsPosts(rawItems, locale)
+      .filter((post) => !post.isSecret)
+      .slice(0, HOME_ITEMS);
+  } catch (err) {
+    console.error('[HomeWrNewsBlock]', err);
+    return null;
+  }
+
   const primary = items[0];
   const secondary = items.slice(1, HOME_ITEMS);
   const multi = secondary.length > 0;
-  const isEn = locale === 'en';
-  const listPath = isEn ? LIST_PATH_EN : LIST_PATH_KO;
   const primarySnip = primary ? toPlainSnippet(primary.content, HERO_SNIPPET_MAX) : '';
 
   return (

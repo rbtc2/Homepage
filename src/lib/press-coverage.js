@@ -2,6 +2,10 @@ import { supabase } from './supabase';
 import { ITEMS_PER_PAGE } from './paginate';
 import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 
+/** anon 공개 컬럼 — secret_password_hash 제외 */
+const PRESS_SELECT =
+  'id, title, source_name, article_url, published_at, summary, thumbnail_url, content, author, created_at, views, is_featured, is_secret';
+
 function normalize(row) {
   if (!row) return null;
   const viewsNum = Number(row.views);
@@ -38,7 +42,7 @@ function orderByDateDesc(q) {
 /** 대표 노출 글 (목록 1페이지 상단) */
 export async function getFeaturedPress() {
   const { data, error } = await orderByDateDesc(
-    supabase.from('press_coverage').select('*').eq('is_featured', true)
+    supabase.from('press_coverage').select(PRESS_SELECT).eq('is_featured', true)
   );
   if (error) throw new Error(error.message);
   return (data ?? []).map(normalize);
@@ -50,7 +54,7 @@ export async function getPressPage({ page = 1, itemsPerPage = ITEMS_PER_PAGE } =
   const to = from + itemsPerPage - 1;
   const { data, error, count } = await supabase
     .from('press_coverage')
-    .select('*', { count: 'exact' })
+    .select(PRESS_SELECT, { count: 'exact' })
     .eq('is_featured', false)
     .order('published_at', { ascending: false })
     .order('id', { ascending: false })
@@ -67,7 +71,7 @@ export async function searchPressPage({ query, page = 1, itemsPerPage = ITEMS_PE
   const to = from + itemsPerPage - 1;
   const { data, error, count } = await supabase
     .from('press_coverage')
-    .select('*', { count: 'exact' })
+    .select(PRESS_SELECT, { count: 'exact' })
     .or(
       `title.ilike.%${q}%,summary.ilike.%${q}%,source_name.ilike.%${q}%,content.ilike.%${q}%`
     )
@@ -84,7 +88,7 @@ export async function getPressById(id) {
   const idEq = typeof id === 'number' ? id : String(id).trim();
   const { data, error } = await supabase
     .from('press_coverage')
-    .select('*')
+    .select(PRESS_SELECT)
     .eq('id', idEq)
     .single();
   if (error) return null;
@@ -156,7 +160,7 @@ export async function getPrevNextPress(id) {
 export async function getAllPress() {
   const { data, error } = await supabase
     .from('press_coverage')
-    .select('*')
+    .select(PRESS_SELECT)
     .order('published_at', { ascending: false })
     .order('id', { ascending: false });
   if (error) throw new Error(error.message);

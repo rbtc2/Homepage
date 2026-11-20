@@ -71,14 +71,16 @@ export default function WrNewsList({
     <>
       <ul className="wnl" aria-label={ui.listAria}>
         {items.map((post, i) => {
-          const snippet = toPlainSnippet(post.content, 160);
+          const isSecret = Boolean(post.isSecret);
+          const snippet = isSecret ? ui.secretExcerpt : toPlainSnippet(post.content, 160);
           const date = formatYmd(post.createdAt);
+          const showCover = Boolean(post.coverImage) && !isSecret;
 
           return (
             <li key={post.id} className="wnl__item">
               <Link href={`${basePath}/${post.id}`} className="wnl__link">
                 <span className="wnl__thumb">
-                  {post.coverImage ? (
+                  {showCover ? (
                     <Image
                       src={post.coverImage}
                       alt=""
@@ -105,7 +107,10 @@ export default function WrNewsList({
                   )}
                 </span>
                 <span className="wnl__body">
-                  <span className="wnl__title">{post.title}</span>
+                  <span className="wnl__title">
+                    {isSecret ? '🔒 ' : ''}
+                    {post.title}
+                  </span>
                   {snippet ? <span className="wnl__snip">{snippet}</span> : null}
                   <span className="wnl__meta">
                     <span>{post.author}</span>

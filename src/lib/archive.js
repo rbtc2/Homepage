@@ -2,6 +2,7 @@ import { createPostLib } from './db';
 import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 
 const lib = createPostLib('archive', {
+  select: 'id, title, content, author, created_at, views, is_secret, category_id',
   normalizeExtra: (row) => ({
     ...normalizeSecretExtra(row),
     categoryId:

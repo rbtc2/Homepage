@@ -25,9 +25,12 @@ export const SECRET_BOARD_CONFIG = {
 };
 
 export function normalizeSecretExtra(row) {
+  const isSecret = Boolean(row.is_secret);
+  // anon에는 secret_password_hash 컬럼이 REVOKE 됨 — 공개 select에 없으면 is_secret 기준으로 표시
+  const hasHashField = Object.prototype.hasOwnProperty.call(row, 'secret_password_hash');
   return {
-    isSecret: Boolean(row.is_secret),
-    hasSecretPassword: Boolean(row.secret_password_hash),
+    isSecret,
+    hasSecretPassword: hasHashField ? Boolean(row.secret_password_hash) : isSecret,
   };
 }
 

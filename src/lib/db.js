@@ -7,9 +7,14 @@ const SEARCH_FIELD_RE = /^[a-z_]+$/;
 /**
  * 게시판 테이블 공통 CRUD 유틸 팩토리.
  * @param {string} tableName - Supabase 테이블 이름
- * @param {{ normalizeExtra?: (row: object) => object, searchFields?: string[] }} options
+ * @param {{
+ *   normalizeExtra?: (row: object) => object,
+ *   searchFields?: string[],
+ *   select?: string,
+ * }} options
+ * `select`는 anon이 볼 수 있는 컬럼만 (secret_password_hash 제외).
  */
-export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) {
+export function createPostLib(tableName, { normalizeExtra, searchFields, select = '*' } = {}) {
   const orSearchFields = (searchFields ?? ['title', 'content']).filter((field) =>
     SEARCH_FIELD_RE.test(field)
   );
@@ -31,7 +36,7 @@ export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) 
   async function getAll() {
     const { data, error } = await supabase
       .from(tableName)
-      .select('*')
+      .select(select)
       .order('id', { ascending: false });
 
     if (error) throw new Error(error.message);
@@ -43,7 +48,7 @@ export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) 
    * @param {(q: object) => object} applyFilter
    */
   async function getWhere(applyFilter) {
-    let q = supabase.from(tableName).select('*').order('id', { ascending: false });
+    let q = supabase.from(tableName).select(select).order('id', { ascending: false });
     if (applyFilter) q = applyFilter(q);
     const { data, error } = await q;
     if (error) throw new Error(error.message);
@@ -60,7 +65,7 @@ export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) 
     const to = from + itemsPerPage - 1;
     let q = supabase
       .from(tableName)
-      .select('*', { count: 'exact' })
+      .select(select, { count: 'exact' })
       .order('id', { ascending: false })
       .range(from, to);
     if (applyFilter) q = applyFilter(q);
@@ -92,7 +97,7 @@ export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) 
       const orExpr = fields.map((field) => `${field}.ilike.%${q}%`).join(',');
       let request = supabase
         .from(tableName)
-        .select('*', { count: 'exact' })
+        .select(select, { count: 'exact' })
         .or(orExpr)
         .order('id', { ascending: false })
         .range(from, to);
@@ -117,7 +122,7 @@ export function createPostLib(tableName, { normalizeExtra, searchFields } = {}) 
     const idEq = typeof id === 'number' ? id : String(id).trim();
     const { data, error } = await supabase
       .from(tableName)
-      .select('*')
+      .select(select)
       .eq('id', idEq)
       .single();
 

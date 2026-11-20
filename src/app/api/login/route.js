@@ -9,8 +9,17 @@ export async function POST(request) {
   const { id, password } = await request.json();
 
   const adminId = process.env.ADMIN_ID?.trim() || 'admin';
-  // 환경변수 ADMIN_PASSWORD(예: Vercel에 admin)가 코드 기본값을 덮어써 혼선이 생겨 고정값 사용
-  const adminPassword = 'wr20260326!!';
+  const adminPassword = process.env.ADMIN_PASSWORD?.trim() ?? '';
+
+  if (!adminPassword) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: '서버에 ADMIN_PASSWORD가 설정되지 않았습니다.',
+      },
+      { status: 500 }
+    );
+  }
 
   if (id !== adminId || password !== adminPassword) {
     return NextResponse.json(

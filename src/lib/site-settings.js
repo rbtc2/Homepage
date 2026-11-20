@@ -9,8 +9,21 @@ export const DEFAULT_SITE_FOOTER = {
   faxNumber: '0504-287-7334',
 };
 
-/** 회원가입 신청 버튼(단체 후원 안내 페이지) 외부 URL 기본값 */
-export const DEFAULT_SIGNUP_APPLICATION_URL = 'https://example.com';
+/** 회원가입 신청 URL — 미설정 시 빈 문자열(링크 비활성) */
+export const DEFAULT_SIGNUP_APPLICATION_URL = '';
+
+/** http(s) URL만 허용. 아니면 빈 문자열. */
+export function resolveSignupApplicationHref(raw) {
+  const s = String(raw ?? '').trim();
+  if (!s) return '';
+  try {
+    const u = new URL(s);
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return '';
+    return u.href;
+  } catch {
+    return '';
+  }
+}
 
 async function fetchSiteFooterFromDb() {
   const { data, error } = await supabase
@@ -28,12 +41,7 @@ async function fetchSiteFooterFromDb() {
     };
   }
 
-  const rawSignup =
-    data.signup_application_url != null
-      ? String(data.signup_application_url).trim()
-      : '';
-  const signupApplicationUrl =
-    rawSignup.length > 0 ? rawSignup : DEFAULT_SIGNUP_APPLICATION_URL;
+  const signupApplicationUrl = resolveSignupApplicationHref(data.signup_application_url);
 
   return {
     officeAddress:

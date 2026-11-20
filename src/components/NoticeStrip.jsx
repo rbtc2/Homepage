@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { getNotices, localizeNotices } from '@/lib/notices';
+import { getPinnedNotices, localizeNotices } from '@/lib/notices';
+
+const HOME_PINNED_LIMIT = 2;
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
@@ -16,11 +18,17 @@ function ArrowIcon() {
 }
 
 export default async function NoticeStrip({ locale = 'ko' }) {
-  const allNotices = localizeNotices(await getNotices(), locale);
-  const pinnedNotices = allNotices
-    .filter((n) => n.isPinned)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 2);
+  let pinnedNotices = [];
+  try {
+    const pinned = localizeNotices(await getPinnedNotices(), locale);
+    pinnedNotices = pinned
+      .filter((n) => !n.isSecret)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, HOME_PINNED_LIMIT);
+  } catch (err) {
+    console.error('[NoticeStrip]', err);
+    return null;
+  }
 
   if (pinnedNotices.length === 0) return null;
 

@@ -13,7 +13,7 @@ export const metadata = {
 export default function EnHomePage() {
   return (
     <>
-      <HeroBanner />
+      <HeroBanner locale="en" />
       <NoticeStrip locale="en" />
       <main className="main main--flush" role="main">
         <HomeWrNewsBlock locale="en" />

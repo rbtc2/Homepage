@@ -1,6 +1,6 @@
 import {
-  DEFAULT_SIGNUP_APPLICATION_URL,
   getSiteFooterSettings,
+  resolveSignupApplicationHref,
 } from '@/lib/site-settings';
 
 export const metadata = {
@@ -11,10 +11,7 @@ export const metadata = {
 
 export default async function DuesPage() {
   const { signupApplicationUrl } = await getSiteFooterSettings();
-  const applicationHref =
-    signupApplicationUrl && /^https?:\/\//i.test(signupApplicationUrl.trim())
-      ? signupApplicationUrl.trim()
-      : DEFAULT_SIGNUP_APPLICATION_URL;
+  const applicationHref = resolveSignupApplicationHref(signupApplicationUrl);
 
   return (
     <>
@@ -55,18 +52,23 @@ export default async function DuesPage() {
                   월드라이츠는 단단하고 투명한 조직을 지향하며, 단 1원의 회비도 허투루
                   사용하지 않습니다. 매년 초 홈페이지를 통해 전년도 수입 및 지출 내역을
                   투명하게 보고하며, 회비가 투입된 프로젝트의 성과를 뉴스레터와 연간 보고서를
-                  통해 회원님께 가장 먼저 보고드립니다.{' '}
-                  <a
-                    href={applicationHref}
-                    className="su-cta-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="su-cta-link__label">회원가입 신청 링크</span>
-                    <span className="su-cta-link__icon" aria-hidden="true">
-                      ↗
-                    </span>
-                  </a>
+                  통해 회원님께 가장 먼저 보고드립니다.
+                  {applicationHref ? (
+                    <>
+                      {' '}
+                      <a
+                        href={applicationHref}
+                        className="su-cta-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <span className="su-cta-link__label">회원가입 신청 링크</span>
+                        <span className="su-cta-link__icon" aria-hidden="true">
+                          ↗
+                        </span>
+                      </a>
+                    </>
+                  ) : null}
                 </p>
               </div>
             </article>

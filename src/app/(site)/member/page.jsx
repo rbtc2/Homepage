@@ -1,6 +1,6 @@
 import {
-  DEFAULT_SIGNUP_APPLICATION_URL,
   getSiteFooterSettings,
+  resolveSignupApplicationHref,
 } from '@/lib/site-settings';
 
 export const metadata = {
@@ -27,10 +27,7 @@ function FlowArrow() {
 
 export default async function MemberPage() {
   const { signupApplicationUrl } = await getSiteFooterSettings();
-  const applicationHref =
-    signupApplicationUrl && /^https?:\/\//i.test(signupApplicationUrl.trim())
-      ? signupApplicationUrl.trim()
-      : DEFAULT_SIGNUP_APPLICATION_URL;
+  const applicationHref = resolveSignupApplicationHref(signupApplicationUrl);
 
   return (
     <>
@@ -86,18 +83,24 @@ export default async function MemberPage() {
 
             <p className="su-procedure-lead">
               국제인권연대 월드라이츠의 목적과 취지에 동의하는 분이라면 누구나 월드라이츠의 회원이 되실 수 있습니다. 회원 신규가입을 원하시는 경우{' '}
-              <a
-                href={applicationHref}
-                className="su-cta-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="su-cta-link__label">회원가입 신청 링크</span>
-                <span className="su-cta-link__icon" aria-hidden="true">
-                  ↗
-                </span>
-              </a>
-              를 통해 신청서를 제출해 주시기 바랍니다.
+              {applicationHref ? (
+                <a
+                  href={applicationHref}
+                  className="su-cta-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="su-cta-link__label">회원가입 신청 링크</span>
+                  <span className="su-cta-link__icon" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              ) : (
+                <strong>회원가입 신청 링크</strong>
+              )}
+              {applicationHref
+                ? '를 통해 신청서를 제출해 주시기 바랍니다.'
+                : '는 준비 중입니다. 문의는 연락처로 부탁드립니다.'}
             </p>
 
             <div className="su-flow" role="group" aria-label="회원가입 4단계 절차">

@@ -9,11 +9,30 @@ const AUTO_PLAY_MS = 6000;
 
 /** 배경만 쓰는 풀블리드 슬라이드. 파일명은 public/images/hero/slides/ 기준 */
 const HERO_SLIDES = [
-  { backgroundImage: 'slide-01.webp', label: '배너 이미지 1' },
-  { backgroundImage: 'slide-02.webp', label: '배너 이미지 2' },
-  { backgroundImage: 'slide-03.webp', label: '배너 이미지 3' },
-  { backgroundImage: 'slide-04.webp', label: '배너 이미지 4' },
+  { backgroundImage: 'slide-01.webp', labelKo: '배너 이미지 1', labelEn: 'Banner image 1' },
+  { backgroundImage: 'slide-02.webp', labelKo: '배너 이미지 2', labelEn: 'Banner image 2' },
+  { backgroundImage: 'slide-03.webp', labelKo: '배너 이미지 3', labelEn: 'Banner image 3' },
+  { backgroundImage: 'slide-04.webp', labelKo: '배너 이미지 4', labelEn: 'Banner image 4' },
 ];
+
+const HERO_UI = {
+  ko: {
+    section: '메인 배너 슬라이드',
+    live: (label, index, total) => `${label}, ${index}번째 슬라이드, 전체 ${total}장 중`,
+    prev: '이전 슬라이드',
+    next: '다음 슬라이드',
+    dots: '배너 슬라이드 선택',
+    show: (label) => `${label} 보기`,
+  },
+  en: {
+    section: 'Main banner slides',
+    live: (label, index, total) => `${label}, slide ${index} of ${total}`,
+    prev: 'Previous slide',
+    next: 'Next slide',
+    dots: 'Choose banner slide',
+    show: (label) => `Show ${label}`,
+  },
+};
 
 function getNextIndex(current, delta, total) {
   return (current + delta + total) % total;
@@ -27,7 +46,9 @@ function urlForSlide(slide) {
   return slide?.backgroundImage ? slideUrl(slide.backgroundImage) : null;
 }
 
-export default function HeroBanner() {
+export default function HeroBanner({ locale = 'ko' }) {
+  const ui = HERO_UI[locale] ?? HERO_UI.ko;
+  const isEn = locale === 'en';
   const firstUrl = urlForSlide(HERO_SLIDES[0]);
   const [index, setIndex] = useState(0);
   const [urlA, setUrlA] = useState(firstUrl);
@@ -37,17 +58,25 @@ export default function HeroBanner() {
 
   const indexRef = useRef(index);
   const topLayerRef = useRef(topLayer);
-  indexRef.current = index;
-  topLayerRef.current = topLayer;
+
+  useEffect(() => {
+    indexRef.current = index;
+    topLayerRef.current = topLayer;
+  }, [index, topLayer]);
 
   /** 호버·포커스(키보드) 시 자동 재생 일시정지 */
   const [interactionPaused, setInteractionPaused] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [tabHidden, setTabHidden] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
+  const [tabHidden, setTabHidden] = useState(() => {
+    if (typeof document === 'undefined') return false;
+    return document.hidden;
+  });
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mq.matches);
     const onMq = () => setPrefersReducedMotion(mq.matches);
     mq.addEventListener('change', onMq);
     return () => mq.removeEventListener('change', onMq);
@@ -55,7 +84,6 @@ export default function HeroBanner() {
 
   useEffect(() => {
     const onVis = () => setTabHidden(document.hidden);
-    onVis();
     document.addEventListener('visibilitychange', onVis);
     return () => document.removeEventListener('visibilitychange', onVis);
   }, []);
@@ -85,6 +113,7 @@ export default function HeroBanner() {
   }, [autoPlayBlocked, goTo]);
 
   const slide = HERO_SLIDES[index];
+  const slideLabel = isEn ? slide.labelEn : slide.labelKo;
 
   function handleBlurCapture(e) {
     if (!e.currentTarget.contains(e.relatedTarget)) {
@@ -105,7 +134,7 @@ export default function HeroBanner() {
   const styleB = urlB ? { backgroundImage: `url("${urlB}")` } : undefined;
 
   return (
-    <section className="hero" aria-label="메인 배너 슬라이드">
+    <section className="hero" aria-label={ui.section}>
       <div
         className="hero__viewport"
         id="hero-viewport"
@@ -126,14 +155,14 @@ export default function HeroBanner() {
         </div>
         <div className="hero__slide hero__slide--images-only">
           <p className="hero__sr-only" aria-live="polite">
-            {slide.label}, {index + 1}번째 슬라이드, 전체 {HERO_SLIDES.length}장 중
+            {ui.live(slideLabel, index + 1, HERO_SLIDES.length)}
           </p>
         </div>
 
         <button
           type="button"
           className="hero__ctrl hero__ctrl--prev"
-          aria-label="이전 슬라이드"
+          aria-label={ui.prev}
           onClick={() => goTo(getNextIndex(index, -1, HERO_SLIDES.length))}
         >
           <svg className="hero__chevron" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -143,7 +172,7 @@ export default function HeroBanner() {
         <button
           type="button"
           className="hero__ctrl hero__ctrl--next"
-          aria-label="다음 슬라이드"
+          aria-label={ui.next}
           onClick={() => goTo(getNextIndex(index, +1, HERO_SLIDES.length))}
         >
           <svg className="hero__chevron" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -151,13 +180,13 @@ export default function HeroBanner() {
           </svg>
         </button>
 
-        <nav className="hero__dots" aria-label="배너 슬라이드 선택">
+        <nav className="hero__dots" aria-label={ui.dots}>
           {HERO_SLIDES.map((s, i) => (
             <button
               key={i}
               type="button"
               className={`hero__dot ${i === index ? 'hero__dot--active' : ''}`}
-              aria-label={`${s.label} 보기`}
+              aria-label={ui.show(isEn ? s.labelEn : s.labelKo)}
               aria-current={i === index ? 'true' : undefined}
               onClick={() => goTo(i)}
             >

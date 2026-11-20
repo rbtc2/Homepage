@@ -2,6 +2,7 @@ import { createPostLib } from './db';
 import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 
 const lib = createPostLib('disclosures', {
+  select: 'id, title, content, author, created_at, views, is_secret',
   normalizeExtra: (row) => normalizeSecretExtra(row),
 });
 

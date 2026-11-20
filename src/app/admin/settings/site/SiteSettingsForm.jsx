@@ -184,7 +184,7 @@ export default function SiteSettingsForm({ initial }) {
                 spellCheck={false}
               />
               <p className="adm-settings__field-hint">
-                반드시 http:// 또는 https:// 로 시작하는 전체 주소를 입력합니다. 칸을 비우고 저장하면 예시 주소(https://example.com)가 들어갑니다.
+                반드시 http:// 또는 https:// 로 시작하는 전체 주소를 입력합니다. 칸을 비우고 저장하면 신청 링크가 숨겨집니다.
               </p>
             </div>
           </div>

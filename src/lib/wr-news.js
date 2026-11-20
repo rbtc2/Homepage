@@ -8,6 +8,8 @@ function hasEnglishFields(titleEn, contentEn) {
 }
 
 const lib = createPostLib('wr_news', {
+  select:
+    'id, title, content, author, created_at, views, cover_image, cover_width, title_en, content_en, is_secret',
   searchFields: ['title', 'content', 'title_en', 'content_en'],
   normalizeExtra: (row) => {
     const titleEn = row.title_en ?? '';

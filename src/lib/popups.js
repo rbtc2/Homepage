@@ -40,37 +40,48 @@ export async function getPopups() {
   return (data ?? []).map(normalize).filter(Boolean);
 }
 
-/** 사이트: 현재 노출 대상 팝업 */
+/** 사이트: 현재 노출 대상 팝업. 조회 실패 시 빈 배열(공개 페이지를 막지 않음). */
 export async function getActiveSitePopups() {
-  const now = new Date().toISOString();
+  try {
+    const now = new Date().toISOString();
 
-  const [immediateRes, scheduledRes] = await Promise.all([
-    supabase
-      .from('site_popups')
-      .select('*')
-      .eq('display_mode', 'immediate')
-      .eq('is_active', true),
-    supabase
-      .from('site_popups')
-      .select('*')
-      .eq('display_mode', 'scheduled')
-      .eq('is_active', true)
-      .lte('start_at', now)
-      .gte('end_at', now),
-  ]);
+    const [immediateRes, scheduledRes] = await Promise.all([
+      supabase
+        .from('site_popups')
+        .select('*')
+        .eq('display_mode', 'immediate')
+        .eq('is_active', true),
+      supabase
+        .from('site_popups')
+        .select('*')
+        .eq('display_mode', 'scheduled')
+        .eq('is_active', true)
+        .lte('start_at', now)
+        .gte('end_at', now),
+    ]);
 
-  if (immediateRes.error) throw new Error(immediateRes.error.message);
-  if (scheduledRes.error) throw new Error(scheduledRes.error.message);
+    if (immediateRes.error) {
+      console.error('[getActiveSitePopups]', immediateRes.error.message);
+      return [];
+    }
+    if (scheduledRes.error) {
+      console.error('[getActiveSitePopups]', scheduledRes.error.message);
+      return [];
+    }
 
-  const merged = [...(immediateRes.data ?? []), ...(scheduledRes.data ?? [])];
-  const byId = new Map();
+    const merged = [...(immediateRes.data ?? []), ...(scheduledRes.data ?? [])];
+    const byId = new Map();
 
-  for (const row of merged) {
-    const item = normalize(row);
-    if (item) byId.set(item.id, item);
+    for (const row of merged) {
+      const item = normalize(row);
+      if (item) byId.set(item.id, item);
+    }
+
+    return [...byId.values()].sort((a, b) => Number(b.id) - Number(a.id));
+  } catch (err) {
+    console.error('[getActiveSitePopups]', err);
+    return [];
   }
-
-  return [...byId.values()].sort((a, b) => Number(b.id) - Number(a.id));
 }
 
 /** 대시보드: 노출 중 팝업 수 */
