@@ -1,7 +1,10 @@
+import { GoogleTagManager } from '@next/third-parties/google';
 import { Noto_Sans_KR } from 'next/font/google';
 import { headers } from 'next/headers';
 import SitePopupsLoader from '@/components/SitePopupsLoader';
 import './globals.css';
+
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NV9MRFDM';
 
 const notoSansKR = Noto_Sans_KR({
   weight: ['400', '500', '600', '700'],
@@ -23,6 +26,7 @@ export default async function RootLayout({ children }) {
       <head>
         <meta name="color-scheme" content="light" />
       </head>
+      <GoogleTagManager gtmId={GTM_ID} />
       <body>
         {children}
         <SitePopupsLoader locale={locale} />
