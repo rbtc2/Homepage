@@ -94,6 +94,16 @@ const NAV_ITEMS = [
 
 const SETTINGS_NAV_ITEMS = [
   {
+    href: '/admin/stats',
+    label: '통계',
+    icon: (
+      <svg className="adm-sidebar__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 19V5M4 19h16" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        <path d="M8 16V11M12 16V8M16 16v-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
     href: '/admin/settings',
     label: '사이트 설정',
     icon: (
