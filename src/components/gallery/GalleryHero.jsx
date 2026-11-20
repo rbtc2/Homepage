@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { galleryUi } from '@/lib/gallery-ui';
+import { SITE_IMAGE } from '@/lib/site-image';
 
 /**
  * 갤러리 히어로 섹션 — 최신 1~3개 게시물을 큰 이미지로 노출
@@ -35,6 +36,7 @@ export default function GalleryHero({ items, basePath = '/gallery', locale = 'ko
                   }
                   className="gallery-hero__img"
                   priority={i === 0}
+                  quality={SITE_IMAGE.thumbQuality}
                   style={{ objectFit: 'contain' }}
                 />
               ) : (

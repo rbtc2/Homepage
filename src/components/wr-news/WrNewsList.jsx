@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BoardPagination from '@/components/board/BoardPagination';
 import { wrNewsUi } from '@/lib/wr-news-ui';
+import { SITE_IMAGE } from '@/lib/site-image';
 
 function toPlainSnippet(html, max) {
   if (!html || typeof html !== 'string') return '';
@@ -88,6 +89,7 @@ export default function WrNewsList({
                       className="wnl__img"
                       sizes="(max-width: 768px) 100vw, 320px"
                       priority={i < 2}
+                      quality={SITE_IMAGE.thumbQuality}
                       style={{ objectFit: 'cover' }}
                     />
                   ) : (

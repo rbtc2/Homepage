@@ -12,6 +12,7 @@ import {
 } from '@/lib/gallery';
 import { galleryUi } from '@/lib/gallery-ui';
 import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
+import { SITE_IMAGE } from '@/lib/site-image';
 
 export default async function GalleryDetailView({ id, locale = 'ko' }) {
   const raw = await getGalleryById(id);
@@ -78,11 +79,12 @@ export default async function GalleryDetailView({ id, locale = 'ko' }) {
                   <Image
                     src={post.coverImage}
                     alt={post.title}
-                    width={1600}
-                    height={1200}
+                    width={SITE_IMAGE.detailWidth}
+                    height={SITE_IMAGE.detailHeight}
                     className="gd__cover"
                     priority
-                    sizes="(max-width: 768px) 100vw, 1180px"
+                    quality={SITE_IMAGE.detailQuality}
+                    sizes={SITE_IMAGE.detailSizes}
                     style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
                   />
                 ) : (

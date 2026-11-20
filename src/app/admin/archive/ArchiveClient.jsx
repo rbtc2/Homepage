@@ -83,11 +83,14 @@ export default function ArchiveClient({ initialArchives, initialCategoryState })
                 <tr key={archive.id} className="an-table__row">
                   <td className="an-table__td an-table__td--num">{sorted.length - idx}</td>
                   <td className="an-table__td an-table__td--title">
-                    <span className="an-table__notice-title">
+                    <Link
+                      href={`/admin/archive/${archive.id}/edit`}
+                      className="an-table__notice-title an-table__notice-title--link"
+                    >
                       {archive.isSecret ? '🔒 ' : ''}
                       <CategoryMark label={label} />
                       {archive.title}
-                    </span>
+                    </Link>
                   </td>
                   <td className="an-table__td an-table__td--date">{archive.createdAt}</td>
                   <td className="an-table__td an-table__td--views">{Number(archive.views).toLocaleString()}</td>

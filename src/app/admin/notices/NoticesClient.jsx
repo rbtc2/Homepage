@@ -150,10 +150,13 @@ export default function NoticesClient({ initialNotices }) {
                 </td>
                 <td className="an-table__td an-table__td--title">
                   <span className="an-table__title-row">
-                    <span className="an-table__notice-title">
+                    <Link
+                      href={`/admin/notices/${notice.id}/edit`}
+                      className="an-table__notice-title an-table__notice-title--link"
+                    >
                       {notice.isSecret ? '🔒 ' : ''}
                       {notice.title}
-                    </span>
+                    </Link>
                     {notice.hasEnglish ? (
                       <span className="an-en-badge-wrap">
                         <Link

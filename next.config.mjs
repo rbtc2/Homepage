@@ -28,6 +28,10 @@ const nextConfig = {
     ];
   },
   images: {
+    // Next 15+ 기본 qualities=[75]만 허용 → 상세/썸네일 고품질 prop 사용을 위해 명시
+    qualities: [75, 85, 90],
+    // 1180px 레이아웃 × 2~2.5 DPR까지 선명한 srcset
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 2560, 3840],
     remotePatterns: [
       {
         protocol: 'https',

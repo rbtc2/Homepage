@@ -13,6 +13,7 @@ import {
 import { wrNewsUi } from '@/lib/wr-news-ui';
 import { parseCoverWidthPx } from '@/lib/cover-image-width';
 import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
+import { SITE_IMAGE } from '@/lib/site-image';
 
 export default async function WrNewsDetailView({ id, locale = 'ko' }) {
   const raw = await getWrNewsById(id);
@@ -34,6 +35,10 @@ export default async function WrNewsDetailView({ id, locale = 'ko' }) {
   const { prev, next } = await getWrNewsPrevNext(id, locale);
   const coverWidth = parseCoverWidthPx(post.coverWidth);
   const coverSized = coverWidth != null;
+  // 표시 CSS px의 2×까지 소스 확보 (레티나), 상한은 SITE_IMAGE.detailWidth
+  const coverIntrinsicW = coverSized
+    ? Math.min(SITE_IMAGE.detailWidth, coverWidth * 2)
+    : SITE_IMAGE.detailWidth;
 
   return (
     <>
@@ -86,14 +91,15 @@ export default async function WrNewsDetailView({ id, locale = 'ko' }) {
                     <Image
                       src={post.coverImage}
                       alt={post.title}
-                      width={coverSized ? coverWidth : 1600}
-                      height={coverSized ? Math.round(coverWidth * 0.75) : 1200}
+                      width={coverIntrinsicW}
+                      height={Math.round(coverIntrinsicW * 0.75)}
                       className="wna__cover-img"
                       priority
+                      quality={SITE_IMAGE.detailQuality}
                       sizes={
                         coverSized
                           ? `(max-width: ${coverWidth}px) 100vw, ${coverWidth}px`
-                          : '(max-width: 768px) 100vw, 720px'
+                          : SITE_IMAGE.detailSizes
                       }
                       style={{ width: '100%', height: 'auto' }}
                     />

@@ -225,7 +225,13 @@ export default function PopupsClient({ initialPopups }) {
                 <tr key={popup.id} className="an-table__row">
                   <td className="an-table__td an-table__td--num">{popups.length - idx}</td>
                   <td className="an-table__td an-table__td--title">
-                    <span className="an-table__notice-title">{popup.title}</span>
+                    <button
+                      type="button"
+                      className="an-table__notice-title an-table__notice-title--link"
+                      onClick={() => openEdit(popup)}
+                    >
+                      {popup.title}
+                    </button>
                   </td>
                   <td className="an-table__td an-table__td--date" data-label="노출 설정">
                     <span className="an-popup-period">{formatPopupPeriod(popup)}</span>

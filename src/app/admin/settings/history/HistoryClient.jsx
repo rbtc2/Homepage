@@ -171,7 +171,13 @@ export default function HistoryClient({ initialEvents }) {
                 </td>
                 <td className="an-table__td an-table__td--title">
                   <span className="an-table__title-row">
-                    <span className="an-table__notice-title">{ev.title}</span>
+                    <button
+                      type="button"
+                      className="an-table__notice-title an-table__notice-title--link"
+                      onClick={() => openEdit(ev)}
+                    >
+                      {ev.title}
+                    </button>
                     {ev.hasEnglish ? (
                       <span className="an-en-badge-wrap">
                         <Link

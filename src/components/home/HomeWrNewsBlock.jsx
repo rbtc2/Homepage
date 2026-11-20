@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getWrNewsPage, localizeWrNewsPosts } from '@/lib/wr-news';
+import { SITE_IMAGE } from '@/lib/site-image';
 
 const LIST_PATH_KO = '/wr-news';
 const LIST_PATH_EN = '/en/wr-news';
@@ -96,6 +97,7 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
                       fill
                       sizes="(max-width: 768px) 100vw, 590px"
                       priority
+                      quality={SITE_IMAGE.thumbQuality}
                       style={{ objectFit: 'cover' }}
                     />
                   ) : (
@@ -137,6 +139,7 @@ export default async function HomeWrNewsBlock({ locale = 'ko' }) {
                             alt=""
                             fill
                             sizes="(max-width: 768px) 72px, 33vw"
+                            quality={SITE_IMAGE.thumbQuality}
                             style={{ objectFit: 'cover' }}
                           />
                         ) : (

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { SITE_IMAGE } from '@/lib/site-image';
 
 /**
  * 갤러리 그리드 카드
@@ -22,6 +23,7 @@ export default function GalleryCard({ post, basePath, index = 0 }) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="gallery-card__img"
             priority={index < 3}
+            quality={SITE_IMAGE.thumbQuality}
             style={{ objectFit: 'contain' }}
           />
         ) : (
