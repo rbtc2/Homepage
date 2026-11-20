@@ -4,6 +4,35 @@ const ITEMS_PER_PAGE = 10;
 
 const SEARCH_FIELD_RE = /^[a-z_]+$/;
 
+function isMissingColumnError(error) {
+  const code = error?.code ?? '';
+  const message = `${error?.message ?? ''} ${error?.details ?? ''} ${error?.hint ?? ''}`;
+  return (
+    code === '42703' ||
+    /column .* does not exist/i.test(message) ||
+    /Could not find the ['`].+['`] column/i.test(message)
+  );
+}
+
+/** 에러 메시지에서 없는 컬럼명을 찾아 select 목록에서 제거합니다. */
+function selectWithoutMissingColumn(selectClause, error) {
+  if (!selectClause || selectClause === '*') return null;
+  const message = `${error?.message ?? ''} ${error?.details ?? ''}`;
+  const match =
+    message.match(/Could not find the ['`]([^'`]+)['`] column/i) ||
+    message.match(/column\s+[\w.]+\.([a-z_][a-z0-9_]*)/i) ||
+    message.match(/['`]([a-z_][a-z0-9_]*)['`]/i);
+  if (!match) return null;
+  const missing = match[1];
+  const next = selectClause
+    .split(',')
+    .map((part) => part.trim())
+    .filter((part) => part && part !== missing)
+    .join(', ');
+  if (!next || next === selectClause) return null;
+  return next;
+}
+
 /**
  * 게시판 테이블 공통 CRUD 유틸 팩토리.
  * @param {string} tableName - Supabase 테이블 이름
@@ -18,6 +47,8 @@ export function createPostLib(tableName, { normalizeExtra, searchFields, select 
   const orSearchFields = (searchFields ?? ['title', 'content']).filter((field) =>
     SEARCH_FIELD_RE.test(field)
   );
+  let activeSelect = select;
+
   function normalize(row) {
     if (!row) return null;
     const viewsNum = Number(row.views);
@@ -33,11 +64,27 @@ export function createPostLib(tableName, { normalizeExtra, searchFields, select 
     };
   }
 
+  async function runSelect(buildQuery) {
+    let clause = activeSelect;
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      const result = await buildQuery(clause);
+      if (!result.error) {
+        activeSelect = clause;
+        return result;
+      }
+      if (!isMissingColumnError(result.error)) return result;
+      const next = selectWithoutMissingColumn(clause, result.error);
+      if (!next) return result;
+      console.error(`[createPostLib:${tableName}] missing column, retry without it:`, result.error.message);
+      clause = next;
+    }
+    return buildQuery(clause);
+  }
+
   async function getAll() {
-    const { data, error } = await supabase
-      .from(tableName)
-      .select(select)
-      .order('id', { ascending: false });
+    const { data, error } = await runSelect((clause) =>
+      supabase.from(tableName).select(clause).order('id', { ascending: false })
+    );
 
     if (error) throw new Error(error.message);
     return (data ?? []).map(normalize);
@@ -48,9 +95,11 @@ export function createPostLib(tableName, { normalizeExtra, searchFields, select 
    * @param {(q: object) => object} applyFilter
    */
   async function getWhere(applyFilter) {
-    let q = supabase.from(tableName).select(select).order('id', { ascending: false });
-    if (applyFilter) q = applyFilter(q);
-    const { data, error } = await q;
+    const { data, error } = await runSelect((clause) => {
+      let q = supabase.from(tableName).select(clause).order('id', { ascending: false });
+      if (applyFilter) q = applyFilter(q);
+      return q;
+    });
     if (error) throw new Error(error.message);
     return (data ?? []).map(normalize);
   }
@@ -63,13 +112,15 @@ export function createPostLib(tableName, { normalizeExtra, searchFields, select 
   async function getPage({ page = 1, itemsPerPage = ITEMS_PER_PAGE, applyFilter } = {}) {
     const from = (page - 1) * itemsPerPage;
     const to = from + itemsPerPage - 1;
-    let q = supabase
-      .from(tableName)
-      .select(select, { count: 'exact' })
-      .order('id', { ascending: false })
-      .range(from, to);
-    if (applyFilter) q = applyFilter(q);
-    const { data, error, count } = await q;
+    const { data, error, count } = await runSelect((clause) => {
+      let q = supabase
+        .from(tableName)
+        .select(clause, { count: 'exact' })
+        .order('id', { ascending: false })
+        .range(from, to);
+      if (applyFilter) q = applyFilter(q);
+      return q;
+    });
     if (error) throw new Error(error.message);
     const totalCount = count == null ? 0 : Number(count);
     return { items: (data ?? []).map(normalize), totalCount };
@@ -93,11 +144,11 @@ export function createPostLib(tableName, { normalizeExtra, searchFields, select 
     const from = (page - 1) * itemsPerPage;
     const to = from + itemsPerPage - 1;
     const q = escapeLike(query.trim());
-    const runSearch = (fields) => {
+    const runSearch = (fields, clause) => {
       const orExpr = fields.map((field) => `${field}.ilike.%${q}%`).join(',');
       let request = supabase
         .from(tableName)
-        .select(select, { count: 'exact' })
+        .select(clause, { count: 'exact' })
         .or(orExpr)
         .order('id', { ascending: false })
         .range(from, to);
@@ -105,9 +156,14 @@ export function createPostLib(tableName, { normalizeExtra, searchFields, select 
       return request;
     };
 
-    let { data, error, count } = await runSearch(orSearchFields);
+    let { data, error, count } = await runSelect((clause) => runSearch(orSearchFields, clause));
     if (error && orSearchFields.some((field) => field.endsWith('_en'))) {
-      const retry = await runSearch(orSearchFields.filter((field) => field === 'title' || field === 'content'));
+      const retry = await runSelect((clause) =>
+        runSearch(
+          orSearchFields.filter((field) => field === 'title' || field === 'content'),
+          clause
+        )
+      );
       data = retry.data;
       error = retry.error;
       count = retry.count;
@@ -120,11 +176,9 @@ export function createPostLib(tableName, { normalizeExtra, searchFields, select 
   async function getById(id) {
     if (id == null || id === '') return null;
     const idEq = typeof id === 'number' ? id : String(id).trim();
-    const { data, error } = await supabase
-      .from(tableName)
-      .select(select)
-      .eq('id', idEq)
-      .single();
+    const { data, error } = await runSelect((clause) =>
+      supabase.from(tableName).select(clause).eq('id', idEq).single()
+    );
 
     if (error) return null;
     return normalize(data);

@@ -1,4 +1,4 @@
-import { parseCoverWidthPx, parseStoredCoverImage } from './cover-image-width';
+import { parseStoredCoverImage } from './cover-image-width';
 import { createPostLib } from './db';
 import { getBoardSecretAuth, normalizeSecretExtra } from './secret-post';
 import { supabase } from './supabase';
@@ -8,8 +8,9 @@ function hasEnglishFields(titleEn, contentEn) {
 }
 
 const lib = createPostLib('wr_news', {
+  // cover_width 는 DB 컬럼이 아님 — cover_image URL 해시(#cw=)에 저장
   select:
-    'id, title, content, author, created_at, views, cover_image, cover_width, title_en, content_en, is_secret',
+    'id, title, content, author, created_at, views, cover_image, title_en, content_en, is_secret',
   searchFields: ['title', 'content', 'title_en', 'content_en'],
   normalizeExtra: (row) => {
     const titleEn = row.title_en ?? '';
@@ -17,7 +18,7 @@ const lib = createPostLib('wr_news', {
     const storedCover = parseStoredCoverImage(row.cover_image);
     return {
       coverImage: storedCover.url,
-      coverWidth: parseCoverWidthPx(row.cover_width) ?? storedCover.width,
+      coverWidth: storedCover.width,
       titleEn,
       contentEn,
       hasEnglish: hasEnglishFields(titleEn, contentEn),
