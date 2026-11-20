@@ -2,6 +2,7 @@
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { VALID_POSITIONS } from '@/lib/popups';
+import { clampOffset } from '@/lib/popup-placement';
 import { kstDatetimeLocalToIso } from '@/lib/popup-schedule';
 import { revalidatePath } from 'next/cache';
 
@@ -23,8 +24,8 @@ function normalizePayload(data) {
       ? null
       : Math.max(80, Math.min(900, Number(heightRaw)));
 
-  const offsetX = Math.max(-400, Math.min(400, Number(data.offsetX) || 0));
-  const offsetY = Math.max(-400, Math.min(400, Number(data.offsetY) || 0));
+  const offsetX = clampOffset(data.offsetX);
+  const offsetY = clampOffset(data.offsetY);
 
   if (!title) throw new Error('팝업 제목을 입력해 주세요.');
   if (!imageUrl) throw new Error('팝업 이미지를 등록해 주세요.');

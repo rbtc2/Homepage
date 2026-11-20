@@ -1,4 +1,3 @@
-import { optimizeEditorImage } from '@/app/admin/optimize-image-action';
 import {
   IMAGE_QUALITY_OPTIONS,
   IMAGE_QUALITY_PRESETS,
@@ -66,7 +65,6 @@ function canvasToWebpBlob(canvas, quality) {
 
 /**
  * 서버(sharp) 사용 불가 시 브라우저 폴백.
- * lanczos급은 아니지만 high-quality 리샘플 + WebP로 최소한의 품질을 유지.
  *
  * @param {File} file
  * @param {Exclude<ImageQualityPreset, 'original'>} presetKey
@@ -111,21 +109,61 @@ async function optimizeImageFileClientFallback(file, presetKey) {
 }
 
 /**
- * @param {string} base64
- * @param {string} mimeType
- * @param {string} fileName
- * @returns {File}
+ * @param {File} file
+ * @param {Exclude<ImageQualityPreset, 'original'>} presetKey
  */
-function fileFromBase64(base64, mimeType, fileName) {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i += 1) {
-    bytes[i] = binary.charCodeAt(i);
+async function optimizeImageFileViaApi(file, presetKey) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('preset', presetKey);
+
+  const response = await fetch('/api/admin/optimize-image', {
+    method: 'POST',
+    body: fd,
+    credentials: 'same-origin',
+  });
+
+  const contentType = response.headers.get('content-type') || '';
+
+  if (contentType.includes('application/json')) {
+    const data = await response.json();
+    if (!response.ok || !data?.ok) {
+      throw new Error(data?.message || '이미지 최적화에 실패했습니다.');
+    }
+    return {
+      file,
+      originalBytes: data.originalBytes ?? file.size,
+      resultBytes: data.resultBytes ?? file.size,
+      skipped: true,
+      format: 'original',
+    };
   }
-  return new File([bytes], fileName, {
-    type: mimeType,
+
+  if (!response.ok) {
+    throw new Error('이미지 최적화에 실패했습니다.');
+  }
+
+  const blob = await response.blob();
+  const originalBytes = Number(response.headers.get('x-original-bytes') || file.size);
+  const resultBytes = Number(response.headers.get('x-result-bytes') || blob.size);
+  const formatHeader = response.headers.get('x-format') || 'avif';
+  const encodedName = response.headers.get('x-file-name');
+  const fileName = encodedName
+    ? decodeURIComponent(encodedName)
+    : `${file.name.replace(/\.[^.]+$/, '') || 'image'}.${formatHeader}`;
+
+  const optimized = new File([blob], fileName, {
+    type: blob.type || (formatHeader === 'webp' ? 'image/webp' : 'image/avif'),
     lastModified: Date.now(),
   });
+
+  return {
+    file: optimized,
+    originalBytes,
+    resultBytes,
+    skipped: false,
+    format: formatHeader === 'webp' ? 'webp' : 'avif',
+  };
 }
 
 /**
@@ -151,35 +189,7 @@ export async function optimizeImageFile(file, presetKey) {
   }
 
   try {
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('preset', presetKey);
-    const res = await optimizeEditorImage(fd);
-
-    if (!res.ok) {
-      // 세션/서버 오류 시 브라우저 폴백으로 업로드는 가능하게
-      const fallback = await optimizeImageFileClientFallback(file, presetKey);
-      return { ...fallback, format: fallback.skipped ? 'original' : 'webp' };
-    }
-
-    if (res.skipped || !res.base64) {
-      return {
-        file,
-        originalBytes: res.originalBytes,
-        resultBytes: res.resultBytes,
-        skipped: true,
-        format: 'original',
-      };
-    }
-
-    const optimized = fileFromBase64(res.base64, res.mimeType, res.fileName);
-    return {
-      file: optimized,
-      originalBytes: res.originalBytes,
-      resultBytes: res.resultBytes,
-      skipped: false,
-      format: res.format === 'avif' || res.format === 'webp' ? res.format : 'webp',
-    };
+    return await optimizeImageFileViaApi(file, presetKey);
   } catch {
     const fallback = await optimizeImageFileClientFallback(file, presetKey);
     return { ...fallback, format: fallback.skipped ? 'original' : 'webp' };

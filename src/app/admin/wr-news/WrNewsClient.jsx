@@ -146,10 +146,13 @@ export default function WrNewsClient({ initialPosts }) {
                 </td>
                 <td className="an-table__td an-table__td--title">
                   <span className="an-table__title-row">
-                    <span className="an-table__notice-title">
+                    <Link
+                      href={`/admin/wr-news/${post.id}/edit`}
+                      className="an-table__notice-title an-table__notice-title--link"
+                    >
                       {post.isSecret ? '🔒 ' : ''}
                       {post.title}
-                    </span>
+                    </Link>
                     {post.hasEnglish ? (
                       <span className="an-en-badge-wrap">
                         <Link

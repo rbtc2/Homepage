@@ -1,12 +1,5 @@
 import { supabase } from './supabase';
-
-const VALID_POSITIONS = new Set([
-  'center',
-  'top-left',
-  'top-right',
-  'bottom-left',
-  'bottom-right',
-]);
+import { VALID_POSITIONS } from './popup-placement';
 
 function normalize(row) {
   if (!row) return null;

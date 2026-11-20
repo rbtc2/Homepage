@@ -281,6 +281,16 @@
   color: var(--ink);
 }
 
+a.an-table__notice-title--link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.an-table__notice-title--link:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
 .an-table__title-row {
   display: flex;
   align-items: center;
@@ -753,7 +763,169 @@ a.an-en-badge--add:hover {
 
 /* 팝업 폼 모달 너비 */
 .an-modal--popup-form {
-  max-width: 560px;
+  max-width: 640px;
+}
+
+/* 팝업 9그리드 배치 */
+.an-popup-place {
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.an-popup-place__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-top: 0.35rem;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, #eef2f7 0%, #e4e9f0 100%);
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+
+.an-popup-place__stage--dragging {
+  cursor: grabbing;
+}
+
+.an-popup-place__grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(18, 79, 166, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(18, 79, 166, 0.08) 1px, transparent 1px);
+  background-size: calc(100% / 3) calc(100% / 3);
+  pointer-events: none;
+}
+
+.an-popup-place__anchor {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: rgba(18, 79, 166, 0.25);
+  pointer-events: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.an-popup-place__anchor--on {
+  background: var(--brand, #124fa6);
+  transform: scale(1.35);
+}
+
+.an-popup-place__sibling {
+  position: absolute;
+  border: 1px dashed rgba(92, 101, 115, 0.55);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.45);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.an-popup-place__sibling-label {
+  display: block;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.625rem;
+  color: var(--muted, #5c6573);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.an-popup-place__card {
+  position: absolute;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(12, 20, 36, 0.18);
+  overflow: hidden;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--brand, #124fa6);
+}
+
+.an-popup-place__card--dragging {
+  cursor: grabbing;
+  box-shadow: 0 14px 28px rgba(12, 20, 36, 0.28);
+}
+
+.an-popup-place__card-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.an-popup-place__card-fallback {
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted, #5c6573);
+  text-align: center;
+}
+
+.an-popup-place__warn {
+  color: #b45309;
+}
+
+.an-popup-place__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  margin: 0.75rem 0 0.85rem;
+}
+
+.an-popup-place__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 3rem;
+  padding: 0.4rem 0.25rem;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink, #1a1a1a);
+  cursor: pointer;
+  font: inherit;
+}
+
+.an-popup-place__cell:hover {
+  border-color: rgba(18, 79, 166, 0.35);
+}
+
+.an-popup-place__cell--on {
+  border-color: var(--brand, #124fa6);
+  background: rgba(18, 79, 166, 0.06);
+}
+
+.an-popup-place__cell-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(18, 79, 166, 0.35);
+}
+
+.an-popup-place__cell--on .an-popup-place__cell-dot {
+  background: var(--brand, #124fa6);
+}
+
+.an-popup-place__cell-label {
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  color: var(--muted, #5c6573);
+}
+
+.an-popup-place__cell--on .an-popup-place__cell-label {
+  color: var(--brand, #124fa6);
+  font-weight: 600;
 }
 
 /* 팝업 노출 방식 (즉시 / 기간 예약) */

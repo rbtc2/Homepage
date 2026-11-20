@@ -1,4 +1,3 @@
-import sharp from 'sharp';
 import { IMAGE_QUALITY_PRESETS } from '@/lib/optimize-image-presets';
 
 /**
@@ -27,6 +26,7 @@ import { IMAGE_QUALITY_PRESETS } from '@/lib/optimize-image-presets';
 /**
  * sharp(libvips) + AVIF(tune iq)로 리사이즈·인코딩.
  * AVIF 실패 시 libwebp WebP로 폴백.
+ * sharp는 호출 시에만 동적 로드해 페이지 RSC 번들과 분리합니다.
  *
  * @param {Buffer} input
  * @param {Exclude<import('@/lib/optimize-image-presets').ImageQualityPreset, 'original'>} presetKey
@@ -45,6 +45,8 @@ export async function optimizeImageBuffer(input, presetKey) {
     };
   }
 
+  const { default: sharp } = await import('sharp');
+
   const originalBytes = input.length;
   const base = sharp(input, { failOn: 'none', animated: false }).rotate();
 
@@ -56,7 +58,7 @@ export async function optimizeImageBuffer(input, presetKey) {
     kernel: sharp.kernel.lanczos3,
   });
 
-  /** @type {{ data: Buffer; info: sharp.OutputInfo } | null} */
+  /** @type {{ data: Buffer; info: import('sharp').OutputInfo } | null} */
   let encoded = null;
   /** @type {'avif' | 'webp'} */
   let format = 'avif';
@@ -66,9 +68,7 @@ export async function optimizeImageBuffer(input, presetKey) {
       .clone()
       .avif({
         quality: preset.avifQuality,
-        // 인코드 시간 vs 용량: 5가 실무 균형점
         effort: 5,
-        // 피부·헤어·미세 질감 보존 (sharp 0.35+ / libaom IQ)
         tune: 'iq',
       })
       .toBuffer({ resolveWithObject: true });
@@ -90,7 +90,6 @@ export async function optimizeImageBuffer(input, presetKey) {
 
   const resultBytes = encoded.data.length;
 
-  // 용량이 줄지 않으면 원본 유지 (이미 최적화된 파일 등)
   if (resultBytes >= originalBytes) {
     return {
       buffer: input,

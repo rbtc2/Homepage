@@ -10,14 +10,7 @@ import {
   getPopupStatus,
   isoToKstDatetimeLocal,
 } from '@/lib/popup-schedule';
-
-const POSITION_LABELS = {
-  center: '중앙',
-  'top-left': '좌상단',
-  'top-right': '우상단',
-  'bottom-left': '좌하단',
-  'bottom-right': '우하단',
-};
+import { POSITION_LABELS } from '@/lib/popup-placement';
 
 const STATUS_LABEL = {
   active: '노출 중',
@@ -118,6 +111,14 @@ export default function PopupsClient({ initialPopups }) {
   const handleImageUrlChange = (url) => {
     setForm((prev) => ({ ...prev, imageUrl: url }));
   };
+
+  const handlePlacementChange = ({ position, offsetX, offsetY }) => {
+    setForm((prev) => ({ ...prev, position, offsetX, offsetY }));
+  };
+
+  const siblingPopups = popups.filter(
+    (p) => getPopupStatus(p) === 'active' && (!editTarget || p.id !== editTarget.id),
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -296,9 +297,11 @@ export default function PopupsClient({ initialPopups }) {
         <PopupFormModal
           editTarget={editTarget}
           form={form}
+          siblingPopups={siblingPopups}
           onChange={handleFormChange}
           onDisplayModeChange={handleDisplayModeChange}
           onImageUrlChange={handleImageUrlChange}
+          onPlacementChange={handlePlacementChange}
           onSubmit={handleSubmit}
           onClose={closeModal}
           saving={saving}

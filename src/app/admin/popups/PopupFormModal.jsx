@@ -1,14 +1,7 @@
 'use client';
 
 import PopupImageField from './PopupImageField';
-
-const POSITION_OPTIONS = [
-  { value: 'center', label: '중앙' },
-  { value: 'top-left', label: '좌상단' },
-  { value: 'top-right', label: '우상단' },
-  { value: 'bottom-left', label: '좌하단' },
-  { value: 'bottom-right', label: '우하단' },
-];
+import PopupPlacementField from './PopupPlacementField';
 
 const CLOSE_SVG = (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -28,9 +21,11 @@ const CHECK_SVG = (
 export default function PopupFormModal({
   editTarget,
   form,
+  siblingPopups = [],
   onChange,
   onDisplayModeChange,
   onImageUrlChange,
+  onPlacementChange,
   onSubmit,
   onClose,
   saving,
@@ -171,57 +166,17 @@ export default function PopupFormModal({
               </div>
             )}
 
-            <div className="an-field">
-              <label className="an-field__label" htmlFor="popup-position">
-                팝업 위치
-              </label>
-              <select
-                id="popup-position"
-                name="position"
-                className="an-field__input an-field__select"
-                value={form.position}
-                onChange={onChange}
-              >
-                {POSITION_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="an-field-row">
-              <div className="an-field">
-                <label className="an-field__label" htmlFor="popup-offset-x">
-                  가로 위치 보정 (px)
-                </label>
-                <input
-                  id="popup-offset-x"
-                  name="offsetX"
-                  type="number"
-                  min={-400}
-                  max={400}
-                  className="an-field__input"
-                  value={form.offsetX}
-                  onChange={onChange}
-                />
-              </div>
-              <div className="an-field">
-                <label className="an-field__label" htmlFor="popup-offset-y">
-                  세로 위치 보정 (px)
-                </label>
-                <input
-                  id="popup-offset-y"
-                  name="offsetY"
-                  type="number"
-                  min={-400}
-                  max={400}
-                  className="an-field__input"
-                  value={form.offsetY}
-                  onChange={onChange}
-                />
-              </div>
-            </div>
+            <PopupPlacementField
+              position={form.position}
+              offsetX={form.offsetX}
+              offsetY={form.offsetY}
+              widthPx={form.widthPx}
+              heightPx={form.heightPx}
+              imageUrl={form.imageUrl}
+              title={form.title}
+              siblingPopups={siblingPopups}
+              onPlacementChange={onPlacementChange}
+            />
 
             <div className="an-field-row">
               <div className="an-field">
