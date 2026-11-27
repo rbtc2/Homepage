@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { buildBoardHref } from '@/lib/paginate';
 import { categoryLabel } from '@/lib/archive-category-shared';
 
-export default function ArchiveCategoryFilter({
+export default function CategoryFilter({
   categories,
   currentId,
   basePath,

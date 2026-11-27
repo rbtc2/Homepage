@@ -8,7 +8,7 @@ function hasEnglishFields(titleEn, contentEn) {
 
 const lib = createPostLib('notices', {
   select:
-    'id, title, content, author, created_at, views, is_pinned, title_en, content_en, is_secret',
+    'id, title, content, author, created_at, views, is_pinned, title_en, content_en, is_secret, category_id',
   searchFields: ['title', 'content', 'title_en', 'content_en'],
   normalizeExtra: (row) => {
     const titleEn = row.title_en ?? '';
@@ -18,6 +18,8 @@ const lib = createPostLib('notices', {
       titleEn,
       contentEn,
       hasEnglish: hasEnglishFields(titleEn, contentEn),
+      categoryId:
+        row.category_id == null || row.category_id === '' ? null : String(row.category_id),
       ...normalizeSecretExtra(row),
     };
   },
@@ -85,11 +87,27 @@ export async function getNoticeSecretAuth(id) {
   return getBoardSecretAuth('notices', id);
 }
 
-export const getPinnedNotices = () =>
-  lib.getWhere((q) => q.eq('is_pinned', true));
+/** 고정 여부(pinned)와 분류(categoryId)로 거르는 쿼리 조건. 둘 다 없으면 undefined. */
+function noticeFilter({ pinned, categoryId } = {}) {
+  const hasCategory = categoryId != null && categoryId !== '';
+  if (pinned === undefined && !hasCategory) return undefined;
+  return (query) => {
+    let next = query;
+    if (pinned !== undefined) next = next.eq('is_pinned', pinned);
+    if (hasCategory) next = next.eq('category_id', String(categoryId));
+    return next;
+  };
+}
 
-export const getNoticesPage = ({ page, itemsPerPage } = {}) =>
-  lib.getPage({ page, itemsPerPage, applyFilter: (q) => q.eq('is_pinned', false) });
+export const getPinnedNotices = ({ categoryId } = {}) =>
+  lib.getWhere(noticeFilter({ pinned: true, categoryId }));
 
-export const searchNoticesPage = ({ query, page, itemsPerPage } = {}) =>
-  lib.searchPage({ query, page, itemsPerPage });
+export const getNoticesPage = ({ page, itemsPerPage, categoryId } = {}) =>
+  lib.getPage({
+    page,
+    itemsPerPage,
+    applyFilter: noticeFilter({ pinned: false, categoryId }),
+  });
+
+export const searchNoticesPage = ({ query, page, itemsPerPage, categoryId } = {}) =>
+  lib.searchPage({ query, page, itemsPerPage, applyFilter: noticeFilter({ categoryId }) });

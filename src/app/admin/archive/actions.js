@@ -9,7 +9,7 @@ import {
   resolveSecretFieldsForUpdate,
 } from '@/lib/secret-post';
 import {
-  getArchiveCategoryStateAdmin,
+  resolveArchiveCategoryField,
   revalidateArchiveBoard,
 } from '@/lib/archive-categories';
 
@@ -19,18 +19,6 @@ function today() {
 
 function revalidateArchivePaths(id) {
   revalidateArchiveBoard(id);
-}
-
-async function resolveArchiveCategoryField(categoryId) {
-  if (categoryId === undefined) return { fields: {} };
-  const state = await getArchiveCategoryStateAdmin();
-  if (!state.enabled || state.categories.length === 0) return { fields: {} };
-  if (categoryId == null || categoryId === '') return { fields: { category_id: null } };
-  const id = String(categoryId);
-  if (!state.categories.some((category) => category.id === id)) {
-    return { error: actionFail('선택한 분류를 찾을 수 없습니다.') };
-  }
-  return { fields: { category_id: id } };
 }
 
 export async function createArchive({ title, content, createdAt, isSecret, secretPassword, categoryId }) {

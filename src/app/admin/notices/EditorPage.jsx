@@ -4,7 +4,12 @@ import RichEditor from '@/components/editor/RichEditor';
 import { assertActionOk } from '@/lib/assert-action-ok';
 import { createNotice, updateNotice } from './actions';
 
-export default function EditorPage({ notice }) {
+export default function EditorPage({ notice, categoryState }) {
+  const categoryOptions =
+    categoryState?.enabled && categoryState.categories.length > 0
+      ? categoryState.categories
+      : null;
+
   const handleSave = async ({
     title,
     content,
@@ -12,17 +17,13 @@ export default function EditorPage({ notice }) {
     isPinned,
     isSecret,
     secretPassword,
+    categoryId,
   }) => {
+    const payload = { title, content, isPinned, createdAt, isSecret, secretPassword };
+    if (categoryOptions) payload.categoryId = categoryId ?? null;
     const result = notice
-      ? await updateNotice(notice.id, {
-          title,
-          content,
-          isPinned,
-          createdAt,
-          isSecret,
-          secretPassword,
-        })
-      : await createNotice({ title, content, isPinned, createdAt, isSecret, secretPassword });
+      ? await updateNotice(notice.id, payload)
+      : await createNotice(payload);
     assertActionOk(result);
   };
 
@@ -35,6 +36,7 @@ export default function EditorPage({ notice }) {
       newTitle="새 게시물 작성"
       showPinToggle
       showSecretToggle
+      categoryOptions={categoryOptions}
       onSave={handleSave}
     />
   );

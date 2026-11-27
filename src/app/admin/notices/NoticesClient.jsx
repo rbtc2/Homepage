@@ -7,17 +7,23 @@ import { assertActionOk } from '@/lib/assert-action-ok';
 import { deleteNotice, togglePin, clearNoticeEnglish } from './actions';
 import { comparePostIdsDesc } from '@/lib/compare-post-ids';
 import { useDelete } from '@/hooks/useDelete';
+import { visibleCategoryLabel } from '@/lib/archive-category-shared';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
+import BoardCategorySettingsModal from '@/components/admin/BoardCategorySettingsModal';
+import CategoryMark from '@/components/board/CategoryMark';
 
-export default function NoticesClient({ initialNotices }) {
+export default function NoticesClient({ initialNotices, initialCategoryState }) {
   const router = useRouter();
   const [notices,    setNotices]    = useState(initialNotices);
+  const [categoryState, setCategoryState] = useState(initialCategoryState);
+  const [categoryOpen, setCategoryOpen] = useState(false);
   const [togglingId, setTogglingId] = useState(null);
   const [clearingId, setClearingId] = useState(null);
 
   const { deleteTarget, setDeleteTarget, deleting, handleDelete } = useDelete(deleteNotice);
 
   useEffect(() => { setNotices(initialNotices); }, [initialNotices]);
+  useEffect(() => { setCategoryState(initialCategoryState); }, [initialCategoryState]);
 
   async function handleClearEnglish(notice) {
     const ok = window.confirm(
@@ -88,12 +94,21 @@ export default function NoticesClient({ initialNotices }) {
           <h1 className="an__title">공지사항 관리</h1>
           <p className="an__sub">게시물을 작성·수정·삭제하거나 공지로 고정할 수 있습니다.</p>
         </div>
-        <Link href="/admin/notices/new" className="an-btn an-btn--primary">
-          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-          </svg>
-          새 게시물 작성
-        </Link>
+        <div className="an__bar-actions">
+          <button
+            type="button"
+            className="an-btn an-btn--secondary"
+            onClick={() => setCategoryOpen(true)}
+          >
+            카테고리 설정
+          </button>
+          <Link href="/admin/notices/new" className="an-btn an-btn--primary">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
+            새 게시물 작성
+          </Link>
+        </div>
       </div>
 
       <div className="an-stats">
@@ -155,6 +170,7 @@ export default function NoticesClient({ initialNotices }) {
                       className="an-table__notice-title an-table__notice-title--link"
                     >
                       {notice.isSecret ? '🔒 ' : ''}
+                      <CategoryMark label={visibleCategoryLabel(categoryState, notice.categoryId)} />
                       {notice.title}
                     </Link>
                     {notice.hasEnglish ? (
@@ -240,6 +256,16 @@ export default function NoticesClient({ initialNotices }) {
         onConfirm={handleDelete}
         deleting={deleting}
       />
+
+      {categoryOpen ? (
+        <BoardCategorySettingsModal
+          board="notices"
+          boardName="공지사항"
+          initialState={categoryState}
+          onClose={() => setCategoryOpen(false)}
+          onChange={setCategoryState}
+        />
+      ) : null}
     </div>
   );
 }

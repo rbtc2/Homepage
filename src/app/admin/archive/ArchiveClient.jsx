@@ -8,7 +8,7 @@ import { visibleCategoryLabel } from '@/lib/archive-category-shared';
 import { useDelete } from '@/hooks/useDelete';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import CategoryMark from '@/components/board/CategoryMark';
-import CategorySettingsModal from './CategorySettingsModal';
+import BoardCategorySettingsModal from '@/components/admin/BoardCategorySettingsModal';
 
 export default function ArchiveClient({ initialArchives, initialCategoryState }) {
   const [archives, setArchives] = useState(initialArchives);
@@ -123,7 +123,9 @@ export default function ArchiveClient({ initialArchives, initialCategoryState })
       />
 
       {categoryOpen ? (
-        <CategorySettingsModal
+        <BoardCategorySettingsModal
+          board="archive"
+          boardName="자료실"
           initialState={categoryState}
           onClose={() => setCategoryOpen(false)}
           onChange={setCategoryState}

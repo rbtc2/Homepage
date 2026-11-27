@@ -9,6 +9,7 @@ import {
   resolveSecretFieldsForCreate,
   resolveSecretFieldsForUpdate,
 } from '@/lib/secret-post';
+import { resolveBoardCategoryField } from '@/lib/board-categories';
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -32,10 +33,13 @@ export async function createNotice({
   createdAt,
   isSecret,
   secretPassword,
+  categoryId,
 }) {
   try {
     const secret = resolveSecretFieldsForCreate({ isSecret, secretPassword });
     if (secret.error) return secret.error;
+    const category = await resolveBoardCategoryField('notices', categoryId);
+    if (category.error) return category.error;
 
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
@@ -48,6 +52,7 @@ export async function createNotice({
         is_pinned: Boolean(isPinned),
         views: 0,
         ...secret.fields,
+        ...category.fields,
       });
 
     if (error) return actionFail(error.message);
@@ -61,7 +66,7 @@ export async function createNotice({
 
 export async function updateNotice(
   id,
-  { title, content, isPinned, createdAt, isSecret, secretPassword }
+  { title, content, isPinned, createdAt, isSecret, secretPassword, categoryId }
 ) {
   try {
     const secret = await resolveSecretFieldsForUpdate('notices', id, {
@@ -69,6 +74,8 @@ export async function updateNotice(
       secretPassword,
     });
     if (secret.error) return secret.error;
+    const category = await resolveBoardCategoryField('notices', categoryId);
+    if (category.error) return category.error;
 
     const contentStored = await preparePostContentForStorage(content);
     const { error } = await getSupabaseAdmin()
@@ -79,6 +86,7 @@ export async function updateNotice(
         is_pinned: Boolean(isPinned),
         created_at: createdAt ?? today(),
         ...secret.fields,
+        ...category.fields,
       })
       .eq('id', rowIdForEq(id));
 

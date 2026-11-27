@@ -2,7 +2,8 @@ import BoardSearchForm from '@/components/board/BoardSearchForm';
 import BoardMeta from '@/components/board/BoardMeta';
 import BoardTable from '@/components/board/BoardTable';
 import BoardPagination from '@/components/board/BoardPagination';
-import ArchiveCategoryFilter from '@/components/archive/ArchiveCategoryFilter';
+import CategoryFilter from '@/components/board/CategoryFilter';
+import CategoryCount from '@/components/board/CategoryCount';
 import { getArchivesPage, searchArchivesPage } from '@/lib/archive';
 import {
   archivePublicPath,
@@ -59,7 +60,7 @@ export default async function ArchivePage({ searchParams, locale = 'ko' }) {
         <div className="notice-board">
           <div className="notice-board__inner">
             {showCategories ? (
-              <ArchiveCategoryFilter
+              <CategoryFilter
                 categories={categoryState.categories}
                 currentId={categoryId}
                 basePath={basePath}
@@ -76,22 +77,11 @@ export default async function ArchivePage({ searchParams, locale = 'ko' }) {
                 allCount={totalCount}
                 locale={locale}
                 clearHref={buildBoardHref(basePath, 1, '', extra)}
-                idleCount={filterLabel ? (
-                  locale === 'en' ? (
-                    <>
-                      <strong>{filterLabel}</strong>
-                      {' · '}
-                      <strong>{totalCount}</strong>
-                    </>
-                  ) : (
-                    <>
-                      <strong>{filterLabel}</strong>
-                      {' '}
-                      <strong>{totalCount}</strong>
-                      건
-                    </>
-                  )
-                ) : null}
+                idleCount={
+                  filterLabel ? (
+                    <CategoryCount label={filterLabel} count={totalCount} locale={locale} />
+                  ) : null
+                }
               />
               <BoardSearchForm
                 basePath={basePath}

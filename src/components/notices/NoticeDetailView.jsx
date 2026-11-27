@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import ViewTracker from '@/components/ViewTracker';
 import SafeHtml from '@/components/board/SafeHtml';
 import SecretPostGate from '@/components/board/SecretPostGate';
+import CategoryMark from '@/components/board/CategoryMark';
+import { getBoardCategoryState } from '@/lib/board-categories';
+import { visibleCategoryLabel } from '@/lib/archive-category-shared';
 import {
   getNoticeById,
   getNoticeSecretAuth,
@@ -13,10 +16,14 @@ import { noticesUi } from '@/lib/notices-ui';
 import { canReadSecretPost, SECRET_BOARD_CONFIG } from '@/lib/secret-post';
 
 export default async function NoticeDetailView({ id, locale = 'ko' }) {
-  const raw = await getNoticeById(id);
+  const [raw, categoryState] = await Promise.all([
+    getNoticeById(id),
+    getBoardCategoryState('notices'),
+  ]);
   if (!raw) notFound();
 
   const notice = localizeNotice(raw, locale);
+  const categoryText = visibleCategoryLabel(categoryState, raw.categoryId, locale);
   const ui = noticesUi(locale);
   const basePath = locale === 'en' ? '/en/notices' : '/notices';
   const homePath = locale === 'en' ? '/en' : '/';
@@ -57,7 +64,10 @@ export default async function NoticeDetailView({ id, locale = 'ko' }) {
           <article className="nd">
             <header className="nd__hd">
               {notice.isPinned ? <span className="nd__pin-badge">{ui.pin}</span> : null}
-              <h1 className="nd__title">{notice.title}</h1>
+              <h1 className="nd__title">
+                <CategoryMark label={categoryText} />
+                {notice.title}
+              </h1>
               <div className="nd__byline">
                 <span className="nd__byline-item">
                   <span className="nd__byline-label">{ui.author}</span>

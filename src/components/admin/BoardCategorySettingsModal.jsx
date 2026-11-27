@@ -7,14 +7,24 @@ import {
   CATEGORY_NAME_MAX,
 } from '@/lib/archive-category-shared';
 import {
-  createArchiveCategory,
-  deleteArchiveCategory,
-  moveArchiveCategory,
-  setArchiveCategoriesEnabled,
-  updateArchiveCategory,
-} from './category-actions';
+  createBoardCategory,
+  deleteBoardCategory,
+  moveBoardCategory,
+  setBoardCategoriesEnabled,
+  updateBoardCategory,
+} from '@/app/admin/board-category-actions';
 
-export default function CategorySettingsModal({ initialState, onClose, onChange }) {
+/**
+ * 게시판 카테고리 설정 모달.
+ * @param {{ board: 'archive' | 'notices', boardName: string, initialState: object, onClose: () => void, onChange: (state: object) => void }} props
+ */
+export default function BoardCategorySettingsModal({
+  board,
+  boardName,
+  initialState,
+  onClose,
+  onChange,
+}) {
   const router = useRouter();
   const [enabled, setEnabled] = useState(Boolean(initialState?.enabled));
   const [categories, setCategories] = useState(initialState?.categories ?? []);
@@ -86,7 +96,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
               disabled={busy}
               onClick={() => {
                 void persist(
-                  () => setArchiveCategoriesEnabled(!enabled),
+                  () => setBoardCategoriesEnabled(board, !enabled),
                   () => {
                     setPendingDelete(null);
                     setEditingId(null);
@@ -109,7 +119,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
                 </p>
               ) : (
                 <p className="an-field__help">
-                  글을 쓸 때 분류를 고르면 자료실 제목 앞에 말머리로 보입니다. 고르지 않은 글은 말머리 없이 나갑니다.
+                  글을 쓸 때 분류를 고르면 {boardName} 제목 앞에 말머리로 보입니다. 고르지 않은 글은 말머리 없이 나갑니다.
                 </p>
               )}
 
@@ -138,7 +148,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
                       disabled={busy}
                       onClick={() => {
                         void persist(
-                          () => deleteArchiveCategory(pendingDelete.id),
+                          () => deleteBoardCategory(board, pendingDelete.id),
                           () => setPendingDelete(null)
                         );
                       }}
@@ -179,7 +189,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
                                     disabled={busy}
                                     onClick={() => {
                                       void persist(
-                                        () => updateArchiveCategory(category.id, {
+                                        () => updateBoardCategory(board, category.id, {
                                           name: editName,
                                           nameEn: editNameEn,
                                         }),
@@ -214,7 +224,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
                                     className="an-btn an-btn--sm an-btn--ghost an-btn--icon"
                                     aria-label="위로"
                                     disabled={busy || index === 0}
-                                    onClick={() => { void persist(() => moveArchiveCategory(category.id, 'up')); }}
+                                    onClick={() => { void persist(() => moveBoardCategory(board, category.id, 'up')); }}
                                   >
                                     ↑
                                   </button>
@@ -223,7 +233,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
                                     className="an-btn an-btn--sm an-btn--ghost an-btn--icon"
                                     aria-label="아래로"
                                     disabled={busy || index === categories.length - 1}
-                                    onClick={() => { void persist(() => moveArchiveCategory(category.id, 'down')); }}
+                                    onClick={() => { void persist(() => moveBoardCategory(board, category.id, 'down')); }}
                                   >
                                     ↓
                                   </button>
@@ -265,7 +275,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
                     onSubmit={(event) => {
                       event.preventDefault();
                       void persist(
-                        () => createArchiveCategory({ name, nameEn }),
+                        () => createBoardCategory(board, { name, nameEn }),
                         () => {
                           setName('');
                           setNameEn('');
@@ -302,7 +312,7 @@ export default function CategorySettingsModal({ initialState, onClose, onChange 
             </>
           ) : (
             <p className="an-field__help">
-              꺼 두면 자료실 목록과 글에 분류가 보이지 않습니다. 저장해 둔 분류는 다시 켜면 돌아옵니다.
+              꺼 두면 {boardName} 목록과 글에 분류가 보이지 않습니다. 저장해 둔 분류는 다시 켜면 돌아옵니다.
             </p>
           )}
 

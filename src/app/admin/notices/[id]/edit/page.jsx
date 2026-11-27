@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getNoticeById, getNoticeSecretAuth } from '@/lib/notices';
+import { getBoardCategoryState } from '@/lib/board-categories';
 import { withSecretEditMeta } from '@/lib/secret-post';
 import EditorPage from '../../EditorPage';
 
@@ -12,8 +13,13 @@ export async function generateMetadata({ params }) {
 
 export default async function EditNoticePage({ params }) {
   const { id } = await params;
-  const notice = await getNoticeById(id);
+  const [notice, categoryState] = await Promise.all([
+    getNoticeById(id),
+    getBoardCategoryState('notices'),
+  ]);
   if (!notice) notFound();
   const secretAuth = await getNoticeSecretAuth(id);
-  return <EditorPage notice={withSecretEditMeta(notice, secretAuth)} />;
+  return (
+    <EditorPage notice={withSecretEditMeta(notice, secretAuth)} categoryState={categoryState} />
+  );
 }
