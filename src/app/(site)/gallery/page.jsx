@@ -1,7 +1,6 @@
-import GalleryHero from '@/components/gallery/GalleryHero';
 import GalleryGrid from '@/components/gallery/GalleryGrid';
 import GalleryFilterBar from '@/components/gallery/GalleryFilterBar';
-import { getGalleryPage, getGalleryYears, getLatestGallery } from '@/lib/gallery';
+import { getGalleryPage, getGalleryYears } from '@/lib/gallery';
 import { calcTotalPages } from '@/lib/paginate';
 
 export const metadata = { title: '포토갤러리 | 국제인권연대 월드라이츠(WORLD RIGHTS)' };
@@ -15,12 +14,9 @@ export default async function GalleryPage({ searchParams }) {
   const page = Math.max(1, Number(pageParam) || 1);
   const year = yearParam ?? null;
 
-  const showHero = page === 1 && !year;
-
-  const [{ items, totalCount }, years, heroItems] = await Promise.all([
+  const [{ items, totalCount }, years] = await Promise.all([
     getGalleryPage({ page, year, itemsPerPage: PER_PAGE }),
     getGalleryYears(),
-    showHero ? getLatestGallery(3) : Promise.resolve([]),
   ]);
 
   const totalPages = calcTotalPages(totalCount, PER_PAGE);
@@ -34,10 +30,6 @@ export default async function GalleryPage({ searchParams }) {
             <h1 className="page-header__title">포토갤러리</h1>
           </div>
         </div>
-
-        {showHero && heroItems.length > 0 && (
-          <GalleryHero items={heroItems} basePath={BASE} />
-        )}
 
         <div className="gallery-board">
           <div className="gallery-board__inner">

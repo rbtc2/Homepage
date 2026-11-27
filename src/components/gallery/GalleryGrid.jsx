@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import GalleryCard from './GalleryCard';
+import GalleryLead from './GalleryLead';
 import { galleryUi } from '@/lib/gallery-ui';
 
 function buildGalleryHref(basePath, page, year) {
@@ -96,17 +97,26 @@ export default function GalleryGrid({
     );
   }
 
+  const showLead = page === 1;
+  const lead = showLead ? items[0] : null;
+  const rest = showLead ? items.slice(1) : items;
+
   return (
     <>
-      <div className="gallery-grid" aria-label={ui.listAria}>
-        {items.map((post, i) => (
-          <GalleryCard
-            key={post.id}
-            post={post}
-            basePath={basePath}
-            index={i}
-          />
-        ))}
+      <div className="gallery-list" aria-label={ui.listAria}>
+        {lead ? <GalleryLead post={lead} basePath={basePath} /> : null}
+        {rest.length > 0 ? (
+          <div className="gallery-grid">
+            {rest.map((post, i) => (
+              <GalleryCard
+                key={post.id}
+                post={post}
+                basePath={basePath}
+                priority={!lead && i < 2}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <GalleryPagination

@@ -1,53 +1,31 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { SITE_IMAGE } from '@/lib/site-image';
+import GalleryMedia from './GalleryMedia';
 
-/**
- * 갤러리 그리드 카드
- *
- * @param {object} post      - 갤러리 게시물 (id, title, coverImage, author, createdAt)
- * @param {string} basePath  - 예: '/gallery'
- * @param {number} index     - 그리드 내 위치 (priority 판단용)
- */
-export default function GalleryCard({ post, basePath, index = 0 }) {
-  const href = `${basePath}/${post.id}`;
+const DATE_PREFIX = /^\d{4}-\d{2}-\d{2}/;
+
+export default function GalleryCard({ post, basePath, priority = false }) {
+  const dateTime = DATE_PREFIX.test(post.createdAt) ? post.createdAt : undefined;
 
   return (
-    <Link href={href} className="gallery-card">
-      <div className="gallery-card__img-wrap">
-        {post.coverImage && !post.isSecret ? (
-          <Image
-            src={post.coverImage}
-            alt={post.title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="gallery-card__img"
-            priority={index < 3}
-            quality={SITE_IMAGE.thumbQuality}
-            style={{ objectFit: 'contain' }}
-          />
-        ) : (
-          <div className="gallery-card__placeholder" aria-hidden="true">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <rect x="3" y="6" width="26" height="20" rx="2" stroke="currentColor" strokeWidth="1.5" />
-              <circle cx="11" cy="13" r="2.5" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M3 22l7-6 5 4 4-3 10 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        )}
-      </div>
-
-      <div className="gallery-card__overlay">
-        <h2 className="gallery-card__title">
+    <Link href={`${basePath}/${post.id}`} className="gallery-card">
+      <span className="gallery-card__frame">
+        <GalleryMedia
+          post={post}
+          sizes="(max-width: 768px) 100vw, 560px"
+          priority={priority}
+        />
+      </span>
+      <span className="gallery-card__body">
+        <p className="gallery-card__title">
           {post.isSecret ? '🔒 ' : ''}
           {post.title}
-        </h2>
-        <div className="gallery-card__meta">
-          <span>{post.author}</span>
-          <span className="gallery-card__meta-dot" aria-hidden="true" />
-          <span>{post.createdAt}</span>
-        </div>
-      </div>
+        </p>
+        {post.createdAt ? (
+          <time className="gallery-card__date" dateTime={dateTime}>
+            {post.createdAt}
+          </time>
+        ) : null}
+      </span>
     </Link>
   );
 }

@@ -1,10 +1,8 @@
-import GalleryHero from '@/components/gallery/GalleryHero';
 import GalleryGrid from '@/components/gallery/GalleryGrid';
 import GalleryFilterBar from '@/components/gallery/GalleryFilterBar';
 import {
   getGalleryPage,
   getGalleryYears,
-  getLatestGallery,
   localizeGalleryPosts,
 } from '@/lib/gallery';
 import { galleryUi } from '@/lib/gallery-ui';
@@ -23,16 +21,12 @@ export default async function EnGalleryPage({ searchParams }) {
   const year = yearParam ?? null;
   const ui = galleryUi(LOCALE);
 
-  const showHero = page === 1 && !year;
-
-  const [{ items: rawItems, totalCount }, years, rawHero] = await Promise.all([
+  const [{ items: rawItems, totalCount }, years] = await Promise.all([
     getGalleryPage({ page, year, itemsPerPage: PER_PAGE }),
     getGalleryYears(),
-    showHero ? getLatestGallery(3) : Promise.resolve([]),
   ]);
 
   const items = localizeGalleryPosts(rawItems, LOCALE);
-  const heroItems = localizeGalleryPosts(rawHero, LOCALE);
   const totalPages = calcTotalPages(totalCount, PER_PAGE);
 
   return (
@@ -43,10 +37,6 @@ export default async function EnGalleryPage({ searchParams }) {
           <h1 className="page-header__title">{ui.title}</h1>
         </div>
       </div>
-
-      {showHero && heroItems.length > 0 ? (
-        <GalleryHero items={heroItems} basePath={BASE} locale={LOCALE} />
-      ) : null}
 
       <div className="gallery-board">
         <div className="gallery-board__inner">
