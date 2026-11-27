@@ -2,8 +2,6 @@
 
 .ns {
   background: var(--surface);
-  border-top: none;
-  border-bottom: 1px solid var(--line);
 }
 
 .ns__inner {
